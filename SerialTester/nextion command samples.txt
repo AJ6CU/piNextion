@@ -150,7 +150,7 @@ changing frequency\
 38199A0**\
 new frequency=10099000***\
 0,11:0-59:1-58:2-68:3-2:4-78:5-5B:6-A9:7-0:8-FF:9-FF:10-73:**\
-changing frequency\
+  changing frequency\
 785BA90**\
 new frequency=11099000***\cb1 \
 \cb3 \

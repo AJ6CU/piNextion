@@ -1,0 +1,312 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.4" author="PygubuDesigner 0.41.3">
+  <project>
+    <settings>
+      <setting id="name">pi_Nextion_UX</setting>
+      <setting id="description">A Nextion GUI emulator for CEC</setting>
+      <setting id="module_name">piCEC_UX</setting>
+      <setting id="template">application</setting>
+      <setting id="main_widget">main_window</setting>
+      <setting id="main_classname">piCECNextion</setting>
+      <setting id="main_menu" />
+      <setting id="output_dir">.</setting>
+      <setting id="output_dir2" />
+      <setting id="import_tkvariables">False</setting>
+      <setting id="use_ttk_styledefinition_file">True</setting>
+      <setting id="use_i18n">False</setting>
+      <setting id="all_ids_attributes">False</setting>
+      <setting id="generate_code_onsave">False</setting>
+      <setting id="use_window_centering_code">False</setting>
+      <setting id="ttk_style_definition_file">mystyles.py</setting>
+    </settings>
+    <customwidgets />
+  </project>
+  <object class="tk.Tk" id="main_window" named="True">
+    <property name="height">480</property>
+    <property name="width">800</property>
+    <child>
+      <object class="ttk.Frame" id="frame1">
+        <property name="borderwidth">5</property>
+        <property name="height">480</property>
+        <property name="width">800</property>
+        <layout manager="pack">
+          <property name="anchor">nw</property>
+          <property name="expand">True</property>
+          <property name="fill">both</property>
+          <property name="side">top</property>
+        </layout>
+        <child>
+          <object class="ttk.Frame" id="menuBar_Frame" named="True">
+            <property name="height">50</property>
+            <property name="width">800</property>
+            <layout manager="pack">
+              <property name="anchor">nw</property>
+              <property name="fill">both</property>
+              <property name="side">top</property>
+            </layout>
+            <child>
+              <object class="ttk.Menubutton" id="txStop_Button" named="True">
+                <property name="text" translatable="yes">TX STOP</property>
+                <property name="width">8</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Menubutton" id="vfo_Toggle_button" named="True">
+                <property name="compound">none</property>
+                <property name="text" translatable="yes">VFO</property>
+                <property name="width">7</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Menubutton" id="band_Move_Down_Button" named="True">
+                <property name="compound">none</property>
+                <property name="text" translatable="yes">BAND Down</property>
+                <property name="width">9</property>
+                <layout manager="grid">
+                  <property name="column">2</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Menubutton" id="band_Move_Up1_Button" named="True">
+                <property name="compound">none</property>
+                <property name="text" translatable="yes">BAND Up</property>
+                <property name="width">9</property>
+                <layout manager="grid">
+                  <property name="column">3</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Menubutton" id="mode_Select_Button" named="True">
+                <property name="compound">none</property>
+                <property name="text" translatable="yes">MODE</property>
+                <property name="width">7</property>
+                <layout manager="grid">
+                  <property name="column">4</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Menubutton" id="lock_Button" named="True">
+                <property name="compound">none</property>
+                <property name="text" translatable="yes">LOCK</property>
+                <property name="width">7</property>
+                <layout manager="grid">
+                  <property name="column">5</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Menubutton" id="spk_or_SDR_button" named="True">
+                <property name="compound">none</property>
+                <property name="text" translatable="yes">SPK</property>
+                <property name="width">6</property>
+                <layout manager="grid">
+                  <property name="column">6</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="vfoA_Frame" named="True">
+            <property name="width">480</property>
+            <layout manager="pack">
+              <property name="anchor">nw</property>
+              <property name="expand">true</property>
+              <property name="fill">x</property>
+              <property name="side">top</property>
+            </layout>
+            <child>
+              <object class="ttk.Frame" id="rxTX_Status_Frame" named="True">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">15</property>
+                  <property name="row">0</property>
+                  <property name="sticky">ew</property>
+                </layout>
+                <child>
+                  <object class="ttk.Label" id="rx_Status_Light_Label" named="True">
+                    <property name="borderwidth">4</property>
+                    <property name="style">Heading1.TLabel</property>
+                    <property name="text" translatable="yes">RX</property>
+                    <property name="width">5</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="pady">15</property>
+                      <property name="row">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="tx_Status_Light_Label" named="True">
+                    <property name="background">#000000</property>
+                    <property name="foreground">#ff2600</property>
+                    <property name="state">disabled</property>
+                    <property name="text" translatable="yes">TX</property>
+                    <property name="width">5</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="row">1</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="vfo_Display" named="True">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="vfoB_Frame" named="True">
+            <property name="width">480</property>
+            <layout manager="pack">
+              <property name="side">top</property>
+            </layout>
+            <child>
+              <object class="ttk.Frame" id="vfo_Frame" named="True">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="tuning_Step_Frame" named="True">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="att_IFS_Toggle_Frame" named="True">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout manager="pack">
+              <property name="side">top</property>
+            </layout>
+            <child>
+              <object class="ttk.Frame" id="signal_Control_Frame" named="True">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="callsign_Frame" named="True">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="sw_Release_Frame" named="True">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">2</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="sMeter_Frame" named="True">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout manager="pack">
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="ATT_IFS_Adjust_Frame" named="True">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout manager="pack">
+              <property name="side">top</property>
+            </layout>
+            <child>
+              <object class="ttk.Frame" id="cw_Info_Frame" named="True">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="att_Graph_Frame" named="True">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="ifs_Graph_Frame" named="True">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">2</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="cw_Button_Frame" named="True">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">3</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

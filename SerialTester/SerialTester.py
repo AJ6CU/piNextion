@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 import serial
+import time
 
-def write_to_serial(port, texthdr, mydata):
-    port.write(mydata.hex)
+def write_to_serial(port, texthdr, mydata: bytes):
+    port.write(mydata)
     print("Sent ", texthdr, ": ", mydata.hex(), "\n")
+    time.sleep(0.25)
 
 
 print(" starting serial test\n")

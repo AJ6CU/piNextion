@@ -1,6 +1,8 @@
 import serial
 import time
 
+debugCommandDecoding = False
+
 def extractValue (buffer, start, end):
     returnBuffer =""
     i = start
@@ -10,145 +12,181 @@ def extractValue (buffer, start, end):
     return returnBuffer.replace('"','')
 
 def decodeCEC_command (command_buffer):
+    #
+    # Command format is "pm.xx.val=nn..n" terminated by 3 0xff
+    # Command starts in position 3(0,1,2,3)
+    # Value starts in position 10, and ends before the 3 0xff
+    #
+
+
     command = command_buffer[3]  + command_buffer[4]
-    print("found command = ", command)
+    if debugCommandDecoding:
+        print("found command = ", command)
 
     match command:
         case "v1":
-            print("v1 tuning 1")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("v1 tuning 1")
+                print("value=", value,sep='*',end='*')
+                print("\n")
 
         case "v2":
-            print("v2 tuning 2")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("v2 tuning 2")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "v3":
-            print("v3 tuning 3")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("v3 tuning 3")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "v4":
-            print("v4 tuning 4")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("v4 tuning 4")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "v5":
-            print("v5 tuning 5")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("v5 tuning 5")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "ch":
-            print("ch shift frequency for cw?")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("ch shift frequency for cw?")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "vh":
-            print("vh add cw offset?")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("vh add cw offset?")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "vo":
-            print("vo related to display shift")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("vo related to display shift")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "vp":
-            print("vp display option 1")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("vp display option 1")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "vq":
-            print("vq display option 2")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("vq display option 2")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "sv":
-            print("sv software version")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("sv software version")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "sc":
-            print("sc call sign")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("sc call sign")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "cm":
-            print("cm display version and callsign?")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("cm display version and callsign?")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "c0":
-            print("c0 text (yellow box) or graphics mode")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("c0 text (yellow box) or graphics mode")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "vc":
-            print("vc new frequency change")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("vc new frequency change")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "cc":
-            print("cc change mode for frequency")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("cc change mode for frequency")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "va":
-            print("va assign vfo a frequency")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("va assign vfo a frequency")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "ca":
-            print("ca assign mode for vfoa frequecy")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("ca assign mode for vfoa frequecy")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "vb":
-            print("vb set vfob frequency")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("vb set vfob frequency")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "cb":
-            print("cb set mode for vfoB")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("cb set mode for vfoB")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "cn":
-            print("cn which tuning step (1-5)")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("cn which tuning step (1-5)")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "vt":
-            print("vt tone for CW")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("vt tone for CW")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "ck":
-            print("ck select key for cw")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("ck select key for cw")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "vs":
-            print("vs word/minute for keyer")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("vs word/minute for keyer")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "vy":
-            print("vy delay returning after cw key")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("vy delay returning after cw key")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case "ve":
-            print("ve delay for start")
             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-            print("value=", value,sep='*',end='*')
-            print("\n")
+            if debugCommandDecoding:
+                print("ve delay for start")
+                print("value=", value,sep='*',end='*')
+                print("\n")
         case _:
-            print("unimplemented yet")
+            print("unimplemented yet command=", command)
 
-print("***starting serial procesor***")
+
+if debugCommandDecoding:
+    print("***starting serial procesor***")
 ser = serial.Serial("/dev/ttyS0", 9600, timeout=1)
 
 try:
@@ -167,8 +205,9 @@ try:
             if ((len(buffer) == 0) and (in_byte.decode(errors='ignore') != 'p')):
                 pass
             else:
-                if (len(buffer) == 0):
-                    print("line ", lineNum)
+                if debugCommandDecoding:
+                    if (len(buffer) == 0):
+                        print("line ", lineNum)
                 buffer.append (in_byte)
 
 
@@ -177,19 +216,22 @@ try:
                     if ffCount == 3:
 
                         decoded_buffer_char = [item.decode(errors='ignore') for item in buffer]
-                        for item in decoded_buffer_char:
-                            print(f"{item:<{4}}", end="")
-                        print("")
+                        if debugCommandDecoding:
+                            for item in decoded_buffer_char:
+                                print(f"{item:<{4}}", end="")
+                            print("")
                     
                         decoded_buffer_hex = [item.hex() for item in buffer]
-                        for item in decoded_buffer_hex:
-                            print(f"{item:<{4}}", end="")
-                        print("")
+                        if debugCommandDecoding:
+                            for item in decoded_buffer_hex:
+                                print(f"{item:<{4}}", end="")
+                            print("")
                     
                         decoded_buffer_ord = [ord(item) for item in buffer]
-                        for item in decoded_buffer_ord:
-                            print(f"{item:<{4}}", end="")
-                        print("")
+                        if debugCommandDecoding:
+                            for item in decoded_buffer_ord:
+                                print(f"{item:<{4}}", end="")
+                            print("")
                         ffCount = 0
                         lineNum += 1
                         buffer = buffer[:0]

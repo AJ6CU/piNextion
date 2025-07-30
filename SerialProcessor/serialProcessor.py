@@ -1,13 +1,13 @@
 import serial
 import time
 
-def extractValue (buffer, start, termination_key):
-    returnBuffer =[]
+def extractValue (buffer, start, end):
+    returnBuffer =""
     i = start
-    while buffer[i].hex != termination_key
-        buffer.append(buffer[i])
+    while i < end:
+        returnBuffer = returnBuffer + buffer[i]
         i +=1
-    return returnBuffer
+    return returnBuffer.replace('"','')
 
 def decodeCEC_command (command_buffer):
     command = command_buffer[3]  + command_buffer[4]
@@ -15,59 +15,136 @@ def decodeCEC_command (command_buffer):
 
     match command:
         case "v1":
-            value = extractValue(command_buffer, 10, 0xff)
-            print("v1 tuning1, value=", value)
+            print("v1 tuning 1")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
 
         case "v2":
             print("v2 tuning 2")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "v3":
             print("v3 tuning 3")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "v4":
             print("v4 tuning 4")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "v5":
             print("v5 tuning 5")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "ch":
             print("ch shift frequency for cw?")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "vh":
             print("vh add cw offset?")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "vo":
             print("vo related to display shift")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "vp":
             print("vp display option 1")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "vq":
             print("vq display option 2")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "sv":
             print("sv software version")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "sc":
             print("sc call sign")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "cm":
             print("cm display version and callsign?")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "c0":
             print("c0 text (yellow box) or graphics mode")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "vc":
             print("vc new frequency change")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "cc":
             print("cc change mode for frequency")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "va":
             print("va assign vfo a frequency")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "ca":
             print("ca assign mode for vfoa frequecy")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "vb":
             print("vb set vfob frequency")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "cb":
             print("cb set mode for vfoB")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "cn":
             print("cn which tuning step (1-5)")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "vt":
             print("vt tone for CW")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "ck":
             print("ck select key for cw")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "vs":
             print("vs word/minute for keyer")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "vy":
             print("vy delay returning after cw key")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case "ve":
             print("ve delay for start")
+            value = extractValue(command_buffer, 10, len(command_buffer)-3)
+            print("value=", value,sep='*',end='*')
+            print("\n")
         case _:
             print("unimplemented yet")
 
@@ -113,7 +190,6 @@ try:
                         for item in decoded_buffer_ord:
                             print(f"{item:<{4}}", end="")
                         print("")
-                        print("\n")
                         ffCount = 0
                         lineNum += 1
                         buffer = buffer[:0]

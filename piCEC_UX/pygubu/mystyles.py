@@ -41,6 +41,8 @@ def setup_ttk_styles(master=None):
     style.configure('Heading4.TLabel',font=fontList['Heading4'])
     style.configure('Normal.TLabel',font=fontList['Normal'])
     style.configure('Symbol1.TLabel',font=fontList['Symbol1'])
+    style.configure('Button1.TButton',font=fontList['Heading1'])
+    style.configure('Button2.TButton',font=fontList['Heading2'])
     style.configure('Button3.TButton',font=fontList['Heading3'])
  #   style.configure('DarkButton3.TButton',font=fontList['Heading3'], background='black', foreground='white', boarderwidth=5, relief='raised')
     style.configure('Button4.TButton',font=fontList['Heading4'])

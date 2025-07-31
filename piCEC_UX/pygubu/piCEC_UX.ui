@@ -45,82 +45,103 @@
             <property name="width">800</property>
             <layout manager="pack">
               <property name="anchor">nw</property>
-              <property name="fill">both</property>
+              <property name="fill">x</property>
               <property name="side">top</property>
             </layout>
             <child>
               <object class="ttk.Button" id="settings_Button" named="True">
-                <property name="style">Button3.TButton</property>
-                <property name="text" translatable="yes">Settings</property>
+                <property name="style">Button2.TButton</property>
+                <property name="text" translatable="yes">
+Settings
+</property>
+                <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">0</property>
-                  <property name="padx">5</property>
+                  <property name="padx">1</property>
                   <property name="row">0</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="ttk.Button" id="vfo_Button" named="True">
-                <property name="style">Button3.TButton</property>
-                <property name="text" translatable="yes">VFO</property>
+                <property name="style">Button2.TButton</property>
+                <property name="text" translatable="yes">
+VFO
+</property>
+                <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">1</property>
-                  <property name="padx">5</property>
+                  <property name="padx">1</property>
                   <property name="row">0</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="ttk.Button" id="mode_button" named="True">
-                <property name="style">Button3.TButton</property>
-                <property name="text" translatable="yes">MODE</property>
+                <property name="style">Button2.TButton</property>
+                <property name="text" translatable="yes">
+MODE
+</property>
+                <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">2</property>
-                  <property name="padx">5</property>
+                  <property name="padx">1</property>
                   <property name="row">0</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="ttk.Button" id="band_up_Button" named="True">
-                <property name="style">Button3.TButton</property>
-                <property name="text" translatable="yes">BAND UP</property>
+                <property name="style">Button2.TButton</property>
+                <property name="text" translatable="yes">
+BAND UP
+</property>
+                <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">3</property>
-                  <property name="padx">5</property>
+                  <property name="padx">1</property>
                   <property name="row">0</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="ttk.Button" id="band_dn_Button" named="True">
-                <property name="style">Button3.TButton</property>
-                <property name="text" translatable="yes">BAND DN</property>
+                <property name="style">Button2.TButton</property>
+                <property name="text" translatable="yes">
+BAND DN
+</property>
+                <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">4</property>
-                  <property name="padx">5</property>
+                  <property name="padx">1</property>
                   <property name="row">0</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="ttk.Button" id="lock_Button" named="True">
-                <property name="style">Button3.TButton</property>
-                <property name="text" translatable="yes">Lock</property>
+                <property name="style">Button2.TButton</property>
+                <property name="text" translatable="yes">
+LOCK
+</property>
+                <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">5</property>
-                  <property name="padx">5</property>
+                  <property name="padx">1</property>
                   <property name="row">0</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="ttk.Button" id="spk_Button" named="True">
-                <property name="style">Button3.TButton</property>
-                <property name="text" translatable="yes">SPK</property>
+                <property name="style">Button2.TButton</property>
+                <property name="text" translatable="yes">
+SPK
+</property>
+                <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">6</property>
-                  <property name="padx">5</property>
+                  <property name="padx">1</property>
                   <property name="row">0</property>
                 </layout>
               </object>

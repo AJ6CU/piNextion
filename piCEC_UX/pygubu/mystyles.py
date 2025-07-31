@@ -18,10 +18,13 @@
 
 import tkinter as tk
 import tkinter.ttk as ttk
+#import sv_ttk
 
 
 def setup_ttk_styles(master=None):
+    
     style = ttk.Style(master)
+    #sv_ttk.set_theme("dark"))
 
     fontList = {'Heading1': ('Times New Roman',24, 'bold', 'italic' ),
             'Heading2': ('Arial',18, 'bold' ),
@@ -39,6 +42,7 @@ def setup_ttk_styles(master=None):
     style.configure('Normal.TLabel',font=fontList['Normal'])
     style.configure('Symbol1.TLabel',font=fontList['Symbol1'])
     style.configure('Button3.TButton',font=fontList['Heading3'])
+ #   style.configure('DarkButton3.TButton',font=fontList['Heading3'], background='black', foreground='white', boarderwidth=5, relief='raised')
     style.configure('Button4.TButton',font=fontList['Heading4'])
     style.configure('Button3Blue.TButton',font=fontList['Heading3'], foreground='blue')
     style.configure('Normal.TButton',font=fontList['Normal'])
@@ -65,6 +69,7 @@ def setup_ttk_styles(master=None):
     style.configure('Normal.TText', font=fontList['Heading3'])
 
     style.configure('Highlight.TFrame', background='blue', bd=4 )
+ #   style.configure('Dark.TFrame', background='black', bd=4, bordercolor='white')
     style.configure('Normal.TFrame', background='gray', bd=4)
 
     style.configure('Fixed.TNotebook')

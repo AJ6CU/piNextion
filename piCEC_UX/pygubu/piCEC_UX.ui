@@ -1,20 +1,20 @@
 <?xml version='1.0' encoding='utf-8'?>
-<interface version="1.5" author="PygubuDesigner 0.41.3">
+<interface version="1.5" author="PygubuDesigner 0.41.4">
   <project>
     <settings>
       <setting id="name">pi_Nextion_UX</setting>
       <setting id="description">A Nextion GUI emulator for CEC</setting>
       <setting id="module_name">piCEC_UX</setting>
-      <setting id="template">application</setting>
+      <setting id="template">widget</setting>
       <setting id="main_widget">main_window</setting>
       <setting id="main_classname">piCECNextion</setting>
       <setting id="main_menu" />
       <setting id="output_dir">.</setting>
-      <setting id="output_dir2" />
+      <setting id="output_dir2">.</setting>
       <setting id="import_tkvariables">False</setting>
       <setting id="use_ttk_styledefinition_file">True</setting>
       <setting id="use_i18n">False</setting>
-      <setting id="all_ids_attributes">False</setting>
+      <setting id="all_ids_attributes">True</setting>
       <setting id="generate_code_onsave">False</setting>
       <setting id="use_window_centering_code">False</setting>
       <setting id="ttk_style_definition_file">mystyles.py</setting>
@@ -248,7 +248,7 @@ STOP!
               </object>
             </child>
             <child>
-              <object class="ttk.Frame" id="vfo_Display" named="True">
+              <object class="ttk.Frame" id="vfo_display_Frame" named="True">
                 <property name="height">200</property>
                 <property name="style">Normal.TFrame</property>
                 <property name="width">200</property>
@@ -267,6 +267,65 @@ STOP!
                       <property name="anchor">e</property>
                       <property name="expand">false</property>
                       <property name="side">right</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="mode_select_Frame" named="True">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="pady">2</property>
+                  <property name="sticky">e</property>
+                </layout>
+                <child>
+                  <object class="ttk.Button" id="button1">
+                    <property name="style">Button2b.TButton</property>
+                    <property name="text" translatable="yes">
+LSB
+</property>
+                    <layout manager="pack">
+                      <property name="anchor">w</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Button" id="button2">
+                    <property name="style">Button2b.TButton</property>
+                    <property name="text" translatable="yes">
+USB
+</property>
+                    <layout manager="pack">
+                      <property name="anchor">w</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Button" id="button3">
+                    <property name="style">Button2b.TButton</property>
+                    <property name="text" translatable="yes">
+CWL
+</property>
+                    <layout manager="pack">
+                      <property name="anchor">w</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Button" id="button4">
+                    <property name="style">Button2b.TButton</property>
+                    <property name="text" translatable="yes">
+CWU
+</property>
+                    <layout manager="pack">
+                      <property name="anchor">w</property>
+                      <property name="side">left</property>
                     </layout>
                   </object>
                 </child>

@@ -1,35 +1,491 @@
 #!/usr/bin/python3
-import pathlib
 import tkinter as tk
 import tkinter.ttk as ttk
-import pygubu
 
 
-class piCECNextionUI:
+def i18n_translator_noop(value):
+    """i18n - Setup translator in derived class file"""
+    return value
+
+
+def first_object_callback_noop(widget):
+    """on first objec callback - Setup callback in derived class file."""
+    pass
+
+
+def image_loader_default(master, image_name: str):
+    """Image loader - Setup image_loader in derived class file."""
+    img = None
+    try:
+        img = tk.PhotoImage(file=image_name, master=master)
+    except tk.TclError:
+        pass
+    return img
+
+
+#
+# Base class definition
+#
+class piCECNextionUI(tk.Tk):
     def __init__(
         self,
         master=None,
         *,
-        project_ui,
-        resource_paths=None,
         translator=None,
         on_first_object_cb=None,
         data_pool=None,
+        image_loader=None,
+        **kw
     ):
-        self.builder = pygubu.Builder(
-            translator=translator,
-            on_first_object=on_first_object_cb,
-            data_pool=data_pool
-        )
-        self.builder.add_from_file(project_ui)
-        if resource_paths is not None:
-            self.builder.add_resource_paths(resource_paths)
-        # Main widget
-        self.mainwindow: tk.Tk = self.builder.get_object("main_window", master)
-        self.builder.connect_callbacks(self)
+        if translator is None:
+            translator = i18n_translator_noop
+        _ = translator  # i18n string marker.
+        if image_loader is None:
+            image_loader = image_loader_default
+        if on_first_object_cb is None:
+            on_first_object_cb = first_object_callback_noop
 
-    def run(self):
-        self.mainwindow.mainloop()
+        super().__init__(master, **kw)
+
+        self.frame1 = ttk.Frame(self)
+        self.frame1.configure(
+            borderwidth=5,
+            height=480,
+            style="Normal.TFrame",
+            width=1000)
+        # First object created
+        on_first_object_cb(self.frame1)
+
+        self.menuBar_Frame = ttk.Frame(self.frame1, name="menubar_frame")
+        self.menuBar_Frame.configure(
+            borderwidth=5,
+            height=50,
+            style="Normal.TFrame",
+            width=800)
+        self.settings_Button = ttk.Button(
+            self.menuBar_Frame, name="settings_button")
+        self.settings_VAR = tk.StringVar(value='\nSETTINGS\n')
+        self.settings_Button.configure(
+            style="Button2b.TButton",
+            text='\nSETTINGS\n',
+            textvariable=self.settings_VAR,
+            width=12)
+        self.settings_Button.grid(column=0, padx="0 2", row=0, sticky="ns")
+        self.settings_Button.configure(command=self.settings_CB)
+        self.vfo_Button = ttk.Button(self.menuBar_Frame, name="vfo_button")
+        self.vfo_VAR = tk.StringVar(value='\nVFO\n')
+        self.vfo_Button.configure(
+            style="Button2b.TButton",
+            text='\nVFO\n',
+            textvariable=self.vfo_VAR,
+            width=12)
+        self.vfo_Button.grid(column=1, padx="0 2", row=0, sticky="ns")
+        self.vfo_Button.configure(command=self.vfo_CB)
+        self.mode_button = ttk.Button(self.menuBar_Frame, name="mode_button")
+        self.mode_VAR = tk.StringVar(value='\nMODE\n')
+        self.mode_button.configure(
+            style="Button2b.TButton",
+            text='\nMODE\n',
+            textvariable=self.mode_VAR,
+            width=12)
+        self.mode_button.grid(column=2, padx="0 2", row=0, sticky="ns")
+        self.mode_button.configure(command=self.mode_CB)
+        self.band_up_Button = ttk.Button(
+            self.menuBar_Frame, name="band_up_button")
+        self.band_up_VAR = tk.StringVar(value='\nBAND UP\n')
+        self.band_up_Button.configure(
+            style="Button2b.TButton",
+            text='\nBAND UP\n',
+            textvariable=self.band_up_VAR,
+            width=12)
+        self.band_up_Button.grid(column=3, padx="0 2", row=0, sticky="ns")
+        self.band_up_Button.configure(command=self.band_up_CB)
+        self.band_dn_Button = ttk.Button(
+            self.menuBar_Frame, name="band_dn_button")
+        self.band_dn_VAR = tk.StringVar(value='\nBAND DN\n')
+        self.band_dn_Button.configure(
+            style="Button2b.TButton",
+            text='\nBAND DN\n',
+            textvariable=self.band_dn_VAR,
+            width=12)
+        self.band_dn_Button.grid(column=4, padx="0 2", row=0, sticky="ns")
+        self.band_dn_Button.configure(command=self.band_dn_CB)
+        self.lock_Button = ttk.Button(self.menuBar_Frame, name="lock_button")
+        self.lock_VAR = tk.StringVar(value='\nLOCK\n')
+        self.lock_Button.configure(
+            style="Button2b.TButton",
+            text='\nLOCK\n',
+            textvariable=self.lock_VAR,
+            width=12)
+        self.lock_Button.grid(column=5, padx="0 2", row=0, sticky="ns")
+        self.lock_Button.configure(command=self.lock_CB)
+        self.speaker_Button = ttk.Button(
+            self.menuBar_Frame, name="speaker_button")
+        self.speaker_Button.configure(
+            style="Button2b.TButton",
+            text='\nSPEAKER\n',
+            width=12)
+        self.speaker_Button.grid(column=6, row=0, sticky="ns")
+        self.speaker_Button.configure(command=self.speaker_CB)
+        self.menuBar_Frame.pack(anchor="n", expand=True, fill="x", side="top")
+        self.vfoA_Frame = ttk.Frame(self.frame1, name="vfoa_frame")
+        self.vfoA_Frame.configure(style="NormalOutline.TFrame", width=480)
+        self.rxTX_Status_Frame = ttk.Frame(
+            self.vfoA_Frame, name="rxtx_status_frame")
+        self.rxTX_Status_Frame.configure(
+            height=200, style="Normal.TFrame", width=200)
+        self.rx_Status_Light_Label = ttk.Label(
+            self.rxTX_Status_Frame, name="rx_status_light_label")
+        self.rx_Status_Light_Label.configure(
+            borderwidth=4,
+            state="normal",
+            style="GreenLED.TLabel",
+            text='  RX',
+            width=5)
+        self.rx_Status_Light_Label.grid(column=0, pady=10, row=0)
+        self.tx_Status_Light_Label = ttk.Label(
+            self.rxTX_Status_Frame, name="tx_status_light_label")
+        self.tx_Status_Light_Label.configure(
+            borderwidth=4,
+            state="disabled",
+            style="RedLED.TLabel",
+            text='  TX',
+            width=5)
+        self.tx_Status_Light_Label.grid(column=0, pady=15, row=1)
+        self.stop_Button = ttk.Button(
+            self.rxTX_Status_Frame, name="stop_button")
+        self.stop_Button.configure(
+            state="disabled",
+            style="RedButton2.TButton",
+            text='\nSTOP!\n',
+            width=6)
+        self.stop_Button.grid(column=1, padx="20 10", row=0, rowspan=2)
+        self.stop_Button.configure(command=self.stop_CB)
+        self.separator2 = ttk.Separator(self.rxTX_Status_Frame)
+        self.separator2.configure(orient="vertical")
+        self.separator2.grid(column=2, row=0, rowspan=2, sticky="ns")
+        self.rxTX_Status_Frame.grid(column=0, padx=15, row=0, sticky="w")
+        self.vfo_display_Frame = ttk.Frame(
+            self.vfoA_Frame, name="vfo_display_frame")
+        self.vfo_display_Frame.configure(
+            height=200, style="Normal.TFrame", width=200)
+        self.primary_VFO_Label = ttk.Label(
+            self.vfo_display_Frame, name="primary_vfo_label")
+        self.primary_VFO_VAR = tk.StringVar(value='99.999.999')
+        self.primary_VFO_Label.configure(
+            style="VFO.TLabel",
+            text='99.999.999',
+            textvariable=self.primary_VFO_VAR)
+        self.primary_VFO_Label.pack(anchor="e", expand=False, side="right")
+        self.vfo_display_Frame.grid(column=1, pady=2, row=0, sticky="e")
+        self.mode_select_Frame = ttk.Frame(
+            self.vfoA_Frame, name="mode_select_frame")
+        self.mode_select_Frame.configure(height=200, width=200)
+        self.button1 = ttk.Button(self.mode_select_Frame)
+        self.button1.configure(style="Button2b.TButton", text='\nLSB\n')
+        self.button1.pack(anchor="w", side="left")
+        self.button2 = ttk.Button(self.mode_select_Frame)
+        self.button2.configure(style="Button2b.TButton", text='\nUSB\n')
+        self.button2.pack(anchor="w", side="left")
+        self.button3 = ttk.Button(self.mode_select_Frame)
+        self.button3.configure(style="Button2b.TButton", text='\nCWL\n')
+        self.button3.pack(anchor="w", side="left")
+        self.button4 = ttk.Button(self.mode_select_Frame)
+        self.button4.configure(style="Button2b.TButton", text='\nCWU\n')
+        self.button4.pack(anchor="w", side="left")
+        self.mode_select_Frame.grid(column=1, pady=2, sticky="e")
+        self.vfoA_Frame.pack(
+            anchor="center",
+            expand=False,
+            fill="x",
+            side="top")
+        self.vfoB_Frame = ttk.Frame(self.frame1, name="vfob_frame")
+        self.vfoB_Frame.configure(style="Normal.TFrame")
+        self.vfo_Frame = ttk.Frame(self.vfoB_Frame, name="vfo_frame")
+        self.vfo_Frame.configure(style="Normal.TFrame")
+        self.secondary_VFO_Label = ttk.Label(
+            self.vfo_Frame, name="secondary_vfo_label")
+        self.secondary_VFO_VAR = tk.StringVar(value='99.999.999')
+        self.secondary_VFO_Label.configure(
+            style="Heading1.TLabel",
+            text='99.999.999',
+            textvariable=self.secondary_VFO_VAR)
+        self.secondary_VFO_Label.pack(anchor="nw", padx=20, side="left")
+        self.secondary_Mode_Label = ttk.Label(
+            self.vfo_Frame, name="secondary_mode_label")
+        self.secondary_Mode_VAR = tk.StringVar(value='CWL')
+        self.secondary_Mode_Label.configure(
+            style="Heading1.TLabel",
+            text='CWL',
+            textvariable=self.secondary_Mode_VAR)
+        self.secondary_Mode_Label.pack(anchor="ne", side="right")
+        self.vfo_Frame.grid(column=0, padx=130, pady=4, row=0, sticky="w")
+        self.tuning_Step_Frame = ttk.Frame(
+            self.vfoB_Frame, name="tuning_step_frame")
+        self.tuning_Step_Frame.configure(style="Normal.TFrame", width=200)
+        self.tuning_Step_Button = ttk.Button(
+            self.tuning_Step_Frame, name="tuning_step_button")
+        self.tuning_Step_Button.configure(
+            style="Button2b.TButton", text='10000')
+        self.tuning_Step_Button.pack(anchor="nw", padx=10, side="left")
+        self.tuning_Step_Button.configure(command=self.tuning_Step_CB)
+        self.tuning_Step_Units_Label = ttk.Label(
+            self.tuning_Step_Frame, name="tuning_step_units_label")
+        self.tuning_Step_Units_Label.configure(
+            style="Heading1.TLabel", text='Hz')
+        self.tuning_Step_Units_Label.pack(anchor="nw", side="right")
+        self.tuning_Step_Frame.grid(column=1, padx="250 0", row=0, sticky="e")
+        self.separator1 = ttk.Separator(self.vfoB_Frame)
+        self.separator1.configure(cursor="dot", orient="horizontal")
+        self.separator1.grid(column=0, columnspan=2, row=1, sticky="ew")
+        self.vfoB_Frame.pack(
+            anchor="center",
+            expand=True,
+            fill="both",
+            side="top")
+        self.secondary_menu_Frame = ttk.Frame(
+            self.frame1, name="secondary_menu_frame")
+        self.secondary_menu_Frame.configure(
+            height=200, style="Normal.TFrame", width=200)
+        self.signal_Control_Frame = ttk.Frame(
+            self.secondary_menu_Frame, name="signal_control_frame")
+        self.signal_Control_Frame.configure(
+            height=200, style="Normal.TFrame", width=200)
+        self.split_Button = ttk.Button(
+            self.signal_Control_Frame, name="split_button")
+        self.split_Button.configure(style="Button2b.TButton", text='\nSPLIT\n')
+        self.split_Button.pack(anchor="nw", padx=20, side="left")
+        self.split_Button.configure(command=self.split_CB)
+        self.rit_Button = ttk.Button(
+            self.signal_Control_Frame, name="rit_button")
+        self.rit_Button.configure(style="Button2b.TButton", text='\nRIT\n')
+        self.rit_Button.pack(anchor="nw", padx="0 20", side="left")
+        self.rit_Button.configure(command=self.rit_CB)
+        self.store_Button = ttk.Button(
+            self.signal_Control_Frame, name="store_button")
+        self.store_Button.configure(style="Button2b.TButton", text='\nSTORE\n')
+        self.store_Button.pack(anchor="nw", padx="0 20", side="left")
+        self.store_Button.configure(command=self.store_CB)
+        self.recall_Button = ttk.Button(
+            self.signal_Control_Frame, name="recall_button")
+        self.recall_Button.configure(
+            style="Button2b.TButton", text='\nRECALL\n')
+        self.recall_Button.pack(anchor="nw", side="left")
+        self.recall_Button.configure(command=self.recall_CB)
+        self.signal_Control_Frame.grid(column=0, pady=10, row=0, sticky="n")
+        self.callsign_Frame = ttk.Frame(
+            self.secondary_menu_Frame,
+            name="callsign_frame")
+        self.callsign_Frame.configure(
+            height=200, style="Normal.TFrame", width=200)
+        self.label5 = ttk.Label(self.callsign_Frame)
+        self.label5.configure(style="Heading2b.TLabel", text='AJ6CU', width=10)
+        self.label5.pack(anchor="nw", padx="0 10", side="left")
+        self.label6 = ttk.Label(self.callsign_Frame)
+        self.label6.configure(style="Heading2b.TLabel", text='V2.0 RCL1')
+        self.label6.pack(anchor="nw", side="left")
+        self.callsign_Frame.grid(
+            column=1,
+            padx="20 0",
+            pady=10,
+            row=0,
+            sticky="n")
+        self.secondary_menu_Frame.pack(anchor="nw", side="top")
+        self.sMeter_Frame = ttk.Frame(self.frame1, name="smeter_frame")
+        self.sMeter_Frame.configure(
+            height=200, style="Normal.TFrame", width=200)
+        self.s_meter_Label = ttk.Label(self.sMeter_Frame, name="s_meter_label")
+        self.s_meter_Label.configure(style="Heading2b.TLabel", text='S Meter')
+        self.s_meter_Label.grid(column=0, row=1, sticky="w")
+        self.s_meter_Progressbar = ttk.Progressbar(
+            self.sMeter_Frame, name="s_meter_progressbar")
+        self.s_meter_Progressbar.configure(
+            length=380, maximum=10, orient="horizontal")
+        self.s_meter_Progressbar.grid(column=1, row=1, sticky="w")
+        self.power_meter_Label = ttk.Label(
+            self.sMeter_Frame, name="power_meter_label")
+        self.power_meter_Label.configure(
+            style="Heading2b.TLabel", text='Power')
+        self.power_meter_Label.grid(column=0, row=2, sticky="w")
+        self.power_meter_Progressbar = ttk.Progressbar(
+            self.sMeter_Frame, name="power_meter_progressbar")
+        self.power_meter_Progressbar.configure(
+            length=380, maximum=10, orient="horizontal")
+        self.power_meter_Progressbar.grid(column=1, row=2)
+        self.label7 = ttk.Label(self.sMeter_Frame)
+        self.label7.configure(
+            style="Heading2b.TLabel",
+            text='...................5................7..............8..........9........')
+        self.label7.grid(column=1, row=0, sticky="ew")
+        self.sMeter_Frame.pack(
+            anchor="nw",
+            expand=True,
+            fill="x",
+            padx=150,
+            side="top")
+        self.ATT_IFS_Adjust_Frame = ttk.Frame(
+            self.frame1, name="att_ifs_adjust_frame")
+        self.ATT_IFS_Adjust_Frame.configure(
+            height=50, style="Normal.TFrame", width=800)
+        self.att_ifs_Frame = ttk.Frame(
+            self.ATT_IFS_Adjust_Frame,
+            name="att_ifs_frame")
+        self.att_ifs_Frame.configure(
+            height=200, style="Normal.TFrame", width=400)
+        self.att_Graph_Frame = ttk.Frame(
+            self.att_ifs_Frame, name="att_graph_frame")
+        self.att_Graph_Frame.configure(
+            height=200, style="Normal.TFrame", width=500)
+        self.att_Button = ttk.Button(self.att_Graph_Frame, name="att_button")
+        self.att_Button.configure(style="Button2b.TButton", text='ATT')
+        self.att_Button.pack(anchor="w", padx="5 10", side="left")
+        self.att_Button.configure(command=self.att_CB)
+        self.att_LabeledScale = ttk.LabeledScale(
+            self.att_Graph_Frame,
+            compound="bottom",
+            from_=0,
+            to=255,
+            name="att_labeledscale")
+        self.att_LabeledScale.pack(
+            anchor="w", expand=True, fill="x", side="right")
+        self.att_Graph_Frame.pack(
+            anchor="w", expand=True, fill="x", side="top")
+        self.ifs_Graph_Frame = ttk.Frame(
+            self.att_ifs_Frame, name="ifs_graph_frame")
+        self.ifs_Graph_Frame.configure(
+            height=200, style="Normal.TFrame", width=500)
+        self.ifs_Button = ttk.Button(self.ifs_Graph_Frame, name="ifs_button")
+        self.ifs_Button.configure(
+            state="normal",
+            style="Button2b.TButton",
+            text='IFS')
+        self.ifs_Button.pack(anchor="w", padx="5 10", side="left")
+        self.ifs_Button.configure(command=self.ifs_CB)
+        self.ifs_LabeledScale = ttk.LabeledScale(
+            self.ifs_Graph_Frame,
+            compound="bottom",
+            from_=-2000,
+            to=2000,
+            name="ifs_labeledscale")
+        self.ifs_LabeledScale.pack(
+            anchor="w", expand=True, fill="x", side="right")
+        self.ifs_Graph_Frame.pack(
+            anchor="w",
+            expand=True,
+            fill="x",
+            pady=50,
+            side="bottom")
+        self.att_ifs_Frame.pack(
+            anchor="nw",
+            expand=True,
+            fill="x",
+            padx=10,
+            side="left")
+        self.cw_Info_Frame = ttk.Frame(
+            self.ATT_IFS_Adjust_Frame,
+            name="cw_info_frame")
+        self.cw_Info_Frame.configure(
+            borderwidth=5,
+            height=200,
+            style="NormalOutline.TFrame",
+            width=200)
+        self.cw_settings_title_Label = ttk.Label(
+            self.cw_Info_Frame, name="cw_settings_title_label")
+        self.cw_settings_title_Label.configure(
+            style="Heading2b.TLabel", text='CW Settings')
+        self.cw_settings_title_Label.grid(column=0, columnspan=3, row=0)
+        self.tone_Label = ttk.Label(self.cw_Info_Frame, name="tone_label")
+        self.tone_Label.configure(style="Heading3b.TLabel", text='Tone')
+        self.tone_Label.grid(column=0, row=1, sticky="w")
+        self.tone_value_Label = ttk.Label(
+            self.cw_Info_Frame, name="tone_value_label")
+        self.tone_value_VAR = tk.StringVar(value='700')
+        self.tone_value_Label.configure(
+            style="Heading3b.TLabel",
+            text='700',
+            textvariable=self.tone_value_VAR)
+        self.tone_value_Label.grid(column=1, padx="0 2", row=1, sticky="w")
+        self.tone_units_Label = ttk.Label(
+            self.cw_Info_Frame, name="tone_units_label")
+        self.tone_units_Label.configure(style="Heading3b.TLabel", text='Hz')
+        self.tone_units_Label.grid(column=2, row=1, sticky="w")
+        self.key_type_Label = ttk.Label(
+            self.cw_Info_Frame, name="key_type_label")
+        self.key_type_Label.configure(style="Heading3b.TLabel", text='Key')
+        self.key_type_Label.grid(column=0, row=2, sticky="w")
+        self.key_type_value_Label = ttk.Label(
+            self.cw_Info_Frame, name="key_type_value_label")
+        self.key_type_value_VAR = tk.StringVar(value='Straight')
+        self.key_type_value_Label.configure(
+            style="Heading3b.TLabel",
+            text='Straight',
+            textvariable=self.key_type_value_VAR)
+        self.key_type_value_Label.grid(column=1, row=2, sticky="w")
+        self.key_speed_label = ttk.Label(
+            self.cw_Info_Frame, name="key_speed_label")
+        self.key_speed_label.configure(style="Heading3b.TLabel", text='Speed')
+        self.key_speed_label.grid(column=0, row=3, sticky="w")
+        self.key_speed_value_Label = ttk.Label(
+            self.cw_Info_Frame, name="key_speed_value_label")
+        self.key_speed_value_VAR = tk.StringVar(value='15')
+        self.key_speed_value_Label.configure(
+            style="Heading3b.TLabel",
+            text='15',
+            textvariable=self.key_speed_value_VAR)
+        self.key_speed_value_Label.grid(column=1, row=3, sticky="w")
+        self.key_speed_units_Label = ttk.Label(
+            self.cw_Info_Frame, name="key_speed_units_label")
+        self.key_speed_units_Label.configure(
+            style="Heading3b.TLabel", text='wpm')
+        self.key_speed_units_Label.grid(column=2, row=3, sticky="w")
+        self.delay_returning_to_rx_Label = ttk.Label(
+            self.cw_Info_Frame, name="delay_returning_to_rx_label")
+        self.delay_returning_to_rx_Label.configure(
+            style="Heading3b.TLabel", text='Delay->RX')
+        self.delay_returning_to_rx_Label.grid(
+            column=0, padx="0 3", row=4, sticky="w")
+        self.delay_returning_to_rx_value_Label = ttk.Label(
+            self.cw_Info_Frame, name="delay_returning_to_rx_value_label")
+        self.delay_returning_to_rx_value_VAR = tk.StringVar(value='500')
+        self.delay_returning_to_rx_value_Label.configure(
+            style="Heading3b.TLabel",
+            text='500',
+            textvariable=self.delay_returning_to_rx_value_VAR)
+        self.delay_returning_to_rx_value_Label.grid(
+            column=1, row=4, sticky="w")
+        self.delay_returning_to_rx_units_Label = ttk.Label(
+            self.cw_Info_Frame, name="delay_returning_to_rx_units_label")
+        self.delay_returning_to_rx_units_Label.configure(
+            style="Heading3b.TLabel", text='ms')
+        self.delay_returning_to_rx_units_Label.grid(
+            column=2, row=4, sticky="w")
+        self.delay_starting_tx_Label = ttk.Label(
+            self.cw_Info_Frame, name="delay_starting_tx_label")
+        self.delay_starting_tx_Label.configure(
+            style="Heading3b.TLabel", text='Delay->TX')
+        self.delay_starting_tx_Label.grid(column=0, row=5, sticky="w")
+        self.delay_starting_tx_value_Label = ttk.Label(
+            self.cw_Info_Frame, name="delay_starting_tx_value_label")
+        self.delay_starting_tx_value_VAR = tk.StringVar(value='250')
+        self.delay_starting_tx_value_Label.configure(
+            style="Heading3b.TLabel",
+            text='250',
+            textvariable=self.delay_starting_tx_value_VAR)
+        self.delay_starting_tx_value_Label.grid(column=1, row=5, sticky="w")
+        self.delay_starting_tx_units_Label = ttk.Label(
+            self.cw_Info_Frame, name="delay_starting_tx_units_label")
+        self.delay_starting_tx_units_Label.configure(
+            style="Heading3b.TLabel", text='ms')
+        self.delay_starting_tx_units_Label.grid(column=2, row=5, sticky="w")
+        self.cw_Info_Frame.pack(anchor="n", expand=True, fill="x", side="top")
+        self.ATT_IFS_Adjust_Frame.pack(
+            anchor="center",
+            expand=True,
+            fill="x",
+            pady="50 0",
+            side="bottom")
+        self.frame1.pack(anchor="nw", expand=True, fill="x", side="top")
+        self.configure(height=665, width=850)
 
     def settings_CB(self):
         pass
@@ -75,3 +531,10 @@ class piCECNextionUI:
 
     def ifs_CB(self):
         pass
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    widget = piCECNextionUI(root)
+    widget.pack(expand=True, fill="both")
+    root.mainloop()

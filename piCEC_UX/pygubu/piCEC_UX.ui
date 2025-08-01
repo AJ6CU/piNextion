@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<interface version="1.5" author="PygubuDesigner 0.41.4">
+<interface version="1.5" author="PygubuDesigner 0.41.3">
   <project>
     <settings>
       <setting id="name">pi_Nextion_UX</setting>
@@ -57,7 +57,7 @@
 SETTINGS
 </property>
                 <property name="textvariable">string:settings_VAR</property>
-                <property name="width">10</property>
+                <property name="width">12</property>
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="padx">0 2</property>
@@ -74,7 +74,7 @@ SETTINGS
 VFO
 </property>
                 <property name="textvariable">string:vfo_VAR</property>
-                <property name="width">10</property>
+                <property name="width">12</property>
                 <layout manager="grid">
                   <property name="column">1</property>
                   <property name="padx">0 2</property>
@@ -91,7 +91,7 @@ VFO
 MODE
 </property>
                 <property name="textvariable">string:mode_VAR</property>
-                <property name="width">10</property>
+                <property name="width">12</property>
                 <layout manager="grid">
                   <property name="column">2</property>
                   <property name="padx">0 2</property>
@@ -108,7 +108,7 @@ MODE
 BAND UP
 </property>
                 <property name="textvariable">string:band_up_VAR</property>
-                <property name="width">10</property>
+                <property name="width">12</property>
                 <layout manager="grid">
                   <property name="column">3</property>
                   <property name="padx">0 2</property>
@@ -125,7 +125,7 @@ BAND UP
 BAND DN
 </property>
                 <property name="textvariable">string:band_dn_VAR</property>
-                <property name="width">10</property>
+                <property name="width">12</property>
                 <layout manager="grid">
                   <property name="column">4</property>
                   <property name="padx">0 2</property>
@@ -142,7 +142,7 @@ BAND DN
 LOCK
 </property>
                 <property name="textvariable">string:lock_VAR</property>
-                <property name="width">10</property>
+                <property name="width">12</property>
                 <layout manager="grid">
                   <property name="column">5</property>
                   <property name="padx">0 2</property>
@@ -158,7 +158,7 @@ LOCK
                 <property name="text" translatable="yes">
 SPEAKER
 </property>
-                <property name="width">10</property>
+                <property name="width">12</property>
                 <layout manager="grid">
                   <property name="column">6</property>
                   <property name="row">0</property>
@@ -254,7 +254,6 @@ STOP!
                 <property name="width">200</property>
                 <layout manager="grid">
                   <property name="column">1</property>
-                  <property name="padx">50 0</property>
                   <property name="pady">2</property>
                   <property name="row">0</property>
                   <property name="sticky">e</property>
@@ -267,7 +266,6 @@ STOP!
                     <layout manager="pack">
                       <property name="anchor">e</property>
                       <property name="expand">false</property>
-                      <property name="fill">x</property>
                       <property name="side">right</property>
                     </layout>
                   </object>
@@ -326,7 +324,7 @@ STOP!
                 <property name="width">200</property>
                 <layout manager="grid">
                   <property name="column">1</property>
-                  <property name="padx">30</property>
+                  <property name="padx">225 0</property>
                   <property name="row">0</property>
                   <property name="sticky">e</property>
                 </layout>

@@ -30,3 +30,48 @@ class piCECNextionUI:
 
     def run(self):
         self.mainwindow.mainloop()
+
+    def settings_CB(self):
+        pass
+
+    def vfo_CB(self):
+        pass
+
+    def mode_CB(self):
+        pass
+
+    def band_up_CB(self):
+        pass
+
+    def band_dn_CB(self):
+        pass
+
+    def lock_CB(self):
+        pass
+
+    def speaker_CB(self):
+        pass
+
+    def stop_CB(self):
+        pass
+
+    def tuning_Step_CB(self):
+        pass
+
+    def split_CB(self):
+        pass
+
+    def rit_CB(self):
+        pass
+
+    def store_CB(self):
+        pass
+
+    def recall_CB(self):
+        pass
+
+    def att_CB(self):
+        pass
+
+    def ifs_CB(self):
+        pass

@@ -26,23 +26,33 @@ def setup_ttk_styles(master=None):
     style = ttk.Style(master)
     #sv_ttk.set_theme("dark"))
 
-    fontList = {'Heading1': ('Times New Roman',24, 'bold', 'italic' ),
+    fontList = {'Heading1': ('Times New Roman',24, 'bold' ),
             'Heading2': ('Arial',18, 'bold' ),
+            'Heading2b': ('Arial',14, 'bold' ),
             'Heading3': ('Arial',12, 'bold' ),
             'Heading4': ('Arial',10, 'bold' ),
             'Normal': ('Default', 10),
+            'HeadingVFO': ('Fixed',82, 'bold' ),
             'Emphasis': ('Default',12, 'bold'),
             'Symbol1': ('Symbol',18, 'bold'),
             'Symbol3': ('Symbol',12, 'bold')}
 
-    style.configure('Heading1.TLabel',font=fontList['Heading1'], background='blue', foreground='white')
+    style.configure('Heading1.TLabel',font=fontList['Heading1'], background='gray', foreground='white')
     style.configure('Heading2.TLabel',font=fontList['Heading2'])
+    style.configure('Heading2b.TLabel',font=fontList['Heading2b'], background='gray', foreground='white')
+    style.configure('Heading3b.TLabel',font=fontList['Heading3'], background='gray', foreground='white')
+    style.configure('Heading4b.TLabel',font=fontList['Heading4'], background='gray', foreground='white')
+    style.configure('GreenLED.TLabel',font=fontList['Heading2'], background='green', foreground='white')
+    style.configure('RedLED.TLabel',font=fontList['Heading2'], background='red', foreground='white')
+    style.configure('VFO.TLabel',font=fontList['HeadingVFO'], background='gray', foreground='white')
     style.configure('Heading3.TLabel',font=fontList['Heading3'])
     style.configure('Heading4.TLabel',font=fontList['Heading4'])
     style.configure('Normal.TLabel',font=fontList['Normal'])
     style.configure('Symbol1.TLabel',font=fontList['Symbol1'])
     style.configure('Button1.TButton',font=fontList['Heading1'])
     style.configure('Button2.TButton',font=fontList['Heading2'])
+    style.configure('Button2b.TButton',font=fontList['Heading2b'])
+    style.configure('RedButton2.TButton',font=fontList['Heading2'], background='red', foreground='white')
     style.configure('Button3.TButton',font=fontList['Heading3'])
  #   style.configure('DarkButton3.TButton',font=fontList['Heading3'], background='black', foreground='white', boarderwidth=5, relief='raised')
     style.configure('Button4.TButton',font=fontList['Heading4'])
@@ -73,6 +83,7 @@ def setup_ttk_styles(master=None):
     style.configure('Highlight.TFrame', background='blue', bd=4 )
  #   style.configure('Dark.TFrame', background='black', bd=4, bordercolor='white')
     style.configure('Normal.TFrame', background='gray', bd=4)
+    style.configure('NormalOutline.TFrame', background='gray', bd=4, bordercolor='white' ,relief='raised')
 
     style.configure('Fixed.TNotebook')
     style.configure('Fixed.TNotebook.Tab',padding=[5,2])

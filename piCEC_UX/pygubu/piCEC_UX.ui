@@ -34,7 +34,7 @@
         <layout manager="pack">
           <property name="anchor">nw</property>
           <property name="expand">True</property>
-          <property name="fill">both</property>
+          <property name="fill">x</property>
           <property name="side">top</property>
         </layout>
         <child>
@@ -45,104 +45,118 @@
             <property name="width">800</property>
             <layout manager="pack">
               <property name="anchor">nw</property>
+              <property name="expand">true</property>
               <property name="fill">x</property>
               <property name="side">top</property>
             </layout>
             <child>
               <object class="ttk.Button" id="settings_Button" named="True">
-                <property name="style">Button2.TButton</property>
+                <property name="command" type="command" cbtype="simple">settings_CB</property>
+                <property name="style">Button2b.TButton</property>
                 <property name="text" translatable="yes">
-Settings
+SETTINGS
 </property>
-                <property name="width">10</property>
+                <property name="textvariable">string:settings_VAR</property>
+                <property name="width">9</property>
                 <layout manager="grid">
                   <property name="column">0</property>
-                  <property name="padx">1</property>
                   <property name="row">0</property>
+                  <property name="sticky">ns</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="ttk.Button" id="vfo_Button" named="True">
-                <property name="style">Button2.TButton</property>
+                <property name="command" type="command" cbtype="simple">vfo_CB</property>
+                <property name="style">Button2b.TButton</property>
                 <property name="text" translatable="yes">
 VFO
 </property>
-                <property name="width">10</property>
+                <property name="textvariable">string:vfo_VAR</property>
+                <property name="width">9</property>
                 <layout manager="grid">
                   <property name="column">1</property>
-                  <property name="padx">1</property>
                   <property name="row">0</property>
+                  <property name="sticky">ns</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="ttk.Button" id="mode_button" named="True">
-                <property name="style">Button2.TButton</property>
+                <property name="command" type="command" cbtype="simple">mode_CB</property>
+                <property name="style">Button2b.TButton</property>
                 <property name="text" translatable="yes">
 MODE
 </property>
-                <property name="width">10</property>
+                <property name="textvariable">string:mode_VAR</property>
+                <property name="width">9</property>
                 <layout manager="grid">
                   <property name="column">2</property>
-                  <property name="padx">1</property>
                   <property name="row">0</property>
+                  <property name="sticky">ns</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="ttk.Button" id="band_up_Button" named="True">
-                <property name="style">Button2.TButton</property>
+                <property name="command" type="command" cbtype="simple">band_up_CB</property>
+                <property name="style">Button2b.TButton</property>
                 <property name="text" translatable="yes">
 BAND UP
 </property>
-                <property name="width">10</property>
+                <property name="textvariable">string:band_up_VAR</property>
+                <property name="width">9</property>
                 <layout manager="grid">
                   <property name="column">3</property>
-                  <property name="padx">1</property>
                   <property name="row">0</property>
+                  <property name="sticky">ns</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="ttk.Button" id="band_dn_Button" named="True">
-                <property name="style">Button2.TButton</property>
+                <property name="command" type="command" cbtype="simple">band_dn_CB</property>
+                <property name="style">Button2b.TButton</property>
                 <property name="text" translatable="yes">
 BAND DN
 </property>
-                <property name="width">10</property>
+                <property name="textvariable">string:band_dn_VAR</property>
+                <property name="width">9</property>
                 <layout manager="grid">
                   <property name="column">4</property>
-                  <property name="padx">1</property>
                   <property name="row">0</property>
+                  <property name="sticky">ns</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="ttk.Button" id="lock_Button" named="True">
-                <property name="style">Button2.TButton</property>
+                <property name="command" type="command" cbtype="simple">lock_CB</property>
+                <property name="style">Button2b.TButton</property>
                 <property name="text" translatable="yes">
 LOCK
 </property>
-                <property name="width">10</property>
+                <property name="textvariable">string:lock_VAR</property>
+                <property name="width">9</property>
                 <layout manager="grid">
                   <property name="column">5</property>
-                  <property name="padx">1</property>
                   <property name="row">0</property>
+                  <property name="sticky">ns</property>
                 </layout>
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="spk_Button" named="True">
-                <property name="style">Button2.TButton</property>
+              <object class="ttk.Button" id="speaker_Button" named="True">
+                <property name="command" type="command" cbtype="simple">speaker_CB</property>
+                <property name="style">Button2b.TButton</property>
                 <property name="text" translatable="yes">
-SPK
+SPEAKER
 </property>
-                <property name="width">10</property>
+                <property name="width">9</property>
                 <layout manager="grid">
                   <property name="column">6</property>
-                  <property name="padx">1</property>
                   <property name="row">0</property>
+                  <property name="sticky">ns</property>
                 </layout>
               </object>
             </child>
@@ -150,7 +164,7 @@ SPK
         </child>
         <child>
           <object class="ttk.Frame" id="vfoA_Frame" named="True">
-            <property name="style">Normal.TFrame</property>
+            <property name="style">NormalOutline.TFrame</property>
             <property name="width">480</property>
             <layout manager="pack">
               <property name="anchor">nw</property>
@@ -172,26 +186,56 @@ SPK
                 <child>
                   <object class="ttk.Label" id="rx_Status_Light_Label" named="True">
                     <property name="borderwidth">4</property>
-                    <property name="style">Heading2.TLabel</property>
-                    <property name="text" translatable="yes">RX</property>
+                    <property name="state">normal</property>
+                    <property name="style">GreenLED.TLabel</property>
+                    <property name="text" translatable="yes">  RX</property>
                     <property name="width">5</property>
                     <layout manager="grid">
                       <property name="column">0</property>
-                      <property name="pady">15</property>
+                      <property name="pady">10</property>
                       <property name="row">0</property>
                     </layout>
                   </object>
                 </child>
                 <child>
                   <object class="ttk.Label" id="tx_Status_Light_Label" named="True">
-                    <property name="background">#000000</property>
-                    <property name="foreground">#ff2600</property>
+                    <property name="borderwidth">4</property>
                     <property name="state">disabled</property>
-                    <property name="text" translatable="yes">TX</property>
+                    <property name="style">RedLED.TLabel</property>
+                    <property name="text" translatable="yes">  TX</property>
                     <property name="width">5</property>
                     <layout manager="grid">
                       <property name="column">0</property>
+                      <property name="pady">15</property>
                       <property name="row">1</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Button" id="stop_Button" named="True">
+                    <property name="command" type="command" cbtype="simple">stop_CB</property>
+                    <property name="state">disabled</property>
+                    <property name="style">RedButton2.TButton</property>
+                    <property name="text" translatable="yes">
+STOP!
+</property>
+                    <property name="width">6</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="padx">20 10</property>
+                      <property name="row">0</property>
+                      <property name="rowspan">2</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Separator" id="separator2">
+                    <property name="orient">vertical</property>
+                    <layout manager="grid">
+                      <property name="column">2</property>
+                      <property name="row">0</property>
+                      <property name="rowspan">2</property>
+                      <property name="sticky">ns</property>
                     </layout>
                   </object>
                 </child>
@@ -204,8 +248,23 @@ SPK
                 <property name="width">200</property>
                 <layout manager="grid">
                   <property name="column">1</property>
+                  <property name="pady">2</property>
                   <property name="row">0</property>
+                  <property name="sticky">e</property>
                 </layout>
+                <child>
+                  <object class="ttk.Label" id="primary_VFO_Label" named="True">
+                    <property name="style">VFO.TLabel</property>
+                    <property name="text" translatable="yes">99.999.999</property>
+                    <property name="textvariable">string:primary_VFO_VAR</property>
+                    <layout manager="pack">
+                      <property name="anchor">e</property>
+                      <property name="expand">true</property>
+                      <property name="fill">both</property>
+                      <property name="side">right</property>
+                    </layout>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -213,40 +272,102 @@ SPK
         <child>
           <object class="ttk.Frame" id="vfoB_Frame" named="True">
             <property name="style">Normal.TFrame</property>
-            <property name="width">480</property>
             <layout manager="pack">
+              <property name="anchor">nw</property>
+              <property name="expand">true</property>
+              <property name="fill">both</property>
               <property name="side">top</property>
             </layout>
             <child>
               <object class="ttk.Frame" id="vfo_Frame" named="True">
-                <property name="height">200</property>
                 <property name="style">Normal.TFrame</property>
-                <property name="width">200</property>
                 <layout manager="grid">
                   <property name="column">0</property>
+                  <property name="padx">130</property>
+                  <property name="pady">4</property>
                   <property name="row">0</property>
+                  <property name="sticky">w</property>
                 </layout>
+                <child>
+                  <object class="ttk.Label" id="secondary_VFO_Label" named="True">
+                    <property name="style">Heading1.TLabel</property>
+                    <property name="text" translatable="yes">99.999.999</property>
+                    <property name="textvariable">string:secondary_VFO_VAR</property>
+                    <layout manager="pack">
+                      <property name="anchor">nw</property>
+                      <property name="padx">20</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="secondary_Mode_Label" named="True">
+                    <property name="style">Heading1.TLabel</property>
+                    <property name="text" translatable="yes">CWL</property>
+                    <property name="textvariable">string:secondary_Mode_VAR</property>
+                    <layout manager="pack">
+                      <property name="anchor">ne</property>
+                      <property name="side">right</property>
+                    </layout>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
               <object class="ttk.Frame" id="tuning_Step_Frame" named="True">
-                <property name="height">200</property>
                 <property name="style">Normal.TFrame</property>
                 <property name="width">200</property>
                 <layout manager="grid">
                   <property name="column">1</property>
+                  <property name="padx">30</property>
                   <property name="row">0</property>
+                  <property name="sticky">e</property>
+                </layout>
+                <child>
+                  <object class="ttk.Button" id="tuning_Step_Button" named="True">
+                    <property name="command" type="command" cbtype="simple">tuning_Step_CB</property>
+                    <property name="style">Button2b.TButton</property>
+                    <property name="text" translatable="yes">10000</property>
+                    <layout manager="pack">
+                      <property name="anchor">nw</property>
+                      <property name="padx">10</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="tuning_Step_Units_Label" named="True">
+                    <property name="style">Heading1.TLabel</property>
+                    <property name="text" translatable="yes">Hz</property>
+                    <layout manager="pack">
+                      <property name="anchor">nw</property>
+                      <property name="side">right</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Separator" id="separator1">
+                <property name="cursor">dot</property>
+                <property name="orient">horizontal</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="columnspan">2</property>
+                  <property name="row">1</property>
+                  <property name="sticky">ew</property>
                 </layout>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="ttk.Frame" id="att_IFS_Toggle_Frame" named="True">
+          <object class="ttk.Frame" id="secondary_menu_Frame" named="True">
             <property name="height">200</property>
             <property name="style">Normal.TFrame</property>
             <property name="width">200</property>
             <layout manager="pack">
+              <property name="anchor">nw</property>
               <property name="side">top</property>
             </layout>
             <child>
@@ -256,8 +377,65 @@ SPK
                 <property name="width">200</property>
                 <layout manager="grid">
                   <property name="column">0</property>
+                  <property name="pady">10</property>
                   <property name="row">0</property>
+                  <property name="sticky">n</property>
                 </layout>
+                <child>
+                  <object class="ttk.Button" id="split_Button" named="True">
+                    <property name="command" type="command" cbtype="simple">split_CB</property>
+                    <property name="style">Button2b.TButton</property>
+                    <property name="text" translatable="yes">
+SPLIT
+</property>
+                    <layout manager="pack">
+                      <property name="anchor">nw</property>
+                      <property name="padx">20</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Button" id="rit_Button" named="True">
+                    <property name="command" type="command" cbtype="simple">rit_CB</property>
+                    <property name="style">Button2b.TButton</property>
+                    <property name="text" translatable="yes">
+RIT
+</property>
+                    <layout manager="pack">
+                      <property name="anchor">nw</property>
+                      <property name="padx">0 20</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Button" id="store_Button" named="True">
+                    <property name="command" type="command" cbtype="simple">store_CB</property>
+                    <property name="style">Button2b.TButton</property>
+                    <property name="text" translatable="yes">
+STORE
+</property>
+                    <layout manager="pack">
+                      <property name="anchor">nw</property>
+                      <property name="padx">0 20</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Button" id="recall_Button" named="True">
+                    <property name="command" type="command" cbtype="simple">recall_CB</property>
+                    <property name="style">Button2b.TButton</property>
+                    <property name="text" translatable="yes">
+RECALL
+</property>
+                    <layout manager="pack">
+                      <property name="anchor">nw</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
@@ -267,19 +445,33 @@ SPK
                 <property name="width">200</property>
                 <layout manager="grid">
                   <property name="column">1</property>
+                  <property name="padx">20 0</property>
+                  <property name="pady">10</property>
                   <property name="row">0</property>
+                  <property name="sticky">n</property>
                 </layout>
-              </object>
-            </child>
-            <child>
-              <object class="ttk.Frame" id="sw_Release_Frame" named="True">
-                <property name="height">200</property>
-                <property name="style">Normal.TFrame</property>
-                <property name="width">200</property>
-                <layout manager="grid">
-                  <property name="column">2</property>
-                  <property name="row">0</property>
-                </layout>
+                <child>
+                  <object class="ttk.Label" id="label5">
+                    <property name="style">Heading2b.TLabel</property>
+                    <property name="text" translatable="yes">AJ6CU</property>
+                    <property name="width">10</property>
+                    <layout manager="pack">
+                      <property name="anchor">nw</property>
+                      <property name="padx">0 10</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="label6">
+                    <property name="style">Heading2b.TLabel</property>
+                    <property name="text" translatable="yes">V2.0 RCL1</property>
+                    <layout manager="pack">
+                      <property name="anchor">nw</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -290,60 +482,358 @@ SPK
             <property name="style">Normal.TFrame</property>
             <property name="width">200</property>
             <layout manager="pack">
+              <property name="anchor">nw</property>
+              <property name="expand">true</property>
+              <property name="fill">x</property>
+              <property name="padx">150</property>
               <property name="side">top</property>
             </layout>
+            <child>
+              <object class="ttk.Label" id="s_meter_Label" named="True">
+                <property name="style">Heading2b.TLabel</property>
+                <property name="text" translatable="yes">S Meter</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Progressbar" id="s_meter_Progressbar" named="True">
+                <property name="length">380</property>
+                <property name="maximum">10</property>
+                <property name="orient">horizontal</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="power_meter_Label" named="True">
+                <property name="style">Heading2b.TLabel</property>
+                <property name="text" translatable="yes">Power</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="row">2</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Progressbar" id="power_meter_Progressbar" named="True">
+                <property name="length">380</property>
+                <property name="maximum">10</property>
+                <property name="orient">horizontal</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label7">
+                <property name="style">Heading2b.TLabel</property>
+                <property name="text" translatable="yes">...................5................7..............8..........9........</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                  <property name="sticky">ew</property>
+                </layout>
+              </object>
+            </child>
           </object>
         </child>
         <child>
           <object class="ttk.Frame" id="ATT_IFS_Adjust_Frame" named="True">
-            <property name="height">200</property>
+            <property name="height">50</property>
             <property name="style">Normal.TFrame</property>
-            <property name="width">200</property>
+            <property name="width">800</property>
             <layout manager="pack">
-              <property name="side">top</property>
+              <property name="anchor">w</property>
+              <property name="expand">true</property>
+              <property name="fill">x</property>
+              <property name="pady">50 0</property>
+              <property name="side">bottom</property>
             </layout>
             <child>
+              <object class="ttk.Frame" id="att_ifs_Frame" named="True">
+                <property name="height">200</property>
+                <property name="style">Normal.TFrame</property>
+                <property name="width">400</property>
+                <layout manager="pack">
+                  <property name="anchor">nw</property>
+                  <property name="expand">true</property>
+                  <property name="fill">x</property>
+                  <property name="padx">10</property>
+                  <property name="side">left</property>
+                </layout>
+                <child>
+                  <object class="ttk.Frame" id="att_Graph_Frame" named="True">
+                    <property name="height">200</property>
+                    <property name="style">Normal.TFrame</property>
+                    <property name="width">500</property>
+                    <layout manager="pack">
+                      <property name="anchor">w</property>
+                      <property name="expand">true</property>
+                      <property name="fill">x</property>
+                      <property name="side">top</property>
+                    </layout>
+                    <child>
+                      <object class="ttk.Button" id="att_Button" named="True">
+                        <property name="command" type="command" cbtype="simple">att_CB</property>
+                        <property name="style">Button2b.TButton</property>
+                        <property name="text" translatable="yes">ATT</property>
+                        <layout manager="pack">
+                          <property name="anchor">w</property>
+                          <property name="padx">5 10</property>
+                          <property name="side">left</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.LabeledScale" id="att_LabeledScale" named="True">
+                        <property name="compound">bottom</property>
+                        <property name="from_">0</property>
+                        <property name="to">255</property>
+                        <layout manager="pack">
+                          <property name="anchor">w</property>
+                          <property name="expand">true</property>
+                          <property name="fill">x</property>
+                          <property name="side">right</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Frame" id="ifs_Graph_Frame" named="True">
+                    <property name="height">200</property>
+                    <property name="style">Normal.TFrame</property>
+                    <property name="width">500</property>
+                    <layout manager="pack">
+                      <property name="anchor">w</property>
+                      <property name="expand">true</property>
+                      <property name="fill">x</property>
+                      <property name="pady">50</property>
+                      <property name="side">bottom</property>
+                    </layout>
+                    <child>
+                      <object class="ttk.Button" id="ifs_Button" named="True">
+                        <property name="command" type="command" cbtype="simple">ifs_CB</property>
+                        <property name="state">normal</property>
+                        <property name="style">Button2b.TButton</property>
+                        <property name="text" translatable="yes">IFS</property>
+                        <layout manager="pack">
+                          <property name="anchor">w</property>
+                          <property name="padx">5 10</property>
+                          <property name="side">left</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.LabeledScale" id="ifs_LabeledScale" named="True">
+                        <property name="compound">bottom</property>
+                        <property name="from_">-2000</property>
+                        <property name="to">2000</property>
+                        <layout manager="pack">
+                          <property name="anchor">w</property>
+                          <property name="expand">true</property>
+                          <property name="fill">x</property>
+                          <property name="side">right</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
               <object class="ttk.Frame" id="cw_Info_Frame" named="True">
+                <property name="borderwidth">5</property>
                 <property name="height">200</property>
-                <property name="style">Normal.TFrame</property>
+                <property name="style">NormalOutline.TFrame</property>
                 <property name="width">200</property>
-                <layout manager="grid">
-                  <property name="column">0</property>
-                  <property name="row">0</property>
+                <layout manager="pack">
+                  <property name="anchor">n</property>
+                  <property name="expand">true</property>
+                  <property name="fill">x</property>
+                  <property name="side">top</property>
                 </layout>
-              </object>
-            </child>
-            <child>
-              <object class="ttk.Frame" id="att_Graph_Frame" named="True">
-                <property name="height">200</property>
-                <property name="style">Normal.TFrame</property>
-                <property name="width">200</property>
-                <layout manager="grid">
-                  <property name="column">1</property>
-                  <property name="row">0</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="ttk.Frame" id="ifs_Graph_Frame" named="True">
-                <property name="height">200</property>
-                <property name="style">Normal.TFrame</property>
-                <property name="width">200</property>
-                <layout manager="grid">
-                  <property name="column">2</property>
-                  <property name="row">0</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="ttk.Frame" id="cw_Button_Frame" named="True">
-                <property name="height">200</property>
-                <property name="style">Normal.TFrame</property>
-                <property name="width">200</property>
-                <layout manager="grid">
-                  <property name="column">3</property>
-                  <property name="row">0</property>
-                </layout>
+                <child>
+                  <object class="ttk.Label" id="cw_settings_title_Label" named="True">
+                    <property name="style">Heading2b.TLabel</property>
+                    <property name="text" translatable="yes">CW Settings</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="columnspan">3</property>
+                      <property name="row">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="tone_Label" named="True">
+                    <property name="style">Heading3b.TLabel</property>
+                    <property name="text" translatable="yes">Tone</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="row">1</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="tone_value_Label" named="True">
+                    <property name="style">Heading3b.TLabel</property>
+                    <property name="text" translatable="yes">700</property>
+                    <property name="textvariable">string:tone_value_VAR</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="padx">0 2</property>
+                      <property name="row">1</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="tone_units_Label" named="True">
+                    <property name="style">Heading3b.TLabel</property>
+                    <property name="text" translatable="yes">Hz</property>
+                    <layout manager="grid">
+                      <property name="column">2</property>
+                      <property name="row">1</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="key_type_Label" named="True">
+                    <property name="style">Heading3b.TLabel</property>
+                    <property name="text" translatable="yes">Key</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="row">2</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="key_type_value_Label" named="True">
+                    <property name="style">Heading3b.TLabel</property>
+                    <property name="text" translatable="yes">Straight</property>
+                    <property name="textvariable">string:key_type_value_VAR</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="row">2</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="key_speed_label" named="True">
+                    <property name="style">Heading3b.TLabel</property>
+                    <property name="text" translatable="yes">Speed</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="row">3</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="key_speed_value_Label" named="True">
+                    <property name="style">Heading3b.TLabel</property>
+                    <property name="text" translatable="yes">15</property>
+                    <property name="textvariable">string:key_speed_value_VAR</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="row">3</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="key_speed_units_Label" named="True">
+                    <property name="style">Heading3b.TLabel</property>
+                    <property name="text" translatable="yes">wpm</property>
+                    <layout manager="grid">
+                      <property name="column">2</property>
+                      <property name="row">3</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="delay_returning_to_rx_Label" named="True">
+                    <property name="style">Heading3b.TLabel</property>
+                    <property name="text" translatable="yes">Delay-&gt;RX</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">0 3</property>
+                      <property name="row">4</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="delay_returning_to_rx_value_Label" named="True">
+                    <property name="style">Heading3b.TLabel</property>
+                    <property name="text" translatable="yes">500</property>
+                    <property name="textvariable">string:delay_returning_to_rx_value_VAR</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="row">4</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="delay_returning_to_rx_units_Label" named="True">
+                    <property name="style">Heading3b.TLabel</property>
+                    <property name="text" translatable="yes">ms</property>
+                    <layout manager="grid">
+                      <property name="column">2</property>
+                      <property name="row">4</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="delay_starting_tx_Label" named="True">
+                    <property name="style">Heading3b.TLabel</property>
+                    <property name="text" translatable="yes">Delay-&gt;TX</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="row">5</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="delay_starting_tx_value_Label" named="True">
+                    <property name="style">Heading3b.TLabel</property>
+                    <property name="text" translatable="yes">250</property>
+                    <property name="textvariable">string:delay_starting_tx_value_VAR</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="row">5</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="delay_starting_tx_units_Label" named="True">
+                    <property name="style">Heading3b.TLabel</property>
+                    <property name="text" translatable="yes">ms</property>
+                    <layout manager="grid">
+                      <property name="column">2</property>
+                      <property name="row">5</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

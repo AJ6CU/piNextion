@@ -23,14 +23,14 @@
     <resources />
   </project>
   <object class="tk.Tk" id="main_window" named="True">
-    <property name="height">480</property>
-    <property name="width">800</property>
+    <property name="height">665</property>
+    <property name="width">850</property>
     <child>
       <object class="ttk.Frame" id="frame1">
         <property name="borderwidth">5</property>
         <property name="height">480</property>
         <property name="style">Normal.TFrame</property>
-        <property name="width">800</property>
+        <property name="width">1000</property>
         <layout manager="pack">
           <property name="anchor">nw</property>
           <property name="expand">True</property>
@@ -44,7 +44,7 @@
             <property name="style">Normal.TFrame</property>
             <property name="width">800</property>
             <layout manager="pack">
-              <property name="anchor">nw</property>
+              <property name="anchor">n</property>
               <property name="expand">true</property>
               <property name="fill">x</property>
               <property name="side">top</property>
@@ -57,9 +57,10 @@
 SETTINGS
 </property>
                 <property name="textvariable">string:settings_VAR</property>
-                <property name="width">9</property>
+                <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">0</property>
+                  <property name="padx">0 2</property>
                   <property name="row">0</property>
                   <property name="sticky">ns</property>
                 </layout>
@@ -73,9 +74,10 @@ SETTINGS
 VFO
 </property>
                 <property name="textvariable">string:vfo_VAR</property>
-                <property name="width">9</property>
+                <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">1</property>
+                  <property name="padx">0 2</property>
                   <property name="row">0</property>
                   <property name="sticky">ns</property>
                 </layout>
@@ -89,9 +91,10 @@ VFO
 MODE
 </property>
                 <property name="textvariable">string:mode_VAR</property>
-                <property name="width">9</property>
+                <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">2</property>
+                  <property name="padx">0 2</property>
                   <property name="row">0</property>
                   <property name="sticky">ns</property>
                 </layout>
@@ -105,9 +108,10 @@ MODE
 BAND UP
 </property>
                 <property name="textvariable">string:band_up_VAR</property>
-                <property name="width">9</property>
+                <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">3</property>
+                  <property name="padx">0 2</property>
                   <property name="row">0</property>
                   <property name="sticky">ns</property>
                 </layout>
@@ -121,9 +125,10 @@ BAND UP
 BAND DN
 </property>
                 <property name="textvariable">string:band_dn_VAR</property>
-                <property name="width">9</property>
+                <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">4</property>
+                  <property name="padx">0 2</property>
                   <property name="row">0</property>
                   <property name="sticky">ns</property>
                 </layout>
@@ -137,9 +142,10 @@ BAND DN
 LOCK
 </property>
                 <property name="textvariable">string:lock_VAR</property>
-                <property name="width">9</property>
+                <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">5</property>
+                  <property name="padx">0 2</property>
                   <property name="row">0</property>
                   <property name="sticky">ns</property>
                 </layout>
@@ -152,7 +158,7 @@ LOCK
                 <property name="text" translatable="yes">
 SPEAKER
 </property>
-                <property name="width">9</property>
+                <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">6</property>
                   <property name="row">0</property>
@@ -167,8 +173,8 @@ SPEAKER
             <property name="style">NormalOutline.TFrame</property>
             <property name="width">480</property>
             <layout manager="pack">
-              <property name="anchor">nw</property>
-              <property name="expand">true</property>
+              <property name="anchor">center</property>
+              <property name="expand">false</property>
               <property name="fill">x</property>
               <property name="side">top</property>
             </layout>
@@ -181,7 +187,7 @@ SPEAKER
                   <property name="column">0</property>
                   <property name="padx">15</property>
                   <property name="row">0</property>
-                  <property name="sticky">ew</property>
+                  <property name="sticky">w</property>
                 </layout>
                 <child>
                   <object class="ttk.Label" id="rx_Status_Light_Label" named="True">
@@ -248,6 +254,7 @@ STOP!
                 <property name="width">200</property>
                 <layout manager="grid">
                   <property name="column">1</property>
+                  <property name="padx">50 0</property>
                   <property name="pady">2</property>
                   <property name="row">0</property>
                   <property name="sticky">e</property>
@@ -259,8 +266,8 @@ STOP!
                     <property name="textvariable">string:primary_VFO_VAR</property>
                     <layout manager="pack">
                       <property name="anchor">e</property>
-                      <property name="expand">true</property>
-                      <property name="fill">both</property>
+                      <property name="expand">false</property>
+                      <property name="fill">x</property>
                       <property name="side">right</property>
                     </layout>
                   </object>
@@ -273,7 +280,7 @@ STOP!
           <object class="ttk.Frame" id="vfoB_Frame" named="True">
             <property name="style">Normal.TFrame</property>
             <layout manager="pack">
-              <property name="anchor">nw</property>
+              <property name="anchor">center</property>
               <property name="expand">true</property>
               <property name="fill">both</property>
               <property name="side">top</property>
@@ -552,7 +559,7 @@ RECALL
             <property name="style">Normal.TFrame</property>
             <property name="width">800</property>
             <layout manager="pack">
-              <property name="anchor">w</property>
+              <property name="anchor">center</property>
               <property name="expand">true</property>
               <property name="fill">x</property>
               <property name="pady">50 0</property>

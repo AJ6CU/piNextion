@@ -3,13 +3,13 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 
+
 def i18n_translator_noop(value):
     """i18n - Setup translator in derived class file"""
     return value
 
 
 def first_object_callback_noop(widget):
-    """on first objec callback - Setup callback in derived class file."""
     pass
 
 
@@ -26,7 +26,7 @@ def image_loader_default(master, image_name: str):
 #
 # Base class definition
 #
-class modeSelectUI(tk.Toplevel):
+class testButtonClassUI(ttk.Frame):
     def __init__(
         self,
         master=None,
@@ -47,30 +47,18 @@ class modeSelectUI(tk.Toplevel):
 
         super().__init__(master, **kw)
 
-        self.lsb_select_Button = ttk.Button(self, name="lsb_select_button")
-        self.lsb_select_Button.configure(text='LSB')
+        self.button1 = ttk.Button(self)
+        self.button1.configure(style="Button3Blue.TButton", text='button1')
         # First object created
-        on_first_object_cb(self.lsb_select_Button)
+        on_first_object_cb(self.button1)
 
-        self.lsb_select_Button.pack(anchor="w", side="left")
-        self.lsb_select_Button.configure(command=self.lsb_clicked_CB)
-        self.usb_select_Button = ttk.Button(self, name="usb_select_button")
-        self.usb_select_Button.configure(text='USB')
-        self.usb_select_Button.pack(anchor="w", side="left")
-        self.cwl_select_Button = ttk.Button(self, name="cwl_select_button")
-        self.cwl_select_Button.configure(text='CWL')
-        self.cwl_select_Button.pack(anchor="w", side="left")
-        self.cwu_select_Button = ttk.Button(self, name="cwu_select_button")
-        self.cwu_select_Button.configure(text='CWU')
-        self.cwu_select_Button.pack(anchor="w", side="left")
-        self.configure(height=200, width=200)
-
-    def lsb_clicked_CB(self):
-        pass
+        self.button1.pack(side="top")
+        self.configure(height=200, style="Normal.TFrame", width=200)
+        self.pack(side="top")
 
 
 if __name__ == "__main__":
     root = tk.Tk()
-    widget = modeSelectUI(root)
+    widget = testButtonClassUI(root)
     widget.pack(expand=True, fill="both")
     root.mainloop()

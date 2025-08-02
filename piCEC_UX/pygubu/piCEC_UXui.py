@@ -26,7 +26,7 @@ def image_loader_default(master, image_name: str):
 #
 # Base class definition
 #
-class piCECNextionUI(tk.Tk):
+class piCECNextionUI(ttk.Frame):
     def __init__(
         self,
         master=None,
@@ -47,21 +47,15 @@ class piCECNextionUI(tk.Tk):
 
         super().__init__(master, **kw)
 
-        self.frame1 = ttk.Frame(self)
-        self.frame1.configure(
-            borderwidth=5,
-            height=480,
-            style="Normal.TFrame",
-            width=1000)
-        # First object created
-        on_first_object_cb(self.frame1)
-
-        self.menuBar_Frame = ttk.Frame(self.frame1, name="menubar_frame")
+        self.menuBar_Frame = ttk.Frame(self, name="menubar_frame")
         self.menuBar_Frame.configure(
             borderwidth=5,
             height=50,
             style="Normal.TFrame",
             width=800)
+        # First object created
+        on_first_object_cb(self.menuBar_Frame)
+
         self.settings_Button = ttk.Button(
             self.menuBar_Frame, name="settings_button")
         self.settings_VAR = tk.StringVar(value='\nSETTINGS\n')
@@ -81,15 +75,41 @@ class piCECNextionUI(tk.Tk):
             width=12)
         self.vfo_Button.grid(column=1, padx="0 2", row=0, sticky="ns")
         self.vfo_Button.configure(command=self.vfo_CB)
-        self.mode_button = ttk.Button(self.menuBar_Frame, name="mode_button")
-        self.mode_VAR = tk.StringVar(value='\nMODE\n')
-        self.mode_button.configure(
-            style="Button2b.TButton",
-            text='\nMODE\n',
-            textvariable=self.mode_VAR,
-            width=12)
-        self.mode_button.grid(column=2, padx="0 2", row=0, sticky="ns")
-        self.mode_button.configure(command=self.mode_CB)
+        self.mode_select_Menubutton = ttk.Menubutton(
+            self.menuBar_Frame, name="mode_select_menubutton")
+        self.mode_select_VAR = tk.StringVar(value=' \nMode\n')
+        self.mode_select_Menubutton.configure(
+            state="normal",
+            style="Heading2b.TMenubutton",
+            text=' \nMode\n',
+            textvariable=self.mode_select_VAR,
+            width=9)
+        self.menu1 = tk.Menu(self.mode_select_Menubutton)
+        self.menu1.configure(tearoff=False)
+        self.menu1.add(
+            "command",
+            command=self.mode_lsb_CB,
+            font="{Arial} 36 {}",
+            label='LSB',
+            state="normal")
+        self.menu1.add(
+            "command",
+            command=self.mode_usb_CB,
+            font="{Arial} 36 {}",
+            label='USB')
+        self.menu1.add(
+            "command",
+            command=self.mode_cwl_CB,
+            font="{Arial} 36 {}",
+            label='CWL')
+        self.menu1.add(
+            "command",
+            command=self.mode_cwu_CB,
+            font="{Arial} 36 {}",
+            label='CWU')
+        self.mode_select_Menubutton.configure(menu=self.menu1)
+        self.mode_select_Menubutton.grid(
+            column=2, padx="0 2", row=0, sticky="ns")
         self.band_up_Button = ttk.Button(
             self.menuBar_Frame, name="band_up_button")
         self.band_up_VAR = tk.StringVar(value='\nBAND UP\n')
@@ -128,7 +148,7 @@ class piCECNextionUI(tk.Tk):
         self.speaker_Button.grid(column=6, row=0, sticky="ns")
         self.speaker_Button.configure(command=self.speaker_CB)
         self.menuBar_Frame.pack(anchor="n", expand=True, fill="x", side="top")
-        self.vfoA_Frame = ttk.Frame(self.frame1, name="vfoa_frame")
+        self.vfoA_Frame = ttk.Frame(self, name="vfoa_frame")
         self.vfoA_Frame.configure(style="NormalOutline.TFrame", width=480)
         self.rxTX_Status_Frame = ttk.Frame(
             self.vfoA_Frame, name="rxtx_status_frame")
@@ -178,28 +198,12 @@ class piCECNextionUI(tk.Tk):
             textvariable=self.primary_VFO_VAR)
         self.primary_VFO_Label.pack(anchor="e", expand=False, side="right")
         self.vfo_display_Frame.grid(column=1, pady=2, row=0, sticky="e")
-        self.mode_select_Frame = ttk.Frame(
-            self.vfoA_Frame, name="mode_select_frame")
-        self.mode_select_Frame.configure(height=200, width=200)
-        self.button1 = ttk.Button(self.mode_select_Frame)
-        self.button1.configure(style="Button2b.TButton", text='\nLSB\n')
-        self.button1.pack(anchor="w", side="left")
-        self.button2 = ttk.Button(self.mode_select_Frame)
-        self.button2.configure(style="Button2b.TButton", text='\nUSB\n')
-        self.button2.pack(anchor="w", side="left")
-        self.button3 = ttk.Button(self.mode_select_Frame)
-        self.button3.configure(style="Button2b.TButton", text='\nCWL\n')
-        self.button3.pack(anchor="w", side="left")
-        self.button4 = ttk.Button(self.mode_select_Frame)
-        self.button4.configure(style="Button2b.TButton", text='\nCWU\n')
-        self.button4.pack(anchor="w", side="left")
-        self.mode_select_Frame.grid(column=1, pady=2, sticky="e")
         self.vfoA_Frame.pack(
             anchor="center",
             expand=False,
             fill="x",
             side="top")
-        self.vfoB_Frame = ttk.Frame(self.frame1, name="vfob_frame")
+        self.vfoB_Frame = ttk.Frame(self, name="vfob_frame")
         self.vfoB_Frame.configure(style="Normal.TFrame")
         self.vfo_Frame = ttk.Frame(self.vfoB_Frame, name="vfo_frame")
         self.vfo_Frame.configure(style="Normal.TFrame")
@@ -244,7 +248,7 @@ class piCECNextionUI(tk.Tk):
             fill="both",
             side="top")
         self.secondary_menu_Frame = ttk.Frame(
-            self.frame1, name="secondary_menu_frame")
+            self, name="secondary_menu_frame")
         self.secondary_menu_Frame.configure(
             height=200, style="Normal.TFrame", width=200)
         self.signal_Control_Frame = ttk.Frame(
@@ -291,7 +295,7 @@ class piCECNextionUI(tk.Tk):
             row=0,
             sticky="n")
         self.secondary_menu_Frame.pack(anchor="nw", side="top")
-        self.sMeter_Frame = ttk.Frame(self.frame1, name="smeter_frame")
+        self.sMeter_Frame = ttk.Frame(self, name="smeter_frame")
         self.sMeter_Frame.configure(
             height=200, style="Normal.TFrame", width=200)
         self.s_meter_Label = ttk.Label(self.sMeter_Frame, name="s_meter_label")
@@ -324,7 +328,7 @@ class piCECNextionUI(tk.Tk):
             padx=150,
             side="top")
         self.ATT_IFS_Adjust_Frame = ttk.Frame(
-            self.frame1, name="att_ifs_adjust_frame")
+            self, name="att_ifs_adjust_frame")
         self.ATT_IFS_Adjust_Frame.configure(
             height=50, style="Normal.TFrame", width=800)
         self.att_ifs_Frame = ttk.Frame(
@@ -484,8 +488,12 @@ class piCECNextionUI(tk.Tk):
             fill="x",
             pady="50 0",
             side="bottom")
-        self.frame1.pack(anchor="nw", expand=True, fill="x", side="top")
-        self.configure(height=665, width=850)
+        self.configure(
+            borderwidth=5,
+            height=665,
+            style="Normal.TFrame",
+            width=850)
+        self.pack(anchor="nw", expand=True, fill="x", side="top")
 
     def settings_CB(self):
         pass
@@ -493,7 +501,16 @@ class piCECNextionUI(tk.Tk):
     def vfo_CB(self):
         pass
 
-    def mode_CB(self):
+    def mode_lsb_CB(self):
+        pass
+
+    def mode_usb_CB(self):
+        pass
+
+    def mode_cwl_CB(self):
+        pass
+
+    def mode_cwu_CB(self):
         pass
 
     def band_up_CB(self):

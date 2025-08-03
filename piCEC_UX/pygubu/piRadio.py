@@ -1,9 +1,10 @@
 import serial
 import time
 class piRadio:
-    def __init__(self, serialPort, debugFlag):
+    def __init__(self, serialPort, window, debugFlag):
         self.debugCommandDecoding = debugFlag
         self.tty = serialPort
+        self.mainWindow = window
         self.radioPort = None
         self.getterCB_Dict = {
             "v1": self.v1Get,
@@ -361,7 +362,14 @@ class piRadio:
 #   The "ca" command indicates assignment of a new mode to vfoA
 #
     def caGet(self, buffer):
+        modeDict = {"2":"LSB",
+                    "3":"USB",
+                    "4":"CWL",
+                    "5":"CWU"}
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+
+        self.mainWindow.mode_select_VAR.set(modeDict[value])
+
         if self.debugCommandDecoding:
             print("ca get called:", "buffer =", buffer)
             print("ca assign mode for vfoA frequency")

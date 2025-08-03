@@ -30,12 +30,14 @@ class piCECNextion(baseui.piCECNextionUI):
 #   Main program and loop
 #
 
-myRadio = piRadio("/dev/ttyS0", True)
-myRadio.openRadio()
-myRadio.readALLValues()
+
 
 
 root = tk.Tk()
-widget = piCECNextion(root)
-widget.pack(expand=True, fill="both")
+mainWindow = piCECNextion(root)
+mainWindow.pack(expand=True, fill="both")
+
+myRadio = piRadio("/dev/ttyS0", mainWindow,True)
+myRadio.openRadio()
+myRadio.readALLValues()
 root.mainloop()

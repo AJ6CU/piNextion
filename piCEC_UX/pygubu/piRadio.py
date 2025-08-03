@@ -318,6 +318,8 @@ class piRadio:
 #
     def vcGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.mainWindow.mode_select_VAR.set(modeDict[value])
+
         if self.debugCommandDecoding:
             print("vc get called:", "buffer =", buffer)
             print("vc new frequency change")
@@ -564,4 +566,44 @@ class piRadio:
                             commandCount += 1
 
             # time.sleep(0.1)  # Small delay to prevent busy-waiting
+
+    def updateData(self):
+        ffCount = 0
+        buffer = []
+        while self.radioPort.in_waiting > 0:
+            #
+            #   Get command
+            #
+            in_byte = self.radioPort.read(1)
+
+            if in_byte:
+                #
+                #   Looking for the first line with a "p" in the first character
+                #   CEC sends a zero to start, just ignore it
+                #
+                if ((len(buffer) == 0) and (in_byte.decode(errors='ignore') != 'p')):
+                    pass
+                else:
+                    if self.debugCommandDecoding:
+                        if (len(buffer) == 0):
+                            print("line ", commandCount)
+                    buffer.append(in_byte)
+
+                    if in_byte.hex() == 'ff':
+                        ffCount += 1
+                        if ffCount == 3:
+                            #
+                            #   decode the characters into ascii
+                            #
+                            decoded_buffer_char = [item.decode(errors='ignore') for item in buffer]
+                            #
+                            #   since we saw 3 0xff's in a row, we can call the getter to
+                            #   set the value in the UX
+                            #
+                            self.getRadioCommand(decoded_buffer_char)
+                            #
+                            #   reset counters (and add one to total processed)
+                            #
+                            ffCount = 0
+                            buffer = buffer[:0]
 

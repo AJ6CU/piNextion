@@ -40,4 +40,6 @@ mainWindow.pack(expand=True, fill="both")
 myRadio = piRadio("/dev/ttyS0", mainWindow,True)
 myRadio.openRadio()
 myRadio.readALLValues()
+
+root.after(100,myRadio.updateData)
 root.mainloop()

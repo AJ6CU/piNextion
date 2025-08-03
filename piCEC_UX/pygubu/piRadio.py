@@ -62,6 +62,12 @@ class piRadio:
             "vy": self.vyPut,
             "ve": self.vePut
         }
+        self.modeDict = {
+            "2":"LSB",
+            "3":"USB",
+            "4":"CWL",
+            "5":"CWU"
+        }
 
 
     def openRadio(self):
@@ -318,7 +324,7 @@ class piRadio:
 #
     def vcGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        self.mainWindow.mode_select_VAR.set(modeDict[value])
+        self.mainWindow.primary_VFO_VAR.set(value)
 
         if self.debugCommandDecoding:
             print("vc get called:", "buffer =", buffer)
@@ -365,13 +371,9 @@ class piRadio:
 #   The "ca" command indicates assignment of a new mode to vfoA
 #
     def caGet(self, buffer):
-        modeDict = {"2":"LSB",
-                    "3":"USB",
-                    "4":"CWL",
-                    "5":"CWU"}
         value = self.extractValue(buffer, 10, len(buffer) - 3)
 
-        self.mainWindow.mode_select_VAR.set(modeDict[value])
+        self.mainWindow.mode_select_VAR.set(self.modeDict[value])
 
         if self.debugCommandDecoding:
             print("ca get called:", "buffer =", buffer)
@@ -584,9 +586,7 @@ class piRadio:
                 if ((len(buffer) == 0) and (in_byte.decode(errors='ignore') != 'p')):
                     pass
                 else:
-                    if self.debugCommandDecoding:
-                        if (len(buffer) == 0):
-                            print("line ", commandCount)
+
                     buffer.append(in_byte)
 
                     if in_byte.hex() == 'ff':
@@ -606,4 +606,5 @@ class piRadio:
                             #
                             ffCount = 0
                             buffer = buffer[:0]
+        self.mainWindow.after(500,self.updateData)
 

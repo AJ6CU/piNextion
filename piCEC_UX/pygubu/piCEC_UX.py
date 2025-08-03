@@ -41,5 +41,5 @@ myRadio = piRadio("/dev/ttyS0", mainWindow,True)
 myRadio.openRadio()
 myRadio.readALLValues()
 
-root.after(100,myRadio.updateData)
+root.after(500,myRadio.updateData)
 root.mainloop()

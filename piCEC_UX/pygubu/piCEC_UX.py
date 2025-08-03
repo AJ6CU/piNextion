@@ -4,6 +4,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import pygubu
 import piCEC_UXui as baseui
+from piRadio import piRadio
 
 import mystyles  # Styles definition module
 
@@ -25,8 +26,16 @@ class piCECNextion(baseui.piCECNextionUI):
         )
 
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    widget = piCECNextion(root)
-    widget.pack(expand=True, fill="both")
-    root.mainloop()
+#
+#   Main program and loop
+#
+
+myRadio = piRadio("/dev/ttyS0", True)
+myRadio.openRadio()
+myRadio.processRadioCommand("v1","put","a command buffer")
+myRadio.processRadioCommand("v1","get","a command buffer")
+
+root = tk.Tk()
+widget = piCECNextion(root)
+widget.pack(expand=True, fill="both")
+root.mainloop()

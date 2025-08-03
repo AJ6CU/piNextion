@@ -32,8 +32,8 @@ class piCECNextion(baseui.piCECNextionUI):
 
 myRadio = piRadio("/dev/ttyS0", True)
 myRadio.openRadio()
-myRadio.processRadioCommand("v1","put","a command buffer")
-myRadio.processRadioCommand("v1","get","a command buffer")
+myRadio.readALLValues()
+
 
 root = tk.Tk()
 widget = piCECNextion(root)

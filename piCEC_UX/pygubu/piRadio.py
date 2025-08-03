@@ -1,9 +1,10 @@
 import serial
 import time
-class piRadio():
+class piRadio:
     def __init__(self, serialPort, debugFlag):
         self.debugCommandDecoding = debugFlag
         self.tty = serialPort
+        self.radioPort = None
         self.getterCB_Dict = {
             "v1": self.v1Get,
             "v2": self.v2Get,
@@ -26,10 +27,14 @@ class piRadio():
             "vb": self.vbGet,
             "cb": self.cbGet,
             "cn": self.cnGet,
-
+            "vt": self.vtGet,
+            "ck": self.ckGet,
+            "vs": self.vsGet,
+            "vy": self.vyGet,
+            "ve": self.veGet
         }
         self.putterCB_Dict = {
-            "v1": self.v1Put
+            "v1": self.v1Put,
             "v2": self.v2Put,
             "v3": self.v3Put,
             "v4": self.v4Put,
@@ -43,7 +48,6 @@ class piRadio():
             "sc": self.scPut,
             "cm": self.cmPut,
             "c0": self.c0Put,
-            "c0": self.c0Put,
             "vc": self.vcPut,
             "cc": self.ccPut,
             "va": self.vaPut,
@@ -51,18 +55,23 @@ class piRadio():
             "vb": self.vbPut,
             "cb": self.cbPut,
             "cn": self.cnPut,
+            "vt": self.vtPut,
+            "ck": self.ckPut,
+            "vs": self.vsPut,
+            "vy": self.vyPut,
+            "ve": self.vePut
         }
 
 
     def openRadio(self):
-        self.radioPort = None
+
         if self.debugCommandDecoding:
             print("***opening port to radio***")
         try:
             self.radioPort = serial.Serial(self.tty, 9600, timeout=1)
         except serial.SerialException as e:
             print(f"Serial port error: {e}")
-        return self.radioPort
+        return
 
     def extractValue(self, buffer, start, end):
         returnBuffer =""
@@ -201,32 +210,32 @@ class piRadio():
 #
 #   The "vo" command originates from the EEPROM and is added to the frequency to shift it
 #
-        def voGet(self, buffer):
-            value = self.extractValue(buffer, 10, len(buffer) - 3)
-            if self.debugCommandDecoding:
-                print("vo get called:", "buffer =", buffer)
-                print("vo related to display shift")
-                print("value=", value, sep='*', end='*')
-                print("\n")
+    def voGet(self, buffer):
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+        if self.debugCommandDecoding:
+            print("vo get called:", "buffer =", buffer)
+            print("vo related to display shift")
+            print("value=", value, sep='*', end='*')
+            print("\n")
 
-        def voPut(self):
-            if self.debugCommandDecoding:
-                print("vo put called")
+    def voPut(self):
+        if self.debugCommandDecoding:
+            print("vo put called")
 
 #
 #   The "vp" command originates from the EEPROM and is added to the frequency to shift it
 #
-        def vpGet(self, buffer):
-            value = self.extractValue(buffer, 10, len(buffer) - 3)
-            if self.debugCommandDecoding:
-                print("vp get called:", "buffer =", buffer)
-                print("vp related to display shift")
-                print("value=", value, sep='*', end='*')
-                print("\n")
+    def vpGet(self, buffer):
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+        if self.debugCommandDecoding:
+            print("vp get called:", "buffer =", buffer)
+            print("vp related to display shift")
+            print("value=", value, sep='*', end='*')
+            print("\n")
 
-        def vpPut(self):
-            if self.debugCommandDecoding:
-                print("vp put called")
+    def vpPut(self):
+        if self.debugCommandDecoding:
+            print("vp put called")
 
 #
 #   The "vq" command is referred to as display option 2 in EEPROM
@@ -265,7 +274,7 @@ class piRadio():
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("sc get called:", "buffer =", buffer)
-            print("sc call sign"")
+            print("sc call sign")
             print("value=", value, sep='*', end='*')
             print("\n")
 
@@ -319,7 +328,7 @@ class piRadio():
             print("vc put called")
 
 #
-#   The "cc" command indicates a change to a new mode (e.g. USB, LSB, etc)
+#   The "cc" command indicates a change to a new mode (e.g. USB, LSB, etc.)
 #
     def ccGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
@@ -355,7 +364,7 @@ class piRadio():
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("ca get called:", "buffer =", buffer)
-            print("ca assign mode for vfoa frequecy")
+            print("ca assign mode for vfoA frequency")
             print("value=", value, sep='*', end='*')
             print("\n")
 
@@ -385,7 +394,7 @@ class piRadio():
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("cb get called:", "buffer =", buffer)
-            print("cb assign mode for vfoB frequecy")
+            print("cb assign mode for vfoB frequency")
             print("value=", value, sep='*', end='*')
             print("\n")
 
@@ -408,103 +417,142 @@ class piRadio():
         if self.debugCommandDecoding:
             print("cn put called")
 
+#
+#   The "vt" command stores the CW tone
+#
+    def vtGet(self, buffer):
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+        if self.debugCommandDecoding:
+            print("vt get called:", "buffer =", buffer)
+            print("vt tone for CW")
+            print("value=", value, sep='*', end='*')
+            print("\n")
+
+    def vtPut(self):
+        if self.debugCommandDecoding:
+            print("vt put called")
+
+#
+#   The "ck" command stores which cw key is being used
+#
+    def ckGet(self, buffer):
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+        if self.debugCommandDecoding:
+            print("ck get called:", "buffer =", buffer)
+            print("ck select key for cw")
+            print("value=", value, sep='*', end='*')
+            print("\n")
+
+    def ckPut(self):
+        if self.debugCommandDecoding:
+            print("ck put called")
+
+#
+#   The "vs" command stores words/minute
+#
+    def vsGet(self, buffer):
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+        if self.debugCommandDecoding:
+            print("vs get called:", "buffer =", buffer)
+            print("vs word/minute for keyer")
+            print("value=", value, sep='*', end='*')
+            print("\n")
+
+    def vsPut(self):
+        if self.debugCommandDecoding:
+            print("vs put called")
+
+#
+#   The "vy" command stores delay returning after last cw character
+#
+    def vyGet(self, buffer):
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+        if self.debugCommandDecoding:
+            print("vy get called:", "buffer =", buffer)
+            print("vy delay returning after cw key")
+            print("value=", value, sep='*', end='*')
+            print("\n")
+
+    def vyPut(self):
+        if self.debugCommandDecoding:
+            print("vy put called")
+
+#
+#   The "ve" command stores delay returning after last cw character
+#
+    def veGet(self, buffer):
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+        if self.debugCommandDecoding:
+            print("ve get called:", "buffer =", buffer)
+            print("ve start delay for first cw character")
+            print("value=", value, sep='*', end='*')
+            print("\n")
+
+    def vePut(self):
+        if self.debugCommandDecoding:
+            print("ve put called")
+#
+#   Read and process all the values sent at startup of radio
+#
+    def readALLValues(self):
+
+        ffCount = 0
+        buffer = []
+        commandCount = 0
+
+        while commandCount < 26:
+            # Read a line from the serial port (until a newline character is received)
+            # Decode the bytes to a string (e.g., 'utf-8') and remove leading/trailing whitespace
+
+            in_byte= self.radioPort.read(1)
+
+            if in_byte:
+                #
+                #   Looking for the first line with a "p" in the first character
+                #   CEC sends a zero to start, just ignore it
+                #
+                if ((len(buffer) == 0) and (in_byte.decode(errors='ignore') != 'p')):
+                    pass
+                else:
+                    if self.debugCommandDecoding:
+                        if (len(buffer) == 0):
+                            print("line ", commandCount)
+                    buffer.append (in_byte)
 
 
-    #         case "vt":
-    #             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-    #             if debugCommandDecoding:
-    #                 print("vt tone for CW")
-    #                 print("value=", value,sep='*',end='*')
-    #                 print("\n")
-    #         case "ck":
-    #             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-    #             if debugCommandDecoding:
-    #                 print("ck select key for cw")
-    #                 print("value=", value,sep='*',end='*')
-    #                 print("\n")
-    #         case "vs":
-    #             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-    #             if debugCommandDecoding:
-    #                 print("vs word/minute for keyer")
-    #                 print("value=", value,sep='*',end='*')
-    #                 print("\n")
-    #         case "vy":
-    #             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-    #             if debugCommandDecoding:
-    #                 print("vy delay returning after cw key")
-    #                 print("value=", value,sep='*',end='*')
-    #                 print("\n")
-    #         case "ve":
-    #             value = extractValue(command_buffer, 10, len(command_buffer)-3)
-    #             if debugCommandDecoding:
-    #                 print("ve delay for start")
-    #                 print("value=", value,sep='*',end='*')
-    #                 print("\n")
-    #         case _:
-    #             print("unimplemented yet command=", command)
-    #
-    #
-    # if debugCommandDecoding:
-    #     print("***starting serial procesor***")
-    # ser = serial.Serial("/dev/ttyS0", 9600, timeout=1)
-    #
-    # try:
-    #     ffCount = 0
-    #     buffer = []
-    #     lineNum = 1
-    #
-    #     while True:
-    #         # Read a line from the serial port (until a newline character is received)
-    #         # Decode the bytes to a string (e.g., 'utf-8') and remove leading/trailing whitespace
-    #
-    #         in_byte= ser.read(1)
-    #
-    #         if in_byte:
+                    if in_byte.hex() == 'ff':
+                        ffCount += 1
+                        if ffCount == 3:
+                            #
+                            #   decode the characters into ascii
+                            #
+                            decoded_buffer_char = [item.decode(errors='ignore') for item in buffer]
 
-    #             if ((len(buffer) == 0) and (in_byte.decode(errors='ignore') != 'p')):
-    #                 pass
-    #             else:
-    #                 if debugCommandDecoding:
-    #                     if (len(buffer) == 0):
-    #                         print("line ", lineNum)
-    #                 buffer.append (in_byte)
-    #
-    #
-    #                 if in_byte.hex() == 'ff':
-    #                     ffCount += 1
-    #                     if ffCount == 3:
-    #
-    #                         decoded_buffer_char = [item.decode(errors='ignore') for item in buffer]
-    #                         if debugCommandDecoding:
-    #                             for item in decoded_buffer_char:
-    #                                 print(f"{item:<{4}}", end="")
-    #                             print("")
-    #
-    #                         decoded_buffer_hex = [item.hex() for item in buffer]
-    #                         if debugCommandDecoding:
-    #                             for item in decoded_buffer_hex:
-    #                                 print(f"{item:<{4}}", end="")
-    #                             print("")
-    #
-    #                         decoded_buffer_ord = [ord(item) for item in buffer]
-    #                         if debugCommandDecoding:
-    #                             for item in decoded_buffer_ord:
-    #                                 print(f"{item:<{4}}", end="")
-    #                             print("")
-    #                         ffCount = 0
-    #                         lineNum += 1
-    #                         buffer = buffer[:0]
-    #                         #
-    #                         # process and print it
-    #                         #
-    #                         decodeCEC_command (decoded_buffer_char)
-    #
-    #         time.sleep(0.1)  # Small delay to prevent busy-waiting
-    #
-    #
-    # except KeyboardInterrupt:
-    #     print("Program terminated by user.")
-    # finally:
-    #     if ser.is_open:
-    #         ser.close()
-    #         print("Serial port closed.")
+                            if self.debugCommandDecoding:
+                                for item in decoded_buffer_char:
+                                    print(f"{item:<{4}}", end="")
+                                print("")
+
+                                decoded_buffer_hex = [item.hex() for item in buffer]
+                                for item in decoded_buffer_hex:
+                                    print(f"{item:<{4}}", end="")
+                                print("")
+
+                                decoded_buffer_ord = [ord(item) for item in buffer]
+                                for item in decoded_buffer_ord:
+                                    print(f"{item:<{4}}", end="")
+                                print("")
+                            #
+                            #   since we saw 3 0xff's in a row, we can call the getter to
+                            #   set the value in the UX
+                            #
+                            self.getRadioCommand(decoded_buffer_char)
+                            #
+                            #   reset counters (and add one to total processed)
+                            #
+                            ffCount = 0
+                            buffer = buffer[:0]
+                            commandCount += 1
+
+            #time.sleep(0.1)  # Small delay to prevent busy-waiting
+

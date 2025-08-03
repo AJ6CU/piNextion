@@ -353,6 +353,7 @@ class piRadio:
             print("va assign vfo a frequency")
             print("value=", value, sep='*', end='*')
             print("\n")
+        self.mainWindow.primary_VFO_VAR.set(value)
 
     def vaPut(self):
         if self.debugCommandDecoding:
@@ -562,5 +563,5 @@ class piRadio:
                             buffer = buffer[:0]
                             commandCount += 1
 
-            #time.sleep(0.1)  # Small delay to prevent busy-waiting
+            # time.sleep(0.1)  # Small delay to prevent busy-waiting
 

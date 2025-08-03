@@ -62,12 +62,47 @@ class piRadio:
             "vy": self.vyPut,
             "ve": self.vePut
         }
+        self.toRadioCommandDict = {
+            "TS_CMD_MODE":1,
+            "TS_CMD_FREQ":2,
+            "TS_CMD_BAND":3,
+            "TS_CMD_VFO":4,
+            "TS_CMD_SPLIT":5,
+            "TS_CMD_RIT":6,
+            "TS_CMD_TXSTOP":7,
+            "TS_CMD_SDR":8,
+            "TS_CMD_LOCK":9,            # Dial Lock
+            "TS_CMD_ATT":10,            # ATT
+            "TS_CMD_IFS":11,            # IFS Enabled
+            "TS_CMD_IFSVALUE":12,       # IFS VALUE
+            "TS_CMD_STARTADC":13,
+            "TS_CMD_STOPADC":14,
+            "TS_CMD_SPECTRUMOPT":15,    # Option for Spectrum
+            "TS_CMD_SPECTRUM":16,       # Get Spectrum Value
+            "TS_CMD_TUNESTEP":17,       # Get Spectrum Value
+            "TS_CMD_WPM":18,            # Set WPM
+            "TS_CMD_KEYTYPE":19,        # Set KeyType
+            "TS_CMD_SWTRIG":21,         # SW Action Trigger for WSPR and more
+            "TS_CMD_READMEM":31,        # Read EEProm
+            "TS_CMD_WRITEMEM":32,       # Write EEProm
+            "TS_CMD_LOOPBACK0":74,      # Loopback1 (Response to Loopback Channgel)
+            "TS_CMD_LOOPBACK1":75,      # Loopback2 (Response to Loopback Channgel)
+            "TS_CMD_LOOPBACK2":76,      # Loopback3 (Response to Loopback Channgel)
+            "TS_CMD_LOOPBACK3":77,      # Loopback4 (Response to Loopback Channgel)
+            "TS_CMD_LOOPBACK4":78,      # Loopback5 (Response to Loopback Channgel)
+            "TS_CMD_LOOPBACK5":79,      # Loopback6 (Response to Loopback Channgel)
+            "TS_CMD_FACTORYRESET":85,   # Factory Reset
+            "TS_CMD_UBITX_REBOOT":95    # Reboot
+        }
         self.modeDict = {
             "2":"LSB",
             "3":"USB",
             "4":"CWL",
             "5":"CWU"
         }
+        self.tx_to_mcu_preamble = [0x59,0x58,0x68]      # all commands to MCU must start with these three bytes
+        self.tx_to_mcu_postscript = [0xff,0xff,0xff]    # all commands to MCU must end with these three numbers
+        self.mcu_command_buffer =[]                     # buffer used to send bytes to MCU
 
 
     def openRadio(self):
@@ -347,10 +382,24 @@ class piRadio:
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def ccPut(self):
+    def ccPut(self,newMode):
+        temp_Buffer =[]
+
         if self.debugCommandDecoding:
             print("cc put called")
 
+        temp_Buffer.append(self.toRadioCommandDict ["TS_CMD_MODE"])
+        temp_Buffer.append(newMode)
+        print("decoded string =", temp_Buffer)
+
+        #
+        # decoded_buffer_hex = [item.hex() for item in buffer]
+        # for item in decoded_buffer_hex:
+        #     print(f"{item:<{4}}", end="")
+        # print("")
+
+
+        self.sendCommandToMCU(temp_Buffer)
 #
 #   The "va" command indicates assignment of vfoA to new frequency
 #
@@ -518,6 +567,7 @@ class piRadio:
             # Decode the bytes to a string (e.g., 'utf-8') and remove leading/trailing whitespace
 
             in_byte= self.radioPort.read(1)
+            #print("just tried read, in_byte=", in_byte)
 
             if in_byte:
                 #
@@ -607,4 +657,17 @@ class piRadio:
                             ffCount = 0
                             buffer = buffer[:0]
         self.mainWindow.after(500,self.updateData)
+#
+#   Send command to MCU
+#
+    def sendCommandToMCU(self, commandList):
+        for item in self.tx_to_mcu_preamble:
+            self.radioPort.write(item)
 
+        for item in commandList:
+            self.radioPort.write(bytes(item))
+
+        for item in self.tx_to_mcu_postscript:
+            self.radioPort.write(item)
+
+        self.radioPort.flush()

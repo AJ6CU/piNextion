@@ -2,7 +2,18 @@ import serial
 import time
 
 print(" starting serial test\n")
-ser = serial.Serial("/dev/ttyS0", 9600, timeout=1)
+ser = serial.Serial("com6", 9600,
+                    # bytesize=serial.EIGHTBITS,
+                    # parity=serial.PARITY_NONE,
+                    # stopbits=serial.STOPBITS_ONE,
+                    # timeout=20,  # Read timeout of 1 second
+                    # xonxoff=False,
+                    # rtscts=False,
+                    # dsrdtr=False,
+                    # write_timeout=1,  # Write timeout of 1 second
+                    # inter_byte_timeout=None,  # No inter-byte timeout
+                    # exclusive=True  # Open port exclusively
+                     timeout=1)
 
 try:
     ffCount = 0
@@ -44,7 +55,7 @@ try:
                     lineNum += 1
                     buffer = buffer[:0]
  
-        time.sleep(0.1)  # Small delay to prevent busy-waiting
+        # time.sleep(0.1)  # Small delay to prevent busy-waiting
 
 except serial.SerialException as e:
     print(f"Serial port error: {e}")

@@ -102,6 +102,8 @@ class piRadio:
         }
         self.tx_to_mcu_preamble = [0x59,0x58,0x68]      # all commands to MCU must start with these three bytes
         self.tx_to_mcu_postscript = [0x00,0x00,0x00,0xff,0xff,0x73]    # all commands to MCU must end with these three numbers
+        self.tx_select_tuning = [0x59,0x58,0x68,0x11,0x05,0x00,0x00,0x00,0xff,0xff,0x73]
+        self.tx_bandup = [0x59, 0x58, 0x68, 0x03, 0x02, 0x00, 0x00, 0x00, 0xff, 0xff, 0x73]
         self.mcu_command_buffer =[]                     # buffer used to send bytes to MCU
 
 
@@ -486,7 +488,9 @@ class piRadio:
 #   The "cn" command indicates which tuning step is active (1(smallest) - 5(largest)
 #
     def cnGet(self, buffer):
+
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.mainWindow.tuning_Step_Button_VAR.set("100")
         if self.debugCommandDecoding:
             print("cn get called:", "buffer =", buffer)
             print("cn which tuning step (1-5)")
@@ -694,7 +698,16 @@ class piRadio:
         print (buffer_bytes.hex())
         # for item in buffer_bytes:
         #     self.radioPort.write(item)
+        print("changing tuning")
+        for item in self.tx_select_tuning:
+            self.radioPort.write(item)
+            print(item)
+        print("changing band")
+        for item in self.tx_bandup:
+            self.radioPort.write(item)
+            print(item)
 
+        print("changing mode")
         for item in buffer_bytes:
             self.radioPort.write(item)
             print(item)

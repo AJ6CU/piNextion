@@ -363,6 +363,7 @@ STOP!
                 <property name="command" type="command" cbtype="simple">tuning_Step_CB</property>
                 <property name="style">Button2b.TButton</property>
                 <property name="text" translatable="yes">10000</property>
+                <property name="textvariable">string:tuning_Step_Button_VAR</property>
                 <layout manager="pack">
                   <property name="anchor">nw</property>
                   <property name="padx">10</property>

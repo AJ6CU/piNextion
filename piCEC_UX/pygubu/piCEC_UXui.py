@@ -229,8 +229,11 @@ class piCECNextionUI(ttk.Frame):
         self.tuning_Step_Frame.configure(style="Normal.TFrame", width=200)
         self.tuning_Step_Button = ttk.Button(
             self.tuning_Step_Frame, name="tuning_step_button")
+        self.tuning_Step_Button_VAR = tk.StringVar(value='10000')
         self.tuning_Step_Button.configure(
-            style="Button2b.TButton", text='10000')
+            style="Button2b.TButton",
+            text='10000',
+            textvariable=self.tuning_Step_Button_VAR)
         self.tuning_Step_Button.pack(anchor="nw", padx=10, side="left")
         self.tuning_Step_Button.configure(command=self.tuning_Step_CB)
         self.tuning_Step_Units_Label = ttk.Label(

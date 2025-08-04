@@ -101,7 +101,7 @@ class piRadio:
             "5":"CWU"
         }
         self.tx_to_mcu_preamble = [0x59,0x58,0x68]      # all commands to MCU must start with these three bytes
-        self.tx_to_mcu_postscript = [0xff,0xff,0xff]    # all commands to MCU must end with these three numbers
+        self.tx_to_mcu_postscript = [0x00,0x00,0x00,0xff,0xff,0x73]    # all commands to MCU must end with these three numbers
         self.mcu_command_buffer =[]                     # buffer used to send bytes to MCU
 
 
@@ -376,6 +376,7 @@ class piRadio:
 #
     def ccGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.mainWindow.mode_select_VAR.set(self.modeDict[value])
         if self.debugCommandDecoding:
             print("cc get called:", "buffer =", buffer)
             print("cc new mode change")
@@ -430,15 +431,30 @@ class piRadio:
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def caPut(self):
+    def caPut(self,newMode):
         if self.debugCommandDecoding:
             print("ca put called")
+        temp_Buffer =[]
+
+        temp_Buffer.append(self.toRadioCommandDict ["TS_CMD_MODE"])
+        temp_Buffer.append(newMode)
+        # print("decoded string =", temp_Buffer)
+
+        #
+        # decoded_buffer_hex = [item.hex() for item in buffer]
+        # for item in decoded_buffer_hex:
+        #     print(f"{item:<{4}}", end="")
+        # print("")
+
+
+        self.sendCommandToMCU(temp_Buffer)
 
 #
 #   The "vb" command indicates assignment of vfoB to new frequency
 #
     def vbGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.mainWindow.secondary_VFO_VAR.set(value)
         if self.debugCommandDecoding:
             print("vb get called:", "buffer =", buffer)
             print("vb assign vfo b frequency")
@@ -454,11 +470,13 @@ class piRadio:
 #
     def cbGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.mainWindow.secondary_Mode_VAR.set(self.modeDict[value])
         if self.debugCommandDecoding:
             print("cb get called:", "buffer =", buffer)
             print("cb assign mode for vfoB frequency")
             print("value=", value, sep='*', end='*')
             print("\n")
+
 
     def cbPut(self):
         if self.debugCommandDecoding:
@@ -661,13 +679,35 @@ class piRadio:
 #   Send command to MCU
 #
     def sendCommandToMCU(self, commandList):
-        for item in self.tx_to_mcu_preamble:
+        print("command")
+        buffer = []
+        buffer.extend (self.tx_to_mcu_preamble)
+        print(bytes(buffer))
+        buffer.extend(commandList)
+        print(bytes(buffer))
+        buffer.extend (self.tx_to_mcu_postscript)
+        print(bytes(buffer))
+
+        buffer_bytes = bytes(buffer)
+
+        print(buffer)
+        print (buffer_bytes.hex())
+        # for item in buffer_bytes:
+        #     self.radioPort.write(item)
+
+        for item in buffer_bytes:
             self.radioPort.write(item)
-
-        for item in commandList:
-            self.radioPort.write(bytes(item))
-
-        for item in self.tx_to_mcu_postscript:
-            self.radioPort.write(item)
-
-        self.radioPort.flush()
+            print(item)
+        #
+        # for item in self.tx_to_mcu_preamble:
+        #
+        # for item in self.tx_to_mcu_preamble:
+        #     self.radioPort.write(item)
+        #
+        # for item in commandList:
+        #     self.radioPort.write(bytes(item))
+        #
+        # for item in self.tx_to_mcu_postscript:
+        #     self.radioPort.write(item)
+        #
+        # self.radioPort.flush()

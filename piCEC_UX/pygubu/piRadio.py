@@ -112,7 +112,7 @@ class piRadio:
         if self.debugCommandDecoding:
             print("***opening port to radio***")
         try:
-            self.radioPort = serial.Serial(self.tty, 9600, timeout=1)
+            self.radioPort = serial.Serial(self.tty, 9600, timeout=0)
         except serial.SerialException as e:
             print(f"Serial port error: {e}")
         return
@@ -400,9 +400,16 @@ class piRadio:
         # for item in decoded_buffer_hex:
         #     print(f"{item:<{4}}", end="")
         # print("")
+        temp = 5
+        temp_bin = temp.to_bytes(1, byteorder='little')
+        tx_mode_switch_USB2pre = b'\x59\x58\x68\x01'
+        tx_mode_switch_USB2com = temp_bin + b'\x00\x00\x00'
+        tx_mode_switch_USB2post = b'\xff\xff\x73'
+        tx_mode_switch_USB2 = tx_mode_switch_USB2pre + tx_mode_switch_USB2com + tx_mode_switch_USB2post
+        print('command =', tx_mode_switch_USB2)
+        self.radioPort.write(tx_mode_switch_USB2)
 
-
-        self.sendCommandToMCU(temp_Buffer)
+        # self.sendCommandToMCU(tx_mode_switch_USB2)
 #
 #   The "va" command indicates assignment of vfoA to new frequency
 #

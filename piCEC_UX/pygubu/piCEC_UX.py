@@ -47,8 +47,10 @@ root = tk.Tk()
 mainWindow = piCECNextion(root)
 mainWindow.pack(expand=True, fill="both")
 
-# myRadio = piRadio("/dev/ttyS0", mainWindow,True)
-myRadio = piRadio("com6", mainWindow,True)
+# myRadio = piRadio("/dev/ttyS0", mainWindow,True)  # linux
+myRadio = piRadio("com6", mainWindow,True) # windows
+#myRadio = piRadio("/dev/cu.usbserial-00000000", mainWindow,True) # macos
+
 mainWindow.attachRadio(myRadio)
 myRadio.openRadio()
 myRadio.readALLValues()

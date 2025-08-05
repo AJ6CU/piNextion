@@ -12,6 +12,12 @@ from piRadio import piRadio
 # PROJECT_PATH = pathlib.Path(__file__).parent
 # PROJECT_UI = "piCEC_UX.ui"
 # RESOURCE_PATHS = [PROJECT_PATH]
+#define conv2BytesToInt32(lsb,msb) (int)((int16_t)((msb<<8) + lsb));
+#// 
+#// originally it was the following line. But becausee Nano's do arithmatic strangly, this failed
+W// perhaps a new compiler issue. Have to cast everything first and then you can add them
+W//#define conv4BytesToLong(lsb,lsb1,lsb2,msb) (unsigned long)(((int)(msb<<24)) + ((int)(lsb2<<16)) + ((int)(lsb1<<8))+lsb);
+#define conv4BytesToLong(lsb,lsb1,lsb2,msb) (unsigned long)(((long)msb<<24) + ((long)lsb2<<16) + ((long)lsb1<<8)+ (long)lsb);
 
 
 #

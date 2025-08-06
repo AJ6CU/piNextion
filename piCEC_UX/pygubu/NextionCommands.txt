@@ -1,0 +1,288 @@
+PX
+
+Preinitialize Events
+
+//Hide Mode Buttons
+vis bLSB,0
+vis bUSB,0
+vis bCWL,0
+vis bCWU,0
+//Hide IFS
+vis hIFS,qIFS.picc //found bug by VE1BWV
+//Hide Text Line for compatiable with Character LCD
+vis t0,0
+vis t1,0
+vis nCWNum,0
+vis tCWText,0
+vis bAction,0
+//Added Version 1.1
+vis bStep1,0
+vis bStep2,0
+vis bStep3,0
+vis bStep4,0
+vis bStep5,0
+pm.vv.val=-1
+pm.vg.val=0
+pm.sp.txt="J"
+pm.sb.txt="^"
+vis tDecode1,0
+vDecodeVisible.val=0
+if(nQuickMenu.val==1)
+{
+  //CW Menu
+  qKey.picc=1
+  vis nQWPM,1
+  vis tQKeyType,1
+  vis b0,1
+  vis b1,1
+  vis b2,1
+  vis hATT,0
+  vis hIFS,0
+  vis nATT,0
+  vis nIFS,0
+}else
+{
+  //Normal
+  qKey.picc=0
+  vis nQWPM,0
+  vis tQKeyType,0
+  vis b0,0
+  vis b1,0
+  vis b2,0
+  vis hATT,1
+  vis hIFS,qIFS.picc
+  vis nATT,1
+  vis nIFS,1
+}
+
+
+TOUCH PRESS EVENTS
+if(dim==0)
+{
+  dim=dims
+}
+
+
+***TM1****
+Events
+if(pm.sp.txt!="J")
+{
+  if(qInfo.picc==0)
+  {
+    qInfo.picc=1
+    fill 5,365,110,90,7
+  }
+  if(vDecodeVisible.val==1)
+  {
+    vis tDecode1,0
+    vDecodeVisible.val=0
+  }
+  sNewMax.txt=""
+  sys2=0
+  sys1=0
+  nTemp0.val=0
+  for(sys0=0;sys0<62;sys0++)
+  {
+    substr pm.sp.txt,sTemp0.txt,sys0*2,2
+    covx sTemp0.txt,sys2,2,2
+    //sys2/=2
+    if(sys1<sys2)
+    {
+      sys1=sys2
+      nTemp0.val=sys0
+    }
+    if(sys2<0)
+    {
+      sys2=0
+    }
+    if(sys2>100)
+    {
+      sys2=100   //was 90
+    }
+    substr sMax.txt,sTemp1.txt,sys0*2,2
+    covx sTemp1.txt,nTemp1.val,2,2
+    if(nTemp1.val<sys2)
+    {
+      nTemp1.val=sys2
+    }else
+    {
+      nTemp1.val*=9
+      nTemp3.val=sys2*1
+      nTemp1.val+=nTemp3.val
+      nTemp1.val/=10
+    }
+    covx nTemp1.val,sTemp1.txt,2,2
+    substr sTemp1.txt,sTemp1.txt,2,2
+    sNewMax.txt+=sTemp1.txt
+    if(sys0<18)
+    {
+      if(sys2>92) //was 82
+      {
+        sys2=92
+      }
+      if(nTemp1.val>92)  //was 82
+      {
+        nTemp1.val=92
+      }
+      fill sys0*4+5,475-nTemp1.val,4,nTemp1.val,1342	//1500+sys1*2046
+      fill sys0*4+5,475-sys2,4,sys2,57343	//1500+sys1*2046
+      fill sys0*4+5,383,4,92-nTemp1.val,7		//1500+sys1*2046
+    }else
+    {
+      fill sys0*4+5,475-nTemp1.val,4,nTemp1.val,1342	//1500+sys1*2046
+      fill sys0*4+5,475-sys2,4,sys2,57343	//1500+sys1*2046
+      fill sys0*4+5,365,4,100-nTemp1.val,7		//1500+sys1*2046
+    }
+    //if(sys1>nADCDisVal.val)					//maximum adc dccharget
+    //{
+    //  sys2=sys1-nADCDisVal.val
+    //}
+    //sys2=sys1*90	//80%
+    //sys2/=100
+  }
+  sMax.txt=sNewMax.txt
+  if(sys1>50)
+  {
+    sys1=63488
+  }else if(sys1>40)
+  {
+    sys1=64528
+  }else if(sys1>30)
+  {
+    sys1=58584
+  }else if(sys1>20)
+  {
+    sys1=39566
+  }else if(sys1>10)
+  {
+    sys1=33549
+  }else
+  {
+    sys1=31727
+  }
+  nTemp0.val=nTemp0.val*47
+  nTemp0.val=nTemp0.val+30
+  cov nTemp0.val,sTemp0.txt,0
+  xstr 20,362,50,20,2,sys1,7,0,1,1,sTemp0.txt
+  //xstr 5,350,90,18,0,WHITE,10565,0,1,1,sTemp0.txt
+  //xstr 5,360,37,18,0,sys1,7,2,1,1,sTemp0.txt
+  pm.sp.txt="J"
+}
+if(pm.sb.txt!="^")
+{
+  if(vDecodeVisible.val==0)
+  {
+    vis tDecode1,1
+    vDecodeVisible.val=1
+  }
+  strlen tDecode1.txt,sys0
+  if(sys0>23)
+  {
+    substr tDecode1.txt,tDecode1.txt,1,sys0-1
+  }
+  tDecode1.txt=tDecode1.txt+pm.sb.txt
+  pm.sb.txt="^"
+}
+
+
+***TIMER 2***
+//If Graphic mode
+if(nDispStatus.val==0)
+{
+  add 17,0,jSMeter.val/3
+}
+sys2=pm.vq.val&0x07
+if(sys2>0)
+{
+  //check Now condition
+  //if(dim==0)
+  if(nSaverCount.val==-10)				//Screen Saver Mode
+  {
+    //Screen Saver Mode
+    if(nLastFreq.val!=nSaverFreq.val)
+    {
+      dim=dims
+      nSaverCount.val=0
+    }
+  }else if(nSaverCount.val!=-20)	//Screen off by remote control -> disabled screen saver, always backlight off
+  {
+    //Running Mode
+    if(nLastFreq.val!=nSaverFreq.val)
+    {
+      nSaverFreq.val=nLastFreq.val
+      nSaverCount.val=0
+    }else
+    {
+      nSaverCount.val++
+      if(sys2==1)
+      {
+        if(nSaverCount.val>=180)	//3 Min
+        {
+          dim=0
+          nSaverCount.val=-10
+        }
+      }else if(sys2==2)
+      {
+        if(nSaverCount.val>=600)		//10 Min
+        {
+          dim=0
+          nSaverCount.val=-10
+        }
+      }else if(sys2==3)
+      {
+        if(nSaverCount.val>=1200)		//20 Min
+        {
+          dim=0
+          nSaverCount.val=-10
+        }
+      }
+    }
+  }
+}
+if(pm.vg.val==74)				//Loopback Process
+{
+  pm.vg.val=-1
+  //sys0 : Sender, sys1 : Command
+  sys2=pm.vv.val				//Loop back Value
+  pm.vv.val=0						//Init value for Next Receive process
+  sys0=sys2&0xFF				//Sender
+  //Loopback Signal
+  if(sys0>4)						//Sender < 5, ignore
+  {
+    sys2=sys2>>8
+    sys1=sys2&0xFF			//Command
+    if(sys1==10)				//Command : Backlight Off
+    {
+      sys2=sys2>>8			//
+      sys1=sys2&0xFF		//Data1
+      sys2=sys2>>8			//Data2 (Checksum
+      sys2=sys2&0xFF
+      sys0=sys0+sys1+10	//sender + command(10) + data1
+      sys0=sys0%256
+      if(sys0==sys2)		//Check Checksum
+      {
+        //Backlight Off
+        nSaverCount.val=-20	//Backlight off by Remote control
+        dim=0
+      }
+    }else if(sys1==11)		//Command : Backlight On
+    {
+      sys2=sys2>>8			//
+      sys1=sys2&0xFF		//Data1
+      sys2=sys2>>8			//Data2 (Checksum
+      sys2=sys2&0xFF
+      sys0=sys0+sys1+11	//sender + command(10) + data1
+      sys0=sys0%256
+      if(sys0==sys2)		//Check Checksum
+      {
+        //Backlight Off
+        dim=dims
+        nSaverCount.val=0
+      }
+    }
+  }
+}
+
+
+
+

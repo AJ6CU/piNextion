@@ -11,10 +11,20 @@ class piRadio:
         self.mainWindow = window
         self.radioPort = None
 
-        self.tx_to_mcu_preamble = [0x59,0x58,0x68]      # all commands to MCU must start with these three bytes
-        self.tx_to_mcu_postscript = [0x00,0x00,0x00,0xff,0xff,0x73]    # all commands to MCU must end with these three numbers
-        self.tx_select_tuning = [0x59,0x58,0x68,0x11,0x05,0x00,0x00,0x00,0xff,0xff,0x73]
-        self.tx_bandup = [0x59, 0x58, 0x68, 0x03, 0x02, 0x00, 0x00, 0x00, 0xff, 0xff, 0x73]
+
+#   note on external device to MCU protocol
+        #   Proceeded by 3 bytes ("preamble), completed by 3 bytes ("postscript)
+        #   In the middle there are 5 bytes tha are in one of two formats
+        #   1. First byte is the command, 2nd byte is a subfunction and 3-5 bytes are not used and 0x0
+        #   e.g. Mode change is command "1" and second byte selects the mode. 2= LSB, 3=USB, etc.
+        #   The last 4 bytes could also be characters for 4 digits (e.g. v1-5 for tuning)
+        #   2. First byte is the command and the remaining 4 bytes encode a number.
+        #   e.g. Frequency is set with a "4" The remaining 4 bytes shift at 24 bit, 2nd 16, etc. and
+        #   then add them together for the frequency
+
+        self.tx_to_mcu_preamble = b'\x59\x58\x68'       # all commands to MCU must start with these three bytes
+        self.tx_to_mcu_postscript = b'\xff\xff\x73'     # all commands to MCU must end with these three numbers
+
         self.mcu_command_buffer =[]                     # buffer used to send bytes to MCU
 
 
@@ -160,34 +170,59 @@ class piRadio:
 #   Send command to MCU
 #
     def sendCommandToMCU(self, commandList):
-        print("command")
-        buffer = []
-        buffer.extend (self.tx_to_mcu_preamble)
-        print(bytes(buffer))
-        buffer.extend(commandList)
-        print(bytes(buffer))
-        buffer.extend (self.tx_to_mcu_postscript)
-        print(bytes(buffer))
+        tx_mode_switch_USB2pre = b'\x59\x58\x68\x03'
+        tx_mode_switch_USB2com = b'\x02\x00\x00\x00'
+        tx_mode_switch_USB2post = b'\xff\xff\x73'
+        tx_mode_switch_USB2 = tx_mode_switch_USB2pre + tx_mode_switch_USB2com + tx_mode_switch_USB2post
+        self.tx_to_mcu_preamble = b'\x59\x58\x68'  # all commands to MCU must start with these three bytes
+        self.tx_to_mcu_postscript = b'\xff\xff\x73'  # all commands to MCU must end with these three numbers
+        print("commandList =", commandList)
 
-        buffer_bytes = bytes(buffer)
+        temp = self.tx_to_mcu_preamble + commandList + self.tx_to_mcu_postscript
+        print(" function call =", bytes(temp))
+        self.radioPort.write(self.tx_to_mcu_preamble + commandList + self.tx_to_mcu_postscript)
+        # for item in self.tx_to_mcu_preamble :
+        #     self.radioPort.write(item)
+        #     print(item)
+        #
+        # for item in commandList:
+        #     self.radioPort.write(item)
+        #     self.radioPort.write(item)
+        #     print(item)
+        #
+        # for item in self.tx_to_mcu_postscript:
+        #     self.radioPort.write(item)
+        #     print(item)
 
-        print(buffer)
-        print (buffer_bytes.hex())
+        # self.mcu_command_buffer = []
+        # print("command")
+        # buffer = []
+        # buffer.extend (self.tx_to_mcu_preamble)
+        # print(bytes(buffer))
+        # buffer.extend(commandList)
+        # print(bytes(buffer))
+        # buffer.extend (self.tx_to_mcu_postscript)
+        # print(bytes(buffer))
+        #
+        # buffer_bytes = bytes(buffer)
+        #
+        # print(buffer)
+        # print (buffer_bytes.hex())
+        # # for item in buffer_bytes:
+        # #     self.radioPort.write(item)
+        # print("changing tuning")
+        # for item in self.tx_select_tuning:
+        #     self.radioPort.write(item)
+        #     print(item)
+        # print("changing band")
+        # for item in self.tx_bandup:
+        #     self.radioPort.write(item)
+        #     print(item)
+        #
+        # print("changing mode")
         # for item in buffer_bytes:
         #     self.radioPort.write(item)
-        print("changing tuning")
-        for item in self.tx_select_tuning:
-            self.radioPort.write(item)
-            print(item)
-        print("changing band")
-        for item in self.tx_bandup:
-            self.radioPort.write(item)
-            print(item)
-
-        print("changing mode")
-        for item in buffer_bytes:
-            self.radioPort.write(item)
-            print(item)
+        #     print(item)
         #
         # for item in self.tx_to_mcu_preamble:
         #

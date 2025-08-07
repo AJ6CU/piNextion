@@ -28,7 +28,7 @@ class piCECNextion(baseui.piCECNextionUI):
             "cm": self.cmGet,
             "c0": self.c0Get,
             "vc": self.vcGet,
-            "cc": self.ccGet,
+            "cc": self.cc_UX_Set_Mode,
             "va": self.vaGet,
             "ca": self.caGet,
             "vb": self.vbGet,
@@ -56,7 +56,7 @@ class piCECNextion(baseui.piCECNextionUI):
             "cm": self.cmPut,
             "c0": self.c0Put,
             "vc": self.vcPut,
-            "cc": self.ccPut,
+            "cc": self.cc_Radio_Set_Mode,
             "va": self.vaPut,
             "ca": self.caPut,
             "vb": self.vbPut,
@@ -100,11 +100,18 @@ class piCECNextion(baseui.piCECNextionUI):
             "TS_CMD_FACTORYRESET":85,   # Factory Reset
             "TS_CMD_UBITX_REBOOT":95    # Reboot
         }
-        self.modeDict = {
+        self.modeNum_To_TextDict = {
             "2":"LSB",
             "3":"USB",
             "4":"CWL",
             "5":"CWU"
+        }
+
+        self.Text_To_ModeNum = {
+            "LSB": 2,
+            "USB":3,
+            "CWL":4,
+            "CWU":5
         }
 
     def attachRadio(self, radio):
@@ -123,24 +130,24 @@ class piCECNextion(baseui.piCECNextionUI):
     def mode_lsb_CB(self):
         print("lsb change cb called")
         self.mode_select_VAR.set("LSB")
-        self.ccPut(2)
+        self.cc_Radio_Set_Mode(self.Text_To_ModeNum["LSB"])
 
     def mode_usb_CB(self):
         print("usb change cb called")
         self.mode_select_VAR.set("USB")
-        self.ccPut(3)
+        self.cc_Radio_Set_Mode(self.Text_To_ModeNum["USB"])
 
 
     def mode_cwl_CB(self):
         print("cwl change cb called")
         self.mode_select_VAR.set("CWL")
-        self.ccPut(4)
+        self.cc_Radio_Set_Mode(self.Text_To_ModeNum["CWL"])
 
 
     def mode_cwu_CB(self):
         print("cwu change cb called")
         self.mode_select_VAR.set("CWU")
-        self.ccPut(5)
+        self.cc_Radio_Set_Mode(self.Text_To_ModeNum["CWU"])
 
     def band_up_CB(self):
          print("band up")
@@ -399,43 +406,38 @@ class piCECNextion(baseui.piCECNextionUI):
         #   The "cc" command indicates a change to a new mode (e.g. USB, LSB, etc.)
         #
 
-    def ccGet(self, buffer):
+    def cc_UX_Set_Mode(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        self.mode_select_VAR.set(self.modeDict[value])
+        self.mode_select_VAR.set(self.modeNum_To_TextDict[value])
         if self.debugCommandDecoding:
             print("cc get called:", "buffer =", buffer)
             print("cc new mode change")
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def ccPut(self, newMode):
-        temp_Buffer = []
-
-        if self.debugCommandDecoding:
-            print("cc put called")
-
-        temp_Buffer.append(self.toRadioCommandDict["TS_CMD_MODE"])
-        temp_Buffer.append(newMode)
-        print("decoded string =", temp_Buffer)
-
+    def cc_Radio_Set_Mode(self, newMode):
+        # temp_Buffer = []
         #
-        # decoded_buffer_hex = [item.hex() for item in buffer]
-        # for item in decoded_buffer_hex:
-        #     print(f"{item:<{4}}", end="")
-        # print("")
-        temp = 5
-        temp_bin = temp.to_bytes(1, byteorder='little')
-        tx_mode_switch_USB2pre = b'\x59\x58\x68\x01'
-        tx_mode_switch_USB2com = temp_bin + b'\x00\x00\x00'
-        tx_mode_switch_USB2post = b'\xff\xff\x73'
-        tx_mode_switch_USB2 = tx_mode_switch_USB2pre + tx_mode_switch_USB2com + tx_mode_switch_USB2post
-        print('command =', tx_mode_switch_USB2)
-        self.theRadio.radioPort.write(tx_mode_switch_USB2)
+        # if self.debugCommandDecoding:
+        #     print("cc put called")
+        #
+        # temp_Buffer.append(self.toRadioCommandDict["TS_CMD_MODE"])
+        # temp_Buffer.append(newMode)
+        # print("decoded string =", temp_Buffer)
+        #
+        # #
+        # # decoded_buffer_hex = [item.hex() for item in buffer]
+        # # for item in decoded_buffer_hex:
+        # #     print(f"{item:<{4}}", end="")
+        # # print("")
 
-        # self.sendCommandToMCU(tx_mode_switch_USB2)
-        #
-        #   The "va" command indicates assignment of vfoA to new frequency
-        #
+
+        command = [1,newMode,0,0,0]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    #
+    #   The "va" command indicates assignment of vfoA to new frequency
+    #
 
     def vaGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
@@ -457,7 +459,7 @@ class piCECNextion(baseui.piCECNextionUI):
     def caGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
 
-        self.mode_select_VAR.set(self.modeDict[value])
+        self.mode_select_VAR.set(self.modeNum_To_TextDict[value])
 
         if self.debugCommandDecoding:
             print("ca get called:", "buffer =", buffer)
@@ -505,7 +507,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def cbGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        self.secondary_Mode_VAR.set(self.modeDict[value])
+        self.secondary_Mode_VAR.set(self.modeNum_To_TextDict[value])
         if self.debugCommandDecoding:
             print("cb get called:", "buffer =", buffer)
             print("cb assign mode for vfoB frequency")

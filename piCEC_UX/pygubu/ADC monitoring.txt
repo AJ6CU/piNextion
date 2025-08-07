@@ -1,0 +1,100 @@
+ADC Monitoring
+Preinitialization
+
+toggleButton.val=0
+if(pm.vx.val!=-1)
+{
+  if(pm.vn.val==0)
+  {
+    n0.val=pm.vx.val
+  }else if(pm.vn.val==1)
+  {
+    n1.val=pm.vx.val
+  }else if(pm.vn.val==2)
+  {
+    n2.val=pm.vx.val
+  }else if(pm.vn.val==3)
+  {
+    n3.val=pm.vx.val
+  }
+}
+tStatus.pco=65535
+
+---
+Timer
+if(pm.vx.val!=-1)
+{
+  if(pm.vn.val==2)				//ADC2
+  {
+    n0.val=pm.vx.val
+  }else if(pm.vn.val==3)	//ADC3
+  {
+    n1.val=pm.vx.val
+  }else if(pm.vn.val==4)	//ADC4
+  {
+    n2.val=pm.vx.val
+  }else if(pm.vn.val==5)	//ADC5
+  {
+    n3.val=pm.vx.val
+  }
+  add 3,pm.vn.val-2,pm.vx.val/10
+  pm.vx.val=-1
+  vRespCount.val=0
+}else
+{
+  vRespCount.val++
+}
+if(vRespCount.val>30)
+{
+  if(toggleButton.val==0)
+  {
+    tmrADC.en=0
+  }
+}
+----
+Start/Standby Button
+Press Event
+
+if(toggleButton.val==0)
+{
+  toggleButton.val=1
+  bStart.pic=16
+  tStatus.txt="Monitoring"
+  tStatus.pco=63488
+  bHome.pco=31695
+  pm.vn.val=-1
+  pm.vx.val=0
+  printh 59										//MAGIC
+  printh 58										//MAGIC
+  printh 68										//MAGIC
+  prints 13,1									//Command : START ADC
+  //print vNowIndex.val				//VALUE
+  //print 0										//VALUE
+  //sys0=0										//Start Index + End Ended + Time Wait
+  printh 02										//START Index
+  printh 05										//END Index
+  printh 20										//Delay Length = * 10 msec
+  printh 00										//TEMP
+  printh FF										//MAGIC
+  printh FF										//MAGIC
+  printh 73										//ETX
+  tmrADC.en=1
+}else
+{
+  toggleButton.val=0
+  bStart.pic=16
+  tStatus.txt="Standby"
+  tStatus.pco=65535
+  bHome.pco=65535
+  pm.vn.val=-1
+  pm.vx.val=0
+  printh 59										//MAGIC
+  printh 58										//MAGIC
+  printh 68										//MAGIC
+  prints 14,1									//STOP ADC
+  //print vNowIndex.val					//VALUE
+  print 0					//VALUE
+  printh FF										//MAGIC
+  printh FF										//MAGIC
+  printh 73										//ETX
+}

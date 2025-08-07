@@ -1,0 +1,471 @@
+VFO Frequency seting
+
+Preinitialization
+nFreq.val=px.nLastFreq.val
+rSendedFreq.val=nFreq.val
+if(dim==0)
+{
+  dim=dims
+  px.nSaverCount.val=0
+}
+
+Timer
+//==================================
+// TITLE: Frequency Input
+// DAT  : 06/04/2018
+// NAME : Ian KD8CEC
+//----------------------------------
+// DESC :
+//==================================
+//===================================
+//SEND COMMAND STX(3BYTE) + COMMAND + DATA (4byte) + ETX(3BYTE)
+//===================================
+//Check changed Frequency and mode
+if(rSendNeed.val==0)	//Empty Send Buffer
+{
+  if(rSendedFreq.val!=nFreq.val)
+  {
+    rSendedFreq.val=nFreq.val
+    rSendCommand.val=2					//COMMAND : FREQ
+    rSendData.val=nFreq.val			//DOWN
+    rSendNeed.val=1							//Set Send Request
+    nGetFreq.val=10							//Wait 1Sec, get frequency from Transceiver
+  }
+}
+if(rSendNeed.val==1)				//Check Need transsfer
+{
+  printh 59										//MAGIC
+  printh 58										//MAGIC
+  printh 68										//MAGIC
+  prints rSendCommand.val,1		//MODE CHANGE
+  print rSendData.val					//VALUE
+  printh FF										//MAGIC
+  printh FF										//MAGIC
+  printh 73										//ETX
+  rSendNeed.val=0
+}
+//Refresh New Frequency
+if(nGetFreq.val<2)
+{
+  if(pm.vc.val!=-1)
+  {
+    if(nFreq.val!=pm.vc.val)
+    {
+      nFreq.val=pm.vc.val
+      rSendedFreq.val=nFreq.val
+    }
+  }
+}else
+{
+  nGetFreq.val--
+}
+//Refresh New Mode
+nTemp0.val=-1
+if(pm.cc.val!=-1)
+{
+  nTemp0.val=pm.cc.val
+}else
+{
+  nTemp0.val=px.nLastMode.val
+}
+if(nTemp0.val!=nMode.val)
+{
+  //Display Mode Information
+  if(nTemp0.val==2)
+  {
+    bMode.txt="LSB"
+  }else if(nTemp0.val==3)
+  {
+    bMode.txt="USB"
+  }else if(nTemp0.val==4)
+  {
+    bMode.txt="CWL"
+  }else if(nTemp0.val==5)
+  {
+    bMode.txt="CWU"
+  }
+  nMode.val=nTemp0.val
+}
+//Check Press Keyvalue
+//Check Input Mode (changed InputMode)
+if(nInputMode.val!=nActiveInMode.val)
+{
+  nInputFreq.val=0
+  nActiveInMode.val=nInputMode.val
+  nPointPos.val=-1
+  if(nActiveInMode.val==2)
+  {
+    nIsShift.val=0
+    nActiveShift.val=0
+    bShift.picc=15
+    tFreq1.pco=46518
+    tFreq2.pco=46518
+    tFreq3.pco=46518
+    tFreq4.pco=46518
+    tFreq5.pco=46518
+    tFreq6.pco=46518
+    tFreq7.pco=46518
+    tFreq8.pco=46518
+  }else
+  {
+    nIsShift.val=0
+    nActiveShift.val=0
+    bShift.picc=4
+    tFreq1.pco=65535
+    tFreq2.pco=65535
+    tFreq3.pco=65535
+    tFreq4.pco=65535
+    tFreq5.pco=65535
+    tFreq6.pco=65535
+    tFreq7.pco=65535
+    tFreq8.pco=65535
+  }
+}
+if(nActiveInMode.val==2)
+{
+  if(nPressKey.val!=-1)
+  {
+    //Full Input mode
+    if(nPointPos.val<1)
+    {
+      if(nInputFreq.val<10000000)
+      {
+        nInputFreq.val*=10
+        nInputFreq.val+=nPressKey.val
+      }
+      nPressIndex.val=1
+    }else
+    {
+      //Full Input mode
+      //Set value to Fixed Digit
+      if(nPointPos.val==6)
+      {
+        nTemp1.val=nPressKey.val*100000
+      }else if(nPointPos.val==5)
+      {
+        nTemp1.val=nPressKey.val*10000
+      }else if(nPointPos.val==4)
+      {
+        nTemp1.val=nPressKey.val*1000
+      }else if(nPointPos.val==3)
+      {
+        nTemp1.val=nPressKey.val*100
+      }else if(nPointPos.val==2)
+      {
+        nTemp1.val=nPressKey.val*10
+      }else if(nPointPos.val==1)
+      {
+        nTemp1.val=nPressKey.val
+      }
+      nInputFreq.val+=nTemp1.val
+      if(nPointPos.val>=0)
+      {
+        nPressIndex.val=nPointPos.val
+      }
+      nPointPos.val--
+      if(nPointPos.val==0)
+      {
+        nFreq.val=nInputFreq.val
+        nInputMode.val=0
+      }
+    }
+    nPressKey.val=-1
+    nDispFreq.val=-1	//always refress at Key Input
+  }
+  nTemp0.val=nInputFreq.val
+}else
+{
+  nTemp0.val=nFreq.val
+}
+//==================================
+// Display Digit
+//==================================
+if(nPressIndex.val!=nPressActive.val)
+{
+  q1Up.picc=4
+  q2Up.picc=4
+  q3Up.picc=4
+  q4Up.picc=4
+  q5Up.picc=4
+  q6Up.picc=4
+  q7Up.picc=4
+  q8Up.picc=4
+  q1Down.picc=4
+  q2Down.picc=4
+  q3Down.picc=4
+  q4Down.picc=4
+  q5Down.picc=4
+  q6Down.picc=4
+  q7Down.picc=4
+  q8Down.picc=4
+  tFreq1.picc=4
+  tFreq2.picc=4
+  tFreq3.picc=4
+  tFreq4.picc=4
+  tFreq5.picc=4
+  tFreq6.picc=4
+  tFreq7.picc=4
+  if(nPressIndex.val==1)
+  {
+    q1Up.picc=5
+    q1Down.picc=5
+    tFreq1.picc=5
+  }else if(nPressIndex.val==2)
+  {
+    q2Up.picc=5
+    q2Down.picc=5
+    tFreq2.picc=5
+  }else if(nPressIndex.val==3)
+  {
+    q3Up.picc=5
+    q3Down.picc=5
+    tFreq3.picc=5
+  }else if(nPressIndex.val==4)
+  {
+    q4Up.picc=5
+    q4Down.picc=5
+    tFreq4.picc=5
+  }else if(nPressIndex.val==5)
+  {
+    q5Up.picc=5
+    q5Down.picc=5
+    tFreq5.picc=5
+  }else if(nPressIndex.val==6)
+  {
+    q6Up.picc=5
+    q6Down.picc=5
+    tFreq6.picc=5
+  }else if(nPressIndex.val==7)
+  {
+    q7Up.picc=5
+    q7Down.picc=5
+    tFreq7.picc=5
+  }else if(nPressIndex.val==8)
+  {
+    q8Up.picc=5
+    q8Down.picc=5
+    tFreq8.picc=5
+  }
+  nPressActive.val=nPressIndex.val
+}
+if(nActiveShift.val!=nIsShift.val)
+{
+  nActiveShift.val=nIsShift.val
+  //Shift Mode Toggle
+  if(nActiveShift.val==1)
+  {
+    bShift.picc=5
+    b1.picc=5
+    b2.picc=5
+    b3.picc=5
+    b4.picc=5
+    b5.picc=5
+    b6.picc=5
+    b7.picc=5
+    b8.picc=5
+    b9.picc=5
+    b0.picc=5
+  }else
+  {
+    bShift.picc=4
+    b1.picc=4
+    b2.picc=4
+    b3.picc=4
+    b4.picc=4
+    b5.picc=4
+    b6.picc=4
+    b7.picc=4
+    b8.picc=4
+    b9.picc=4
+    b0.picc=4
+  }
+}
+//=================================
+// DISPLAY Frequency
+//=================================
+if(nDispFreq.val!=nTemp0.val)
+{
+  nRefreshCount.val=0
+}else
+{
+  nRefreshCount.val++
+}
+if(nRefreshCount.val<3)
+{
+  nDispFreq.val=nTemp0.val
+  //digit 1
+  nTemp1.val=nTemp0.val%10
+  cov nTemp1.val,tFreq1.txt,1
+  //digit 2
+  nTemp0.val/=10
+  nTemp1.val=nTemp0.val%10
+  cov nTemp1.val,tFreq2.txt,1
+  //digit 3
+  nTemp0.val/=10
+  nTemp1.val=nTemp0.val%10
+  cov nTemp1.val,tFreq3.txt,1
+  //digit 4
+  nTemp0.val/=10
+  nTemp1.val=nTemp0.val%10
+  cov nTemp1.val,tFreq4.txt,1
+  //digit 5
+  nTemp0.val/=10
+  nTemp1.val=nTemp0.val%10
+  cov nTemp1.val,tFreq5.txt,1
+  //digit 6
+  nTemp0.val/=10
+  nTemp1.val=nTemp0.val%10
+  cov nTemp1.val,tFreq6.txt,1
+  //digit 7
+  nTemp0.val/=10
+  nTemp1.val=nTemp0.val%10
+  cov nTemp1.val,tFreq7.txt,1
+  //digit 8
+  nTemp0.val/=10
+  nTemp1.val=nTemp0.val%10
+  cov nTemp1.val,tFreq8.txt,1
+}
+
+--- Note cov command
+The cov command in Nextion displays stands for "convert" and is used for variable type conversion. Its primary function is to convert data between numeric and text (string) types within the Nextion environment.
+Syntax:
+Code
+
+cov att1,att2,length
+att1: The source variable or component attribute whose value you want to convert.
+att2: The target variable or component attribute where the converted value will be stored.
+length: Specifies the length of the string when converting a numeric value to text.
+0: Automatic length adjustment.
+Non-zero value: Fixed length for the resulting string.
+----
+up arrows
+far left
+nFreq.val+=10000000
+nPressIndex.val=8
+
+next one
+nFreq.val+=1000000
+nPressIndex.val=7
+
+down arrows
+if(nFreq.val>10000000)
+{
+  nFreq.val-=10000000
+}
+nPressIndex.val=8
+
+Next one
+if(nFreq.val>1000000)
+{
+  nFreq.val-=1000000
+}
+nPressIndex.val=7
+
+Slider
+Touch Event
+nPressValue.val=nFreq.val
+
+Release event
+nPressValue.val=0
+h0.val=500
+
+Move Event
+if(nPressValue.val>10000)
+{
+  if(nActiveInMode.val!=2)
+  {
+    if(nActiveShift.val==0)
+    {
+      nTemp0.val=h0.val-500
+      nTemp0.val*=100
+      nFreq.val=nPressValue.val+nTemp0.val
+    }
+  }
+}
+
+"1" Key
+if(nIsShift.val==1)
+{
+  nFreq.val=1810000
+  nIsShift.val=0
+}else
+{
+  nInputMode.val=2
+  nPressKey.val=1
+}
+
+"2" Key
+if(nIsShift.val==1)
+{
+  nFreq.val=3500000   // Hard wired bands to USA if shift key is pressed
+  nIsShift.val=0
+}else
+{
+  nInputMode.val=2
+  nPressKey.val=2
+}
+
+"3" Key
+if(nIsShift.val==1)
+{
+  nFreq.val=7000000
+  nIsShift.val=0
+}else
+{
+  nInputMode.val=2
+  nPressKey.val=3
+}
+
+
+ENTER KEY
+if(nActiveInMode.val==2)
+{
+  //Input Frequency Validataion Check
+  if(nInputFreq.val<30000)
+  {
+  }else if(nInputFreq.val>60000000)
+  {
+  }else
+  {
+    nFreq.val=nInputFreq.val
+    nInputMode.val=0
+  }
+}
+
+BAND KEY
+
+if(nActiveInMode.val==2)
+{
+  nInputMode.val=0
+  nPointPos.val=-1
+}else
+{
+  //Shift Mode Toggle
+  if(nIsShift.val==0)
+  {
+    nIsShift.val=1
+  }else
+  {
+    nIsShift.val=0
+  }
+}
+
+USB Key
+//Send command
+rSendCommand.val=1		//COMMAND : MODE
+if(nMode.val==2)			//LSB -> USB
+{
+  rSendData.val=3
+}else if(nMode.val==3)	//USB -> CWL
+{
+  rSendData.val=4
+}else if(nMode.val==4)	//CWL -> CWU
+{
+  rSendData.val=5
+}else
+{
+  rSendData.val=2
+}
+rSendNeed.val=1			//Set Send Request
+
+

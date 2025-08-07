@@ -1,0 +1,474 @@
+MEM-> VFO
+
+Post initialization of screen
+click bRead,1
+click bRead,0
+
+(refresh)
+
+Timer
+if(pm.sh.txt!="J")
+{
+  //=========================================================
+  //Begin of User code
+  //Process the code according to the request code rSendType.
+  //=========================================================
+  //t0.txt=pm.sh.txt
+  //Rreceive Mode
+  if(nSendProcess.val>99)
+  {
+    //Frequency
+    if(nSendProcess.val<110)
+    {
+      sys2=nSendProcess.val-100
+      sys2++
+      jReadStep.val=sys2*10
+      //Response
+      covx pm.sh.txt,sys0,0,4
+      //channel Mode
+      sys1=sys0>>29			//Mode
+      sys1=sys1&0x07
+      sys0&=0x1FFFFFFF	//Frequency
+      tmpS0.txt=""
+      tmpS1.txt=""
+      if(sys1==2)
+      {
+        tmpS0.txt="LSB"
+      }else if(sys1==3)
+      {
+        tmpS0.txt="USB"
+      }else if(sys1==4)
+      {
+        tmpS0.txt="CWL"
+      }else if(sys1==5)
+      {
+        tmpS0.txt="CWU"
+      }
+      if(nSendProcess.val==100)	//Channel 0
+      {
+        nCH00_Freq.val=sys0
+        nCH00_Mode.val=sys1
+        if(nCH00_Freq.val>0)
+        {
+          //          vis tCH00_Text,1
+          //          vis nCH00_Freq,1
+          //          vis tCH00_Mode,1
+          vis b0,1
+          tCH00_Mode.txt=tmpS0.txt
+          nSendProcess.val=10
+        }else
+        {
+          tCH00_Text.txt="AVAIL"
+          nSendProcess.val=1
+        }
+      }else if(nSendProcess.val==101)	//Channel 1
+      {
+        nCH01_Freq.val=sys0
+        nCH01_Mode.val=sys1
+        if(nCH01_Freq.val>0)
+        {
+          tCH01_Mode.txt=tmpS0.txt
+          nSendProcess.val=11
+        }else
+        {
+          tCH01_Text.txt="AVAIL"
+          nSendProcess.val=2
+        }
+      }else if(nSendProcess.val==102)	//Channel 2
+      {
+        nCH02_Freq.val=sys0
+        nCH02_Mode.val=sys1
+        if(nCH02_Freq.val>0)
+        {
+          tCH02_Mode.txt=tmpS0.txt
+          nSendProcess.val=12
+        }else
+        {
+          tCH02_Text.txt="AVAIL"
+          nSendProcess.val=3
+        }
+      }else if(nSendProcess.val==103)	//Channel 3
+      {
+        nCH03_Freq.val=sys0
+        nCH03_Mode.val=sys1
+        if(nCH03_Freq.val>0)
+        {
+          tCH03_Mode.txt=tmpS0.txt
+          nSendProcess.val=13
+        }else
+        {
+          tCH03_Text.txt="AVAIL"
+          nSendProcess.val=4
+        }
+      }else if(nSendProcess.val==104)	//Channel 4
+      {
+        nCH04_Freq.val=sys0
+        nCH04_Mode.val=sys1
+        if(nCH04_Freq.val>0)
+        {
+          tCH04_Mode.txt=tmpS0.txt
+          nSendProcess.val=14
+        }else
+        {
+          tCH04_Text.txt="AVAIL"
+          nSendProcess.val=5
+        }
+      }else if(nSendProcess.val==105)	//Channel 5
+      {
+        nCH05_Freq.val=sys0
+        nCH05_Mode.val=sys1
+        if(nCH05_Freq.val>0)
+        {
+          tCH05_Mode.txt=tmpS0.txt
+          nSendProcess.val=15
+        }else
+        {
+          tCH05_Text.txt="AVAIL"
+          nSendProcess.val=6
+        }
+      }else if(nSendProcess.val==106)	//Channel 6
+      {
+        nCH06_Freq.val=sys0
+        nCH06_Mode.val=sys1
+        if(nCH06_Freq.val>0)
+        {
+          tCH06_Mode.txt=tmpS0.txt
+          nSendProcess.val=16
+        }else
+        {
+          tCH06_Text.txt="AVAIL"
+          nSendProcess.val=7
+        }
+      }else if(nSendProcess.val==107)	//Channel 7
+      {
+        nCH07_Freq.val=sys0
+        nCH07_Mode.val=sys1
+        if(nCH07_Freq.val>0)
+        {
+          tCH07_Mode.txt=tmpS0.txt
+          nSendProcess.val=17
+        }else
+        {
+          tCH07_Text.txt="AVAIL"
+          nSendProcess.val=8
+        }
+      }else if(nSendProcess.val==108)	//Channel 8
+      {
+        nCH08_Freq.val=sys0
+        nCH08_Mode.val=sys1
+        if(nCH08_Freq.val>0)
+        {
+          tCH08_Mode.txt=tmpS0.txt
+          nSendProcess.val=18
+        }else
+        {
+          tCH08_Text.txt="AVAIL"
+          nSendProcess.val=9
+        }
+      }else if(nSendProcess.val==109)	//Channel 9
+      {
+        nCH09_Freq.val=sys0
+        nCH09_Mode.val=sys1
+        if(nCH09_Freq.val>0)
+        {
+          tCH09_Mode.txt=tmpS0.txt
+          nSendProcess.val=19
+        }else
+        {
+          tCH09_Text.txt="AVAIL"
+          nSendProcess.val=-1
+        }
+      }
+    }else
+    {
+      if(nSendProcess.val==110)	//Channel 0 Text
+      {
+        if(nCH00_Freq.val>0)
+        {
+          tCH00_Text.txt=pm.sh.txt
+          if(tCH00_Text.txt=="")
+          {
+            tCH00_Text.txt="CH01"
+          }
+        }
+        nSendProcess.val=1	//Read Text
+      }else if(nSendProcess.val==111)	//Channel 0 Text
+      {
+        if(nCH01_Freq.val>0)
+        {
+          tCH01_Text.txt=pm.sh.txt
+          if(tCH01_Text.txt=="")
+          {
+            tCH01_Text.txt="CH02"
+          }
+        }
+        nSendProcess.val=2	//Read Text
+      }else if(nSendProcess.val==112)	//Channel 0 Text
+      {
+        if(nCH02_Freq.val>0)
+        {
+          tCH02_Text.txt=pm.sh.txt
+          if(tCH02_Text.txt=="")
+          {
+            tCH02_Text.txt="CH03"
+          }
+        }
+        nSendProcess.val=3	//Read Text
+      }else if(nSendProcess.val==113)	//Channel 0 Text
+      {
+        if(nCH03_Freq.val>0)
+        {
+          tCH03_Text.txt=pm.sh.txt
+          if(tCH03_Text.txt=="")
+          {
+            tCH03_Text.txt="CH04"
+          }
+        }
+        nSendProcess.val=4	//Read Text
+      }else if(nSendProcess.val==114)	//Channel 0 Text
+      {
+        if(nCH04_Freq.val>0)
+        {
+          tCH04_Text.txt=pm.sh.txt
+          if(tCH04_Text.txt=="")
+          {
+            tCH04_Text.txt="CH05"
+          }
+        }
+        nSendProcess.val=5	//Read Text
+      }else if(nSendProcess.val==115)	//Channel 0 Text
+      {
+        if(nCH05_Freq.val>0)
+        {
+          tCH05_Text.txt=pm.sh.txt
+          if(tCH05_Text.txt=="")
+          {
+            tCH05_Text.txt="CH06"
+          }
+        }
+        nSendProcess.val=6	//Read Text
+      }else if(nSendProcess.val==116)	//Channel 0 Text
+      {
+        if(nCH06_Freq.val>0)
+        {
+          tCH06_Text.txt=pm.sh.txt
+          if(tCH06_Text.txt=="")
+          {
+            tCH06_Text.txt="CH07"
+          }
+        }
+        nSendProcess.val=7	//Read Text
+      }else if(nSendProcess.val==117)	//Channel 0 Text
+      {
+        if(nCH07_Freq.val>0)
+        {
+          tCH07_Text.txt=pm.sh.txt
+          if(tCH07_Text.txt=="")
+          {
+            tCH07_Text.txt="CH08"
+          }
+        }
+        nSendProcess.val=8	//Read Text
+      }else if(nSendProcess.val==118)	//Channel 0 Text
+      {
+        if(nCH08_Freq.val>0)
+        {
+          tCH08_Text.txt=pm.sh.txt
+          if(tCH08_Text.txt=="")
+          {
+            tCH08_Text.txt="CH09"
+          }
+        }
+        nSendProcess.val=9	//Read Text
+      }else if(nSendProcess.val==119)	//Channel 0 Text
+      {
+        if(nCH09_Freq.val>0)
+        {
+          tCH09_Text.txt=pm.sh.txt
+          if(tCH09_Text.txt=="")
+          {
+            tCH09_Text.txt="CH10"
+          }
+        }
+        nSendProcess.val=-1	//Read Text
+      }
+    }
+  }
+  pm.sh.txt="J"
+}
+if(nSendProcess.val<100)
+{
+  if(nSendProcess.val>9)
+  {
+    //Read Text
+    sys0=nSendProcess.val-10
+    sys0=6*sys0
+    sys0=sys0+nAddressOffset.val	//0~9 or 10~19
+    sys0=sys0+1
+    rSendIndex.val=710+sys0	//EEProm Address (CH0 Text Address)
+    rSendLength.val=5				//Read Length
+    rValueType.val=87				//Type 89:HEX String (C Language order) 72:HEX String(Nextion), 87:String
+    rRWType.val=31					//READ:31, WRITE:32  // Trigger
+    nSendProcess.val+=100
+  }else if(nSendProcess.val>-1)
+  {
+    //Read Frequency
+    //Request
+    sys0=4*nSendProcess.val
+    sys0=sys0+nAddressOffset.val	//0~9 or 10~19
+    rSendIndex.val=630+sys0	//EEProm Address (CH0 Address)
+    rSendLength.val=4				//Read Length
+    rValueType.val=72				//Type 89:HEX String (C Language order) 72:HEX String(Nextion), 87:String
+    rRWType.val=31					//READ:31, WRITE:32  // Trigger
+    nSendProcess.val+=100
+  }
+}
+//===================================================================================
+//If you use this send / receive logic, do not modify it below. Please keep the code
+//-----------------------------------------------------------------------------------
+// Ian KD8CEC
+//===================================================================================
+if(rRWType.val==32)					  //Write
+{
+  printh 59										//MAGIC
+  printh 58										//MAGIC
+  printh 68										//MAGIC
+  prints rRWType.val,1				//Command : Read EEProm(31), Write EEProm(32)
+  sys0=rSendIndex.val					//Write Index
+  prints sys0,1								//Start Index Convert to 2Byte Integer
+  sys1=sys0>>8
+  prints sys1,1								//Start Index Convert to 2Byte Integer
+  prints rSendLength.val,1		//Data Length
+  sys0=sys0&255	//1Byte
+  sys1=sys1&255	//1Byte
+  sys0=sys0+sys1+rSendLength.val
+  sys0%=256
+  prints sys0,1								//Check sum Address Offset (0 Byte + 1 Byte + 2 Byte) % 256
+  if(rValueType.val==1)				//String 1 Byte Send
+  {
+    prints rSendStr.txt,rSendLength.val
+  }else
+  {
+    prints rSendInt.val,rSendLength.val
+  }
+  printh FF										//MAGIC
+  printh FF										//MAGIC
+  printh 73										//ETX
+  rRWType.val=-1
+}
+if(rRWType.val==10)					  //Set Frequency
+{
+  printh 59										//MAGIC
+  printh 58										//MAGIC
+  printh 68										//MAGIC
+  prints 2,1									//Frequency CHANGE
+  print rSendIndex.val				//VALUE
+  printh FF										//MAGIC
+  printh FF										//MAGIC
+  printh 73										//ETX
+  rRWType.val=-1
+  tm1.en=1										//after 500msec, send mode change command
+}else if(rRWType.val!=-1)			//READ Command
+{
+  printh 59										//MAGIC
+  printh 58										//MAGIC
+  printh 68										//MAGIC
+  prints rRWType.val,1				//Command : Read EEProm(31), Write EEProm(32)
+  prints rSendIndex.val,1			//Start Index
+  sys0=rSendIndex.val>>8
+  prints sys0,1	//Start Index
+  prints rSendLength.val,1		//Length
+  prints rValueType.val,1			//Type 89:HEX String (C Language order) 72:HEX String(Nextion), 87:String
+  printh FF										//MAGIC
+  printh FF										//MAGIC
+  printh 73										//ETX
+  rSendLength.val=0
+  rRWType.val=-1
+}
+//Change Current Frequency
+if(pm.vc.val==-1)
+{
+  sys0=px.nLastFreq.val
+  sys1=px.nLastMode.val
+}else
+{
+  sys0=pm.vc.val
+  sys1=pm.cc.val
+}
+nCurrentFreq.val=sys0
+nCurrentMode.val=sys1
+if(nCurrentMode.val==2)
+{
+  CurrentModeTxt.txt="LSB"
+}else if(nCurrentMode.val==3)
+{
+  CurrentModeTxt.txt="USB"
+}else if(nCurrentMode.val==4)
+{
+  CurrentModeTxt.txt="CWL"
+}else if(nCurrentMode.val==5)
+{
+  CurrentModeTxt.txt="CWU"
+}
+
+-----
+
+
+Timer 1
+tm1.en=0
+printh 59										//MAGIC
+printh 58										//MAGIC
+printh 68										//MAGIC
+prints 1,1									//Mode CHANGE
+print rSendMode.val					//VALUE
+printh FF										//MAGIC
+printh FF										//MAGIC
+printh 73										//ETX
+
+-------------------------
+
+Mem->VFO Button
+Touch Event
+if(r10.val!=1)
+{
+  rRWType.val=10
+}
+
+Refresh Button
+touch event
+nSendProcess.val=0
+delay=200
+
+
+Touching Any of the memory Fields selects it
+
+Bullet Selection
+"0" bullet
+rSendIndex.val=nCH00_Freq.val		//Set Frequency
+rSendMode.val=nCH00_Mode.val		//Set Mode
+r0.val=1
+r1.val=0
+r2.val=0
+r3.val=0
+r4.val=0
+r5.val=0
+r6.val=0
+r7.val=0
+r8.val=0
+r9.val=0
+r10.val=0
+
+"1" bullet
+rSendIndex.val=nCH01_Freq.val				//Set Frequency
+rSendMode.val=nCH01_Mode.val		//Set Mode
+r0.val=0
+r1.val=1
+r2.val=0
+r3.val=0
+r4.val=0
+r5.val=0
+r6.val=0
+r7.val=0
+r8.val=0
+r9.val=0
+r10.val=0

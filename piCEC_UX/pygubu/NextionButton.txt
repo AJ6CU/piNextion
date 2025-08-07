@@ -1,0 +1,436 @@
+STOP BUTTON
+-Touch Press Event-
+//Send command
+rSendCommand.val=7	//COMMAND : TX STOP
+rSendData.val=0			//
+rSendNeed.val=1			//Set Send Request
+
+
+VFO BUTTON
+-Touch Press Event-
+//Send command
+rSendCommand.val=4	//COMMAND : Toggle Active VFO (A / B)
+rSendData.val=0			//
+rSendNeed.val=1			//Set Send Request
+
+BAND DOWN BUTTON
+-Touch Button Event-
+rSendCommand.val=3	//COMMAND : BAND
+rSendData.val=1			//DOWN
+rSendNeed.val=1			//Set Send Request
+
+BAND UP BUTTON
+-Touch Button Event-
+rSendCommand.val=3	//COMMAND : BAND
+rSendData.val=2			//UP
+rSendNeed.val=1			//Set Send Request
+
+MODE BUTTON
+-Touch Button Event-
+if(nTemp4.val==1)
+{
+  //  vis bLSB,0
+  //  vis bUSB,0
+  //  vis bCWL,0
+  //  vis bCWU,0
+  nTemp4.val=0
+  page px
+}else
+{
+  vis bLSB,1
+  vis bUSB,1
+  vis bCWL,1
+  vis bCWU,1
+  nTemp4.val=1
+}
+
+LSB SELECTION
+-Touch Release Event-
+//Hide Mode buttons
+//vis bLSB,0
+//vis bUSB,0
+//vis bCWL,0
+//vis bCWU,0
+nTemp4.val=0
+//Send command
+rSendCommand.val=1	//COMMAND : MODE
+rSendData.val=2			//LSB
+rSendNeed.val=1			//Set Send Request
+
+USB SELECTION
+-Touch Release Event-
+//Hide Mode buttons
+//vis bLSB,0
+//vis bUSB,0
+//vis bCWL,0
+//vis bCWU,0
+nTemp4.val=0
+//Send command
+rSendCommand.val=1	//COMMAND : MODE
+rSendData.val=3			//LSB
+rSendNeed.val=1			//Set Send Request
+
+CWL SELECTION
+-Touch Release Event-
+//Hide Mode buttons
+//vis bLSB,0
+//vis bUSB,0
+//vis bCWL,0
+//vis bCWU,0
+nTemp4.val=0
+//Send command
+rSendCommand.val=1	//COMMAND : MODE
+rSendData.val=4			//LSB
+rSendNeed.val=1			//Set Send Request
+
+CWU SELECTION-
+-Touch Release Event-
+//Hide Mode buttons
+//vis bLSB,0
+//vis bUSB,0
+//vis bCWL,0
+//vis bCWU,0
+nTemp4.val=0
+//Send command
+rSendCommand.val=1	//COMMAND : MODE
+rSendData.val=5			//LSB
+rSendNeed.val=1			//Set Send Request
+
+LOCK BUTTON
+-Touch Press Event-
+//Send command
+rSendCommand.val=9	//COMMAND : Dial Lock
+rSendData.val=0			//
+rSendNeed.val=1			//Set Send Request
+if(qLock.picc==1)		//for if not communication with Transceiver
+{
+  //UnLock all Thouch area
+  tsw 255,1
+}
+
+SDR BUTTON
+-Touch Press Event-
+//Send command
+rSendCommand.val=8	//COMMAND : SDR
+rSendData.val=0			//
+rSendNeed.val=1			//Set Send Request
+
+STOR Button
+-Touch Press Event-
+page pvfotomem
+
+RCL BUTTON
+-Touch Press Event-
+page pmemtovfo
+
+RX and TX buttons are not valid, display only
+
+FREQUENCY
+-Left two digits-
+-Touch Release Event-
+if(dim==0)	//if backlight off, just turn on backlight
+{
+  dim=dims
+  nSaverCount.val=0
+}else if(nLastFreq.val>30000)
+{
+  rSendCommand.val=2						//COMMAND : Set Frequency
+  rSendData.val=nLastFreq.val-nTuneStep.val
+  rSendNeed.val=1								//Set Send Request
+}
+//else
+//{
+//  page pf
+//}
+
+
+- MIDDLE Three Digits-
+-Touch Release Event-
+if(dim==0)	//if backlight off, just turn on backlight
+{
+  dim=dims
+  nSaverCount.val=0
+}else if(nLastFreq.val>30000)
+{
+  rSendCommand.val=2						//COMMAND : Set Frequency
+  rSendData.val=nLastFreq.val-nTuneStep.val
+  rSendNeed.val=1								//Set Send Request
+}
+//else
+//{
+//  page pf
+//}
+
+-RIGHT Most 3 Digits-
+-Touch Release Event-
+if(dim==0)	//if backlight off, just turn on backlight
+{
+  dim=dims
+  nSaverCount.val=0
+}else if(nLastFreq.val<57000000)
+{
+  rSendCommand.val=2						//COMMAND : Set Frequency
+  rSendData.val=nLastFreq.val+nTuneStep.val
+  rSendNeed.val=1								//Set Send Request
+}
+//else
+//{
+//  page pf
+//}
+
+TUNE STEP BUTTON
+-Touch Release Event-
+cov pm.v1.val,bStep1.txt,0
+cov pm.v2.val,bStep2.txt,0
+cov pm.v3.val,bStep3.txt,0
+cov pm.v4.val,bStep4.txt,0
+cov pm.v5.val,bStep5.txt,0
+bStep1.bco=19049
+bStep2.bco=19049
+bStep3.bco=19049
+bStep4.bco=19049
+bStep5.bco=19049
+if(nTuneStep.val==pm.v1.val)
+{
+  bStep1.bco=64520
+}else if(nTuneStep.val==pm.v2.val)
+{
+  bStep2.bco=64520
+}else if(nTuneStep.val==pm.v3.val)
+{
+  bStep3.bco=64520
+}else if(nTuneStep.val==pm.v4.val)
+{
+  bStep4.bco=64520
+}else if(nTuneStep.val==pm.v5.val)
+{
+  bStep5.bco=64520
+}
+vis bStep1,1
+vis bStep2,1
+vis bStep3,1
+vis bStep4,1
+vis bStep5,1
+
+LOWEST STEP SLOT (b1)
+-Touch Release Event-
+//Hide Tune buttons
+//vis bStep1,0
+//vis bStep2,0
+//vis bStep3,0
+//vis bStep4,0
+//vis bStep5,0
+//Send command
+rSendCommand.val=17	//COMMAND : Set Tune Step
+rSendData.val=1			//
+rSendNeed.val=1			//Set Send Request
+
+NEXT LOWEST STEP SLOT (b2)
+-Touch Release Event-
+//Hide Tune buttons
+//vis bStep1,0
+//vis bStep2,0
+//vis bStep3,0
+//vis bStep4,0
+//vis bStep5,0
+//Send command
+rSendCommand.val=17	//COMMAND : Set Tune Step
+rSendData.val=2			//
+rSendNeed.val=1			//Set Send Request
+
+
+MIDDLE STEP SLOT (b3)
+-Touch Release Event-
+//Hide Tune buttons
+//vis bStep1,0
+//vis bStep2,0
+//vis bStep3,0
+//vis bStep4,0
+//vis bStep5,0
+//Send command
+rSendCommand.val=17	//COMMAND : Set Tune Step
+rSendData.val=3			//
+rSendNeed.val=1			//Set Send Request
+
+NEXT TO HIGHEST STEP SLOT (b4)
+-Touch Release Event-
+//Hide Tune buttons
+//vis bStep1,0
+//vis bStep2,0
+//vis bStep3,0
+//vis bStep4,0
+//vis bStep5,0
+//Send command
+rSendCommand.val=17	//COMMAND : Set Tune Step
+rSendData.val=4			//
+rSendNeed.val=1			//Set Send Request
+
+HIGHEST STEP SLOT (b5)
+-Touch Release Event-
+//Hide Tune buttons
+//vis bStep1,0
+//vis bStep2,0
+//vis bStep3,0
+//vis bStep4,0
+//vis bStep5,0
+//Send command
+rSendCommand.val=17	//COMMAND : Set Tune Step
+rSendData.val=5			//
+rSendNeed.val=1			//Set Send Request
+
+WSPR buttons
+-Touch Press Event-
+rSendCommand.val=21	//COMMAND : SWAction
+rSendData.val=1			//Dummy
+rSendNeed.val=1			//Set Send Request
+
+S-METER
+-Touch Release Event-
+if(dim==0)	//if backlight off, just turn on backlight
+{
+  dim=dims
+  nSaverCount.val=0
+}else
+{
+  page pbandscan
+}
+
+CW INFO AREA
+-Touch Release Event-
+if(dim==0)	//if backlight off, just turn on backlight
+{
+  dim=dims
+  nSaverCount.val=0
+}else
+{
+  page pc
+  //page padc
+  //page pspectrum
+  //page pmem
+}
+
+DOWN ARROW NEAR IFS Scale
+These appear and disapper when arrow on bottom right is touched
+-Touch Release Event-
+if(nQWPM.val>3)
+{
+  sys0=nQWPM.val-1
+  sys0=1200/sys0
+  rSendCommand.val=18	//COMMAND : WPM
+  rSendData.val=sys0	//WPM
+  rSendNeed.val=1			//Set Send Request
+}
+
+UP ARROW NEAR IFS Scale
+-Touch Release Event-
+if(nQWPM.val<37)
+{
+  sys0=nQWPM.val+1
+  sys0=1200/sys0
+  rSendCommand.val=18	//COMMAND : WPM
+  rSendData.val=sys0	//WPM
+  rSendNeed.val=1			//Set Send Request
+}
+
+ARROW ON BOTTOM RIGHT - makes
+-Touch Release Event-
+if(nQuickMenu.val==0)
+{
+  nQuickMenu.val=1
+}else if(nQuickMenu.val==1)
+{
+  nQuickMenu.val=0
+}
+page px
+
+KEYER TOUCH POINT WHEN IN SPECIAL CW MODE
+-Touch Release Event-
+if(tKey.txt=="Straight")
+{
+  sys0=1
+}else if(tKey.txt=="IAMBICA")
+{
+  sys0=2
+}else if(tKey.txt=="IAMBICB")
+{
+  sys0=0
+}
+rSendCommand.val=19	//COMMAND : KEY TYPE
+rSendData.val=sys0	//DOWN
+rSendNeed.val=1			//Set Send Request
+
+
+VFO B FREQUENCY
+-Touch Release Event-
+if(dim==0)	//if backlight off, just turn on backlight
+{
+  dim=dims
+  nSaverCount.val=0
+}else
+{
+  page pmemtovfo
+}
+
+SPL BUTTON
+-Touch Press Event-
+//Send command
+rSendCommand.val=5	//COMMAND : Split
+rSendData.val=0			//
+rSendNeed.val=1			//Set Send Request
+
+RIT BUTTON
+-Touch Press Event-
+//Send command
+rSendCommand.val=6	//COMMAND : RIT
+rSendData.val=0			//
+rSendNeed.val=1			//Set Send Request
+
+IFS BUTTON
+-Touch Press Event-
+rSendCommand.val=11		//COMMAND : IFS
+rSendData.val=0				//
+rSendNeed.val=1				//Set Send Request
+if(nTemp3.val==1)
+{
+  vis hIFS,0
+  nTemp3.val=0
+}else
+{
+  vis hIFS,1
+  nTemp3.val=1
+}
+
+ATT BUTTON
+-Touch Press Event-
+//Unset ATT Level
+rSendCommand.val=10			//COMMAND : ATT
+if(hATT.val==0)
+{
+  //Set Default ATT Level
+  rSendData.val=70			//ATT Value
+}else
+{
+  rSendData.val=0				//ATT Value
+}
+rSendNeed.val=1					//Set Send Request
+
+IFS GRAPH
+-Touch Move-
+rSendCommand.val=12						//COMMAND : IFS Value
+//Offset change, Range : 0 ~ 4000 => -20000 ~ + 20000
+rSendData.val=hIFS.val-2000	//IFS Value
+rSendData.val/=10
+rSendData.val*=10
+rSendNeed.val=1								//Set Send Request
+
+ATT GRAPH
+-Touch Move-
+rSendCommand.val=10			//COMMAND : ATT
+rSendData.val=hATT.val	//ATT Value
+rSendNeed.val=1					//Set Send Request
+
+
+
+
+
+

@@ -1,0 +1,138 @@
+LCD Setup
+
+Preinitialization
+vnDim.val=dim
+hDim.val=dim
+nDims.val=dims
+hDims.val=dims
+nScreenSaver.val=pm.vq.val&0x07
+click nScreenSaver,1
+
+Timer
+if(nSChanged.val>-1)
+{
+  //Changed
+  //Setup
+  pm.vq.val=pm.vq.val&0xFFFFFFF8
+  pm.vq.val=pm.vq.val|nSChanged.val
+  printh 59										//MAGIC
+  printh 58										//MAGIC
+  printh 68										//MAGIC
+  prints 32,1									//Command : Read EEProm(31), Write EEProm(32)
+  sys0=770										//Write Index
+  prints sys0,1								//Start Index Convert to 2Byte Integer
+  sys1=sys0>>8
+  prints sys1,1								//Start Index Convert to 2Byte Integer
+  prints 1,1									//Data Length
+  sys0=sys0&255
+  sys1=sys1&255
+  sys0=sys0+sys1+1
+  sys0%=256
+  prints sys0,1								//Check sum Address Offset (0 Byte + 1 Byte + 2 Byte) % 256
+  sys0=pm.vq.val&0xFF
+  prints sys0,1								//Send Data
+  printh FF										//MAGIC
+  printh FF										//MAGIC
+  printh 73										//ETX
+  //Save to uBITX EEProm
+  //sys0=pm.vq.val&0xFF
+  nScreenSaver.val=nSChanged.val
+  nSChanged.val=-1
+  click nScreenSaver,1
+}
+if(pm.vg.val==74)
+{
+  //  sys0=pm.vx.val&0xFF		//Sender
+  //Loopback Signal
+  //  if(sys0==nMyAddr.val)	//if Sender == me, ignore
+  //  {
+  pm.vg.val=0
+  pm.vv.val=0
+  //  }
+}
+
+
+
+***2nd LCD Button***
+Touch Press Event
+if(LCDToggle.val==1)
+{
+  LCDToggle.val=0
+  OtherLCDButton.pic=16
+  // Oeiginal code follows
+  randset 5,255
+  nMyAddr.val=rand
+  //Send
+  pm.vn.val=-1
+  pm.vx.val=0
+  printh 59										//MAGIC
+  printh 58										//MAGIC
+  printh 68										//MAGIC
+  prints 74,1									//Command : LOOP BACK
+  prints nMyAddr.val,1				//Loop Sender :
+  prints 10,1									//Loop Command1 : Command Type / 10: Backligt Off
+  prints 255,1								//Loop Command2 : Command Value / 255 : All device Receive
+  sys0=nMyAddr.val+10+255
+  sys0=sys0%256
+  prints sys0,1										//Loop Command3 : Command Value / CheckSum
+  printh FF										//MAGIC
+  printh FF										//MAGIC
+  printh 73										//ETX
+}else
+{
+  LCDToggle.val=1
+  OtherLCDButton.pic=15
+  //  Original code follows
+  randset 5,255
+  nMyAddr.val=rand
+  //Send
+  pm.vn.val=-1
+  pm.vx.val=0
+  printh 59										//MAGIC
+  printh 58										//MAGIC
+  printh 68										//MAGIC
+  prints 74,1									//Command : LOOP BACK
+  prints nMyAddr.val,1				//Loop Sender :
+  prints 11,1									//Loop Command1 : Command Type / 10: Backligt ON
+  prints 255,1								//Loop Command2 : Command Value / 255 : All device Receive
+  sys0=nMyAddr.val+11+255
+  sys0=sys0%256
+  prints sys0,1										//Loop Command3 : Command Value / CheckSum
+  printh FF										//MAGIC
+  printh FF										//MAGIC
+  printh 73										//ETX
+}
+
+CURRENT BACKLIGHT SLIDER
+Touch Move
+dim=hDim.val
+nDim.val=hDim.val
+
+STORED BACKLIGHT SLIDER
+Touch Move
+dims=hDims.val
+nDims.val=hDims.val
+hDim.val=hDims.val
+nDim.val=hDim.val
+
+Always on Option
+Touch Release
+nSChanged.val=0
+
+3 Minutes
+Touch Release
+nSChanged.val=1
+
+10 Minutes
+Touch Release
+nSChanged.val=2
+
+
+20 Minutes
+Touch Release
+nSChanged.val=3
+
+
+
+
+

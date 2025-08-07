@@ -1,0 +1,380 @@
+CW Subscreen
+--
+important nextion command---
+covx <source>,<destination>,<length>,<format>
+Parameters:
+<source>:
+The source variable or object property containing the data to be converted (e.g., n0.val, t0.txt).
+<destination>:
+The target variable or object property where the converted data will be stored (e.g., t1.txt, n1.val).
+<length>:
+Specifies the number of characters to display when converting a number to text.
+0: Automatic length (the display will determine the appropriate length).
+Non-zero value: Fixed length. If the converted value is shorter than the specified length, it will be padded (e.g., with leading zeros). If it's longer, it may be truncated.
+<format>:
+(Optional) Specifies the format for numeric conversions.
+0: Decimal format (default).
+1: Hexadecimal format.
+2: Decimal with commas (for displaying larger numbers with thousands separators).
+----
+
+Upon Screen Entry Initialization
+---
+click bLoad,1
+click bLoad,0
+delay=200
+---
+
+Timer
+if(pm.sh.txt!="J")
+{
+  //=========================================================
+  //Begin of User code
+  //Process the code according to the request code rSendType.
+  //=========================================================
+  //Rreceive Mode
+  if(nSendProcess.val==100)
+  {
+    //KeyType
+    rS.val=0
+    rA.val=0
+    rB.val=0
+    covx pm.sh.txt,sys0,0,2
+    if(sys0==0)
+    {
+      rS.val=1
+    }else if(sys0==1)
+    {
+      rA.val=1
+    }else if(sys0==2)
+    {
+      rB.val=1
+    }
+    nSendProcess.val=1
+  }else if(nSendProcess.val==101)
+  {
+    //KeyType
+    covx pm.sh.txt,sys0,0,4
+    nSpeed.val=1200/sys0
+    nSendProcess.val=2
+  }else if(nSendProcess.val==102)
+  {
+    //Side tone
+    covx pm.sh.txt,sys0,0,4
+    nSideTone.val=sys0
+    nSendProcess.val=3
+  }else if(nSendProcess.val==103)
+  {
+    //Dealy
+    covx pm.sh.txt,sys0,0,2
+    nDelay.val=sys0*10
+    nSendProcess.val=4
+  }else if(nSendProcess.val==104)
+  {
+    //Start Delay
+    covx pm.sh.txt,sys0,0,2
+    nStart.val=sys0*2
+    nSendProcess.val=-1
+  }
+  pm.sh.txt="J"
+  //  if(nSendProcess.val==-1)
+  //  {
+  //    tStatus.pco=65535
+  //    tStatus.txt="Offline"
+  //  }else
+  //  {
+  //    tStatus.pco=63488
+  //    tStatus.txt="Online"
+  //  }
+}
+if(pm.vn.val>-1)
+{
+  if(pm.vn.val==358)	//key Type Write Complete
+  {
+    nSendProcess.val=11
+  }else if(pm.vn.val==28)	//key Type Write Complete
+  {
+    nSendProcess.val=12
+  }else if(pm.vn.val==24)	//key Type Write Complete
+  {
+    nSendProcess.val=13
+  }else if(pm.vn.val==258)	//key Type Write Complete
+  {
+    nSendProcess.val=14
+  }else if(pm.vn.val==259)	//key Type Write Complete
+  {
+    nSendProcess.val=-1
+    //Last
+    //reboot uBITX
+    printh 59										//MAGIC
+    printh 58										//MAGIC
+    printh 68										//MAGIC
+    prints 95,1									//Command : 95 : Reboot
+    prints 1497712748,4					//MAGIC
+    printh FF										//MAGIC
+    printh FF										//MAGIC
+    printh 73										//ETX
+  }
+  pm.vn.val=0
+}
+if(nSendProcess.val==-1)
+{
+  tStatus.txt="Offline"
+  tStatus.pco=65535
+}else
+{
+  tStatus.txt="Online"
+  tStatus.pco=63488
+}
+if(nSendProcess.val<100)
+{
+  //Read menory
+  if(nSendProcess.val==0)	//Read Key Type
+  {
+    //KeyType
+    rSendIndex.val=358			//EEProm Address
+    rSendLength.val=1				//Read Length
+    rValueType.val=72				//Type 89:HEX String (C Language order) 72:HEX String(Nextion), 87:String
+    rRWType.val=31					//READ:31, WRITE:32  // Trigger
+    nSendProcess.val+=100
+  }else if(nSendProcess.val==1)	//CW Speed
+  {
+    //CW Speed
+    rSendIndex.val=28				//EEProm Address
+    rSendLength.val=4				//Read Length
+    rValueType.val=72				//Type 89:HEX String (C Language order) 72:HEX String(Nextion), 87:String
+    rRWType.val=31					//READ:31, WRITE:32  // Trigger
+    nSendProcess.val+=100
+  }else if(nSendProcess.val==2)	//CW Tone
+  {
+    //CW Speed
+    rSendIndex.val=24				//EEProm Address
+    rSendLength.val=4				//Read Length
+    rValueType.val=72				//Type 89:HEX String (C Language order) 72:HEX String(Nextion), 87:String
+    rRWType.val=31					//READ:31, WRITE:32  // Trigger
+    nSendProcess.val+=100
+  }else if(nSendProcess.val==3)	//CW Delay
+  {
+    //CW Delay
+    rSendIndex.val=258			//EEProm Address
+    rSendLength.val=1				//Read Length
+    rValueType.val=72				//Type 89:HEX String (C Language order) 72:HEX String(Nextion), 87:String
+    rRWType.val=31					//READ:31, WRITE:32  // Trigger
+    nSendProcess.val+=100
+  }else if(nSendProcess.val==4)	//CW Start Delay
+  {
+    //CW Start Delay
+    rSendIndex.val=259			//EEProm Address
+    rSendLength.val=1				//Read Length
+    rValueType.val=72				//Type 89:HEX String (C Language order) 72:HEX String(Nextion), 87:String
+    rRWType.val=31					//READ:31, WRITE:32  // Trigger
+    nSendProcess.val+=100
+  }else if(nSendProcess.val==10)	//Key Type Write
+  {
+    //Key Type Write
+    rSendIndex.val=358			//EEProm Address
+    rSendLength.val=1				//Read Length
+    rValueType.val=0				//Type 89:HEX String (C Language order) 72:HEX String(Nextion), 87:String
+    sys0=0
+    if(rA.val==1)
+    {
+      sys0=1
+    }else if(rB.val==1)
+    {
+      sys0=2
+    }
+    rSendInt.val=sys0
+    rRWType.val=32					//READ:31, WRITE:32  // Trigger
+    nSendProcess.val+=100
+    pm.vn.val=-1
+  }else if(nSendProcess.val==11)	//CW Speed
+  {
+    //CW Speed
+    rSendIndex.val=28				//EEProm Address
+    rSendLength.val=4				//Read Length
+    rValueType.val=0				//Type 89:HEX String (C Language order) 72:HEX String(Nextion), 87:String
+    sys0=1200/nSpeed.val
+    rSendInt.val=sys0
+    rRWType.val=32					//READ:31, WRITE:32  // Trigger
+    nSendProcess.val+=100
+    pm.vn.val=-1
+  }else if(nSendProcess.val==12)	//CW Tone
+  {
+    //CW Side Tone
+    rSendIndex.val=24				//EEProm Address
+    rSendLength.val=4				//Read Length
+    rValueType.val=0				//Type 89:HEX String (C Language order) 72:HEX String(Nextion), 87:String
+    sys0=nSideTone.val
+    rSendInt.val=sys0
+    rRWType.val=32					//READ:31, WRITE:32  // Trigger
+    nSendProcess.val+=100
+    pm.vn.val=-1
+  }else if(nSendProcess.val==13)	//CW Delay
+  {
+    //CW Delay
+    rSendIndex.val=258				//EEProm Address
+    rSendLength.val=1				//Read Length
+    rValueType.val=0				//Type 89:HEX String (C Language order) 72:HEX String(Nextion), 87:String
+    sys0=nDelay.val/10
+    rSendInt.val=sys0
+    rRWType.val=32					//READ:31, WRITE:32  // Trigger
+    nSendProcess.val+=100
+    pm.vn.val=-1
+  }else if(nSendProcess.val==14)	//CW Start Delay
+  {
+    //CW Start Delay
+    rSendIndex.val=259				//EEProm Address
+    rSendLength.val=1				//Read Length
+    rValueType.val=0				//Type 89:HEX String (C Language order) 72:HEX String(Nextion), 87:String
+    sys0=nStart.val/2
+    rSendInt.val=sys0
+    rRWType.val=32					//READ:31, WRITE:32  // Trigger
+    nSendProcess.val+=100
+    pm.vn.val=-1
+  }
+}
+//===================================================================================
+//If you use this send / receive logic, do not modify it below. Please keep the code
+//-----------------------------------------------------------------------------------
+// Ian KD8CEC
+//===================================================================================
+if(rRWType.val==32)					  //Write
+{
+  printh 59										//MAGIC
+  printh 58										//MAGIC
+  printh 68										//MAGIC
+  prints rRWType.val,1				//Command : Read EEProm(31), Write EEProm(32)
+  sys0=rSendIndex.val					//Write Index
+  prints sys0,1								//Start Index Convert to 2Byte Integer
+  sys1=sys0>>8
+  prints sys1,1								//Start Index Convert to 2Byte Integer
+  prints rSendLength.val,1		//Data Length
+  sys0=sys0&255	//1Byte
+  sys1=sys1&255	//1Byte
+  sys0=sys0+sys1+rSendLength.val
+  sys0%=256
+  prints sys0,1								//Check sum Address Offset (0 Byte + 1 Byte + 2 Byte) % 256
+  prints rSendInt.val,rSendLength.val
+  printh FF										//MAGIC
+  printh FF										//MAGIC
+  printh 73										//ETX
+  rRWType.val=-1
+}else if(rRWType.val!=-1)			//READ Command
+{
+  printh 59										//MAGIC
+  printh 58										//MAGIC
+  printh 68										//MAGIC
+  prints rRWType.val,1				//Command : Read EEProm(31), Write EEProm(32)
+  prints rSendIndex.val,1			//Start Index
+  sys0=rSendIndex.val>>8
+  prints sys0,1	//Start Index
+  prints rSendLength.val,1		//Length
+  prints rValueType.val,1			//Type 89:HEX String (C Language order) 72:HEX String(Nextion), 87:String
+  printh FF										//MAGIC
+  printh FF										//MAGIC
+  printh 73										//ETX
+  rSendLength.val=0
+  rRWType.val=-1
+}
+
+
+
+Apply/Reboot
+-Touch Release Event-
+nSendProcess.val=10
+
+Key Selection
+-Touch Release-
+Straight Key
+rS.val=1
+rA.val=0
+rB.val=0
+
+Iambica A
+rS.val=0
+rA.val=1
+rB.val=0
+
+Iambica B
+rS.val=0
+rA.val=0
+rB.val=1
+
+Refresh
+Touch Release
+nSendProcess.val=0
+
+CW Speed
+Down Arrow
+Post Touch Event-
+if(nSpeed.val>3)
+{
+  nSpeed.val--
+}
+
+Up ArrowPost 
+Touch Release Event-
+if(nSpeed.val<37)
+{
+  nSpeed.val++
+}
+
+Down Arrow Sidetone
+Touch Release Event-
+if(nSideTone.val>300)
+{
+  nSideTone.val=nSideTone.val-50
+  nSideTone.val/=50
+  nSideTone.val*=50
+}
+
+Up Arrow SideTone
+Touch Release Event-
+if(nSideTone.val<1500)
+{
+  nSideTone.val=nSideTone.val+50
+  nSideTone.val/=50
+  nSideTone.val*=50
+}
+
+TX-RX DELAY
+nDelay
+Down Arrow
+f(nDelay.val>0)
+{
+  nDelay.val=nDelay.val-10
+  nDelay.val/=10
+  nDelay.val*=10
+}
+
+Up Arrow
+if(nDelay.val<2500)
+{
+  nDelay.val=nDelay.val+10
+  nDelay.val/=10
+  nDelay.val*=10
+}
+
+RX->TX Delay
+nStart
+Post Touch
+Down Arrow
+if(nStart.val>0)
+{
+  nStart.val=nStart.val-10
+  nStart.val/=10
+  nStart.val*=10
+}
+Up Arrow
+if(nStart.val<2500)
+{
+  nStart.val=nStart.val+10
+  nStart.val/=10
+  nStart.val*=10
+}
+
+
+
+
+
+

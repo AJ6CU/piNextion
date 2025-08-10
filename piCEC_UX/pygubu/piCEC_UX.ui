@@ -148,8 +148,8 @@ BAND UP
           </object>
         </child>
         <child>
-          <object class="ttk.Button" id="band_dn_Button" named="True">
-            <property name="command" type="command" cbtype="simple">band_dn_CB</property>
+          <object class="ttk.Button" id="band_down_Button" named="True">
+            <property name="command" type="command" cbtype="simple">band_down_CB</property>
             <property name="style">Button2b.TButton</property>
             <property name="text" translatable="yes">
 BAND DN

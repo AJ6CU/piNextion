@@ -120,16 +120,16 @@ class piCECNextionUI(ttk.Frame):
             width=12)
         self.band_up_Button.grid(column=3, padx="0 2", row=0, sticky="ns")
         self.band_up_Button.configure(command=self.band_up_CB)
-        self.band_dn_Button = ttk.Button(
-            self.menuBar_Frame, name="band_dn_button")
+        self.band_down_Button = ttk.Button(
+            self.menuBar_Frame, name="band_down_button")
         self.band_dn_VAR = tk.StringVar(value='\nBAND DN\n')
-        self.band_dn_Button.configure(
+        self.band_down_Button.configure(
             style="Button2b.TButton",
             text='\nBAND DN\n',
             textvariable=self.band_dn_VAR,
             width=12)
-        self.band_dn_Button.grid(column=4, padx="0 2", row=0, sticky="ns")
-        self.band_dn_Button.configure(command=self.band_dn_CB)
+        self.band_down_Button.grid(column=4, padx="0 2", row=0, sticky="ns")
+        self.band_down_Button.configure(command=self.band_down_CB)
         self.lock_Button = ttk.Button(self.menuBar_Frame, name="lock_button")
         self.lock_VAR = tk.StringVar(value='\nLOCK\n')
         self.lock_Button.configure(
@@ -496,7 +496,7 @@ class piCECNextionUI(ttk.Frame):
             height=665,
             style="Normal.TFrame",
             width=850)
-        self.pack(anchor="nw", expand=True, fill="x", side="top")
+        # Layout for 'main_window' skipped in custom widget template.
 
     def settings_CB(self):
         pass
@@ -519,7 +519,7 @@ class piCECNextionUI(ttk.Frame):
     def band_up_CB(self):
         pass
 
-    def band_dn_CB(self):
+    def band_down_CB(self):
         pass
 
     def lock_CB(self):

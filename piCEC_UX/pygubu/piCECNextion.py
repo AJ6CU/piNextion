@@ -1,3 +1,5 @@
+from Cython.Compiler.Naming import self_cname
+
 import piCEC_UXui as baseui
 import mystyles  # Styles definition module
 
@@ -11,6 +13,11 @@ class piCECNextion(baseui.piCECNextionUI):
         )
         self.theRadio = None
         self.debugCommandDecoding = True
+
+        self.vfo_VAR.set("VFO-A")
+
+        self.vfoB_Freq_Current=None
+        self.vfoB_Mode_Current=None
 
         self.getterCB_Dict = {
             "v1": self.v1Get,
@@ -38,36 +45,10 @@ class piCECNextion(baseui.piCECNextionUI):
             "ck": self.ckGet,
             "vs": self.vsGet,
             "vy": self.vyGet,
-            "ve": self.veGet
+            "ve": self.veGet,
+            "cv": self.cvGet            #sets active VFO, A=0, B=1
         }
-        self.putterCB_Dict = {
-            "v1": self.v1Put,
-            "v2": self.v2Put,
-            "v3": self.v3Put,
-            "v4": self.v4Put,
-            "v5": self.v5Put,
-            "ch": self.chPut,
-            "vh": self.vhPut,
-            "vo": self.voPut,
-            "vp": self.vpPut,
-            "vq": self.vqPut,
-            "sv": self.svPut,
-            "sc": self.scPut,
-            "cm": self.cmPut,
-            "c0": self.c0Put,
-            "vc": self.vcPut,
-            "cc": self.cc_Radio_Set_Mode,
-            "va": self.vaPut,
-            "ca": self.caPut,
-            "vb": self.vbPut,
-            "cb": self.cbPut,
-            "cn": self.cnPut,
-            "vt": self.vtPut,
-            "ck": self.ckPut,
-            "vs": self.vsPut,
-            "vy": self.vyPut,
-            "ve": self.vePut
-        }
+
         self.toRadioCommandDict = {
             "TS_CMD_MODE":1,
             "TS_CMD_FREQ":2,
@@ -114,6 +95,11 @@ class piCECNextion(baseui.piCECNextionUI):
             "CWU":5
         }
 
+        self.Text_To_BandChange = {
+            "UP": 2,
+            "DOWN":1
+        }
+
     def attachRadio(self, radio):
         self.theRadio = radio
     def delegate_command_processing(self,command, buffer):
@@ -126,6 +112,11 @@ class piCECNextion(baseui.piCECNextionUI):
             returnBuffer = returnBuffer + buffer[i]
             i +=1
         return returnBuffer.replace('"','')
+
+    def vfo_CB(self):
+        self.secondary_VFO_VAR.set(self.primary_VFO_VAR.get())
+        self.secondary_Mode_VAR.set(self.mode_select_VAR.get())
+        self.Radio_Toggle_VFO()
 
     def mode_lsb_CB(self):
         print("lsb change cb called")
@@ -151,13 +142,11 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def band_up_CB(self):
          print("band up")
+         self.Radio_Change_Band(self.Text_To_BandChange["UP"])
 
-         tx_mode_switch_USB2pre = b'\x59\x58\x68\x03'
-         tx_mode_switch_USB2com = b'\x02\x00\x00\x00'
-         tx_mode_switch_USB2post = b'\xff\xff\x73'
-         tx_mode_switch_USB2 = tx_mode_switch_USB2pre + tx_mode_switch_USB2com + tx_mode_switch_USB2post
-         print('command =', tx_mode_switch_USB2)
-         self.theRadio.radioPort.write(tx_mode_switch_USB2)
+    def band_down_CB(self):
+         print("band down")
+         self.Radio_Change_Band(self.Text_To_BandChange["DOWN"])
 
          #
          #   The "v1" command is used for smallest tuning rate
@@ -172,13 +161,6 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def v1Put(self):
-        if self.debugCommandDecoding:
-            print("v1 put called")
-
-        #
-        #   The "v2" command 1s used for the second smallest tuning rate
-        #
 
     def v2Get(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
@@ -188,9 +170,6 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def v2Put(self):
-        if self.debugCommandDecoding:
-            print("v2 put called")
 
         #
         #   The "v3" command 1s used for the third (middle) tuning rate
@@ -204,9 +183,7 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def v3Put(self):
-        if self.debugCommandDecoding:
-            print("v3 put called")
+
 
         #
         #   The "v4" command 1s used for the next largest tuning rate
@@ -220,9 +197,6 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def v4Put(self):
-        if self.debugCommandDecoding:
-            print("v4 put called")
 
         #
         #   The "v5" command 1s used for the largest tuning rate
@@ -236,9 +210,6 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def v5Put(self):
-        if self.debugCommandDecoding:
-            print("v5 put called")
 
         #
         #   The "ch" command originates from the EEPROM and is added to the frequency to shift it
@@ -252,9 +223,7 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def chPut(self):
-        if self.debugCommandDecoding:
-            print("ch put called")
+
 
         #
         #   The "vh" command originates from the EEPROM and is added to the frequency to shift it
@@ -268,9 +237,7 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def vhPut(self):
-        if self.debugCommandDecoding:
-            print("vh put called")
+
 
         #
         #   The "vo" command originates from the EEPROM and is added to the frequency to shift it
@@ -284,9 +251,7 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def voPut(self):
-        if self.debugCommandDecoding:
-            print("vo put called")
+
 
         #
         #   The "vp" command originates from the EEPROM and is added to the frequency to shift it
@@ -300,9 +265,6 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def vpPut(self):
-        if self.debugCommandDecoding:
-            print("vp put called")
 
         #
         #   The "vq" command is referred to as display option 2 in EEPROM
@@ -316,9 +278,6 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def vqPut(self):
-        if self.debugCommandDecoding:
-            print("vq put called")
 
         #
         #   The "sv" command is stores the text of the firmware version
@@ -332,9 +291,6 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def svPut(self):
-        if self.debugCommandDecoding:
-            print("sv put called")
 
         #
         #   The "sc" command is stores the text of the operators callsign
@@ -348,9 +304,6 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def scPut(self):
-        if self.debugCommandDecoding:
-            print("sc put called")
 
         #
         #   The "cm" command determines whether call sign and firmware versions are displayed
@@ -364,9 +317,6 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def cmPut(self):
-        if self.debugCommandDecoding:
-            print("cm put called")
 
         #
         #   The "c0" command determines whether we are in text (yellow box) or graphics mode
@@ -380,9 +330,6 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def c0Put(self):
-        if self.debugCommandDecoding:
-            print("c0 put called")
 
         #
         #   The "vc" command indicates a new frequency
@@ -398,13 +345,16 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def vcPut(self):
-        if self.debugCommandDecoding:
-            print("vc put called")
 
-        #
-        #   The "cc" command indicates a change to a new mode (e.g. USB, LSB, etc.)
-        #
+    def  Radio_Toggle_VFO(self):
+
+        command = [self.toRadioCommandDict["TS_CMD_VFO"],0,0,0,0]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+
+    #
+    #   The "cc" command indicates a change to a new mode (e.g. USB, LSB, etc.)
+    #
 
     def cc_UX_Set_Mode(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
@@ -414,25 +364,21 @@ class piCECNextion(baseui.piCECNextionUI):
             print("cc new mode change")
             print("value=", value, sep='*', end='*')
             print("\n")
-
+    #
+    #   This function tells the Radio that a new mode has been selected for
+    #   the primary (displayed) VFO. After receiving the new mode, the
+    #   Radio will separately send back the mode to the UX
+    #
     def cc_Radio_Set_Mode(self, newMode):
-        # temp_Buffer = []
-        #
-        # if self.debugCommandDecoding:
-        #     print("cc put called")
-        #
-        # temp_Buffer.append(self.toRadioCommandDict["TS_CMD_MODE"])
-        # temp_Buffer.append(newMode)
-        # print("decoded string =", temp_Buffer)
-        #
-        # #
-        # # decoded_buffer_hex = [item.hex() for item in buffer]
-        # # for item in decoded_buffer_hex:
-        # #     print(f"{item:<{4}}", end="")
-        # # print("")
-
-
-        command = [1,newMode,0,0,0]
+        command = [self.toRadioCommandDict["TS_CMD_MODE"],newMode,0,0,0]
+        self.theRadio.sendCommandToMCU(bytes(command))
+    #
+    #   This function tells the Radio that a button up or down has been pushed
+    #   in the UX. After receiving this command the radio will send back a new frequency
+    #   and mode for the displayed VOF
+    #
+    def Radio_Change_Band(self, direction):
+        command = [self.toRadioCommandDict["TS_CMD_BAND"],direction,0,0,0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     #
@@ -448,9 +394,6 @@ class piCECNextion(baseui.piCECNextionUI):
             print("\n")
         self.primary_VFO_VAR.set(value)
 
-    def vaPut(self):
-        if self.debugCommandDecoding:
-            print("va put called")
 
         #
         #   The "ca" command indicates assignment of a new mode to vfoA
@@ -467,22 +410,7 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def caPut(self, newMode):
-        if self.debugCommandDecoding:
-            print("ca put called")
-        temp_Buffer = []
 
-        temp_Buffer.append(self.toRadioCommandDict["TS_CMD_MODE"])
-        temp_Buffer.append(newMode)
-        # print("decoded string =", temp_Buffer)
-
-        #
-        # decoded_buffer_hex = [item.hex() for item in buffer]
-        # for item in decoded_buffer_hex:
-        #     print(f"{item:<{4}}", end="")
-        # print("")
-
-        self.sendCommandToMCU(temp_Buffer)
 
         #
         #   The "vb" command indicates assignment of vfoB to new frequency
@@ -497,13 +425,7 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def vbPut(self):
-        if self.debugCommandDecoding:
-            print("vb put called")
 
-        #
-        #   The "cb" command indicates assignment of a new mode to vfoB
-        #
 
     def cbGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
@@ -514,9 +436,7 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def cbPut(self):
-        if self.debugCommandDecoding:
-            print("cb put called")
+
 
         #
         #   The "cn" command indicates which tuning step is active (1(smallest) - 5(largest)
@@ -532,9 +452,6 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def cnPut(self):
-        if self.debugCommandDecoding:
-            print("cn put called")
 
         #
         #   The "vt" command stores the CW tone
@@ -548,9 +465,6 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def vtPut(self):
-        if self.debugCommandDecoding:
-            print("vt put called")
 
         #
         #   The "ck" command stores which cw key is being used
@@ -564,9 +478,7 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def ckPut(self):
-        if self.debugCommandDecoding:
-            print("ck put called")
+
 
         #
         #   The "vs" command stores words/minute
@@ -580,9 +492,6 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def vsPut(self):
-        if self.debugCommandDecoding:
-            print("vs put called")
 
         #
         #   The "vy" command stores delay returning after last cw character
@@ -596,9 +505,7 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def vyPut(self):
-        if self.debugCommandDecoding:
-            print("vy put called")
+
 
         #
         #   The "ve" command stores delay returning after last cw character
@@ -612,6 +519,19 @@ class piCECNextion(baseui.piCECNextionUI):
             print("value=", value, sep='*', end='*')
             print("\n")
 
-    def vePut(self):
+    #
+    #   Returns active VFO, VFO-A=0, VFO-B=1
+    def cvGet(self, buffer):
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+
+        if (int(value) == 0):
+            self.vfo_VAR.set("VFO-A")
+        else:
+            self.vfo_VAR.set("VFO-B")
+
         if self.debugCommandDecoding:
-            print("ve put called")
+            print("cv get called:", "buffer =", buffer)
+            print("cv toggle vfo")
+            print("value=", value, sep='*', end='*')
+            print("\n")
+

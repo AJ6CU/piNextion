@@ -114,30 +114,35 @@ class piCECNextion(baseui.piCECNextionUI):
         return returnBuffer.replace('"','')
 
     def vfo_CB(self):
+        print("primary vfo =",self.primary_VFO_VAR.get())
+        print("current mode =",self.primary_Mode_VAR.get())
         self.secondary_VFO_VAR.set(self.primary_VFO_VAR.get())
-        self.secondary_Mode_VAR.set(self.mode_select_VAR.get())
+        self.secondary_Mode_VAR.set(self.primary_Mode_VAR.get())
+        print("secondary vfo =",self.secondary_VFO_VAR.get())
+        print("current mode =",self.secondary_Mode_VAR.get())
+
         self.Radio_Toggle_VFO()
 
     def mode_lsb_CB(self):
         print("lsb change cb called")
-        self.mode_select_VAR.set("LSB")
+        self.primary_Mode_VAR.set("LSB")
         self.cc_Radio_Set_Mode(self.Text_To_ModeNum["LSB"])
 
     def mode_usb_CB(self):
         print("usb change cb called")
-        self.mode_select_VAR.set("USB")
+        self.primary_Mode_VAR.set("USB")
         self.cc_Radio_Set_Mode(self.Text_To_ModeNum["USB"])
 
 
     def mode_cwl_CB(self):
         print("cwl change cb called")
-        self.mode_select_VAR.set("CWL")
+        self.primary_Mode_VAR.set("CWL")
         self.cc_Radio_Set_Mode(self.Text_To_ModeNum["CWL"])
 
 
     def mode_cwu_CB(self):
         print("cwu change cb called")
-        self.mode_select_VAR.set("CWU")
+        self.primary_Mode_VAR.set("CWU")
         self.cc_Radio_Set_Mode(self.Text_To_ModeNum["CWU"])
 
     def band_up_CB(self):
@@ -358,7 +363,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def cc_UX_Set_Mode(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        self.mode_select_VAR.set(self.modeNum_To_TextDict[value])
+        self.primary_Mode_VAR.set(self.modeNum_To_TextDict[value])
         if self.debugCommandDecoding:
             print("cc get called:", "buffer =", buffer)
             print("cc new mode change")
@@ -402,7 +407,7 @@ class piCECNextion(baseui.piCECNextionUI):
     def caGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
 
-        self.mode_select_VAR.set(self.modeNum_To_TextDict[value])
+        self.primary_Mode_VAR.set(self.modeNum_To_TextDict[value])
 
         if self.debugCommandDecoding:
             print("ca get called:", "buffer =", buffer)

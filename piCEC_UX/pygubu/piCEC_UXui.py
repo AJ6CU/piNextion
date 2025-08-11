@@ -77,12 +77,11 @@ class piCECNextionUI(ttk.Frame):
         self.vfo_Button.configure(command=self.vfo_CB)
         self.mode_select_Menubutton = ttk.Menubutton(
             self.menuBar_Frame, name="mode_select_menubutton")
-        self.mode_select_VAR = tk.StringVar(value=' \nMode\n')
+        self.primary_Mode_VAR = tk.StringVar(value=' \nMode\n')
         self.mode_select_Menubutton.configure(
-            state="normal",
             style="Heading2b.TMenubutton",
             text=' \nMode\n',
-            textvariable=self.mode_select_VAR,
+            textvariable=self.primary_Mode_VAR,
             width=9)
         self.menu1 = tk.Menu(self.mode_select_Menubutton)
         self.menu1.configure(tearoff=False)

@@ -81,12 +81,11 @@ VFO
         </child>
         <child>
           <object class="ttk.Menubutton" id="mode_select_Menubutton" named="True">
-            <property name="state">normal</property>
             <property name="style">Heading2b.TMenubutton</property>
             <property name="text" translatable="yes"> 
 Mode
 </property>
-            <property name="textvariable">string:mode_select_VAR</property>
+            <property name="textvariable">string:primary_Mode_VAR</property>
             <property name="width">9</property>
             <layout manager="grid">
               <property name="column">2</property>

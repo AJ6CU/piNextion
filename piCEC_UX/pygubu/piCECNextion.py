@@ -1,3 +1,5 @@
+from imghdr import test_xbm
+
 from Cython.Compiler.Naming import self_cname
 
 import piCEC_UXui as baseui
@@ -16,8 +18,19 @@ class piCECNextion(baseui.piCECNextionUI):
 
         self.vfo_VAR.set("VFO-A")
 
-        self.vfoB_Freq_Current=None
-        self.vfoB_Mode_Current=None
+        # self.vfoB_Freq_Current=None
+        # self.vfoB_Mode_Current=None
+
+        self.lock_Button_On = False                 #controls lock of console
+        self.speaker_Button_On = False              #On means in Mute/SDR
+        self.stop_Button_On = False                 #Emergency stop all tx
+        self.split_Button_On = False                #Controls entry into split mode
+        self.rit_Button_On = False                  #Controls RIT. On means in RIT mode
+        self.att_Button_On = False                  #On allows onscreen control of signal attn
+        self.ifs_Button_On = False                  #On allows onscreen mod of the ifs
+
+
+
 
         self.getterCB_Dict = {
             "v1": self.v1Get,
@@ -46,7 +59,15 @@ class piCECNextion(baseui.piCECNextionUI):
             "vs": self.vsGet,
             "vy": self.vyGet,
             "ve": self.veGet,
-            "cv": self.cvGet            #sets active VFO, A=0, B=1
+            "cv": self.cvGet,            #sets active VFO, A=0, B=1
+            "s0": self.s0Get,
+            "cl": self.clGet,
+            "cj": self.cjGet,
+            "cs": self.csGet,
+            "vr": self.vrGet,
+            "cr": self.crGet,
+            "ci": self.ciGet,
+            "cx": self.cxGet
         }
 
         self.toRadioCommandDict = {
@@ -152,6 +173,68 @@ class piCECNextion(baseui.piCECNextionUI):
     def band_down_CB(self):
          print("band down")
          self.Radio_Change_Band(self.Text_To_BandChange["DOWN"])
+
+
+
+
+
+
+
+
+
+
+    def lock_CB(self):
+        if (self.lock_Button_On):
+            self.lock_Button_On = False
+        else:
+            self.lock_Button_On = True
+        self.Radio_Toggle_Lock()
+
+    def speaker_CB(self):
+        if (self.speaker_Button_On):
+            self.speaker_Button_On = False
+        else:
+            self.speaker_Button_On = True
+        self.Radio_Toggle_Speaker()
+
+    def stop_CB(self):
+        if (self.stop_Button_On):
+            self.stop_Button_On = False
+        else:
+            self.stop_Button_On = True
+        self.Radio_Toggle_Stop()
+
+    def split_CB(self):
+        if(self.split_Button_On):
+            self.split_Button_On = False
+        else:
+            self.split_Button_On = True
+        self.Radio_Toggle_Split()
+
+    def rit_CB(self):
+        if(self.rit_Button_On):
+            self.rit_Button_On = False
+        else:
+            self.rit_Button_On = True
+        self.Radio_Toggle_RIT()
+
+    def att_CB(self):
+        # Is ATT Command correctly implemented? on goes to 46hex
+        if(self.att_Button_On):
+            self.att_Button_On = False
+        else:
+            self.att_Button_On = True
+        self.Radio_Toggle_ATT()
+
+    def ifs_CB(self):
+        if(self.ifs_Button_On):
+            self.ifs_Button_On = False
+        else:
+            self.ifs_Button_On = True
+        self.Radio_Toggle_IFS()
+
+
+####    Start of command processing sent by Radio to Screen
 
          #
          #   The "v1" command is used for smallest tuning rate
@@ -349,11 +432,69 @@ class piCECNextion(baseui.piCECNextionUI):
             print("vc new frequency change")
             print("value=", value, sep='*', end='*')
             print("\n")
+    def s0Get(self, buffer):
+        print("unknown s0 called from lock screen")
+
+    def clGet(self, buffer):
+        print("unknown cl called from lock screen")  # command is dial lock
+
+    def cjGet(self, buffer):
+        print("unknown cj called to confirm sdr mode")  # command is sdr
+
+    def csGet(self, buffer):
+        print("unknown cs called to confirm split mode")  # command is split
+
+    def vrGet(self, buffer):
+        print("unknown vr called to confirm rit mode")  # command is rit related
+
+    def crGet(self, buffer):
+        print("unknown cr called to confirm split mode")  # command is rit
 
 
-    def  Radio_Toggle_VFO(self):
+    def ciGet(self, buffer):
+        print("unknown ci called to confirm ifs mode")  # command is ifs
 
+    def cxGet(self, buffer):
+        print("unknown cx called to confirm stop mode")  # command is stop
+
+
+    def Radio_Toggle_VFO(self):
         command = [self.toRadioCommandDict["TS_CMD_VFO"],0,0,0,0]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Toggle_Lock(self):
+        print("lock toggle")
+        command = [self.toRadioCommandDict["TS_CMD_LOCK"],0,0,0,0]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Toggle_Speaker(self):
+        print("speaker toggle")
+        command = [self.toRadioCommandDict["TS_CMD_SDR"],0,0,0,0]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Toggle_Stop(self):
+        print("stop toggle")
+        command = [self.toRadioCommandDict["TS_CMD_TXSTOP"],0,0,0,0]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Toggle_Split(self):
+        print("split toggle")
+        command = [self.toRadioCommandDict["TS_CMD_SPLIT"],0,0,0,0]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Toggle_RIT(self):
+        print("lock RIT")
+        command = [self.toRadioCommandDict["TS_CMD_RIT"],0,0,0,0]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Toggle_ATT(self):
+        print("lock ATT")
+        command = [self.toRadioCommandDict["TS_CMD_ATT"],0,0,0,0]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Toggle_IFS(self):
+        print("IFS toggle")
+        command = [self.toRadioCommandDict["TS_CMD_IFS"],0,0,0,0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
 

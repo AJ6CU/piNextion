@@ -170,7 +170,6 @@ BAND DN
             <property name="text" translatable="yes">
 LOCK
 </property>
-            <property name="textvariable">string:lock_VAR</property>
             <property name="width">12</property>
             <layout manager="grid">
               <property name="column">5</property>
@@ -187,6 +186,7 @@ LOCK
             <property name="text" translatable="yes">
 SPEAKER
 </property>
+            <property name="textvariable">string:speaker_VAR</property>
             <property name="width">12</property>
             <layout manager="grid">
               <property name="column">6</property>
@@ -249,7 +249,7 @@ SPEAKER
             <child>
               <object class="ttk.Button" id="stop_Button" named="True">
                 <property name="command" type="command" cbtype="simple">stop_CB</property>
-                <property name="state">disabled</property>
+                <property name="state">normal</property>
                 <property name="style">RedButton2.TButton</property>
                 <property name="text" translatable="yes">
 STOP!

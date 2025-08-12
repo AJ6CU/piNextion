@@ -130,19 +130,19 @@ class piCECNextionUI(ttk.Frame):
         self.band_down_Button.grid(column=4, padx="0 2", row=0, sticky="ns")
         self.band_down_Button.configure(command=self.band_down_CB)
         self.lock_Button = ttk.Button(self.menuBar_Frame, name="lock_button")
-        self.lock_VAR = tk.StringVar(value='\nLOCK\n')
         self.lock_Button.configure(
             style="Button2b.TButton",
             text='\nLOCK\n',
-            textvariable=self.lock_VAR,
             width=12)
         self.lock_Button.grid(column=5, padx="0 2", row=0, sticky="ns")
         self.lock_Button.configure(command=self.lock_CB)
         self.speaker_Button = ttk.Button(
             self.menuBar_Frame, name="speaker_button")
+        self.speaker_VAR = tk.StringVar(value='\nSPEAKER\n')
         self.speaker_Button.configure(
             style="Button2b.TButton",
             text='\nSPEAKER\n',
+            textvariable=self.speaker_VAR,
             width=12)
         self.speaker_Button.grid(column=6, row=0, sticky="ns")
         self.speaker_Button.configure(command=self.speaker_CB)
@@ -174,7 +174,7 @@ class piCECNextionUI(ttk.Frame):
         self.stop_Button = ttk.Button(
             self.rxTX_Status_Frame, name="stop_button")
         self.stop_Button.configure(
-            state="disabled",
+            state="normal",
             style="RedButton2.TButton",
             text='\nSTOP!\n',
             width=6)

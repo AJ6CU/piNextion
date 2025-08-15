@@ -61,7 +61,7 @@ class piCECNextion(baseui.piCECNextionUI):
             "ve": self.veGet,
             "cv": self.cvGet,            #sets active VFO, A=0, B=1
             "s0": self.s0Get,
-            "cl": self.clGet,
+            "cl": self.cl_UX_Lock_Screen,
             "cj": self.cjGet,
             "cs": self.csGet,
             "vr": self.vrGet,
@@ -174,21 +174,16 @@ class piCECNextion(baseui.piCECNextionUI):
          print("band down")
          self.Radio_Change_Band(self.Text_To_BandChange["DOWN"])
 
-
-
-
-
-
-
-
-
+#
+#   This function sends to the Radio a notice that a screen lock has been requested
+#   The actual locking of the screen waits until the Radio sends back a commond
+#   to lock the screen. This ensures that the screen is not locked by the UX
+#   and the Radio never gets the request for some reason.
+#   The sctual locking of screen is set performed by cl_UX_Lock_Screen()
+#
 
     def lock_CB(self):
-        if (self.lock_Button_On):
-            self.lock_Button_On = False
-        else:
-            self.lock_Button_On = True
-        self.Radio_Toggle_Lock()
+        self.Radio_Toggle_Lock()    # Inform  Radio that a screen lock has been requested
 
     def speaker_CB(self):
         if (self.speaker_Button_On):
@@ -220,6 +215,14 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def att_CB(self):
         # Is ATT Command correctly implemented? on goes to 46hex
+#         if(hATT.val==0)
+# {
+#   //Set Default ATT Level
+#   rSendData.val=70			//ATT Value
+# }else
+# {
+#   rSendData.val=0				//ATT Value
+# }
         if(self.att_Button_On):
             self.att_Button_On = False
         else:
@@ -432,11 +435,34 @@ class piCECNextion(baseui.piCECNextionUI):
             print("vc new frequency change")
             print("value=", value, sep='*', end='*')
             print("\n")
+
+    #
+    # The purpose of this command is a little puzzling
+    # code talks about this being used to eliminate duplicate data
+    # Only sent on the first attempt to lock the screen
+    #
     def s0Get(self, buffer):
         print("unknown s0 called from lock screen")
+        print("buffer=", buffer)
 
-    def clGet(self, buffer):
-        print("unknown cl called from lock screen")  # command is dial lock
+    #
+    #   Received request from Radio to lock the screen
+    #
+    def cl_UX_Lock_Screen(self, buffer):
+        print("cl_UX_Lock_Screen requested by Radio")
+        if (self.lock_Button_On):
+            self.lock_Button_On = False
+            self.lock_Button.configure(bg="gray",fg="black", state="normal")
+        else:
+            print("turning red")
+            self.lock_Button_On = True
+            self.lock_Button.configure(bg="red", fg="white",state="pressed")
+
+    def lockUX(self):
+        pass
+
+    def unlockUX(self):
+        pass
 
     def cjGet(self, buffer):
         print("unknown cj called to confirm sdr mode")  # command is sdr
@@ -453,6 +479,10 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def ciGet(self, buffer):
         print("unknown ci called to confirm ifs mode")  # command is ifs
+  #         if (L_isIFShift != isIFShift)
+  # {
+  #   L_isIFShift = isIFShift;
+  #   SendCommand1Num(CMD_IS_IFSHIFT, L_isIFShift);
 
     def cxGet(self, buffer):
         print("unknown cx called to confirm stop mode")  # command is stop
@@ -496,6 +526,10 @@ class piCECNextion(baseui.piCECNextionUI):
         print("IFS toggle")
         command = [self.toRadioCommandDict["TS_CMD_IFS"],0,0,0,0]
         self.theRadio.sendCommandToMCU(bytes(command))
+      #   first value has something
+      #         {
+      #   isIFShift = isIFShift ? 0 : 1;  //Toggle
+      # }
 
 
     #

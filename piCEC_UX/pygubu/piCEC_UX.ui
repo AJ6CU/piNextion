@@ -49,9 +49,9 @@
           <object class="ttk.Button" id="settings_Button" named="True">
             <property name="command" type="command" cbtype="simple">settings_CB</property>
             <property name="style">Button2b.TButton</property>
-            <property name="text" translatable="yes">
+            <property name="text" translatable="yes">  
 SETTINGS
-</property>
+  </property>
             <property name="textvariable">string:settings_VAR</property>
             <property name="width">12</property>
             <layout manager="grid">

@@ -62,7 +62,7 @@ class piCECNextion(baseui.piCECNextionUI):
             "cv": self.cvGet,            #sets active VFO, A=0, B=1
             "s0": self.s0Get,
             "cl": self.cl_UX_Lock_Screen,
-            "cj": self.cjGet,
+            "cj": self.cj_UX_Speaker_Toggle,
             "cs": self.csGet,
             "vr": self.vrGet,
             "cr": self.crGet,
@@ -194,11 +194,7 @@ class piCECNextion(baseui.piCECNextionUI):
     def lock_CB(self):
         self.Radio_Toggle_Lock()    # Inform  Radio that a screen lock has been requested
 
-    def speaker_CB(self):
-        if (self.speaker_Button_On):
-            self.speaker_Button_On = False
-        else:
-            self.speaker_Button_On = True
+    def speaker_CB(self):           # Inform Radio that a request was made to mute speaker
         self.Radio_Toggle_Speaker()
 
     def stop_CB(self):
@@ -458,6 +454,7 @@ class piCECNextion(baseui.piCECNextionUI):
     # The purpose of this command is a little puzzling
     # code talks about this being used to eliminate duplicate data
     # Only sent on the first attempt to lock the screen
+    # Also contains the text for the speaker button
     #
     def s0Get(self, buffer):
         print("unknown s0 called from lock screen")
@@ -480,7 +477,7 @@ class piCECNextion(baseui.piCECNextionUI):
             self.lock_Button.configure(style='RedButton2b.TButton', state='pressed')
             self.lock_VAR.set("\nLOCK-Red\n")
             self.lockUX()
-            
+
     #
     #   Disable all of the control widgets when a LOCK action is requested
     #
@@ -530,8 +527,19 @@ class piCECNextion(baseui.piCECNextionUI):
                 child.configure(state=newstate)
 
 
-    def cjGet(self, buffer):
-        print("unknown cj called to confirm sdr mode")  # command is sdr
+    def cj_UX_Speaker_Toggle(self, buffer):
+        print("cj_UX_Speaker_Toggle requested by Radio")
+        if (self.speaker_Button_On):
+            print("unmuting audio")
+            self.speaker_Button_On = False
+            self.speaker_Button.configure(style='Button2b.TButton', state="normal")
+            self.speaker_VAR.set("\nSPEAKER\n")
+        else:
+            print("muting audio")
+            self.speaker_Button_On = True
+            self.speaker_Button.configure(style='RedButton2b.TButton', state="pressed")
+            self.speaker_VAR.set("\nMuted-Red\n")
+
 
     def csGet(self, buffer):
         print("unknown cs called to confirm split mode")  # command is split

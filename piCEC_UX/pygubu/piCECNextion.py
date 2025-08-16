@@ -134,6 +134,9 @@ class piCECNextion(baseui.piCECNextionUI):
             i +=1
         return returnBuffer.replace('"','')
 
+    def settings_CB(self):
+        print("settings_CB")
+
     def vfo_CB(self):
         print("primary vfo =",self.primary_VFO_VAR.get())
         print("current mode =",self.primary_Mode_VAR.get())
@@ -174,6 +177,12 @@ class piCECNextion(baseui.piCECNextionUI):
          print("band down")
          self.Radio_Change_Band(self.Text_To_BandChange["DOWN"])
 
+    def cw_info_CB(self, event=None):
+       if (self.lock_Button_On):
+           print("lock button on, ignore callback")
+       else:
+           print("cw_info cb called allowed because lock button off")
+
 #
 #   This function sends to the Radio a notice that a screen lock has been requested
 #   The actual locking of the screen waits until the Radio sends back a commond
@@ -213,6 +222,12 @@ class piCECNextion(baseui.piCECNextionUI):
             self.rit_Button_On = True
         self.Radio_Toggle_RIT()
 
+    def store_CB(self):
+        print("store_CB")
+
+    def recall_CB(self):
+        print("recall_CB")
+
     def att_CB(self):
         # Is ATT Command correctly implemented? on goes to 46hex
 #         if(hATT.val==0)
@@ -235,6 +250,9 @@ class piCECNextion(baseui.piCECNextionUI):
         else:
             self.ifs_Button_On = True
         self.Radio_Toggle_IFS()
+
+    def tuning_Step_CB(self):
+        print("tuning_Step cb called")
 
 
 ####    Start of command processing sent by Radio to Screen
@@ -451,18 +469,69 @@ class piCECNextion(baseui.piCECNextionUI):
     def cl_UX_Lock_Screen(self, buffer):
         print("cl_UX_Lock_Screen requested by Radio")
         if (self.lock_Button_On):
+            print("turning normal")
             self.lock_Button_On = False
-            self.lock_Button.configure(bg="gray",fg="black", state="normal")
+            self.lock_Button.configure(style='Button2b.TButton', state="normal")
+            self.lock_VAR.set("\nLOCK\n")
+            self.unlockUX()
         else:
             print("turning red")
             self.lock_Button_On = True
-            self.lock_Button.configure(bg="red", fg="white",state="pressed")
+            self.lock_Button.configure(style='RedButton2b.TButton', state='pressed')
+            self.lock_VAR.set("\nLOCK-Red\n")
+            self.lockUX()
 
     def lockUX(self):
-        pass
+        self.settings_Button.configure(state = "disabled")
+        self.vfo_Button.configure(state="disabled")
+        self.mode_select_Menubutton.configure(state="disabled")
+        self.band_up_Button.configure(state="disabled")
+        self.band_down_Button.configure(state="disabled")
+        self.speaker_Button.configure(state="disabled")
+        self.split_Button.configure(state="disabled")
+        self.rit_Button.configure(state="disabled")
+        self.store_Button.configure(state="disabled")
+        self.recall_Button.configure(state="disabled")
+        self.att_Button.configure(state="disabled")
+        self.labelScale_Set_State(self.att_LabeledScale,"disabled")
+        self.labelScale_Set_State(self.ifs_LabeledScale, "disabled")
+        self.ifs_Button.configure(state="disabled")
+        self.tuning_Step_Button.configure(state="disabled")
+
+
+
+
+
+
 
     def unlockUX(self):
-        pass
+        self.settings_Button.configure(state = "normal")
+        self.vfo_Button.configure(state="normal")
+        self.mode_select_Menubutton.configure(state="normal")
+        self.band_up_Button.configure(state="normal")
+        self.band_down_Button.configure(state="normal")
+        self.speaker_Button.configure(state="normal")
+        self.split_Button.configure(state="normal")
+        self.rit_Button.configure(state="normal")
+        self.store_Button.configure(state="normal")
+        self.recall_Button.configure(state="normal")
+        self.att_Button.configure(state="normal")
+        self.labelScale_Set_State(self.att_LabeledScale,"normal")
+        self.labelScale_Set_State(self.ifs_LabeledScale, "normal")
+        self.ifs_Button.configure(state="normal")
+        self.tuning_Step_Button.configure(state="normal")
+
+    def labelScale_Set_State(self, labeledScale, state):
+        #
+        #   disabling a label scale requires disabling its children
+        #
+        for child in labeledScale.winfo_children():
+            if hasattr(child,'state'):
+                if state == 'normsl':
+                    child.configure(state)
+                else:
+                    child.state([state])
+
 
     def cjGet(self, buffer):
         print("unknown cj called to confirm sdr mode")  # command is sdr
@@ -513,12 +582,12 @@ class piCECNextion(baseui.piCECNextionUI):
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_RIT(self):
-        print("lock RIT")
+        print("RIT toggle")
         command = [self.toRadioCommandDict["TS_CMD_RIT"],0,0,0,0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_ATT(self):
-        print("lock ATT")
+        print("ATT toggle")
         command = [self.toRadioCommandDict["TS_CMD_ATT"],0,0,0,0]
         self.theRadio.sendCommandToMCU(bytes(command))
 

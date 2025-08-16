@@ -65,6 +65,7 @@ SETTINGS
         <child>
           <object class="ttk.Button" id="vfo_Button" named="True">
             <property name="command" type="command" cbtype="simple">vfo_CB</property>
+            <property name="state">normal</property>
             <property name="style">Button2b.TButton</property>
             <property name="text" translatable="yes">
 VFO
@@ -153,7 +154,7 @@ BAND UP
             <property name="text" translatable="yes">
 BAND DN
 </property>
-            <property name="textvariable">string:band_dn_VAR</property>
+            <property name="textvariable">string:band_down_VAR</property>
             <property name="width">12</property>
             <layout manager="grid">
               <property name="column">4</property>
@@ -170,6 +171,7 @@ BAND DN
             <property name="text" translatable="yes">
 LOCK
 </property>
+            <property name="textvariable">string:lock_VAR</property>
             <property name="width">12</property>
             <layout manager="grid">
               <property name="column">5</property>
@@ -691,6 +693,7 @@ RECALL
             <property name="height">200</property>
             <property name="style">NormalOutline.TFrame</property>
             <property name="width">200</property>
+            <bind sequence="&lt;1&gt;" handler="cw_info_CB" add="" />
             <layout manager="pack">
               <property name="anchor">n</property>
               <property name="expand">true</property>

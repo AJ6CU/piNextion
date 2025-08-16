@@ -58,10 +58,10 @@ class piCECNextionUI(ttk.Frame):
 
         self.settings_Button = ttk.Button(
             self.menuBar_Frame, name="settings_button")
-        self.settings_VAR = tk.StringVar(value='\nSETTINGS\n')
+        self.settings_VAR = tk.StringVar(value='  \nSETTINGS\n  ')
         self.settings_Button.configure(
             style="Button2b.TButton",
-            text='\nSETTINGS\n',
+            text='  \nSETTINGS\n  ',
             textvariable=self.settings_VAR,
             width=12)
         self.settings_Button.grid(column=0, padx="0 2", row=0, sticky="ns")
@@ -69,6 +69,7 @@ class piCECNextionUI(ttk.Frame):
         self.vfo_Button = ttk.Button(self.menuBar_Frame, name="vfo_button")
         self.vfo_VAR = tk.StringVar(value='\nVFO\n')
         self.vfo_Button.configure(
+            state="normal",
             style="Button2b.TButton",
             text='\nVFO\n',
             textvariable=self.vfo_VAR,
@@ -121,18 +122,20 @@ class piCECNextionUI(ttk.Frame):
         self.band_up_Button.configure(command=self.band_up_CB)
         self.band_down_Button = ttk.Button(
             self.menuBar_Frame, name="band_down_button")
-        self.band_dn_VAR = tk.StringVar(value='\nBAND DN\n')
+        self.band_down_VAR = tk.StringVar(value='\nBAND DN\n')
         self.band_down_Button.configure(
             style="Button2b.TButton",
             text='\nBAND DN\n',
-            textvariable=self.band_dn_VAR,
+            textvariable=self.band_down_VAR,
             width=12)
         self.band_down_Button.grid(column=4, padx="0 2", row=0, sticky="ns")
         self.band_down_Button.configure(command=self.band_down_CB)
         self.lock_Button = ttk.Button(self.menuBar_Frame, name="lock_button")
+        self.lock_VAR = tk.StringVar(value='\nLOCK\n')
         self.lock_Button.configure(
             style="Button2b.TButton",
             text='\nLOCK\n',
+            textvariable=self.lock_VAR,
             width=12)
         self.lock_Button.grid(column=5, padx="0 2", row=0, sticky="ns")
         self.lock_Button.configure(command=self.lock_CB)
@@ -484,6 +487,7 @@ class piCECNextionUI(ttk.Frame):
             style="Heading3b.TLabel", text='ms')
         self.delay_starting_tx_units_Label.grid(column=2, row=5, sticky="w")
         self.cw_Info_Frame.pack(anchor="n", expand=True, fill="x", side="top")
+        self.cw_Info_Frame.bind("<1>", self.cw_info_CB, add="")
         self.ATT_IFS_Adjust_Frame.pack(
             anchor="center",
             expand=True,
@@ -549,6 +553,9 @@ class piCECNextionUI(ttk.Frame):
         pass
 
     def ifs_CB(self):
+        pass
+
+    def cw_info_CB(self, event=None):
         pass
 
 

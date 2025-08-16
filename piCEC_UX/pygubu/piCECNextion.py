@@ -480,7 +480,10 @@ class piCECNextion(baseui.piCECNextionUI):
             self.lock_Button.configure(style='RedButton2b.TButton', state='pressed')
             self.lock_VAR.set("\nLOCK-Red\n")
             self.lockUX()
-
+            
+    #
+    #   Disable all of the control widgets when a LOCK action is requested
+    #
     def lockUX(self):
         self.settings_Button.configure(state = "disabled")
         self.vfo_Button.configure(state="disabled")
@@ -498,12 +501,9 @@ class piCECNextion(baseui.piCECNextionUI):
         self.ifs_Button.configure(state="disabled")
         self.tuning_Step_Button.configure(state="disabled")
 
-
-
-
-
-
-
+    #
+    #   Reset all widgets to their "normal" state after the  unlock happens
+    #
     def unlockUX(self):
         self.settings_Button.configure(state = "normal")
         self.vfo_Button.configure(state="normal")
@@ -521,16 +521,13 @@ class piCECNextion(baseui.piCECNextionUI):
         self.ifs_Button.configure(state="normal")
         self.tuning_Step_Button.configure(state="normal")
 
-    def labelScale_Set_State(self, labeledScale, state):
+    def labelScale_Set_State(self, labeledScale, newstate):
         #
-        #   disabling a label scale requires disabling its children
+        #   disabling/enabling a label scale requires disabling its children
         #
         for child in labeledScale.winfo_children():
             if hasattr(child,'state'):
-                if state == 'normsl':
-                    child.configure(state)
-                else:
-                    child.state([state])
+                child.configure(state=newstate)
 
 
     def cjGet(self, buffer):

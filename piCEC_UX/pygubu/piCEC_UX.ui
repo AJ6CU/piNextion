@@ -19,7 +19,9 @@
       <setting id="use_window_centering_code">False</setting>
       <setting id="ttk_style_definition_file">mystyles.py</setting>
     </settings>
-    <customwidgets />
+    <customwidgets>
+      <customwidget path="Dial_UXbo.py" />
+    </customwidgets>
     <resources />
   </project>
   <object class="ttk.Frame" id="main_window" named="True">
@@ -301,6 +303,16 @@ STOP!
                 </layout>
               </object>
             </child>
+          </object>
+        </child>
+        <child>
+          <object class="projectcustom.Dial" id="dial1">
+            <bind sequence="&lt;1&gt;" handler="dialClicked" add="" />
+            <bind sequence="&lt;ButtonRelease&gt;" handler="dialReleased" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="row">1</property>
+            </layout>
           </object>
         </child>
       </object>

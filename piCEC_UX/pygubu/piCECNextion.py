@@ -29,6 +29,9 @@ class piCECNextion(baseui.piCECNextionUI):
         self.att_Button_On = False                  #On allows onscreen control of signal attn
         self.ifs_Button_On = False                  #On allows onscreen mod of the ifs
 
+        self.last_VFODial_Reading = None
+
+
 
 
 
@@ -249,6 +252,22 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def tuning_Step_CB(self):
         print("tuning_Step cb called")
+
+    def dialClicked(self, event=None):
+        print("Dial Clicked")
+        self.last_VFODial_Reading=self.dial1.get()
+        print(self.dial1.get())
+
+    def dialReleased(self, event=None):
+        print("Dial Released")
+        currentVFO = self.dial1.get()
+        print(self.dial1.get())
+        if currentVFO != self.last_VFODial_Reading:
+            self.last_VFODial_Reading=currentVFO
+            print("movement detected")
+        else:
+            print("no movement detected, toggle button")
+
 
 
 ####    Start of command processing sent by Radio to Screen

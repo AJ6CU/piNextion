@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import tkinter as tk
 import tkinter.ttk as ttk
+from tkdial.tkdial import Dial
 
 
 def i18n_translator_noop(value):
@@ -200,6 +201,10 @@ class piCECNextionUI(ttk.Frame):
             textvariable=self.primary_VFO_VAR)
         self.primary_VFO_Label.pack(anchor="e", expand=False, side="right")
         self.vfo_display_Frame.grid(column=1, pady=2, row=0, sticky="e")
+        self.dial1 = Dial(self.vfoA_Frame)
+        self.dial1.grid(column=0, row=1)
+        self.dial1.bind("<1>", self.dialClicked, add="")
+        self.dial1.bind("<ButtonRelease>", self.dialReleased, add="")
         self.vfoA_Frame.pack(
             anchor="center",
             expand=False,
@@ -532,6 +537,12 @@ class piCECNextionUI(ttk.Frame):
         pass
 
     def stop_CB(self):
+        pass
+
+    def dialClicked(self, event=None):
+        pass
+
+    def dialReleased(self, event=None):
         pass
 
     def tuning_Step_CB(self):

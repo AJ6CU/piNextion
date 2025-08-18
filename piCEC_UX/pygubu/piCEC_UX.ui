@@ -21,6 +21,7 @@
     </settings>
     <customwidgets>
       <customwidget path="Dial_UXbo.py" />
+      <customwidget path="JogwheelCustom_UXbo.py" />
     </customwidgets>
     <resources />
   </project>
@@ -303,16 +304,6 @@ STOP!
                 </layout>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="projectcustom.Dial" id="dial1">
-            <bind sequence="&lt;1&gt;" handler="dialClicked" add="" />
-            <bind sequence="&lt;ButtonRelease&gt;" handler="dialReleased" add="" />
-            <layout manager="grid">
-              <property name="column">0</property>
-              <property name="row">1</property>
-            </layout>
           </object>
         </child>
       </object>
@@ -620,78 +611,60 @@ RECALL
               <property name="side">left</property>
             </layout>
             <child>
-              <object class="ttk.Frame" id="att_Graph_Frame" named="True">
+              <object class="ttk.Frame" id="ATT_Frame" named="True">
                 <property name="height">200</property>
                 <property name="style">Normal.TFrame</property>
-                <property name="width">500</property>
+                <property name="width">200</property>
                 <layout manager="pack">
-                  <property name="anchor">w</property>
-                  <property name="expand">true</property>
-                  <property name="fill">x</property>
-                  <property name="side">top</property>
+                  <property name="padx">30</property>
+                  <property name="side">left</property>
                 </layout>
                 <child>
-                  <object class="ttk.Button" id="att_Button" named="True">
-                    <property name="command" type="command" cbtype="simple">att_CB</property>
-                    <property name="style">Button2b.TButton</property>
-                    <property name="text" translatable="yes">ATT</property>
+                  <object class="projectcustom.Jogwheel" id="ATT_Jogwheel" named="True">
                     <layout manager="pack">
-                      <property name="anchor">w</property>
-                      <property name="padx">5 10</property>
-                      <property name="side">left</property>
+                      <property name="anchor">center</property>
+                      <property name="padx">30</property>
+                      <property name="side">top</property>
                     </layout>
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.LabeledScale" id="att_LabeledScale" named="True">
-                    <property name="compound">bottom</property>
-                    <property name="from_">0</property>
-                    <property name="to">255</property>
+                  <object class="ttk.Label" id="ATT_Status_Label" named="True">
+                    <property name="style">Heading2b.TLabel</property>
+                    <property name="text" translatable="yes">ATT (OFF)</property>
                     <layout manager="pack">
-                      <property name="anchor">w</property>
-                      <property name="expand">true</property>
-                      <property name="fill">x</property>
-                      <property name="side">right</property>
+                      <property name="anchor">center</property>
+                      <property name="side">bottom</property>
                     </layout>
                   </object>
                 </child>
               </object>
             </child>
             <child>
-              <object class="ttk.Frame" id="ifs_Graph_Frame" named="True">
+              <object class="ttk.Frame" id="IFS_Frame" named="True">
                 <property name="height">200</property>
                 <property name="style">Normal.TFrame</property>
-                <property name="width">500</property>
+                <property name="width">200</property>
                 <layout manager="pack">
-                  <property name="anchor">w</property>
-                  <property name="expand">true</property>
-                  <property name="fill">x</property>
-                  <property name="pady">50</property>
-                  <property name="side">bottom</property>
+                  <property name="padx">30</property>
+                  <property name="side">left</property>
                 </layout>
                 <child>
-                  <object class="ttk.Button" id="ifs_Button" named="True">
-                    <property name="command" type="command" cbtype="simple">ifs_CB</property>
-                    <property name="state">normal</property>
-                    <property name="style">Button2b.TButton</property>
-                    <property name="text" translatable="yes">IFS</property>
+                  <object class="projectcustom.Jogwheel" id="IFS_Jogwheel" named="True">
                     <layout manager="pack">
-                      <property name="anchor">w</property>
-                      <property name="padx">5 10</property>
-                      <property name="side">left</property>
+                      <property name="anchor">center</property>
+                      <property name="padx">30</property>
+                      <property name="side">top</property>
                     </layout>
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.LabeledScale" id="ifs_LabeledScale" named="True">
-                    <property name="compound">bottom</property>
-                    <property name="from_">-2000</property>
-                    <property name="to">2000</property>
+                  <object class="ttk.Label" id="IFS_Status_Label" named="True">
+                    <property name="style">Heading2b.TLabel</property>
+                    <property name="text" translatable="yes">IFS (OFF)</property>
                     <layout manager="pack">
-                      <property name="anchor">w</property>
-                      <property name="expand">true</property>
-                      <property name="fill">x</property>
-                      <property name="side">right</property>
+                      <property name="anchor">center</property>
+                      <property name="side">bottom</property>
                     </layout>
                   </object>
                 </child>

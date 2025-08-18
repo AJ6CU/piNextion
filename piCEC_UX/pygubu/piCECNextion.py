@@ -31,7 +31,8 @@ class piCECNextion(baseui.piCECNextionUI):
 
         self.last_VFODial_Reading = None
 
-
+        self.ATT_Jogwheel.configure(command=self.updateATTValue_CB)
+        self.IFS_Jogwheel.configure(command=self.updateIFSValue_CB)
 
 
 
@@ -242,6 +243,8 @@ class piCECNextion(baseui.piCECNextionUI):
         else:
             self.att_Button_On = True
         self.Radio_Toggle_ATT()
+    def updateATTValue_CB(self):
+        print("updateATTValue_CB called")
 
     def ifs_CB(self):
         if(self.ifs_Button_On):
@@ -249,6 +252,9 @@ class piCECNextion(baseui.piCECNextionUI):
         else:
             self.ifs_Button_On = True
         self.Radio_Toggle_IFS()
+
+    def updateIFSValue_CB(self):
+        print("updateIFSValue_CB called")
 
     def tuning_Step_CB(self):
         print("tuning_Step cb called")

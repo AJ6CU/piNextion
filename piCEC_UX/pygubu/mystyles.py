@@ -84,7 +84,7 @@ def setup_ttk_styles(master=None):
 
     style.configure('Highlight.TFrame', background='blue', bd=4 )
  #   style.configure('Dark.TFrame', background='black', bd=4, bordercolor='white')
-    style.configure('Normal.TFrame', background='gray', bd=4)
+    style.configure('Normal.TFrame', background='gray', bd=4,font=fontList['Heading2'])
     style.configure('NormalOutline.TFrame', background='gray', bd=4, bordercolor='white' ,relief='groove')
 
     style.configure('Fixed.TNotebook')

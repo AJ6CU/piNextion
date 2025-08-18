@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import tkinter as tk
 import tkinter.ttk as ttk
-from tkdial.tkdial import Dial
+from JogwheelCustom import JogwheelCustom
 
 
 def i18n_translator_noop(value):
@@ -201,10 +201,6 @@ class piCECNextionUI(ttk.Frame):
             textvariable=self.primary_VFO_VAR)
         self.primary_VFO_Label.pack(anchor="e", expand=False, side="right")
         self.vfo_display_Frame.grid(column=1, pady=2, row=0, sticky="e")
-        self.dial1 = Dial(self.vfoA_Frame)
-        self.dial1.grid(column=0, row=1)
-        self.dial1.bind("<1>", self.dialClicked, add="")
-        self.dial1.bind("<ButtonRelease>", self.dialReleased, add="")
         self.vfoA_Frame.pack(
             anchor="center",
             expand=False,
@@ -346,49 +342,26 @@ class piCECNextionUI(ttk.Frame):
             name="att_ifs_frame")
         self.att_ifs_Frame.configure(
             height=200, style="Normal.TFrame", width=400)
-        self.att_Graph_Frame = ttk.Frame(
-            self.att_ifs_Frame, name="att_graph_frame")
-        self.att_Graph_Frame.configure(
-            height=200, style="Normal.TFrame", width=500)
-        self.att_Button = ttk.Button(self.att_Graph_Frame, name="att_button")
-        self.att_Button.configure(style="Button2b.TButton", text='ATT')
-        self.att_Button.pack(anchor="w", padx="5 10", side="left")
-        self.att_Button.configure(command=self.att_CB)
-        self.att_LabeledScale = ttk.LabeledScale(
-            self.att_Graph_Frame,
-            compound="bottom",
-            from_=0,
-            to=255,
-            name="att_labeledscale")
-        self.att_LabeledScale.pack(
-            anchor="w", expand=True, fill="x", side="right")
-        self.att_Graph_Frame.pack(
-            anchor="w", expand=True, fill="x", side="top")
-        self.ifs_Graph_Frame = ttk.Frame(
-            self.att_ifs_Frame, name="ifs_graph_frame")
-        self.ifs_Graph_Frame.configure(
-            height=200, style="Normal.TFrame", width=500)
-        self.ifs_Button = ttk.Button(self.ifs_Graph_Frame, name="ifs_button")
-        self.ifs_Button.configure(
-            state="normal",
-            style="Button2b.TButton",
-            text='IFS')
-        self.ifs_Button.pack(anchor="w", padx="5 10", side="left")
-        self.ifs_Button.configure(command=self.ifs_CB)
-        self.ifs_LabeledScale = ttk.LabeledScale(
-            self.ifs_Graph_Frame,
-            compound="bottom",
-            from_=-2000,
-            to=2000,
-            name="ifs_labeledscale")
-        self.ifs_LabeledScale.pack(
-            anchor="w", expand=True, fill="x", side="right")
-        self.ifs_Graph_Frame.pack(
-            anchor="w",
-            expand=True,
-            fill="x",
-            pady=50,
-            side="bottom")
+        self.ATT_Frame = ttk.Frame(self.att_ifs_Frame, name="att_frame")
+        self.ATT_Frame.configure(height=200, style="Normal.TFrame", width=200)
+        self.ATT_Jogwheel = JogwheelCustom(self.ATT_Frame, name="att_jogwheel")
+        self.ATT_Jogwheel.pack(anchor="center", padx=30, side="top")
+        self.ATT_Status_Label = ttk.Label(
+            self.ATT_Frame, name="att_status_label")
+        self.ATT_Status_Label.configure(
+            style="Heading2b.TLabel", text='ATT (OFF)')
+        self.ATT_Status_Label.pack(anchor="center", side="bottom")
+        self.ATT_Frame.pack(padx=30, side="left")
+        self.IFS_Frame = ttk.Frame(self.att_ifs_Frame, name="ifs_frame")
+        self.IFS_Frame.configure(height=200, style="Normal.TFrame", width=200)
+        self.IFS_Jogwheel = JogwheelCustom(self.IFS_Frame, name="ifs_jogwheel")
+        self.IFS_Jogwheel.pack(anchor="center", padx=30, side="top")
+        self.IFS_Status_Label = ttk.Label(
+            self.IFS_Frame, name="ifs_status_label")
+        self.IFS_Status_Label.configure(
+            style="Heading2b.TLabel", text='IFS (OFF)')
+        self.IFS_Status_Label.pack(anchor="center", side="bottom")
+        self.IFS_Frame.pack(padx=30, side="left")
         self.att_ifs_Frame.pack(
             anchor="nw",
             expand=True,
@@ -539,12 +512,6 @@ class piCECNextionUI(ttk.Frame):
     def stop_CB(self):
         pass
 
-    def dialClicked(self, event=None):
-        pass
-
-    def dialReleased(self, event=None):
-        pass
-
     def tuning_Step_CB(self):
         pass
 
@@ -558,12 +525,6 @@ class piCECNextionUI(ttk.Frame):
         pass
 
     def recall_CB(self):
-        pass
-
-    def att_CB(self):
-        pass
-
-    def ifs_CB(self):
         pass
 
     def cw_info_CB(self, event=None):

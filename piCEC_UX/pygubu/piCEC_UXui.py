@@ -346,6 +346,14 @@ class piCECNextionUI(ttk.Frame):
         self.ATT_Frame.configure(height=200, style="Normal.TFrame", width=200)
         self.ATT_Jogwheel = JogwheelCustom(self.ATT_Frame, name="att_jogwheel")
         self.ATT_Jogwheel.pack(anchor="center", padx=30, side="top")
+        self.ATT_Jogwheel.bind(
+            "<ButtonPress>",
+            self.ATT_Jogwheel_ButtonPressed_CB,
+            add="+")
+        self.ATT_Jogwheel.bind(
+            "<ButtonRelease>",
+            self.ATT_Jogwheel_ButtonReleased_CB,
+            add="+")
         self.ATT_Status_Label = ttk.Label(
             self.ATT_Frame, name="att_status_label")
         self.ATT_Status_Label.configure(
@@ -359,15 +367,18 @@ class piCECNextionUI(ttk.Frame):
         self.IFS_Jogwheel.bind(
             "<ButtonPress>",
             self.IFS_Jogwheel_ButtonPressed_CB,
-            add="")
+            add="+")
         self.IFS_Jogwheel.bind(
             "<ButtonRelease>",
             self.IFS_Jogwheel_ButtonReleased_CB,
-            add="")
+            add="+")
         self.IFS_Status_Label = ttk.Label(
             self.IFS_Frame, name="ifs_status_label")
+        self.IFS_Status_VAR = tk.StringVar(value='IFS (OFF)')
         self.IFS_Status_Label.configure(
-            style="Heading2b.TLabel", text='IFS (OFF)')
+            style="Heading2b.TLabel",
+            text='IFS (OFF)',
+            textvariable=self.IFS_Status_VAR)
         self.IFS_Status_Label.pack(anchor="center", side="bottom")
         self.IFS_Frame.pack(padx=30, side="left")
         self.att_ifs_Frame.pack(
@@ -533,6 +544,12 @@ class piCECNextionUI(ttk.Frame):
         pass
 
     def recall_CB(self):
+        pass
+
+    def ATT_Jogwheel_ButtonPressed_CB(self, event=None):
+        pass
+
+    def ATT_Jogwheel_ButtonReleased_CB(self, event=None):
         pass
 
     def IFS_Jogwheel_ButtonPressed_CB(self, event=None):

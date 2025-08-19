@@ -621,6 +621,8 @@ RECALL
                 </layout>
                 <child>
                   <object class="projectcustom.Jogwheel" id="ATT_Jogwheel" named="True">
+                    <bind sequence="&lt;ButtonPress&gt;" handler="ATT_Jogwheel_ButtonPressed_CB" add="True" />
+                    <bind sequence="&lt;ButtonRelease&gt;" handler="ATT_Jogwheel_ButtonReleased_CB" add="True" />
                     <layout manager="pack">
                       <property name="anchor">center</property>
                       <property name="padx">30</property>
@@ -651,8 +653,8 @@ RECALL
                 </layout>
                 <child>
                   <object class="projectcustom.Jogwheel" id="IFS_Jogwheel" named="True">
-                    <bind sequence="&lt;ButtonPress&gt;" handler="IFS_Jogwheel_ButtonPressed_CB" add="" />
-                    <bind sequence="&lt;ButtonRelease&gt;" handler="IFS_Jogwheel_ButtonReleased_CB" add="" />
+                    <bind sequence="&lt;ButtonPress&gt;" handler="IFS_Jogwheel_ButtonPressed_CB" add="True" />
+                    <bind sequence="&lt;ButtonRelease&gt;" handler="IFS_Jogwheel_ButtonReleased_CB" add="True" />
                     <layout manager="pack">
                       <property name="anchor">center</property>
                       <property name="padx">30</property>
@@ -664,6 +666,7 @@ RECALL
                   <object class="ttk.Label" id="IFS_Status_Label" named="True">
                     <property name="style">Heading2b.TLabel</property>
                     <property name="text" translatable="yes">IFS (OFF)</property>
+                    <property name="textvariable">string:IFS_Status_VAR</property>
                     <layout manager="pack">
                       <property name="anchor">center</property>
                       <property name="side">bottom</property>

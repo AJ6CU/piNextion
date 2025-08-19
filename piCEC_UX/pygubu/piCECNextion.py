@@ -33,9 +33,9 @@ class piCECNextion(baseui.piCECNextionUI):
 
         # self.ATT_Jogwheel.configure(command=self.updateATTValue_CB)
         self.ATT_Jogwheel.command = self.updateATTValue_CB
-        self.ATT_Jogwheel.setState("disabled")
+        self.ATT_Jogwheel.configure(state="disabled", scroll=False)
         self.IFS_Jogwheel.command=self.updateIFSValue_CB
-        self.IFS_Jogwheel.setState("disabled")
+        self.IFS_Jogwheel.configure(state="disabled", scroll=False)
 
 
 
@@ -251,21 +251,11 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def IFS_Jogwheel_ButtonPressed_CB(self, event=None):
         print(">>>Jogwheel Button Pressed called")
-        currentState = self.IFS_Jogwheel.getState()
         self.IFS_Jogwheel.lastValue = self.IFS_Jogwheel.get()
-        print("current state =",currentState)
-        print("IFS current value=", self.IFS_Jogwheel.lastValue)
-    def toggleIFS_State(self):
-        if self.IFS_Jogwheel.getState() == "disabled":
-            self.IFS_Jogwheel.setState("normal")
-            print("Changing state to normal")
-        else:
-            self.IFS_Jogwheel.setState("disabled")
-            print("changing state to disabled")
+
 
     def IFS_Jogwheel_ButtonReleased_CB(self, event=None):
         print("<<<Jogwheel Button Released called")
-        currentState = self.IFS_Jogwheel.getState()
         currentValue = self.IFS_Jogwheel.get()
         if self.IFS_Jogwheel.lastValue == currentValue:
             print("no movement detected, can change state")
@@ -273,7 +263,15 @@ class piCECNextion(baseui.piCECNextionUI):
         else:
             print("movement detected no chamge in state")
 
-        print("current state =",self.IFS_Jogwheel.getState())
+
+    def toggleIFS_State(self):
+
+        if self.IFS_Jogwheel.state == "disabled":
+            self.IFS_Jogwheel.configure(state="normal",scroll=True)
+            self.IFS_Status_VAR.set("IFS (ON)")
+        else:
+            self.IFS_Jogwheel.configure(state="disabled", scroll=False)
+            self.IFS_Status_VAR.set("IFS (OFF)")
 
     def ifs_CB(self):
         if(self.ifs_Button_On):
@@ -285,9 +283,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def updateIFSValue_CB(self):
         print("updateIFSValue_CB called")
-        currentState = self.IFS_Jogwheel.getState()
-        print("current state =",currentState)
-        if(currentState == "normal"):
+        if(self.IFS_Jogwheel.state == "normal"):
             print("processing value change")
         else:
             print("ignorming value change")

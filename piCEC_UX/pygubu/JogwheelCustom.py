@@ -18,19 +18,21 @@ class JogwheelCustom(Jogwheel):
                         text_font=ttk.Style().lookup(master.cget('style'),'font'),
                         scale_color='blue',
                         button_color='red',
-                        button_radius=25
+                        button_radius=25,
+                        state="disabled",
+                        scroll=False
 
         )
-        self.disabledWithCallbacks = None
-        self.lastValue = None
-    def setState (self, state):
-        if  state == 'disabled':
-            self.disabledWithCallbacks = "disabled"
-        else:
-            self.disabledWithCallbacks = "normal"
 
-    def getState(self):
-        return self.disabledWithCallbacks
+        self.lastValue = None
+    # def setState (self, state):
+    #     if  state == 'disabled':
+    #         self.disabledWithCallbacks = "disabled"
+    #     else:
+    #         self.disabledWithCallbacks = "normal"
+    #
+    # def getState(self):
+    #     return self.disabledWithCallbacks
 
     # def configure(self, **kwargs):
     #     """

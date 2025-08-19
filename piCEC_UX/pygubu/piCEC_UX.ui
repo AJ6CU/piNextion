@@ -634,6 +634,7 @@ RECALL
                   <object class="ttk.Label" id="ATT_Status_Label" named="True">
                     <property name="style">Heading2b.TLabel</property>
                     <property name="text" translatable="yes">ATT (OFF)</property>
+                    <property name="textvariable">string:ATT_Status_VAR</property>
                     <layout manager="pack">
                       <property name="anchor">center</property>
                       <property name="side">bottom</property>

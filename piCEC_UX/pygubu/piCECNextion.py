@@ -1,4 +1,5 @@
 from imghdr import test_xbm
+import tkinter.ttk as ttk
 
 from Cython.Compiler.Naming import self_cname
 
@@ -31,11 +32,16 @@ class piCECNextion(baseui.piCECNextionUI):
 
         self.last_VFODial_Reading = None
 
-        # self.ATT_Jogwheel.configure(command=self.updateATTValue_CB)
+
         self.ATT_Jogwheel.command = self.updateATTValue_CB
-        self.ATT_Jogwheel.configure(state="disabled", scroll=False)
+        self.ATT_Jogwheel.setStateDisabled()
+        # self.ATT_Jogwheel.configure(start=0.0, end=255.0)
+        self.ATT_Jogwheel.set(0)
+
         self.IFS_Jogwheel.command=self.updateIFSValue_CB
-        self.IFS_Jogwheel.configure(state="disabled", scroll=False)
+        self.IFS_Jogwheel.setStateDisabled()
+        self.IFS_Jogwheel.configure(end=-2000.0, start=2000.0)
+        self.IFS_Jogwheel.set(-2000)
 
 
 
@@ -240,37 +246,50 @@ class piCECNextion(baseui.piCECNextionUI):
 # }else
 # {
 #   rSendData.val=0				//ATT Value
+        # ifs remembers its value over a session
 # }
         if(self.att_Button_On):
             self.att_Button_On = False
         else:
             self.att_Button_On = True
         self.Radio_Toggle_ATT()
+
+    def ATT_Jogwheel_ButtonPressed_CB(self, event=None):
+        self.ATT_Jogwheel.lastValue = self.ATT_Jogwheel.get()
+
+    def ATT_Jogwheel_ButtonReleased_CB(self, event=None):
+        currentValue = self.ATT_Jogwheel.get()
+        if self.ATT_Jogwheel.lastValue == currentValue:
+            self.toggleATT_State()
+
+    def toggleATT_State(self):
+
+        if self.ATT_Jogwheel.state == "disabled":
+            self.ATT_Jogwheel.setStateNormal()
+            self.ATT_Status_VAR.set("ATT (ON)")
+        else:
+            self.ATT_Jogwheel.setStateDisabled()
+            self.ATT_Status_VAR.set("ATT (OFF)")
+
     def updateATTValue_CB(self):
         print("updateATTValue_CB called")
 
     def IFS_Jogwheel_ButtonPressed_CB(self, event=None):
-        print(">>>Jogwheel Button Pressed called")
         self.IFS_Jogwheel.lastValue = self.IFS_Jogwheel.get()
 
 
     def IFS_Jogwheel_ButtonReleased_CB(self, event=None):
-        print("<<<Jogwheel Button Released called")
         currentValue = self.IFS_Jogwheel.get()
         if self.IFS_Jogwheel.lastValue == currentValue:
-            print("no movement detected, can change state")
             self.toggleIFS_State()
-        else:
-            print("movement detected no chamge in state")
-
 
     def toggleIFS_State(self):
 
         if self.IFS_Jogwheel.state == "disabled":
-            self.IFS_Jogwheel.configure(state="normal",scroll=True)
+            self.IFS_Jogwheel.setStateNormal()
             self.IFS_Status_VAR.set("IFS (ON)")
         else:
-            self.IFS_Jogwheel.configure(state="disabled", scroll=False)
+            self.IFS_Jogwheel.setStateDisabled()
             self.IFS_Status_VAR.set("IFS (OFF)")
 
     def ifs_CB(self):
@@ -285,6 +304,7 @@ class piCECNextion(baseui.piCECNextionUI):
         print("updateIFSValue_CB called")
         if(self.IFS_Jogwheel.state == "normal"):
             print("processing value change")
+            print(self.IFS_Jogwheel.get())
         else:
             print("ignorming value change")
 

@@ -356,8 +356,11 @@ class piCECNextionUI(ttk.Frame):
             add="+")
         self.ATT_Status_Label = ttk.Label(
             self.ATT_Frame, name="att_status_label")
+        self.ATT_Status_VAR = tk.StringVar(value='ATT (OFF)')
         self.ATT_Status_Label.configure(
-            style="Heading2b.TLabel", text='ATT (OFF)')
+            style="Heading2b.TLabel",
+            text='ATT (OFF)',
+            textvariable=self.ATT_Status_VAR)
         self.ATT_Status_Label.pack(anchor="center", side="bottom")
         self.ATT_Frame.pack(padx=30, side="left")
         self.IFS_Frame = ttk.Frame(self.att_ifs_Frame, name="ifs_frame")

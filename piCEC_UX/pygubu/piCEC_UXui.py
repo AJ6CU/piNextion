@@ -356,6 +356,14 @@ class piCECNextionUI(ttk.Frame):
         self.IFS_Frame.configure(height=200, style="Normal.TFrame", width=200)
         self.IFS_Jogwheel = JogwheelCustom(self.IFS_Frame, name="ifs_jogwheel")
         self.IFS_Jogwheel.pack(anchor="center", padx=30, side="top")
+        self.IFS_Jogwheel.bind(
+            "<ButtonPress>",
+            self.IFS_Jogwheel_ButtonPressed_CB,
+            add="")
+        self.IFS_Jogwheel.bind(
+            "<ButtonRelease>",
+            self.IFS_Jogwheel_ButtonReleased_CB,
+            add="")
         self.IFS_Status_Label = ttk.Label(
             self.IFS_Frame, name="ifs_status_label")
         self.IFS_Status_Label.configure(
@@ -525,6 +533,12 @@ class piCECNextionUI(ttk.Frame):
         pass
 
     def recall_CB(self):
+        pass
+
+    def IFS_Jogwheel_ButtonPressed_CB(self, event=None):
+        pass
+
+    def IFS_Jogwheel_ButtonReleased_CB(self, event=None):
         pass
 
     def cw_info_CB(self, event=None):

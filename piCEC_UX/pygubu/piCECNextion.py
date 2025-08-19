@@ -31,8 +31,11 @@ class piCECNextion(baseui.piCECNextionUI):
 
         self.last_VFODial_Reading = None
 
-        self.ATT_Jogwheel.configure(command=self.updateATTValue_CB)
-        self.IFS_Jogwheel.configure(command=self.updateIFSValue_CB)
+        # self.ATT_Jogwheel.configure(command=self.updateATTValue_CB)
+        self.ATT_Jogwheel.command = self.updateATTValue_CB
+        self.ATT_Jogwheel.setState("disabled")
+        self.IFS_Jogwheel.command=self.updateIFSValue_CB
+        self.IFS_Jogwheel.setState("disabled")
 
 
 
@@ -246,6 +249,32 @@ class piCECNextion(baseui.piCECNextionUI):
     def updateATTValue_CB(self):
         print("updateATTValue_CB called")
 
+    def IFS_Jogwheel_ButtonPressed_CB(self, event=None):
+        print(">>>Jogwheel Button Pressed called")
+        currentState = self.IFS_Jogwheel.getState()
+        self.IFS_Jogwheel.lastValue = self.IFS_Jogwheel.get()
+        print("current state =",currentState)
+        print("IFS current value=", self.IFS_Jogwheel.lastValue)
+    def toggleIFS_State(self):
+        if self.IFS_Jogwheel.getState() == "disabled":
+            self.IFS_Jogwheel.setState("normal")
+            print("Changing state to normal")
+        else:
+            self.IFS_Jogwheel.setState("disabled")
+            print("changing state to disabled")
+
+    def IFS_Jogwheel_ButtonReleased_CB(self, event=None):
+        print("<<<Jogwheel Button Released called")
+        currentState = self.IFS_Jogwheel.getState()
+        currentValue = self.IFS_Jogwheel.get()
+        if self.IFS_Jogwheel.lastValue == currentValue:
+            print("no movement detected, can change state")
+            self.toggleIFS_State()
+        else:
+            print("movement detected no chamge in state")
+
+        print("current state =",self.IFS_Jogwheel.getState())
+
     def ifs_CB(self):
         if(self.ifs_Button_On):
             self.ifs_Button_On = False
@@ -253,8 +282,15 @@ class piCECNextion(baseui.piCECNextionUI):
             self.ifs_Button_On = True
         self.Radio_Toggle_IFS()
 
+
     def updateIFSValue_CB(self):
         print("updateIFSValue_CB called")
+        currentState = self.IFS_Jogwheel.getState()
+        print("current state =",currentState)
+        if(currentState == "normal"):
+            print("processing value change")
+        else:
+            print("ignorming value change")
 
     def tuning_Step_CB(self):
         print("tuning_Step cb called")

@@ -72,6 +72,7 @@ class piCECNextion(baseui.piCECNextionUI):
             "cs": self.csGet,
             "vr": self.vrGet,
             "cr": self.crGet,
+            "vf": self.vf_UX_ATT_Level,
             "ci": self.ciGet,
             "cx": self.cxGet
         }
@@ -230,23 +231,6 @@ class piCECNextion(baseui.piCECNextionUI):
     def recall_CB(self):
         print("recall_CB")
 
-    def att_CB(self):
-        # Is ATT Command correctly implemented? on goes to 46hex
-#         if(hATT.val==0)
-# {
-#   //Set Default ATT Level
-#   rSendData.val=70			//ATT Value
-# }else
-# {
-#   rSendData.val=0				//ATT Value
-        # ifs remembers its value over a session
-# }
-        if(self.att_Button_On):
-            self.att_Button_On = False
-        else:
-            self.att_Button_On = True
-        self.Radio_Toggle_ATT()
-
     def ATT_Jogwheel_ButtonPressed_CB(self, event=None):
         self.ATT_Jogwheel.lastValue = self.ATT_Jogwheel.get()
 
@@ -260,11 +244,14 @@ class piCECNextion(baseui.piCECNextionUI):
         if self.ATT_Jogwheel.state == "disabled":
             self.ATT_Jogwheel.setStateNormal()
             self.ATT_Status_VAR.set("ATT (ON)")
+            self.Radio_Set_ATT(self.ATT_Jogwheel.lastValue)
         else:
             self.ATT_Jogwheel.setStateDisabled()
             self.ATT_Status_VAR.set("ATT (OFF)")
+            self.Radio_Set_ATT(0)           # 0 turns off ATT
 
     def updateATTValue_CB(self):
+        self.Radio_Set_ATT(self.ATT_Jogwheel.get())
         print("updateATTValue_CB called")
         print(self.ATT_Jogwheel.get())
 
@@ -601,6 +588,18 @@ class piCECNextion(baseui.piCECNextionUI):
     def crGet(self, buffer):
         print("unknown cr called to confirm split mode")  # command is rit
 
+    def vf_UX_ATT_Level(self, buffer):
+        value = int(self.extractValue(buffer, 10, len(buffer) - 3))
+
+        if (int(self.ATT_Jogwheel.get() != value) and (self.ATT_Jogwheel.state == "normal")):
+            print("ack value failed to matched!")
+            print("state=", self.ATT_Jogwheel.state)
+            print(self.ATT_Jogwheel.get())
+            print(buffer)
+            print("resetting to current value")
+            self.Radio_Set_ATT(self.ATT_Jogwheel.get())
+
+
 
     def ciGet(self, buffer):
         print("unknown ci called to confirm ifs mode")  # command is ifs
@@ -642,12 +641,12 @@ class piCECNextion(baseui.piCECNextionUI):
         command = [self.toRadioCommandDict["TS_CMD_RIT"],0,0,0,0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
-    def Radio_Toggle_ATT(self):
+    def Radio_Set_ATT(self,value: bytes):
         print("ATT toggle")
-        command = [self.toRadioCommandDict["TS_CMD_ATT"],0,0,0,0]
+        command = [self.toRadioCommandDict["TS_CMD_ATT"],value,0,0,0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
-    def Radio_Toggle_IFS(self):
+    def Radio_Toggle_IFS(self,value):
         print("IFS toggle")
         command = [self.toRadioCommandDict["TS_CMD_IFS"],0,0,0,0]
         self.theRadio.sendCommandToMCU(bytes(command))

@@ -58,3 +58,82 @@ class JogwheelCustom(Jogwheel):
                         button_color=self.buttonColor["normal"],
                         text_color=self.textColor["normal"]
                         )
+    def configure(self, **kwargs):
+        """
+        This function contains some configurable options
+        """
+
+        if "text" in kwargs:
+             self.itemconfigure(
+                tagOrId="text",
+                text=kwargs.pop("text"))
+
+        if "start" in kwargs:
+            self.start = kwargs.pop("start")
+
+        if "end" in kwargs:
+            self.end = kwargs.pop("end")
+
+        if "bg" in kwargs:
+            super().configure(bg=kwargs.pop("bg"))
+
+        if "width" in kwargs:
+            super().configure(width=kwargs.pop("width"))
+
+        if "height" in kwargs:
+            super().configure(height=kwargs.pop("height"))
+
+        if "scale_color" in kwargs:
+            self.itemconfigure(tagOrId="min_scale",
+                    fill=kwargs['scale_color'])
+            self.itemconfigure(
+                tagOrId="progress",
+                outline=kwargs.pop("scale_color"))
+
+        if "fg" in kwargs:
+            self.itemconfigure(
+                tagOrId="face",
+                fill=kwargs.pop('fg'))
+
+        if "text_color" in kwargs:
+            self.itemconfigure(
+                tagOrId="text",
+                fill=kwargs.pop("text_color"))
+
+        if "button_color" in kwargs:
+            self.itemconfigure(
+                tagOrId="needle",
+                fill=kwargs.pop("button_color"))
+
+        if "border_color" in kwargs:
+            self.itemconfigure(
+                tagOrId="face",
+                outline=kwargs.pop("border_color"))
+
+        if "scroll_steps" in kwargs:
+            self.scroll_steps = kwargs.pop("scroll_steps")
+
+        if "scroll" in kwargs:
+            if kwargs["scroll"]==False:
+                super().unbind('<MouseWheel>')
+                super().unbind('<Button-4>')
+                super().unbind('<Button-5>')
+            else:
+                super().bind('<MouseWheel>', self.scroll_command)
+                super().bind("<Button-4>", lambda e: self.scroll_command(-1))
+                super().bind("<Button-5>", lambda e: self.scroll_command(1))
+            kwargs.pop("scroll")
+
+        if "integer" in kwargs:
+            self.set(self.value)
+            self.integer = kwargs.pop("integer")
+
+        if "state" in kwargs:
+            self.state = kwargs.pop("state")
+            self.needle_state()
+
+        if "command" in kwargs:
+            self.command = kwargs.pop("command")
+
+        if len(kwargs)>0:
+            raise ValueError("unknown option: " + list(kwargs.keys())[0])

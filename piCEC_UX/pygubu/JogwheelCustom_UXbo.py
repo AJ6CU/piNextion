@@ -24,9 +24,18 @@ class JogwheelCustom_UXbo(BuilderObject):
         "command"
     }
     ro_properties = ("start", "end", "divisions", "radius", "button_radius", "value")
+    command_properties = ("command",)
     properties = OPTIONS_CUSTOM
 
     virtual_events = ("<<JogwheelCustomSelected>>",)
+    # def _code_set_property(self, targetid, pname, value, code_bag):
+    #     if pname == "command":
+    #         code_bag[pname] = f"{targetid}.{value})"
+    #     else:
+    #         super(JogwheelCustom_UXbo, self)._code_set_property(
+    #             targetid, pname, value, code_bag
+    #         )
+
     def _process_property_value(self, pname,value):
         if pname in ("start", "end", "divisions", "value", "scroll_steps", "radius", "button_radius"):
             return int(value)

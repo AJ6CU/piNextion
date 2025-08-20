@@ -20,7 +20,6 @@
       <setting id="ttk_style_definition_file">mystyles.py</setting>
     </settings>
     <customwidgets>
-      <customwidget path="Dial_UXbo.py" />
       <customwidget path="JogwheelCustom_UXbo.py" />
     </customwidgets>
     <resources />
@@ -622,6 +621,7 @@ RECALL
                 <child>
                   <object class="projectcustom.Jogwheel" id="ATT_Jogwheel" named="True">
                     <property name="button_radius">25</property>
+                    <property name="command" type="command" cbtype="simple">updateATTValue_CB</property>
                     <property name="divisions">10</property>
                     <property name="end">255</property>
                     <property name="radius">200</property>
@@ -662,6 +662,7 @@ RECALL
                 <child>
                   <object class="projectcustom.Jogwheel" id="IFS_Jogwheel" named="True">
                     <property name="button_radius">25</property>
+                    <property name="command" type="command" cbtype="simple">updateIFSValue_CB</property>
                     <property name="divisions">150</property>
                     <property name="end">2000</property>
                     <property name="radius">200</property>

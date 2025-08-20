@@ -355,6 +355,7 @@ class piCECNextionUI(ttk.Frame):
             name="att_jogwheel")
         self.ATT_Jogwheel.configure(scroll_steps=10)
         self.ATT_Jogwheel.pack(anchor="center", padx=30, side="top")
+        self.ATT_Jogwheel.configure(command=self.updateATTValue_CB)
         self.ATT_Jogwheel.bind(
             "<ButtonPress>",
             self.ATT_Jogwheel_ButtonPressed_CB,
@@ -385,6 +386,7 @@ class piCECNextionUI(ttk.Frame):
             name="ifs_jogwheel")
         self.IFS_Jogwheel.configure(scroll_steps=150)
         self.IFS_Jogwheel.pack(anchor="center", padx=30, side="top")
+        self.IFS_Jogwheel.configure(command=self.updateIFSValue_CB)
         self.IFS_Jogwheel.bind(
             "<ButtonPress>",
             self.IFS_Jogwheel_ButtonPressed_CB,
@@ -567,10 +569,16 @@ class piCECNextionUI(ttk.Frame):
     def recall_CB(self):
         pass
 
+    def updateATTValue_CB(self):
+        pass
+
     def ATT_Jogwheel_ButtonPressed_CB(self, event=None):
         pass
 
     def ATT_Jogwheel_ButtonReleased_CB(self, event=None):
+        pass
+
+    def updateIFSValue_CB(self):
         pass
 
     def IFS_Jogwheel_ButtonPressed_CB(self, event=None):

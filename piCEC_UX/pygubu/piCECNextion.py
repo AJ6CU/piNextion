@@ -33,10 +33,6 @@ class piCECNextion(baseui.piCECNextionUI):
         self.last_VFODial_Reading = None
 
 
-        self.ATT_Jogwheel.command = self.updateATTValue_CB
-
-        self.IFS_Jogwheel.command=self.updateIFSValue_CB
-
 \
 
 
@@ -270,6 +266,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def updateATTValue_CB(self):
         print("updateATTValue_CB called")
+        print(self.ATT_Jogwheel.get())
 
     def IFS_Jogwheel_ButtonPressed_CB(self, event=None):
         self.IFS_Jogwheel.lastValue = self.IFS_Jogwheel.get()
@@ -296,32 +293,12 @@ class piCECNextion(baseui.piCECNextionUI):
             self.ifs_Button_On = True
         self.Radio_Toggle_IFS()
 
-
     def updateIFSValue_CB(self):
-        print("updateIFSValue_CB called")
-        if(self.IFS_Jogwheel.state == "normal"):
-            print("processing value change")
-            print(self.IFS_Jogwheel.get())
-        else:
-            print("ignorming value change")
+        print("processing value change")
+        print(self.IFS_Jogwheel.get())
 
     def tuning_Step_CB(self):
         print("tuning_Step cb called")
-
-    def dialClicked(self, event=None):
-        print("Dial Clicked")
-        self.last_VFODial_Reading=self.dial1.get()
-        print(self.dial1.get())
-
-    def dialReleased(self, event=None):
-        print("Dial Released")
-        currentVFO = self.dial1.get()
-        print(self.dial1.get())
-        if currentVFO != self.last_VFODial_Reading:
-            self.last_VFODial_Reading=currentVFO
-            print("movement detected")
-        else:
-            print("no movement detected, toggle button")
 
 
 

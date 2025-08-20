@@ -34,14 +34,11 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
         self.ATT_Jogwheel.command = self.updateATTValue_CB
-        self.ATT_Jogwheel.setStateDisabled()
-        # self.ATT_Jogwheel.configure(start=0.0, end=255.0)
-        self.ATT_Jogwheel.set(0)
 
         self.IFS_Jogwheel.command=self.updateIFSValue_CB
-        self.IFS_Jogwheel.setStateDisabled()
-        self.IFS_Jogwheel.configure(end=-2000.0, start=2000.0)
-        self.IFS_Jogwheel.set(-2000)
+
+\
+
 
 
 

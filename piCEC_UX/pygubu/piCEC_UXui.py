@@ -344,7 +344,16 @@ class piCECNextionUI(ttk.Frame):
             height=200, style="Normal.TFrame", width=400)
         self.ATT_Frame = ttk.Frame(self.att_ifs_Frame, name="att_frame")
         self.ATT_Frame.configure(height=200, style="Normal.TFrame", width=200)
-        self.ATT_Jogwheel = JogwheelCustom(self.ATT_Frame, name="att_jogwheel")
+        self.ATT_Jogwheel = JogwheelCustom(
+            self.ATT_Frame,
+            start=0,
+            end=255,
+            divisions=10,
+            radius=200,
+            button_radius=25,
+            value=70,
+            name="att_jogwheel")
+        self.ATT_Jogwheel.configure(scroll_steps=10)
         self.ATT_Jogwheel.pack(anchor="center", padx=30, side="top")
         self.ATT_Jogwheel.bind(
             "<ButtonPress>",
@@ -365,7 +374,16 @@ class piCECNextionUI(ttk.Frame):
         self.ATT_Frame.pack(padx=30, side="left")
         self.IFS_Frame = ttk.Frame(self.att_ifs_Frame, name="ifs_frame")
         self.IFS_Frame.configure(height=200, style="Normal.TFrame", width=200)
-        self.IFS_Jogwheel = JogwheelCustom(self.IFS_Frame, name="ifs_jogwheel")
+        self.IFS_Jogwheel = JogwheelCustom(
+            self.IFS_Frame,
+            start=-2000,
+            end=2000,
+            divisions=150,
+            radius=200,
+            button_radius=25,
+            value=0,
+            name="ifs_jogwheel")
+        self.IFS_Jogwheel.configure(scroll_steps=150)
         self.IFS_Jogwheel.pack(anchor="center", padx=30, side="top")
         self.IFS_Jogwheel.bind(
             "<ButtonPress>",

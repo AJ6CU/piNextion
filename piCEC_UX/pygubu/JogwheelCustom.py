@@ -9,9 +9,7 @@ from tkdial import Jogwheel
 
 class JogwheelCustom(Jogwheel):
     def __init__(self, master=None, **kw):
-        # self.backgroundColor={"normal":ttk.Style().lookup(master.cget('style'),'background'),
-        #                       "disabled":"black"
-        #                       }
+
         self.foregroundColor={"normal":ttk.Style().lookup(master.cget('style'),'foreground'),
                               "disabled":ttk.Style().lookup(master.cget('style'),'background')
                               }
@@ -24,20 +22,24 @@ class JogwheelCustom(Jogwheel):
 
         self.scaleColor={"normal":'blue',
                          "disabled":"gray"
-                              }
+                         }
+        self.initialValue = 0
+        if "name" in kw:
+            kw.pop("name")
+        if "value" in kw:
+            self.initialValue = kw.pop("value")
+
         super().__init__(master,
-                        radius=200,
-                        start=-0,
-                        end=255,
-                        scroll_steps=10,
                         bg=ttk.Style().lookup(master.cget('style'),'background'),
                         fg=ttk.Style().lookup(master.cget('style'),'background'),
                         text_font=ttk.Style().lookup(master.cget('style'),'font'),
-                        button_radius=25
+                        **kw
         )
 
-        self.lastValue = None
+        self.lastValue = self.initialValue
+        self.set(self.lastValue)
         self.setStateDisabled()
+
 
     def setStateDisabled(self):
         self.configure(state="disabled", scroll=False)

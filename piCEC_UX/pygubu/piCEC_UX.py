@@ -43,5 +43,13 @@ mainWindow.attachRadio(myRadio)
 myRadio.openRadio()
 myRadio.readALLValues()
 
+print("ATT startt =", mainWindow.ATT_Jogwheel.start)
+print("ATT end =", mainWindow.ATT_Jogwheel.end)
+print("scroll steps=", mainWindow.ATT_Jogwheel.scroll_steps)
+
+print("IFS startt =", mainWindow.IFS_Jogwheel.start)
+print("IFS end =", mainWindow.IFS_Jogwheel.end)
+print("scroll steps=", mainWindow.IFS_Jogwheel.scroll_steps)
+
 root.after(500,myRadio.updateData)
 root.mainloop()

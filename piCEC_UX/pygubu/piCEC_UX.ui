@@ -621,6 +621,13 @@ RECALL
                 </layout>
                 <child>
                   <object class="projectcustom.Jogwheel" id="ATT_Jogwheel" named="True">
+                    <property name="button_radius">25</property>
+                    <property name="divisions">10</property>
+                    <property name="end">255</property>
+                    <property name="radius">200</property>
+                    <property name="scroll_steps">10</property>
+                    <property name="start">0</property>
+                    <property name="value">70</property>
                     <bind sequence="&lt;ButtonPress&gt;" handler="ATT_Jogwheel_ButtonPressed_CB" add="True" />
                     <bind sequence="&lt;ButtonRelease&gt;" handler="ATT_Jogwheel_ButtonReleased_CB" add="True" />
                     <layout manager="pack">
@@ -654,6 +661,13 @@ RECALL
                 </layout>
                 <child>
                   <object class="projectcustom.Jogwheel" id="IFS_Jogwheel" named="True">
+                    <property name="button_radius">25</property>
+                    <property name="divisions">150</property>
+                    <property name="end">2000</property>
+                    <property name="radius">200</property>
+                    <property name="scroll_steps">150</property>
+                    <property name="start">-2000</property>
+                    <property name="value">0</property>
                     <bind sequence="&lt;ButtonPress&gt;" handler="IFS_Jogwheel_ButtonPressed_CB" add="True" />
                     <bind sequence="&lt;ButtonRelease&gt;" handler="IFS_Jogwheel_ButtonReleased_CB" add="True" />
                     <layout manager="pack">

@@ -23,7 +23,7 @@ class JogwheelCustom_UXbo(BuilderObject):
         "button_radius",
         "command"
     }
-    ro_properties = ("start", "end", "divisions", "radius", "button_radius", "value")
+    ro_properties = ("start", "end", "divisions")
     properties = OPTIONS_CUSTOM
 
     virtual_events = ("<<JogwheelCustomSelected>>",)

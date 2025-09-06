@@ -1,7 +1,7 @@
-from imghdr import test_xbm
+# from imghdr import test_xbm
 import tkinter.ttk as ttk
 
-from Cython.Compiler.Naming import self_cname
+# from Cython.Compiler.Naming import self_cname
 
 import piCEC_UXui as baseui
 import mystyles  # Styles definition module
@@ -530,10 +530,10 @@ class piCECNextion(baseui.piCECNextionUI):
         self.rit_Button.configure(state="disabled")
         self.store_Button.configure(state="disabled")
         self.recall_Button.configure(state="disabled")
-        self.att_Button.configure(state="disabled")
-        self.labelScale_Set_State(self.att_LabeledScale,"disabled")
-        self.labelScale_Set_State(self.ifs_LabeledScale, "disabled")
-        self.ifs_Button.configure(state="disabled")
+        # self.att_Button.configure(state="disabled")
+        # self.labelScale_Set_State(self.att_LabeledScale,"disabled")
+        # self.labelScale_Set_State(self.ifs_LabeledScale, "disabled")
+        # self.ifs_Button.configure(state="disabled")
         self.tuning_Step_Button.configure(state="disabled")
 
     #
@@ -550,10 +550,10 @@ class piCECNextion(baseui.piCECNextionUI):
         self.rit_Button.configure(state="normal")
         self.store_Button.configure(state="normal")
         self.recall_Button.configure(state="normal")
-        self.att_Button.configure(state="normal")
-        self.labelScale_Set_State(self.att_LabeledScale,"normal")
-        self.labelScale_Set_State(self.ifs_LabeledScale, "normal")
-        self.ifs_Button.configure(state="normal")
+        # self.att_Button.configure(state="normal")
+        # self.labelScale_Set_State(self.att_LabeledScale,"normal")
+        # self.labelScale_Set_State(self.ifs_LabeledScale, "normal")
+        # self.ifs_Button.configure(state="normal")
         self.tuning_Step_Button.configure(state="normal")
 
     def labelScale_Set_State(self, labeledScale, newstate):

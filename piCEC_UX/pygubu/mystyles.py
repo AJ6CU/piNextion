@@ -25,6 +25,7 @@ def setup_ttk_styles(master=None):
     
     style = ttk.Style(master)
     #sv_ttk.set_theme("dark"))
+    style.theme_use('default')
 
     fontList = {'Heading1': ('Times New Roman',24, 'bold' ),
             'Heading2': ('Arial',18, 'bold' ),

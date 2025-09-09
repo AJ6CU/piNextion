@@ -27,13 +27,11 @@ class piCECNextion(baseui.piCECNextionUI):
         self.stop_Button_On = False                 #Emergency stop all tx
         self.split_Button_On = False                #Controls entry into split mode
         self.rit_Button_On = False                  #Controls RIT. On means in RIT mode
-        self.att_Button_On = False                  #On allows onscreen control of signal attn
-        self.ifs_Button_On = False                  #On allows onscreen mod of the ifs
+        # self.att_Button_On = False                  #On allows onscreen control of signal attn
+        # self.ifs_Button_On = False                  #On allows onscreen mod of the ifs
 
         self.last_VFODial_Reading = None
 
-
-\
 
 
 
@@ -67,13 +65,14 @@ class piCECNextion(baseui.piCECNextionUI):
             "ve": self.veGet,
             "cv": self.cvGet,            #sets active VFO, A=0, B=1
             "s0": self.s0Get,
+            "vi": self.vi_UX_IFS_Level,
             "cl": self.cl_UX_Lock_Screen,
             "cj": self.cj_UX_Speaker_Toggle,
             "cs": self.csGet,
             "vr": self.vrGet,
             "cr": self.crGet,
             "vf": self.vf_UX_ATT_Level,
-            "ci": self.ciGet,
+            "ci": self.ci_UX_IFA_State_Set,
             "cx": self.cxGet
         }
 
@@ -130,6 +129,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def attachRadio(self, radio):
         self.theRadio = radio
+
     def delegate_command_processing(self,command, buffer):
         self.getterCB_Dict[command](buffer)
 
@@ -269,20 +269,18 @@ class piCECNextion(baseui.piCECNextionUI):
         if self.IFS_Jogwheel.state == "disabled":
             self.IFS_Jogwheel.setStateNormal()
             self.IFS_Status_VAR.set("IFS (ON)")
+            self.Radio_Toggle_IFS()                        # toggle IfS
         else:
             self.IFS_Jogwheel.setStateDisabled()
             self.IFS_Status_VAR.set("IFS (OFF)")
-
-    def ifs_CB(self):
-        if(self.ifs_Button_On):
-            self.ifs_Button_On = False
-        else:
-            self.ifs_Button_On = True
-        self.Radio_Toggle_IFS()
+            self.Radio_Toggle_IFS()                        # toggle IfS
 
     def updateIFSValue_CB(self):
+        # conv2BytesToInt32(swr_buffer[commandStartIndex + 4], swr_buffer[commandStartIndex + 5]);
+        # conv2BytesToInt32(lsb,msb) (int)((int16_t)((msb<<8) + lsb));
         print("processing value change")
         print(self.IFS_Jogwheel.get())
+        self.Radio_Set_IFS_Level(self.IFS_Jogwheel.get())
 
     def tuning_Step_CB(self):
         print("tuning_Step cb called")
@@ -501,6 +499,10 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     #   Received request from Radio to lock the screen
     #
+    def viGet(self, buffer):
+        print("unknown vi called to confirm new ifs setting")
+        print("buffer=", buffer)
+
     def cl_UX_Lock_Screen(self, buffer):
         print("cl_UX_Lock_Screen requested by Radio")
         if (self.lock_Button_On):
@@ -601,12 +603,32 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
 
-    def ciGet(self, buffer):
-        print("unknown ci called to confirm ifs mode")  # command is ifs
-  #         if (L_isIFShift != isIFShift)
-  # {
-  #   L_isIFShift = isIFShift;
-  #   SendCommand1Num(CMD_IS_IFSHIFT, L_isIFShift);
+    def ci_UX_IFA_State_Set(self, buffer):
+        print("ci called to confirm ifs mode")  # command is ifs
+        print("buffer=", buffer)
+        value = int(self.extractValue(buffer, 10, len(buffer) - 3))
+        if (self.IFS_Jogwheel.state == "normal") and (value != 1):
+            print("mcu says state off, ux says state is on")
+        elif (self.IFS_Jogwheel.state == "disabled") and (value != 0):
+            print("mcu says state on, ux says state is off")
+        else:
+            print("MCU and UX agree")
+
+    def vi_UX_IFS_Level(self, buffer):      #verification by MCU of new value
+        value = int(self.extractValue(buffer, 10, len(buffer) - 3))
+
+        if (int(self.IFS_Jogwheel.get() != value) and (self.IFS_Jogwheel.state == "normal")):
+            print("IFS ack value failed to matched!")
+            print("state=", self.IFS_Jogwheel.state)
+            print(self.IFS_Jogwheel.get())
+            print(buffer)
+            print("resetting MCU to IFS to of UX")
+            self.Radio_Set_IFS_Level(self.IFS_Jogwheel.get())
+        else:
+            print("IFS mcu and UX agree, value=", value)
+
+
+
 
     def cxGet(self, buffer):
         print("unknown cx called to confirm stop mode")  # command is stop
@@ -646,15 +668,23 @@ class piCECNextion(baseui.piCECNextionUI):
         command = [self.toRadioCommandDict["TS_CMD_ATT"],value,0,0,0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
-    def Radio_Toggle_IFS(self,value):
+    def Radio_Toggle_IFS(self):
         print("IFS toggle")
         command = [self.toRadioCommandDict["TS_CMD_IFS"],0,0,0,0]
         self.theRadio.sendCommandToMCU(bytes(command))
-      #   first value has something
-      #         {
-      #   isIFShift = isIFShift ? 0 : 1;  //Toggle
-      # }
 
+    def Radio_Set_IFS_Level(self,level):
+        print("IFS Set Level =", level)
+        intLevel = int(level)
+        print("int level=", hex(intLevel))
+        firstByte = intLevel & 0xff
+        print("firstByte=", firstByte)
+        secondByte = (intLevel >> 8) & 0xff
+        print("secondByte=", secondByte)
+        thirdByte = (intLevel >> 16) & 0xff
+        print("thirdByte=", thirdByte)
+        command = [self.toRadioCommandDict["TS_CMD_IFSVALUE"],firstByte,secondByte,thirdByte,0]
+        self.theRadio.sendCommandToMCU(bytes(command))
 
     #
     #   The "cc" command indicates a change to a new mode (e.g. USB, LSB, etc.)

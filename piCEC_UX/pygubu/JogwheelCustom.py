@@ -2,10 +2,9 @@
 # URL = https://github.com/Akascape/TkDial/blob/main/tkdial/jogwheel.py
 # Part of TKDial
 
-# import tkinter as ttk
 import tkinter.ttk as ttk
 
-from tkdial import Jogwheel
+from Jogwheel import Jogwheel
 
 class JogwheelCustom(Jogwheel):
     def __init__(self, master=None, **kw):

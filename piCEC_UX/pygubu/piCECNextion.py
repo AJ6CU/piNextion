@@ -15,7 +15,7 @@ class piCECNextion(baseui.piCECNextionUI):
             on_first_object_cb=mystyles.setup_ttk_styles,
         )
         self.theRadio = None
-        self.debugCommandDecoding = True
+        self.debugCommandDecoding = False
 
         self.VFO_A = "VFO-A"                        # String used for label of VFO-A
         self.VFO_B = "VFO-B"                        # String used for label of VFO-B
@@ -180,40 +180,52 @@ class piCECNextion(baseui.piCECNextionUI):
         self.Radio_Toggle_VFO()
 
     def mode_lsb_CB(self):
-        print("lsb change cb called")
+        if self.debugCommandDecoding:
+            print("lsb change cb called")
         # self.primary_Mode_VAR.set("LSB")
         self.Radio_Set_Mode(self.Text_To_ModeNum["LSB"])
 
     def mode_usb_CB(self):
-        print("usb change cb called")
+        if self.debugCommandDecoding:
+            print("usb change cb called")
         # self.primary_Mode_VAR.set("USB")
         self.Radio_Set_Mode(self.Text_To_ModeNum["USB"])
 
 
     def mode_cwl_CB(self):
-        print("cwl change cb called")
+        if self.debugCommandDecoding:
+            print("cwl change cb called")
         # self.primary_Mode_VAR.set("CWL")
         self.Radio_Set_Mode(self.Text_To_ModeNum["CWL"])
 
 
     def mode_cwu_CB(self):
-        print("cwu change cb called")
+        if self.debugCommandDecoding:
+            print("cwu change cb called")
         # self.primary_Mode_VAR.set("CWU")
         self.Radio_Set_Mode(self.Text_To_ModeNum["CWU"])
 
     def band_up_CB(self):
-         print("band up")
+         if self.debugCommandDecoding:
+             print("band up")
          self.Radio_Change_Band(self.Text_To_BandChange["UP"])
 
     def band_down_CB(self):
-         print("band down")
+         if self.debugCommandDecoding:
+             print("band down")
          self.Radio_Change_Band(self.Text_To_BandChange["DOWN"])
 
     def cw_info_CB(self, event=None):
        if (self.lock_Button_On):
-           print("lock button on, ignore callback")
+           if self.debugCommandDecoding:
+               print("lock button on, ignore callback")
+           else:
+               pass
        else:
-           print("cw_info cb called allowed because lock button off")
+           if self.debugCommandDecoding:
+               print("cw_info cb called allowed because lock button off")
+           else:
+               pass
 
 #
 #   This function sends to the Radio a notice that a screen lock has been requested
@@ -233,16 +245,22 @@ class piCECNextion(baseui.piCECNextionUI):
         self.Radio_Toggle_Stop()
 
     def split_CB(self):
-         self.Radio_Toggle_Split()
+        self.Radio_Toggle_Split()
 
     def rit_CB(self):
         self.Radio_Toggle_RIT()
 
     def store_CB(self):
-        print("store_CB")
+        if self.debugCommandDecoding:
+            print("store_CB")
+        else:
+            pass
 
     def recall_CB(self):
-        print("recall_CB")
+        if self.debugCommandDecoding:
+            print("recall_CB")
+        else:
+            pass
 
     def ATT_Jogwheel_ButtonPressed_CB(self, event=None):
         self.ATT_Jogwheel.lastValue = self.ATT_Jogwheel.get()
@@ -267,8 +285,9 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def updateATTValue_CB(self):
         self.Radio_Set_ATT(self.ATT_Jogwheel.get())
-        print("updateATTValue_CB called")
-        print(self.ATT_Jogwheel.get())
+        if self.debugCommandDecoding:
+            print("updateATTValue_CB called")
+            print(self.ATT_Jogwheel.get())
 
     def IFS_Jogwheel_ButtonPressed_CB(self, event=None):
         self.IFS_Jogwheel.lastValue = self.IFS_Jogwheel.get()
@@ -287,7 +306,8 @@ class piCECNextion(baseui.piCECNextionUI):
             self.IFS_Jogwheel.setStateNormal()
             self.IFS_Status_VAR.set("IFS (ON)")
             self.Radio_Toggle_IFS()                        # toggle IfS
-            print("initial value of ifs=",self.IFS_Jogwheel.get())
+            if self.debugCommandDecoding:
+                print("initial value of ifs=",self.IFS_Jogwheel.get())
         else:
             self.IFS_Jogwheel.setStateDisabled()
             self.IFS_Status_VAR.set("IFS (OFF)")
@@ -296,12 +316,16 @@ class piCECNextion(baseui.piCECNextionUI):
     def updateIFSValue_CB(self):
         # conv2BytesToInt32(swr_buffer[commandStartIndex + 4], swr_buffer[commandStartIndex + 5]);
         # conv2BytesToInt32(lsb,msb) (int)((int16_t)((msb<<8) + lsb));
-        print("processing value change")
-        print(self.IFS_Jogwheel.get())
+        if self.debugCommandDecoding:
+            print("processing value change")
+            print(self.IFS_Jogwheel.get())
         self.Radio_Set_IFS_Level(self.IFS_Jogwheel.get())
 
     def tuning_Step_CB(self):
-        print("tuning_Step cb called")
+        if self.debugCommandDecoding:
+            print("tuning_Step cb called")
+        else:
+            pass
 
 ########################################################################################
 #   End of Callbacks executed by the UX
@@ -335,51 +359,63 @@ class piCECNextion(baseui.piCECNextionUI):
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_Lock(self):
-        print("lock toggle")
+        if self.debugCommandDecoding:
+            print("lock toggle")
         command = [self.toRadioCommandDict["TS_CMD_LOCK"], 0, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_Speaker(self):
-        print("speaker toggle")
+        if self.debugCommandDecoding:
+            print("speaker toggle")
         command = [self.toRadioCommandDict["TS_CMD_SDR"], 0, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_Stop(self):
-        print("stop toggle")
+        if self.debugCommandDecoding:
+            print("stop toggle")
         command = [self.toRadioCommandDict["TS_CMD_TXSTOP"], 0, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_Split(self):
-        print("split toggle")
+        if self.debugCommandDecoding:
+            print("split toggle")
         command = [self.toRadioCommandDict["TS_CMD_SPLIT"], 0, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_RIT(self):
-        print("RIT toggle")
+        if self.debugCommandDecoding:
+            print("RIT toggle")
         command = [self.toRadioCommandDict["TS_CMD_RIT"], 0, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Set_ATT(self, value: bytes):
-        print("ATT Set")
+        if self.debugCommandDecoding:
+            print("ATT Set")
         command = [self.toRadioCommandDict["TS_CMD_ATT"], value, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_IFS(self):
-        print("IFS toggle")
-        print("IFS value =", self.IFS_Jogwheel.get())
+        if self.debugCommandDecoding:
+            print("IFS toggle")
+            print("IFS value =", self.IFS_Jogwheel.get())
         command = [self.toRadioCommandDict["TS_CMD_IFS"], 0, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Set_IFS_Level(self, level):
-        print("IFS Set Level =", level)
+        if self.debugCommandDecoding:
+            print("IFS Set Level =", level)
         intLevel = int(level)
-        print("int level=", hex(intLevel))
+        if self.debugCommandDecoding:
+            print("int level=", hex(intLevel))
         firstByte = intLevel & 0xff
-        print("firstByte=", firstByte)
+        if self.debugCommandDecoding:
+            print("firstByte=", firstByte)
         secondByte = (intLevel >> 8) & 0xff
-        print("secondByte=", secondByte)
+        if self.debugCommandDecoding:
+            print("secondByte=", secondByte)
         thirdByte = (intLevel >> 16) & 0xff
-        print("thirdByte=", thirdByte)
+        if self.debugCommandDecoding:
+            print("thirdByte=", thirdByte)
         command = [self.toRadioCommandDict["TS_CMD_IFSVALUE"], firstByte, secondByte, thirdByte, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
@@ -572,8 +608,11 @@ class piCECNextion(baseui.piCECNextionUI):
     # Also contains the text for the speaker button
     #
     def s0Get(self, buffer):
-        print("unknown s0 called from lock screen")
-        print("buffer=", buffer)
+        if self.debugCommandDecoding:
+            print("unknown s0 called from lock screen")
+            print("buffer=", buffer)
+        else:
+            pass
 
     #
     #   Received request from Radio to lock the screen
@@ -583,15 +622,18 @@ class piCECNextion(baseui.piCECNextionUI):
     #     print("buffer=", buffer)
 
     def cl_UX_Lock_Screen(self, buffer):
-        print("cl_UX_Lock_Screen requested by Radio")
+        if self.debugCommandDecoding:
+            print("cl_UX_Lock_Screen requested by Radio")
         if (self.lock_Button_On):
-            print("turning normal")
+            if self.debugCommandDecoding:
+                print("turning normal")
             self.lock_Button_On = False
             self.lock_Button.configure(style='Button2b.TButton', state="normal")
             self.lock_VAR.set("\nLOCK\n")
             self.unlockUX()
         else:
-            print("turning red")
+            if self.debugCommandDecoding:
+                print("turning red")
             self.lock_Button_On = True
             self.lock_Button.configure(style='RedButton2b.TButton', state='pressed')
             self.lock_VAR.set("\nLOCK-Red\n")
@@ -611,10 +653,6 @@ class piCECNextion(baseui.piCECNextionUI):
         self.rit_Button.configure(state="disabled")
         self.store_Button.configure(state="disabled")
         self.recall_Button.configure(state="disabled")
-        # self.att_Button.configure(state="disabled")
-        # self.labelScale_Set_State(self.att_LabeledScale,"disabled")
-        # self.labelScale_Set_State(self.ifs_LabeledScale, "disabled")
-        # self.ifs_Button.configure(state="disabled")
         self.tuning_Step_Button.configure(state="disabled")
         self.ATT_Jogwheel.state = "disabled"
         self.IFS_Jogwheel.state = "disabled"
@@ -633,10 +671,6 @@ class piCECNextion(baseui.piCECNextionUI):
         self.rit_Button.configure(state="normal")
         self.store_Button.configure(state="normal")
         self.recall_Button.configure(state="normal")
-        # self.att_Button.configure(state="normal")
-        # self.labelScale_Set_State(self.att_LabeledScale,"normal")
-        # self.labelScale_Set_State(self.ifs_LabeledScale, "normal")
-        # self.ifs_Button.configure(state="normal")
         self.tuning_Step_Button.configure(state="normal")
         self.ATT_Jogwheel.state="normal"
         self.IFS_Jogwheel.state="normal"
@@ -651,41 +685,53 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def cj_UX_Speaker_Toggle(self, buffer):
-        print("cj_UX_Speaker_Toggle requested by Radio")
+        if self.debugCommandDecoding:
+            print("cj_UX_Speaker_Toggle requested by Radio")
         if (self.speaker_Button_On):
-            print("unmuting audio")
+            if self.debugCommandDecoding:
+                print("unmuting audio")
             self.speaker_Button_On = False
             self.speaker_Button.configure(style='Button2b.TButton', state="normal")
             self.speaker_VAR.set("\nSPEAKER\n")
         else:
-            print("muting audio")
+            if self.debugCommandDecoding:
+                print("muting audio")
             self.speaker_Button_On = True
             self.speaker_Button.configure(style='RedButton2b.TButton', state="pressed")
             self.speaker_VAR.set("\nMuted-Red\n")
 
 
     def cs_UX_SPLIT_Toggle(self, buffer):
-        print("cs_UX_SPLIT_Toggle called to confirm split mode")  # command is split
+        if self.debugCommandDecoding:
+            print("cs_UX_SPLIT_Toggle called to confirm split mode")  # command is split
         if (self.split_Button_On):
-            print("exiting split mode")
+            if self.debugCommandDecoding:
+                print("exiting split mode")
             self.split_Button_On = False
             self.split_Button.configure(style='Button2b.TButton', state="normal")
         else:
-            print("going into split mode")
+            if self.debugCommandDecoding:
+                print("going into split mode")
             self.split_Button_On = True
             self.split_Button.configure(style='GreenButton2b.TButton', state="pressed")
 
     def vrGet(self, buffer):
-        print("unknown vr called")  # command is rit related
+        if self.debugCommandDecoding:
+            print("unknown vr called")  # command is rit related
+        else:
+            pass
 
     def cr_UX_RIT_Toggle(self, buffer):
-        print("cr_UX_RIT_Toggle called to confirm RIT mode")  # command is split
+        if self.debugCommandDecoding:
+            print("cr_UX_RIT_Toggle called to confirm RIT mode")  # command is split
         if (self.rit_Button_On):
-            print("exiting RIT mode")
+            if self.debugCommandDecoding:
+                print("exiting RIT mode")
             self.rit_Button_On = False
             self.rit_Button.configure(style='Button2b.TButton', state="normal")
         else:
-            print("going into RIT mode")
+            if self.debugCommandDecoding:
+                print("going into RIT mode")
             self.rit_Button_On = True
             self.rit_Button.configure(style='GreenButton2b.TButton', state="pressed")
 
@@ -693,41 +739,53 @@ class piCECNextion(baseui.piCECNextionUI):
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
 
         if (int(self.ATT_Jogwheel.get() != value) and (self.ATT_Jogwheel.state == "normal")):
-            print("ack value failed to matched!")
-            print("state=", self.ATT_Jogwheel.state)
-            print(self.ATT_Jogwheel.get())
-            print(buffer)
+            if self.debugCommandDecoding:
+                print("ack value failed to matched!")
+                print("state=", self.ATT_Jogwheel.state)
+                print(self.ATT_Jogwheel.get())
+                print(buffer)
+            else:
+                pass
 
     def ci_UX_IFA_State_Set(self, buffer):
-        print("ci called to confirm ifs mode")  # command is ifs
-        print("buffer=", buffer)
+        if self.debugCommandDecoding:
+            print("ci called to confirm ifs mode")  # command is ifs
+            print("buffer=", buffer)
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
         if (self.IFS_Jogwheel.state == "normal") and (value != 1):
-            print("mcu says state off, ux says state is on")
+            if self.debugCommandDecoding:
+                print("mcu says state off, ux says state is on")
         elif (self.IFS_Jogwheel.state == "disabled") and (value != 0):
-            print("mcu says state on, ux says state is off")
+            if self.debugCommandDecoding:
+                print("mcu says state on, ux says state is off")
         else:
-            print("MCU and UX agree")
+            if self.debugCommandDecoding:
+                print("MCU and UX agree")
 
     def vi_UX_IFS_Level(self, buffer):      #verification by MCU of new value
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
 
         if (int(self.IFS_Jogwheel.get() != value) and (self.IFS_Jogwheel.state == "normal")):
-            print("IFS ack value failed to matched!")
-            print("state=", self.IFS_Jogwheel.state)
-            print(self.IFS_Jogwheel.get())
-            print(buffer)
+            if self.debugCommandDecoding:
+                print("IFS ack value failed to matched!")
+                print("state=", self.IFS_Jogwheel.state)
+                print(self.IFS_Jogwheel.get())
+                print(buffer)
         else:
-            print("IFS mcu and UX agree, value=", value)
+            if self.debugCommandDecoding:
+                print("IFS mcu and UX agree, value=", value)
 
     def cx_UX_TX_Stop_Toggle(self, buffer):
-        print("cx_UX_TX_Stop_Toggle called to toggle stop mode")  # command is split
+        if self.debugCommandDecoding:
+            print("cx_UX_TX_Stop_Toggle called to toggle stop mode")  # command is split
         if (self.stop_Button_On):
-            print("exiting TX Stop mode")
+            if self.debugCommandDecoding:
+                print("exiting TX Stop mode")
             self.stop_Button_On = False
             self.stop_Button.configure(style='Button2b.TButton', state="normal")
         else:
-            print("going into TX Stop mode")
+            if self.debugCommandDecoding:
+                print("going into TX Stop mode")
             self.stop_Button_On = True
             self.stop_Button.configure(style='RedButton2b.TButton', state="pressed")
 
@@ -824,11 +882,6 @@ class piCECNextion(baseui.piCECNextionUI):
             print("cb assign mode for vfoB frequency")
             print("value=", value, sep='*', end='*')
             print("\n")
-
-
-
-
-
 
     #
     #   The "vt" command stores the CW tone

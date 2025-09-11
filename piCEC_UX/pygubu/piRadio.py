@@ -5,7 +5,7 @@ import time
 
 
 class piRadio:
-    def __init__(self, serialPort, window, debugFlag):
+    def __init__(self, serialPort, window, debugFlag=True):
         self.debugCommandDecoding = debugFlag
         self.tty = serialPort
         self.mainWindow = window
@@ -176,10 +176,12 @@ class piRadio:
         tx_mode_switch_USB2 = tx_mode_switch_USB2pre + tx_mode_switch_USB2com + tx_mode_switch_USB2post
         self.tx_to_mcu_preamble = b'\x59\x58\x68'  # all commands to MCU must start with these three bytes
         self.tx_to_mcu_postscript = b'\xff\xff\x73'  # all commands to MCU must end with these three numbers
-        print("commandList =", commandList)
+        if self.debugCommandDecoding:
+            print("commandList =", commandList)
 
         temp = self.tx_to_mcu_preamble + commandList + self.tx_to_mcu_postscript
-        print(" function call =", bytes(temp))
+        if self.debugCommandDecoding:
+            print(" function call =", bytes(temp))
         self.radioPort.write(self.tx_to_mcu_preamble + commandList + self.tx_to_mcu_postscript)
         # for item in self.tx_to_mcu_preamble :
         #     self.radioPort.write(item)

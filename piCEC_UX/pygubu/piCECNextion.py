@@ -27,8 +27,8 @@ class piCECNextion(baseui.piCECNextionUI):
         self.stop_Button_On = False                 #Emergency stop all tx
         self.split_Button_On = False                #Controls entry into split mode
         self.rit_Button_On = False                  #Controls RIT. On means in RIT mode
-        # self.att_Button_On = False                  #On allows onscreen control of signal attn
-        # self.ifs_Button_On = False                  #On allows onscreen mod of the ifs
+        self.att_Button_On = False                  #On allows onscreen control of signal attn
+        self.ifs_Button_On = False                  #On allows onscreen mod of the ifs
 
         self.last_VFODial_Reading = None
 
@@ -37,43 +37,43 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
         self.getterCB_Dict = {
-            "v1": self.v1Get,
-            "v2": self.v2Get,
-            "v3": self.v3Get,
-            "v4": self.v4Get,
-            "v5": self.v5Get,
+            "v1": self.v1_UX_Set_Tuning_Rate_1,
+            "v2": self.v2_UX_Set_Tuning_Rate_2,
+            "v3": self.v3_UX_Set_Tuning_Rate_3,
+            "v4": self.v4_UX_Set_Tuning_Rate_4,
+            "v5": self.v5_UX_Set_Tuning_Rate_5,
             "ch": self.chGet,
             "vh": self.vhGet,
             "vo": self.voGet,
             "vp": self.vpGet,
             "vq": self.vqGet,
-            "sv": self.svGet,
-            "sc": self.scGet,
-            "cm": self.cmGet,
-            "c0": self.c0Get,
-            "vc": self.vcGet,
-            "cc": self.cc_UX_Set_Mode,
-            "va": self.vaGet,
-            "ca": self.caGet,
-            "vb": self.vbGet,
-            "cb": self.cbGet,
-            "cn": self.cnGet,
-            "vt": self.vtGet,
-            "ck": self.ckGet,
-            "vs": self.vsGet,
-            "vy": self.vyGet,
-            "ve": self.veGet,
-            "cv": self.cvGet,            #sets active VFO, A=0, B=1
+            "sv": self.sv_UX_Set_SW_Version,
+            "sc": self.sc_UX_Set_User_Callsign,
+            "cm": self.cm_UX_Display_Callsign_Version_Flag,
+            "c0": self.c0_UX_In_Yellow_Box_Flag,
+            "vc": self.vc_UX_Set_Primary_VFO_Frequency,
+            "cc": self.cc_UX_Set_Primary_Mode,
+            "va": self.va_UX_Set_VFO_A_Frequency,
+            "ca": self.ca_UX_Set_VFO_A_Mode,
+            "vb": self.vb_UX_Set_VFO_B_Frequency,
+            "cb": self.cb_UX_Set_VFO_B_Mode,
+            "cn": self.cn_UX_Set_Active_Tuning_Rate,
+            "vt": self.vt_UX_SET_CW_Tone,
+            "ck": self.ck_UX_Set_CW_Key_Type,
+            "vs": self.vs_UX_Set_CW_Speed,
+            "vy": self.vy_UX_Set_CW_Post_Delay,
+            "ve": self.ve_UX_Set_CW_Pre_Delay,
+            "cv": self.cv_UX_VFO_Toggle,            #sets active VFO, A=0, B=1
             "s0": self.s0Get,
             "vi": self.vi_UX_IFS_Level,
             "cl": self.cl_UX_Lock_Screen,
             "cj": self.cj_UX_Speaker_Toggle,
-            "cs": self.csGet,
+            "cs": self.cs_UX_SPLIT_Toggle,
             "vr": self.vrGet,
-            "cr": self.crGet,
+            "cr": self.cr_UX_RIT_Toggle,
             "vf": self.vf_UX_ATT_Level,
             "ci": self.ci_UX_IFA_State_Set,
-            "cx": self.cxGet
+            "cx": self.cx_UX_TX_Stop_Toggle
         }
 
         self.toRadioCommandDict = {
@@ -126,6 +126,10 @@ class piCECNextion(baseui.piCECNextionUI):
             "UP": 2,
             "DOWN":1
         }
+        self.Text_To_VFO= {
+            "0": "VFO-A",
+            "1": "VFO-B"
+        }
 
     def attachRadio(self, radio):
         self.theRadio = radio
@@ -140,40 +144,36 @@ class piCECNextion(baseui.piCECNextionUI):
             returnBuffer = returnBuffer + buffer[i]
             i +=1
         return returnBuffer.replace('"','')
+#####################################################################################
+### Start Callbacks                                                                 #
+#####################################################################################
 
     def settings_CB(self):
         print("settings_CB")
 
     def vfo_CB(self):
-        print("primary vfo =",self.primary_VFO_VAR.get())
-        print("current mode =",self.primary_Mode_VAR.get())
-        self.secondary_VFO_VAR.set(self.primary_VFO_VAR.get())
-        self.secondary_Mode_VAR.set(self.primary_Mode_VAR.get())
-        print("secondary vfo =",self.secondary_VFO_VAR.get())
-        print("current mode =",self.secondary_Mode_VAR.get())
-
         self.Radio_Toggle_VFO()
 
     def mode_lsb_CB(self):
         print("lsb change cb called")
-        self.primary_Mode_VAR.set("LSB")
+        # self.primary_Mode_VAR.set("LSB")
         self.cc_Radio_Set_Mode(self.Text_To_ModeNum["LSB"])
 
     def mode_usb_CB(self):
         print("usb change cb called")
-        self.primary_Mode_VAR.set("USB")
+        # self.primary_Mode_VAR.set("USB")
         self.cc_Radio_Set_Mode(self.Text_To_ModeNum["USB"])
 
 
     def mode_cwl_CB(self):
         print("cwl change cb called")
-        self.primary_Mode_VAR.set("CWL")
+        # self.primary_Mode_VAR.set("CWL")
         self.cc_Radio_Set_Mode(self.Text_To_ModeNum["CWL"])
 
 
     def mode_cwu_CB(self):
         print("cwu change cb called")
-        self.primary_Mode_VAR.set("CWU")
+        # self.primary_Mode_VAR.set("CWU")
         self.cc_Radio_Set_Mode(self.Text_To_ModeNum["CWU"])
 
     def band_up_CB(self):
@@ -205,24 +205,12 @@ class piCECNextion(baseui.piCECNextionUI):
         self.Radio_Toggle_Speaker()
 
     def stop_CB(self):
-        if (self.stop_Button_On):
-            self.stop_Button_On = False
-        else:
-            self.stop_Button_On = True
         self.Radio_Toggle_Stop()
 
     def split_CB(self):
-        if(self.split_Button_On):
-            self.split_Button_On = False
-        else:
-            self.split_Button_On = True
-        self.Radio_Toggle_Split()
+         self.Radio_Toggle_Split()
 
     def rit_CB(self):
-        if(self.rit_Button_On):
-            self.rit_Button_On = False
-        else:
-            self.rit_Button_On = True
         self.Radio_Toggle_RIT()
 
     def store_CB(self):
@@ -238,6 +226,8 @@ class piCECNextion(baseui.piCECNextionUI):
         currentValue = self.ATT_Jogwheel.get()
         if self.ATT_Jogwheel.lastValue == currentValue:
             self.toggleATT_State()
+        else:
+            self.Radio_Set_ATT(currentValue)
 
     def toggleATT_State(self):
 
@@ -263,6 +253,8 @@ class piCECNextion(baseui.piCECNextionUI):
         currentValue = self.IFS_Jogwheel.get()
         if self.IFS_Jogwheel.lastValue == currentValue:
             self.toggleIFS_State()
+        else:
+            self.Radio_Set_IFS_Level(currentValue)
 
     def toggleIFS_State(self):
 
@@ -270,6 +262,7 @@ class piCECNextion(baseui.piCECNextionUI):
             self.IFS_Jogwheel.setStateNormal()
             self.IFS_Status_VAR.set("IFS (ON)")
             self.Radio_Toggle_IFS()                        # toggle IfS
+            print("initial value of ifs=",self.IFS_Jogwheel.get())
         else:
             self.IFS_Jogwheel.setStateDisabled()
             self.IFS_Status_VAR.set("IFS (OFF)")
@@ -293,7 +286,7 @@ class piCECNextion(baseui.piCECNextionUI):
          #   The "v1" command is used for smallest tuning rate
          #
 
-    def v1Get(self, buffer):
+    def v1_UX_Set_Tuning_Rate_1(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
 
         if self.debugCommandDecoding:
@@ -303,7 +296,7 @@ class piCECNextion(baseui.piCECNextionUI):
             print("\n")
 
 
-    def v2Get(self, buffer):
+    def v2_UX_Set_Tuning_Rate_2(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("v2 get called:", "buffer =", buffer)
@@ -316,7 +309,7 @@ class piCECNextion(baseui.piCECNextionUI):
         #   The "v3" command 1s used for the third (middle) tuning rate
         #
 
-    def v3Get(self, buffer):
+    def v3_UX_Set_Tuning_Rate_3(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("v3 get called:", "buffer =", buffer)
@@ -330,7 +323,7 @@ class piCECNextion(baseui.piCECNextionUI):
         #   The "v4" command 1s used for the next largest tuning rate
         #
 
-    def v4Get(self, buffer):
+    def v4_UX_Set_Tuning_Rate_4(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("v4 get called:", "buffer =", buffer)
@@ -343,7 +336,7 @@ class piCECNextion(baseui.piCECNextionUI):
         #   The "v5" command 1s used for the largest tuning rate
         #
 
-    def v5Get(self, buffer):
+    def v5_UX_Set_Tuning_Rate_5(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("v5 get called:", "buffer =", buffer)
@@ -424,7 +417,7 @@ class piCECNextion(baseui.piCECNextionUI):
         #   The "sv" command is stores the text of the firmware version
         #
 
-    def svGet(self, buffer):
+    def sv_UX_Set_SW_Version(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("sv get called:", "buffer =", buffer)
@@ -437,7 +430,7 @@ class piCECNextion(baseui.piCECNextionUI):
         #   The "sc" command is stores the text of the operators callsign
         #
 
-    def scGet(self, buffer):
+    def sc_UX_Set_User_Callsign(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("sc get called:", "buffer =", buffer)
@@ -446,12 +439,13 @@ class piCECNextion(baseui.piCECNextionUI):
             print("\n")
 
 
-        #
-        #   The "cm" command determines whether call sign and firmware versions are displayed
-        #
+    #
+    #   The "cm" command determines whether call sign and firmware versions are displayed
+    #
 
-    def cmGet(self, buffer):
+    def cm_UX_Display_Callsign_Version_Flag(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        # MJH Not complete
         if self.debugCommandDecoding:
             print("cm get called:", "buffer =", buffer)
             print("cm display version and callsign?")
@@ -463,7 +457,7 @@ class piCECNextion(baseui.piCECNextionUI):
         #   The "c0" command determines whether we are in text (yellow box) or graphics mode
         #
 
-    def c0Get(self, buffer):
+    def c0_UX_In_Yellow_Box_Flag(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("c0 get called:", "buffer =", buffer)
@@ -473,10 +467,10 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
         #
-        #   The "vc" command indicates a new frequency
+        #   The "vc" command indicates a new frequency for the Primary
         #
 
-    def vcGet(self, buffer):
+    def vc_UX_Set_Primary_VFO_Frequency(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.primary_VFO_VAR.set(value)
 
@@ -537,6 +531,8 @@ class piCECNextion(baseui.piCECNextionUI):
         # self.labelScale_Set_State(self.ifs_LabeledScale, "disabled")
         # self.ifs_Button.configure(state="disabled")
         self.tuning_Step_Button.configure(state="disabled")
+        self.ATT_Jogwheel.state = "disabled"
+        self.IFS_Jogwheel.state = "disabled"
 
     #
     #   Reset all widgets to their "normal" state after the  unlock happens
@@ -557,14 +553,16 @@ class piCECNextion(baseui.piCECNextionUI):
         # self.labelScale_Set_State(self.ifs_LabeledScale, "normal")
         # self.ifs_Button.configure(state="normal")
         self.tuning_Step_Button.configure(state="normal")
+        self.ATT_Jogwheel.state="normal"
+        self.IFS_Jogwheel.state="normal"
 
-    def labelScale_Set_State(self, labeledScale, newstate):
-        #
-        #   disabling/enabling a label scale requires disabling its children
-        #
-        for child in labeledScale.winfo_children():
-            if hasattr(child,'state'):
-                child.configure(state=newstate)
+    # def labelScale_Set_State(self, labeledScale, newstate):
+    #     #
+    #     #   disabling/enabling a label scale requires disabling its children
+    #     #
+    #     for child in labeledScale.winfo_children():
+    #         if hasattr(child,'state'):
+    #             child.configure(state=newstate)
 
 
     def cj_UX_Speaker_Toggle(self, buffer):
@@ -581,14 +579,30 @@ class piCECNextion(baseui.piCECNextionUI):
             self.speaker_VAR.set("\nMuted-Red\n")
 
 
-    def csGet(self, buffer):
-        print("unknown cs called to confirm split mode")  # command is split
+    def cs_UX_SPLIT_Toggle(self, buffer):
+        print("cs_UX_SPLIT_Toggle called to confirm split mode")  # command is split
+        if (self.split_Button_On):
+            print("exiting split mode")
+            self.split_Button_On = False
+            self.split_Button.configure(style='Button2b.TButton', state="normal")
+        else:
+            print("going into split mode")
+            self.split_Button_On = True
+            self.split_Button.configure(style='GreenButton2b.TButton', state="pressed")
 
     def vrGet(self, buffer):
-        print("unknown vr called to confirm rit mode")  # command is rit related
+        print("unknown vr called")  # command is rit related
 
-    def crGet(self, buffer):
-        print("unknown cr called to confirm split mode")  # command is rit
+    def cr_UX_RIT_Toggle(self, buffer):
+        print("cr_UX_RIT_Toggle called to confirm RIT mode")  # command is split
+        if (self.rit_Button_On):
+            print("exiting RIT mode")
+            self.rit_Button_On = False
+            self.rit_Button.configure(style='Button2b.TButton', state="normal")
+        else:
+            print("going into RIT mode")
+            self.rit_Button_On = True
+            self.rit_Button.configure(style='GreenButton2b.TButton', state="pressed")
 
     def vf_UX_ATT_Level(self, buffer):
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
@@ -598,8 +612,8 @@ class piCECNextion(baseui.piCECNextionUI):
             print("state=", self.ATT_Jogwheel.state)
             print(self.ATT_Jogwheel.get())
             print(buffer)
-            print("resetting to current value")
-            self.Radio_Set_ATT(self.ATT_Jogwheel.get())
+            # print("resetting to current value")
+            # self.Radio_Set_ATT(self.ATT_Jogwheel.get())
 
 
 
@@ -622,16 +636,24 @@ class piCECNextion(baseui.piCECNextionUI):
             print("state=", self.IFS_Jogwheel.state)
             print(self.IFS_Jogwheel.get())
             print(buffer)
-            print("resetting MCU to IFS to of UX")
-            self.Radio_Set_IFS_Level(self.IFS_Jogwheel.get())
+            # print("resetting MCU to IFS to of UX")
+            # self.Radio_Set_IFS_Level(self.IFS_Jogwheel.get())
         else:
             print("IFS mcu and UX agree, value=", value)
 
 
 
 
-    def cxGet(self, buffer):
-        print("unknown cx called to confirm stop mode")  # command is stop
+    def cx_UX_TX_Stop_Toggle(self, buffer):
+        print("cx_UX_TX_Stop_Toggle called to toggle stop mode")  # command is split
+        if (self.stop_Button_On):
+            print("exiting TX Stop mode")
+            self.stop_Button_On = False
+            self.stop_Button.configure(style='Button2b.TButton', state="normal")
+        else:
+            print("going into TX Stop mode")
+            self.stop_Button_On = True
+            self.stop_Button.configure(style='RedButton2b.TButton', state="pressed")
 
 
     def Radio_Toggle_VFO(self):
@@ -664,12 +686,13 @@ class piCECNextion(baseui.piCECNextionUI):
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Set_ATT(self,value: bytes):
-        print("ATT toggle")
+        print("ATT Set")
         command = [self.toRadioCommandDict["TS_CMD_ATT"],value,0,0,0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_IFS(self):
         print("IFS toggle")
+        print("IFS value =", self.IFS_Jogwheel.get())
         command = [self.toRadioCommandDict["TS_CMD_IFS"],0,0,0,0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
@@ -690,7 +713,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #   The "cc" command indicates a change to a new mode (e.g. USB, LSB, etc.)
     #
 
-    def cc_UX_Set_Mode(self, buffer):
+    def cc_UX_Set_Primary_Mode(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.primary_Mode_VAR.set(self.modeNum_To_TextDict[value])
         if self.debugCommandDecoding:
@@ -698,6 +721,7 @@ class piCECNextion(baseui.piCECNextionUI):
             print("cc new mode change")
             print("value=", value, sep='*', end='*')
             print("\n")
+
     #
     #   This function tells the Radio that a new mode has been selected for
     #   the primary (displayed) VFO. After receiving the new mode, the
@@ -719,7 +743,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #   The "va" command indicates assignment of vfoA to new frequency
     #
 
-    def vaGet(self, buffer):
+    def va_UX_Set_VFO_A_Frequency(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("va get called:", "buffer =", buffer)
@@ -733,7 +757,7 @@ class piCECNextion(baseui.piCECNextionUI):
         #   The "ca" command indicates assignment of a new mode to vfoA
         #
 
-    def caGet(self, buffer):
+    def ca_UX_Set_VFO_A_Mode(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
 
         self.primary_Mode_VAR.set(self.modeNum_To_TextDict[value])
@@ -750,7 +774,7 @@ class piCECNextion(baseui.piCECNextionUI):
         #   The "vb" command indicates assignment of vfoB to new frequency
         #
 
-    def vbGet(self, buffer):
+    def vb_UX_Set_VFO_B_Frequency(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.secondary_VFO_VAR.set(value)
         if self.debugCommandDecoding:
@@ -758,10 +782,11 @@ class piCECNextion(baseui.piCECNextionUI):
             print("vb assign vfo b frequency")
             print("value=", value, sep='*', end='*')
             print("\n")
+    #
+    #   This sets VFO B to a new mode
+    #
 
-
-
-    def cbGet(self, buffer):
+    def cb_UX_Set_VFO_B_Mode(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.secondary_Mode_VAR.set(self.modeNum_To_TextDict[value])
         if self.debugCommandDecoding:
@@ -776,7 +801,7 @@ class piCECNextion(baseui.piCECNextionUI):
         #   The "cn" command indicates which tuning step is active (1(smallest) - 5(largest)
         #
 
-    def cnGet(self, buffer):
+    def cn_UX_Set_Active_Tuning_Rate(self, buffer):
 
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.tuning_Step_Button_VAR.set("100")
@@ -791,7 +816,7 @@ class piCECNextion(baseui.piCECNextionUI):
         #   The "vt" command stores the CW tone
         #
 
-    def vtGet(self, buffer):
+    def vt_UX_SET_CW_Tone(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("vt get called:", "buffer =", buffer)
@@ -804,7 +829,7 @@ class piCECNextion(baseui.piCECNextionUI):
         #   The "ck" command stores which cw key is being used
         #
 
-    def ckGet(self, buffer):
+    def ck_UX_Set_CW_Key_Type(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("ck get called:", "buffer =", buffer)
@@ -818,7 +843,7 @@ class piCECNextion(baseui.piCECNextionUI):
         #   The "vs" command stores words/minute
         #
 
-    def vsGet(self, buffer):
+    def vs_UX_Set_CW_Speed(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("vs get called:", "buffer =", buffer)
@@ -831,7 +856,7 @@ class piCECNextion(baseui.piCECNextionUI):
         #   The "vy" command stores delay returning after last cw character
         #
 
-    def vyGet(self, buffer):
+    def vy_UX_Set_CW_Post_Delay(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("vy get called:", "buffer =", buffer)
@@ -842,10 +867,10 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
         #
-        #   The "ve" command stores delay returning after last cw character
+        #   The "ve" command stores delay prior to TX 1st cw character
         #
 
-    def veGet(self, buffer):
+    def ve_UX_Set_CW_Pre_Delay(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         if self.debugCommandDecoding:
             print("ve get called:", "buffer =", buffer)
@@ -855,17 +880,17 @@ class piCECNextion(baseui.piCECNextionUI):
 
     #
     #   Returns active VFO, VFO-A=0, VFO-B=1
-    def cvGet(self, buffer):
+    def cv_UX_VFO_Toggle(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-
-        if (int(value) == 0):
-            self.vfo_VAR.set("VFO-A")
-        else:
-            self.vfo_VAR.set("VFO-B")
 
         if self.debugCommandDecoding:
             print("cv get called:", "buffer =", buffer)
             print("cv toggle vfo")
             print("value=", value, sep='*', end='*')
             print("\n")
+
+        self.vfo_VAR.set(self.Text_To_VFO[value])
+        self.secondary_VFO_VAR.set(self.primary_VFO_VAR.get())
+        self.secondary_Mode_VAR.set(self.primary_Mode_VAR.get())
+
 

@@ -179,7 +179,7 @@ class piCECNextionUI(ttk.Frame):
             self.rxTX_Status_Frame, name="stop_button")
         self.stop_Button.configure(
             state="normal",
-            style="RedButton2.TButton",
+            style="Button2b.TButton",
             text='\nSTOP!\n',
             width=6)
         self.stop_Button.grid(column=1, padx="20 10", row=0, rowspan=2)
@@ -519,7 +519,7 @@ class piCECNextionUI(ttk.Frame):
             height=665,
             style="Normal.TFrame",
             width=850)
-        # Layout for 'main_window' skipped in custom widget template.
+        self.pack(anchor="nw", expand=True, fill="x", side="top")
 
     def settings_CB(self):
         pass

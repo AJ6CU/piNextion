@@ -32,11 +32,14 @@ class piCECNextion(baseui.piCECNextionUI):
 
         self.last_VFODial_Reading = None
 
+        #######################################################################################
+        #   Dictionaries that follow are used to lookup textual values based on internal
+        #   Representations. Sometimes it is a string integer. Other times it is a string of
+        #   a couple characters. These translations are collected here to avoid them being
+        #   "codified" directly in the functions that use them.
+        #######################################################################################
 
-
-
-
-        self.getterCB_Dict = {
+        self.MCU_Command_To_CB_Dict = {
             "v1": self.v1_UX_Set_Tuning_Rate_1,
             "v2": self.v2_UX_Set_Tuning_Rate_2,
             "v3": self.v3_UX_Set_Tuning_Rate_3,
@@ -131,11 +134,30 @@ class piCECNextion(baseui.piCECNextionUI):
             "1": "VFO-B"
         }
 
+    #####################################################################################
+    #       End of dictionaries of constants
+    #####################################################################################
+
     def attachRadio(self, radio):
         self.theRadio = radio
 
+    ######################################################################################
+    #   This looks up the command processing routing to be called via a dictionary
+    #   based on the command type (characters 3,4 in the buffer after prelogue stripped
+    ######################################################################################
+
     def delegate_command_processing(self,command, buffer):
-        self.getterCB_Dict[command](buffer)
+        self.MCU_Command_To_CB_Dict[command](buffer)
+
+    ################################################################################
+    #   Format of command sent by radio:
+    #   1. Prelog
+    #   2. command type: characters 0-2, format "xx." Where "xx" is mostly "pm"
+    #   3. subcommand type: characters 3,4  The translation between these characters
+    #   and the code that implements them is in the dictionary above "MCU_Command_To_CB_Dict"
+    #   4. value: This is the 4 bytes between 10-13. Mostly these are characters. But
+    #   in some cases the might represent hex bytes that need to be recoded into an int
+    ################################################################################
 
     def extractValue(self, buffer, start, end):
         returnBuffer =""
@@ -144,8 +166,10 @@ class piCECNextion(baseui.piCECNextionUI):
             returnBuffer = returnBuffer + buffer[i]
             i +=1
         return returnBuffer.replace('"','')
+
 #####################################################################################
-### Start Callbacks                                                                 #
+### Start Callbacks
+#   These are the callbacks as defined in the GUI Builder pygubu-designer
 #####################################################################################
 
     def settings_CB(self):

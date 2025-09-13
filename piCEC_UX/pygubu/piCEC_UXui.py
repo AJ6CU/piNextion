@@ -179,7 +179,7 @@ class piCECNextionUI(ttk.Frame):
             self.rxTX_Status_Frame, name="stop_button")
         self.stop_Button.configure(
             state="normal",
-            style="Button2b.TButton",
+            style="RedButton2.TButton",
             text='\nSTOP!\n',
             width=6)
         self.stop_Button.grid(column=1, padx="20 10", row=0, rowspan=2)

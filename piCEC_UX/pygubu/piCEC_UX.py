@@ -35,7 +35,7 @@ mainWindow = piCECNextion(root)
 mainWindow.pack(expand=True, fill="both")
 
 # myRadio = piRadio("/dev/ttyS0", mainWindow)  # linux
-myRadio = piRadio("com6", mainWindow) # windows
+myRadio = piRadio("com6", mainWindow, True) # windows
 # myRadio = piRadio("/dev/cu.usbmodem141301", mainWindow) # macos
 #myRadio = piRadio("/dev/cu.usbserial-00000000", mainWindow) # macos
 

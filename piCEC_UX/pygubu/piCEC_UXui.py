@@ -179,7 +179,7 @@ class piCECNextionUI(ttk.Frame):
             self.rxTX_Status_Frame, name="stop_button")
         self.stop_Button.configure(
             state="normal",
-            style="RedButton2.TButton",
+            style="Button2b.TButton",
             text='\nSTOP!\n',
             width=6)
         self.stop_Button.grid(column=1, padx="20 10", row=0, rowspan=2)
@@ -207,7 +207,7 @@ class piCECNextionUI(ttk.Frame):
             fill="x",
             side="top")
         self.vfoB_Frame = ttk.Frame(self, name="vfob_frame")
-        self.vfoB_Frame.configure(style="Normal.TFrame")
+        self.vfoB_Frame.configure(borderwidth=2, style="NormalOutline.TFrame")
         self.vfo_Frame = ttk.Frame(self.vfoB_Frame, name="vfo_frame")
         self.vfo_Frame.configure(style="Normal.TFrame")
         self.secondary_VFO_Label = ttk.Label(
@@ -217,7 +217,7 @@ class piCECNextionUI(ttk.Frame):
             style="Heading1.TLabel",
             text='99.999.999',
             textvariable=self.secondary_VFO_VAR)
-        self.secondary_VFO_Label.pack(anchor="nw", padx=20, side="left")
+        self.secondary_VFO_Label.pack(anchor="nw", side="left")
         self.secondary_Mode_Label = ttk.Label(
             self.vfo_Frame, name="secondary_mode_label")
         self.secondary_Mode_VAR = tk.StringVar(value='CWL')
@@ -226,35 +226,49 @@ class piCECNextionUI(ttk.Frame):
             text='CWL',
             textvariable=self.secondary_Mode_VAR)
         self.secondary_Mode_Label.pack(anchor="ne", side="right")
-        self.vfo_Frame.grid(column=0, padx=130, pady=4, row=0, sticky="w")
+        self.vfo_Frame.pack(padx=100, side="left")
+        self.callsign_Frame = ttk.Frame(self.vfoB_Frame, name="callsign_frame")
+        self.callsign_Frame.configure(
+            height=200, style="Normal.TFrame", width=200)
+        self.label5 = ttk.Label(self.callsign_Frame)
+        self.label5.configure(
+            style="Heading4b.TLabel",
+            text='AJ6CUxyz',
+            width=10)
+        self.label5.pack(anchor="nw", padx="0 10", side="left")
+        self.label6 = ttk.Label(self.callsign_Frame)
+        self.label6.configure(style="Heading4b.TLabel", text='V2.0 RCLxyz')
+        self.label6.pack(anchor="nw", side="left")
+        self.callsign_Frame.pack(expand=False, fill="y", pady=10, side="left")
         self.tuning_Step_Frame = ttk.Frame(
             self.vfoB_Frame, name="tuning_step_frame")
         self.tuning_Step_Frame.configure(style="Normal.TFrame", width=200)
-        self.tuning_Step_Button = ttk.Button(
-            self.tuning_Step_Frame, name="tuning_step_button")
-        self.tuning_Step_Button_VAR = tk.StringVar(value='10000')
-        self.tuning_Step_Button.configure(
+        self.tuning_Rate_Button = ttk.Button(
+            self.tuning_Step_Frame, name="tuning_rate_button")
+        self.tuning_Rate_VAR = tk.StringVar(value='0')
+        self.tuning_Rate_Button.configure(
             style="Button2b.TButton",
-            text='10000',
-            textvariable=self.tuning_Step_Button_VAR)
-        self.tuning_Step_Button.pack(anchor="nw", padx=10, side="left")
-        self.tuning_Step_Button.configure(command=self.tuning_Step_CB)
+            text='0',
+            textvariable=self.tuning_Rate_VAR,
+            width=10)
+        self.tuning_Rate_Button.pack(side="left")
+        self.tuning_Rate_Button.configure(command=self.tuning_Rate_CB)
         self.tuning_Step_Units_Label = ttk.Label(
             self.tuning_Step_Frame, name="tuning_step_units_label")
         self.tuning_Step_Units_Label.configure(
             style="Heading1.TLabel", text='Hz')
-        self.tuning_Step_Units_Label.pack(anchor="nw", side="right")
-        self.tuning_Step_Frame.grid(column=1, padx="250 0", row=0, sticky="e")
-        self.separator1 = ttk.Separator(self.vfoB_Frame)
-        self.separator1.configure(cursor="dot", orient="horizontal")
-        self.separator1.grid(column=0, columnspan=2, row=1, sticky="ew")
+        self.tuning_Step_Units_Label.pack(padx=10, side="left")
+        self.tuning_Step_Frame.pack(padx="0 150", side="right")
         self.vfoB_Frame.pack(
             anchor="center",
             expand=True,
             fill="both",
+            pady=5,
             side="top")
+        self.frame1 = ttk.Frame(self)
+        self.frame1.configure(height=200, style="Normal.TFrame", width=200)
         self.secondary_menu_Frame = ttk.Frame(
-            self, name="secondary_menu_frame")
+            self.frame1, name="secondary_menu_frame")
         self.secondary_menu_Frame.configure(
             height=200, style="Normal.TFrame", width=200)
         self.signal_Control_Frame = ttk.Frame(
@@ -282,26 +296,9 @@ class piCECNextionUI(ttk.Frame):
             style="Button2b.TButton", text='\nRECALL\n')
         self.recall_Button.pack(anchor="nw", side="left")
         self.recall_Button.configure(command=self.recall_CB)
-        self.signal_Control_Frame.grid(column=0, pady=10, row=0, sticky="n")
-        self.callsign_Frame = ttk.Frame(
-            self.secondary_menu_Frame,
-            name="callsign_frame")
-        self.callsign_Frame.configure(
-            height=200, style="Normal.TFrame", width=200)
-        self.label5 = ttk.Label(self.callsign_Frame)
-        self.label5.configure(style="Heading2b.TLabel", text='AJ6CU', width=10)
-        self.label5.pack(anchor="nw", padx="0 10", side="left")
-        self.label6 = ttk.Label(self.callsign_Frame)
-        self.label6.configure(style="Heading2b.TLabel", text='V2.0 RCL1')
-        self.label6.pack(anchor="nw", side="left")
-        self.callsign_Frame.grid(
-            column=1,
-            padx="20 0",
-            pady=10,
-            row=0,
-            sticky="n")
-        self.secondary_menu_Frame.pack(anchor="nw", side="top")
-        self.sMeter_Frame = ttk.Frame(self, name="smeter_frame")
+        self.signal_Control_Frame.grid(column=0, pady=10, row=1)
+        self.secondary_menu_Frame.grid(column=0, row=0, sticky="w")
+        self.sMeter_Frame = ttk.Frame(self.frame1, name="smeter_frame")
         self.sMeter_Frame.configure(
             height=200, style="Normal.TFrame", width=200)
         self.s_meter_Label = ttk.Label(self.sMeter_Frame, name="s_meter_label")
@@ -327,12 +324,75 @@ class piCECNextionUI(ttk.Frame):
             style="Heading2b.TLabel",
             text='...................5................7..............8..........9........')
         self.label7.grid(column=1, row=0, sticky="ew")
-        self.sMeter_Frame.pack(
-            anchor="nw",
-            expand=True,
-            fill="x",
-            padx=150,
-            side="top")
+        self.sMeter_Frame.grid(column=0, columnspan=2, padx="200 0", row=1)
+        self.tuning_Step_Selection_Frame = ttk.Frame(
+            self.frame1, name="tuning_step_selection_frame")
+        self.tuning_Step_Selection_Frame.configure(
+            height=200, style="Normal.TFrame", width=10)
+        self.tuning_Rate_5_Radiobutton = ttk.Radiobutton(
+            self.tuning_Step_Selection_Frame, name="tuning_rate_5_radiobutton")
+        self.tuning_Rate_5_Value_VAR = tk.StringVar(value='50000')
+        self.tuning_Rate_Selection_VAR = tk.StringVar(value='5')
+        self.tuning_Rate_5_Radiobutton.configure(
+            style="RadioButton3.TRadiobutton",
+            text='50000',
+            textvariable=self.tuning_Rate_5_Value_VAR,
+            value=5,
+            variable=self.tuning_Rate_Selection_VAR,
+            width=10)
+        self.tuning_Rate_5_Radiobutton.pack(side="top")
+        self.tuning_Rate_5_Radiobutton.configure(command=self.tuning_Rate_5_CB)
+        self.tuning_Rate_4_Radiobutton = ttk.Radiobutton(
+            self.tuning_Step_Selection_Frame, name="tuning_rate_4_radiobutton")
+        self.tuning_Rate_4_Value_VAR = tk.StringVar(value='10000')
+        self.tuning_Rate_4_Radiobutton.configure(
+            style="RadioButton3.TRadiobutton",
+            text='10000',
+            textvariable=self.tuning_Rate_4_Value_VAR,
+            value=4,
+            variable=self.tuning_Rate_Selection_VAR,
+            width=10)
+        self.tuning_Rate_4_Radiobutton.pack(side="top")
+        self.tuning_Rate_4_Radiobutton.configure(command=self.tuning_Rate_4_CB)
+        self.tuning_Rate_3_Radiobutton = ttk.Radiobutton(
+            self.tuning_Step_Selection_Frame, name="tuning_rate_3_radiobutton")
+        self.tuning_Rate_3_Value_VAR = tk.StringVar(value='5000')
+        self.tuning_Rate_3_Radiobutton.configure(
+            style="RadioButton3.TRadiobutton",
+            text='5000',
+            textvariable=self.tuning_Rate_3_Value_VAR,
+            value=3,
+            variable=self.tuning_Rate_Selection_VAR,
+            width=10)
+        self.tuning_Rate_3_Radiobutton.pack(side="top")
+        self.tuning_Rate_3_Radiobutton.configure(command=self.tuning_Rate_3_CB)
+        self.tuning_Rate_2_Radiobutton = ttk.Radiobutton(
+            self.tuning_Step_Selection_Frame, name="tuning_rate_2_radiobutton")
+        self.tuning_Rate_2_Value_VAR = tk.StringVar(value='1000')
+        self.tuning_Rate_2_Radiobutton.configure(
+            style="RadioButton3.TRadiobutton",
+            text='1000',
+            textvariable=self.tuning_Rate_2_Value_VAR,
+            value=2,
+            variable=self.tuning_Rate_Selection_VAR,
+            width=10)
+        self.tuning_Rate_2_Radiobutton.pack(side="top")
+        self.tuning_Rate_2_Radiobutton.configure(command=self.tuning_Rate_2_CB)
+        self.tuning_Rate_1_Radiobutton = ttk.Radiobutton(
+            self.tuning_Step_Selection_Frame, name="tuning_rate_1_radiobutton")
+        self.tuning_Rate_1_Value_VAR = tk.StringVar(value='100')
+        self.tuning_Rate_1_Radiobutton.configure(
+            style="RadioButton3.TRadiobutton",
+            text='100',
+            textvariable=self.tuning_Rate_1_Value_VAR,
+            value=1,
+            variable=self.tuning_Rate_Selection_VAR,
+            width=10)
+        self.tuning_Rate_1_Radiobutton.pack(side="top")
+        self.tuning_Rate_1_Radiobutton.configure(command=self.tuning_Rate_1_CB)
+        self.tuning_Step_Selection_Frame.grid(
+            column=2, padx=49, row=0, rowspan=3, sticky="ne")
+        self.frame1.pack(expand=True, fill="both", side="top")
         self.ATT_IFS_Adjust_Frame = ttk.Frame(
             self, name="att_ifs_adjust_frame")
         self.ATT_IFS_Adjust_Frame.configure(
@@ -554,7 +614,7 @@ class piCECNextionUI(ttk.Frame):
     def stop_CB(self):
         pass
 
-    def tuning_Step_CB(self):
+    def tuning_Rate_CB(self):
         pass
 
     def split_CB(self):
@@ -567,6 +627,21 @@ class piCECNextionUI(ttk.Frame):
         pass
 
     def recall_CB(self):
+        pass
+
+    def tuning_Rate_5_CB(self):
+        pass
+
+    def tuning_Rate_4_CB(self):
+        pass
+
+    def tuning_Rate_3_CB(self):
+        pass
+
+    def tuning_Rate_2_CB(self):
+        pass
+
+    def tuning_Rate_1_CB(self):
         pass
 
     def updateATTValue_CB(self):

@@ -22,16 +22,20 @@ class piCECNextion(baseui.piCECNextionUI):
         self.VFO_B = "VFO-B"                        # String used for label of VFO-B
         self.vfo_VAR.set(self.VFO_A)                #Specifies which VFO is active. Also
                                                     #Label on VFO toggle button
+        # self.tuning_Rate_Settings = [1,2,3,4,5]     #   used to store the values for tuning rates
+        # self.tuning_Rate_Selected = 0
 
         self.lock_Button_On = False                 #controls lock of console
         self.speaker_Button_On = False              #On means in Mute/SDR
         self.stop_Button_On = False                 #Emergency stop all tx
         self.split_Button_On = False                #Controls entry into split mode
         self.rit_Button_On = False                  #Controls RIT. On means in RIT mode
-        self.att_Button_On = False                  #On allows onscreen control of signal attn
-        self.ifs_Button_On = False                  #On allows onscreen mod of the ifs
+        self.ATT_Button_On = False                  #On allows onscreen control of signal attn
+        self.IFS_Button_On = False                  #On allows onscreen mod of the ifs
 
         self.last_VFODial_Reading = None
+
+        self.tuning_Step_Selection_Frame.grid_remove()
 
 #   Constants
         #######################################################################################
@@ -47,6 +51,7 @@ class piCECNextion(baseui.piCECNextionUI):
             "v3": self.v3_UX_Set_Tuning_Rate_3,
             "v4": self.v4_UX_Set_Tuning_Rate_4,
             "v5": self.v5_UX_Set_Tuning_Rate_5,
+            "cn": self.cn_UX_Set_Active_Tuning_Rate,
             "ch": self.chGet,
             "vh": self.vhGet,
             "vo": self.voGet,
@@ -62,7 +67,6 @@ class piCECNextion(baseui.piCECNextionUI):
             "ca": self.ca_UX_Set_VFO_A_Mode,
             "vb": self.vb_UX_Set_VFO_B_Frequency,
             "cb": self.cb_UX_Set_VFO_B_Mode,
-            "cn": self.cn_UX_Set_Active_Tuning_Rate,
             "vt": self.vt_UX_SET_CW_Tone,
             "ck": self.ck_UX_Set_CW_Key_Type,
             "vs": self.vs_UX_Set_CW_Speed,
@@ -70,13 +74,13 @@ class piCECNextion(baseui.piCECNextionUI):
             "ve": self.ve_UX_Set_CW_Pre_Delay,
             "cv": self.cv_UX_VFO_Toggle,            #sets active VFO, A=0, B=1
             "s0": self.s0Get,
-            "vi": self.vi_UX_IFS_Level,
             "cl": self.cl_UX_Lock_Screen,
             "cj": self.cj_UX_Speaker_Toggle,
             "cs": self.cs_UX_SPLIT_Toggle,
-            "vr": self.vrGet,
+            "vr": self.vr_UX_Update_RIT_Freq,
             "cr": self.cr_UX_RIT_Toggle,
             "vf": self.vf_UX_ATT_Level,
+            "vi": self.vi_UX_IFS_Level,
             "ci": self.ci_UX_IFA_State_Set,
             "cx": self.cx_UX_TX_Stop_Toggle
         }
@@ -230,6 +234,32 @@ class piCECNextion(baseui.piCECNextionUI):
                print("cw_info cb called allowed because lock button off")
 
 
+    def tuning_Rate_5_CB(self):
+        self.Radio_Set_Tuning_Rate(5)
+        self.tuning_Step_Selection_Frame.grid_remove()
+
+    def tuning_Rate_4_CB(self):
+        self.Radio_Set_Tuning_Rate(4)
+        self.tuning_Step_Selection_Frame.grid_remove()
+
+    def tuning_Rate_3_CB(self):
+        self.Radio_Set_Tuning_Rate(3)
+        self.tuning_Step_Selection_Frame.grid_remove()
+
+    def tuning_Rate_2_CB(self):
+        self.Radio_Set_Tuning_Rate(2)
+        self.tuning_Step_Selection_Frame.grid_remove()
+
+    def tuning_Rate_1_CB(self):
+        self.Radio_Set_Tuning_Rate(1)
+        self.tuning_Step_Selection_Frame.grid_remove()
+
+
+    def tuning_Rate_CB(self):
+        self.tuning_Step_Selection_Frame.grid()
+
+
+
 #
 #   This function sends to the Radio a notice that a screen lock has been requested
 #   The actual locking of the screen waits until the Radio sends back a commond
@@ -376,6 +406,15 @@ class piCECNextion(baseui.piCECNextionUI):
     #   the primary (displayed) VFO. After receiving the new mode, the
     #   Radio will separately send back the mode to the UX
     #
+    def Radio_Set_Tuning_Rate(self, rate: bytes):
+        command = [self.toRadioCommandDict["TS_CMD_TUNESTEP"], rate, 0, 0, 0]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    #
+    #   This function tells the Radio that a new mode has been selected for
+    #   the primary (displayed) VFO. After receiving the new mode, the
+    #   Radio will separately send back the mode to the UX
+    #
     def Radio_Set_Mode(self, newMode):
         command = [self.toRadioCommandDict["TS_CMD_MODE"], newMode, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
@@ -387,6 +426,10 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def Radio_Change_Band(self, direction):
         command = [self.toRadioCommandDict["TS_CMD_BAND"], direction, 0, 0, 0]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Tuning_Rate(self,value: bytes):
+        command = [self.toRadioCommandDict["TS_CMD_TUNESTEP"], value, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_VFO(self):
@@ -464,6 +507,8 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def v1_UX_Set_Tuning_Rate_1(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.tuning_Rate_1_Value_VAR.set(value)
+
 
         if self.CurrentDebug:
             print("v1 get called:", "buffer =", buffer)
@@ -476,6 +521,8 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def v2_UX_Set_Tuning_Rate_2(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.tuning_Rate_2_Value_VAR.set(value)
+
         if self.CurrentDebug:
             print("v2 get called:", "buffer =", buffer)
             print("v2 tuning 2")
@@ -488,6 +535,8 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def v3_UX_Set_Tuning_Rate_3(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.tuning_Rate_3_Value_VAR.set(value)
+
         if self.CurrentDebug:
             print("v3 get called:", "buffer =", buffer)
             print("v3 tuning 3")
@@ -501,6 +550,8 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def v4_UX_Set_Tuning_Rate_4(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.tuning_Rate_4_Value_VAR.set(value)
+
         if self.CurrentDebug:
             print("v4 get called:", "buffer =", buffer)
             print("v4 tuning 4")
@@ -513,6 +564,8 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def v5_UX_Set_Tuning_Rate_5(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.tuning_Rate_5_Value_VAR.set(value)
+
         if self.CurrentDebug:
             print("v5 get called:", "buffer =", buffer)
             print("v5 tuning 5")
@@ -525,11 +578,31 @@ class piCECNextion(baseui.piCECNextionUI):
     def cn_UX_Set_Active_Tuning_Rate(self, buffer):
 
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        self.tuning_Step_Button_VAR.set("100")
+        self.tuning_Rate_Selection_VAR.set(value)
+
+        match value:
+            case "5":
+                self.tuning_Rate_VAR.set(self.tuning_Rate_5_Value_VAR.get())
+                self.tuning_Rate_Selection_VAR.set(5)
+
+            case "4":
+                self.tuning_Rate_VAR.set(self.tuning_Rate_4_Value_VAR.get())
+                self.tuning_Rate_Selection_VAR.set(4)
+            case "3":
+                self.tuning_Rate_VAR.set(self.tuning_Rate_3_Value_VAR.get())
+                self.tuning_Rate_Selection_VAR.set(3)
+            case "2":
+                self.tuning_Rate_VAR.set(self.tuning_Rate_2_Value_VAR.get())
+                self.tuning_Rate_Selection_VAR.set(2)
+            case "1":
+                self.tuning_Rate_VAR.set(self.tuning_Rate_1_Value_VAR.get())
+                self.tuning_Rate_Selection_VAR.set(1)
+
         if self.CurrentDebug:
             print("cn get called:", "buffer =", buffer)
             print("cn which tuning step (1-5)")
             print("value=", value, sep='*', end='*')
+            print("Value setting as", self.tuning_Rate_VAR.get())
             print("\n")
 
     #
@@ -649,12 +722,7 @@ class piCECNextion(baseui.piCECNextionUI):
         else:
             pass
 
-    #
-    #   Received request from Radio to lock the screen
-    #
-    # def viGet(self, buffer):
-    #     print("unknown vi called to confirm new ifs setting")
-    #     print("buffer=", buffer)
+
 
     def cl_UX_Lock_Screen(self, buffer):
         if self.DeepDebug:
@@ -671,7 +739,7 @@ class piCECNextion(baseui.piCECNextionUI):
                 print("turning red")
             self.lock_Button_On = True
             self.lock_Button.configure(style='RedButton2b.TButton', state='pressed')
-            self.lock_VAR.set("\nLOCK-Red\n")
+            self.lock_VAR.set("\nLOCKED\n")
             self.lockUX()
 
     #
@@ -707,8 +775,10 @@ class piCECNextion(baseui.piCECNextionUI):
         self.store_Button.configure(state="normal")
         self.recall_Button.configure(state="normal")
         self.tuning_Step_Button.configure(state="normal")
-        self.ATT_Jogwheel.setStateNormal()
-        self.IFS_Jogwheel.setStateNormal()
+        if (self.ATT_Button_On == True):
+            self.ATT_Jogwheel.setStateNormal()
+        if (self.IFS_Button_On == True):
+            self.IFS_Jogwheel.setStateNormal()
 
     # def labelScale_Set_State(self, labeledScale, newstate):
     #     #
@@ -733,7 +803,7 @@ class piCECNextion(baseui.piCECNextionUI):
                 print("muting audio")
             self.speaker_Button_On = True
             self.speaker_Button.configure(style='RedButton2b.TButton', state="pressed")
-            self.speaker_VAR.set("\nMuted-Red\n")
+            self.speaker_VAR.set("\nSPK MUTED\n")
 
 
     def cs_UX_SPLIT_Toggle(self, buffer):
@@ -749,12 +819,16 @@ class piCECNextion(baseui.piCECNextionUI):
                 print("going into split mode")
             self.split_Button_On = True
             self.split_Button.configure(style='GreenButton2b.TButton', state="pressed")
-
-    def vrGet(self, buffer):
+    #
+    #   This appears to be a no-op command. If the last rit TX frequency does not equal
+    #   the current frequency, this is called to set the VFO to the RIT TX frequency which happens to be
+    #   the current vfo setting anyway.
+    #
+    def vr_UX_Update_RIT_Freq(self, buffer):
         if self.CurrentDebug:
-            print("unknown vr called")  # command is rit related
-        else:
-            pass
+            print("vr called")  # command is rit related
+            print(buffer)
+
 
     def cr_UX_RIT_Toggle(self, buffer):
         if self.DeepDebug:
@@ -780,41 +854,38 @@ class piCECNextion(baseui.piCECNextionUI):
         if (value == 0):
             self.ATT_Jogwheel.setStateDisabled()
             self.ATT_Status_VAR.set("ATT (OFF)")
+            self.ATT_Button_On = False
         else:
             self.ATT_Jogwheel.setStateNormal()
             self.ATT_Status_VAR.set("ATT (ON)")
+            self.ATT_Button_On = True
             self.ATT_Jogwheel.set(value)            # Set UX to value acked by MCU
 
 
     def ci_UX_IFA_State_Set(self, buffer):
-        # if self.DeepDebug:
-        print("ci called to confirm ifs mode")  # command is ifs
-        print("buffer=", buffer)
+        if self.DeepDebug:
+            print("ci called to confirm ifs mode")  # command is ifs
+            print("buffer=", buffer)
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
-        if (value == 1):
-            self.IFS_Jogwheel.setStateNormal()
-            self.IFS_Status_VAR.set("IFS (ON)")
-        else:
+
+        if (value == 0):                            # Zero value indicates IFS being turned off
             self.IFS_Jogwheel.setStateDisabled()
             self.IFS_Status_VAR.set("IFS (OFF)")
+            self.IFS_Button_On = False
+        else:
+            self.IFS_Jogwheel.setStateNormal()
+            self.IFS_Status_VAR.set("IFS (ON)")
+            self.IFS_Button_On = True
+
 
     def vi_UX_IFS_Level(self, buffer):      #verification by MCU of new value
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
-        print("vi command called")
-        print(buffer)
+        if self.DeepDebug:
+            print("vi command called")
+            print(buffer)
 
         self.IFS_Jogwheel.set(value)
 
-        #
-        # if (int(self.IFS_Jogwheel.get() != value) and (self.IFS_Jogwheel.state == "normal")):
-        #     if self.DeepDebug:
-        #         print("IFS ack value failed to matched!")
-        #         print("state=", self.IFS_Jogwheel.state)
-        #         print(self.IFS_Jogwheel.get())
-        #         print(buffer)
-        # else:
-        #     if self.DeepDebug:
-        #         print("IFS mcu and UX agree, value=", value)
 
     def cx_UX_TX_Stop_Toggle(self, buffer):
         if self.DeepDebug:

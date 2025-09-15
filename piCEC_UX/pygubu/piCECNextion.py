@@ -37,6 +37,13 @@ class piCECNextion(baseui.piCECNextionUI):
 
         self.tuning_Step_Selection_Frame.grid_remove()
 
+        # self.tuning_Jogwheel.setStateNormal()
+        self.tuning_Jogwheel.bind(
+            "<Double-Button-1>",
+            self.tuning_Jogwheel_DoubleClick_CB,
+            add="+")
+
+
 #   Constants
         #######################################################################################
         #   Dictionaries that follow are used to lookup textual values based on internal
@@ -258,6 +265,13 @@ class piCECNextion(baseui.piCECNextionUI):
     def tuning_Rate_CB(self):
         self.tuning_Step_Selection_Frame.grid()
 
+    def tuning_Jogwheel_CB(self):
+        print("tuning_Jogwheel_CB called")
+
+    def tuning_Jogwheel_DoubleClick_CB(self, event=None):
+        print("DoubleClick on tuning wheel")
+        self.tuning_Jogwheel.configure(text='000x n')
+
 
 
 #
@@ -365,17 +379,6 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def toggleIFS_State(self):
         self.Radio_Toggle_IFS()
-
-        # if self.IFS_Jogwheel.state == "disabled":
-        #     self.IFS_Jogwheel.setStateNormal()
-        #     self.IFS_Status_VAR.set("IFS (ON)")
-        #     self.Radio_Toggle_IFS()                        # toggle IfS
-        #     if self.DeepDebug:
-        #         print("initial value of ifs=",self.IFS_Jogwheel.get())
-        # else:
-        #     self.IFS_Jogwheel.setStateDisabled()
-        #     self.IFS_Status_VAR.set("IFS (OFF)")
-        #     self.Radio_Toggle_IFS()                        # toggle IfS
 
     def updateIFSValue_CB(self):
         # conv2BytesToInt32(swr_buffer[commandStartIndex + 4], swr_buffer[commandStartIndex + 5]);

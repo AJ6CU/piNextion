@@ -404,7 +404,7 @@ class piCECNextionUI(ttk.Frame):
         self.sMeter_Frame.grid(column=0, row=1)
         self.control_Meter_Tuning_Frame.grid(column=0, row=2, sticky="w")
         self.frame3 = ttk.Frame(self.frame2)
-        self.frame3.configure(height=200, width=200)
+        self.frame3.configure(height=200, style="Normal.TFrame", width=200)
         self.tuning_Jogwheel = JogwheelCustom(
             self.frame3,
             start=-10,
@@ -412,8 +412,9 @@ class piCECNextionUI(ttk.Frame):
             divisions=10,
             button_radius=25,
             value=0,
+            progress=False,
             name="tuning_jogwheel")
-        self.tuning_Jogwheel.configure(scroll_steps=1)
+        self.tuning_Jogwheel.configure(scroll_steps=1, state="normal")
         self.tuning_Jogwheel.pack(side="top")
         self.tuning_Jogwheel.configure(command=self.tuning_Jogwheel_CB)
         self.frame3.grid(
@@ -444,7 +445,7 @@ class piCECNextionUI(ttk.Frame):
             button_radius=25,
             value=70,
             name="att_jogwheel")
-        self.ATT_Jogwheel.configure(scroll_steps=10)
+        self.ATT_Jogwheel.configure(scroll_steps=10, state="disabled")
         self.ATT_Jogwheel.pack(anchor="center", padx=30, side="top")
         self.ATT_Jogwheel.configure(command=self.updateATTValue_CB)
         self.ATT_Jogwheel.bind(
@@ -475,7 +476,7 @@ class piCECNextionUI(ttk.Frame):
             button_radius=25,
             value=0,
             name="ifs_jogwheel")
-        self.IFS_Jogwheel.configure(scroll_steps=150)
+        self.IFS_Jogwheel.configure(scroll_steps=150, state="disabled")
         self.IFS_Jogwheel.pack(anchor="center", padx=30, side="top")
         self.IFS_Jogwheel.configure(command=self.updateIFSValue_CB)
         self.IFS_Jogwheel.bind(

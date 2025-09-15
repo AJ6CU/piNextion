@@ -678,6 +678,7 @@ RECALL
         <child>
           <object class="ttk.Frame" id="frame3">
             <property name="height">200</property>
+            <property name="style">Normal.TFrame</property>
             <property name="width">200</property>
             <layout manager="grid">
               <property name="column">1</property>
@@ -693,8 +694,10 @@ RECALL
                 <property name="command" type="command" cbtype="simple">tuning_Jogwheel_CB</property>
                 <property name="divisions">10</property>
                 <property name="end">10</property>
+                <property name="progress">False</property>
                 <property name="scroll_steps">1</property>
                 <property name="start">-10</property>
+                <property name="state">normal</property>
                 <property name="value">0</property>
                 <layout manager="pack">
                   <property name="side">top</property>
@@ -747,6 +750,7 @@ RECALL
                     <property name="radius">200</property>
                     <property name="scroll_steps">10</property>
                     <property name="start">0</property>
+                    <property name="state">disabled</property>
                     <property name="value">70</property>
                     <bind sequence="&lt;ButtonPress&gt;" handler="ATT_Jogwheel_ButtonPressed_CB" add="True" />
                     <bind sequence="&lt;ButtonRelease&gt;" handler="ATT_Jogwheel_ButtonReleased_CB" add="True" />
@@ -788,6 +792,7 @@ RECALL
                     <property name="radius">200</property>
                     <property name="scroll_steps">150</property>
                     <property name="start">-2000</property>
+                    <property name="state">disabled</property>
                     <property name="value">0</property>
                     <bind sequence="&lt;ButtonPress&gt;" handler="IFS_Jogwheel_ButtonPressed_CB" add="True" />
                     <bind sequence="&lt;ButtonRelease&gt;" handler="IFS_Jogwheel_ButtonReleased_CB" add="True" />

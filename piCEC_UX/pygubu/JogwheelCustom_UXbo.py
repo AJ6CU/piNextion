@@ -21,9 +21,11 @@ class JogwheelCustom_UXbo(BuilderObject):
         "scroll_steps",
         "radius",
         "button_radius",
-        "command"
+        "command",
+        "progress",
+        "state"
     }
-    ro_properties = ("start", "end", "divisions", "radius", "button_radius", "value")
+    ro_properties = ("start", "end", "divisions", "radius", "button_radius", "value", "progress")
     command_properties = ("command",)
     properties = OPTIONS_CUSTOM
 
@@ -89,6 +91,20 @@ register_custom_property (
     _builder_id,
     "scroll_steps",
     "integernumber"
+)
+
+register_custom_property (
+    _builder_id,
+    "progress",
+    "choice",
+    values=("True", "False")
+)
+
+register_custom_property (
+    _builder_id,
+    "state",
+    "choice",
+    values=("normal", "disabled")
 )
 
 register_custom_property (

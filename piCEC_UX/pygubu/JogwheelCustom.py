@@ -130,6 +130,23 @@ class JogwheelCustom(Jogwheel):
         if "state" in kwargs:
             self.state = kwargs.pop("state")
             self.needle_state()
+            if self.state == "normal":
+                self.set(self.lastValue)
+                self.configure(fg=self.foregroundColor["normal"],
+                               scale_color=self.scaleColor["normal"],
+                               button_color=self.buttonColor["normal"],
+                               text_color=self.textColor["normal"]
+                               )
+            else:
+                self.lastValue = self.get()
+                self.configure(fg=self.foregroundColor["disabled"],
+                               scale_color=self.scaleColor["disabled"],
+                               button_color=self.buttonColor["disabled"],
+                               text_color=self.textColor["disabled"]
+                               )
+
+        if "progress" in kwargs:
+                self.progress = kwargs.pop("progress")
 
         if "command" in kwargs:
             self.command = kwargs.pop("command")

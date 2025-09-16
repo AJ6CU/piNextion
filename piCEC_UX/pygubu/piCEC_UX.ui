@@ -788,6 +788,7 @@ RECALL
                 <property name="start">-10</property>
                 <property name="state">normal</property>
                 <property name="value">0</property>
+                <bind sequence="&lt;Double-Button-1&gt;" handler="tuning_Jogwheel_DoubleClick_CB" add="True" />
                 <layout manager="pack">
                   <property name="side">top</property>
                 </layout>

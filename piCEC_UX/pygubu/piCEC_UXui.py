@@ -458,6 +458,10 @@ class piCECNextionUI(ttk.Frame):
         self.tuning_Jogwheel.configure(scroll_steps=1, state="normal")
         self.tuning_Jogwheel.pack(side="top")
         self.tuning_Jogwheel.configure(command=self.tuning_Jogwheel_CB)
+        self.tuning_Jogwheel.bind(
+            "<Double-Button-1>",
+            self.tuning_Jogwheel_DoubleClick_CB,
+            add="+")
         self.tuning_Dial_Current_HZ_Rate_ = ttk.Label(
             self.frame3, name="tuning_dial_current_hz_rate_")
         self.tuning_Dial_Current_HZ_Rate_.configure(
@@ -733,6 +737,9 @@ class piCECNextionUI(ttk.Frame):
         pass
 
     def tuning_Jogwheel_CB(self):
+        pass
+
+    def tuning_Jogwheel_DoubleClick_CB(self, event=None):
         pass
 
     def center_Button_CB(self):

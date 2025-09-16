@@ -37,12 +37,6 @@ class piCECNextion(baseui.piCECNextionUI):
 
         self.tuning_Step_Selection_Frame.grid_remove()
 
-        # self.tuning_Jogwheel.setStateNormal()
-        self.tuning_Jogwheel.bind(
-            "<Double-Button-1>",
-            self.tuning_Jogwheel_DoubleClick_CB,
-            add="+")
-
 #   Constants
         #######################################################################################
         #   Dictionaries that follow are used to lookup textual values based on internal

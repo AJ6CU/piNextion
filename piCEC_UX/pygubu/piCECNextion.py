@@ -43,7 +43,6 @@ class piCECNextion(baseui.piCECNextionUI):
             self.tuning_Jogwheel_DoubleClick_CB,
             add="+")
 
-
 #   Constants
         #######################################################################################
         #   Dictionaries that follow are used to lookup textual values based on internal
@@ -268,9 +267,13 @@ class piCECNextion(baseui.piCECNextionUI):
     def tuning_Jogwheel_CB(self):
         print("tuning_Jogwheel_CB called")
 
+
     def tuning_Jogwheel_DoubleClick_CB(self, event=None):
         print("DoubleClick on tuning wheel")
         self.tuning_Jogwheel.configure(text='000x n')
+
+    def center_Button_CB(self):
+        print("Center button CB")
 
 
 
@@ -759,9 +762,12 @@ class piCECNextion(baseui.piCECNextionUI):
         self.rit_Button.configure(state="disabled")
         self.store_Button.configure(state="disabled")
         self.recall_Button.configure(state="disabled")
-        self.tuning_Step_Button.configure(state="disabled")
+        self.tuning_Rate_Button.configure(state="disabled")
         self.ATT_Jogwheel.setStateDisabled()
         self.IFS_Jogwheel.setStateDisabled()
+        self.tuning_Jogwheel.setStateDisabled()
+        self.tuning_Jogwheel.unbind("<Double-Button-1>")
+        self.center_Button.configure(state="disabled")
 
     #
     #   Reset all widgets to their "normal" state after the  unlock happens
@@ -777,11 +783,17 @@ class piCECNextion(baseui.piCECNextionUI):
         self.rit_Button.configure(state="normal")
         self.store_Button.configure(state="normal")
         self.recall_Button.configure(state="normal")
-        self.tuning_Step_Button.configure(state="normal")
+        self.tuning_Rate_Button.configure(state="normal")
         if (self.ATT_Button_On == True):
             self.ATT_Jogwheel.setStateNormal()
         if (self.IFS_Button_On == True):
             self.IFS_Jogwheel.setStateNormal()
+        self.tuning_Jogwheel.setStateNormal()
+        self.tuning_Jogwheel.bind(
+            "<Double-Button-1>",
+            self.tuning_Jogwheel_DoubleClick_CB,
+            add="+")
+        self.center_Button.configure(state="normal")
 
     # def labelScale_Set_State(self, labeledScale, newstate):
     #     #

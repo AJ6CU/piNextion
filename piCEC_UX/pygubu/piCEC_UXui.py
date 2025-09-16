@@ -191,12 +191,11 @@ class piCECNextionUI(ttk.Frame):
         self.stop_Button.configure(command=self.stop_CB)
         self.separator2 = ttk.Separator(self.rxTX_Status_Frame)
         self.separator2.configure(orient="vertical")
-        self.separator2.grid(column=2, row=0, rowspan=2, sticky="ns")
+        self.separator2.grid(column=2, row=0, rowspan=3, sticky="ns")
         self.rxTX_Status_Frame.grid(column=0, padx=15, row=0, sticky="e")
         self.vfo_display_Frame = ttk.Frame(
             self.vfoA_Frame, name="vfo_display_frame")
-        self.vfo_display_Frame.configure(
-            height=200, style="Normal.TFrame", width=200)
+        self.vfo_display_Frame.configure(style="Normal.TFrame", width=200)
         self.primary_VFO_Label = ttk.Label(
             self.vfo_display_Frame, name="primary_vfo_label")
         self.primary_VFO_VAR = tk.StringVar(value='99999999')
@@ -206,9 +205,51 @@ class piCECNextionUI(ttk.Frame):
             text='99999999',
             textvariable=self.primary_VFO_VAR,
             width=8)
-        self.primary_VFO_Label.pack(anchor="e", expand=False, side="right")
-        self.vfo_display_Frame.grid(
-            column=1, ipadx=30, pady=2, row=0, sticky="w")
+        self.primary_VFO_Label.pack(anchor="e", side="top")
+        self.frame1 = ttk.Frame(self.vfo_display_Frame)
+        self.frame1.configure(height=10, style="Normal.TFrame", width=200)
+        self.digit1_Highlight_Label = ttk.Label(
+            self.frame1, name="digit1_highlight_label")
+        self.digit1_Highlight_Label.configure(
+            style="Heading4b.TLabel", width=6)
+        self.digit1_Highlight_Label.pack(padx="12 0", side="left")
+        self.digit2_Highlight_Label = ttk.Label(
+            self.frame1, name="digit2_highlight_label")
+        self.digit2_Highlight_Label.configure(
+            style="Heading4b.TLabel", width=6)
+        self.digit2_Highlight_Label.pack(padx="17 0", side="left")
+        self.digit8_Highlight_Label = ttk.Label(
+            self.frame1, name="digit8_highlight_label")
+        self.digit8_Highlight_Label.configure(
+            style="Heading4b.TLabel", width=6)
+        self.digit8_Highlight_Label.pack(padx="16 0", side="left")
+        self.digit7_Highlight_Label = ttk.Label(
+            self.frame1, name="digit7_highlight_label")
+        self.digit7_Highlight_Label.configure(
+            style="Heading4b.TLabel", width=6)
+        self.digit7_Highlight_Label.pack(padx="17 0", side="left")
+        self.digit6_Highlight_Label = ttk.Label(
+            self.frame1, name="digit6_highlight_label")
+        self.digit6_Highlight_Label.configure(
+            style="Heading4b.TLabel", width=6)
+        self.digit6_Highlight_Label.pack(padx="17 0", side="left")
+        self.digit5_Highlight_Label = ttk.Label(
+            self.frame1, name="digit5_highlight_label")
+        self.digit5_Highlight_Label.configure(
+            style="Heading4b.TLabel", width=6)
+        self.digit5_Highlight_Label.pack(padx="17 0", side="left")
+        self.digit4_Highlight_Label = ttk.Label(
+            self.frame1, name="digit4_highlight_label")
+        self.digit4_Highlight_Label.configure(
+            style="Heading4b.TLabel", width=6)
+        self.digit4_Highlight_Label.pack(padx="17 0", side="left")
+        self.digit3_Highlight_Label = ttk.Label(
+            self.frame1, name="digit3_highlight_label")
+        self.digit3_Highlight_Label.configure(
+            style="Heading4b.TLabel", width=6)
+        self.digit3_Highlight_Label.pack(padx="17 0", side="left")
+        self.frame1.pack(anchor="e", padx="10 10", side="bottom")
+        self.vfo_display_Frame.grid(column=1, padx="48 0", row=0, sticky="e")
         self.vfoA_Frame.grid(column=0, row=0, sticky="w")
         self.vfoB_Frame = ttk.Frame(self.frame2, name="vfob_frame")
         self.vfoB_Frame.configure(borderwidth=3, style="NormalOutline.TFrame")
@@ -417,6 +458,15 @@ class piCECNextionUI(ttk.Frame):
         self.tuning_Jogwheel.configure(scroll_steps=1, state="normal")
         self.tuning_Jogwheel.pack(side="top")
         self.tuning_Jogwheel.configure(command=self.tuning_Jogwheel_CB)
+        self.tuning_Dial_Current_HZ_Rate_ = ttk.Label(
+            self.frame3, name="tuning_dial_current_hz_rate_")
+        self.tuning_Dial_Current_HZ_Rate_.configure(
+            anchor="center", style="Heading3b.TLabel", text='50hz', width=8)
+        self.tuning_Dial_Current_HZ_Rate_.pack(side="top")
+        self.center_Button = ttk.Button(self.frame3, name="center_button")
+        self.center_Button.configure(style="Button2b.TButton", text='Center')
+        self.center_Button.pack(anchor="n", pady=5, side="top")
+        self.center_Button.configure(command=self.center_Button_CB)
         self.frame3.grid(
             column=1,
             padx="20 0",
@@ -683,6 +733,9 @@ class piCECNextionUI(ttk.Frame):
         pass
 
     def tuning_Jogwheel_CB(self):
+        pass
+
+    def center_Button_CB(self):
         pass
 
     def updateATTValue_CB(self):

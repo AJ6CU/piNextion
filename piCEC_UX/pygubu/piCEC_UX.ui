@@ -282,7 +282,7 @@ STOP!
                     <layout manager="grid">
                       <property name="column">2</property>
                       <property name="row">0</property>
-                      <property name="rowspan">2</property>
+                      <property name="rowspan">3</property>
                       <property name="sticky">ns</property>
                     </layout>
                   </object>
@@ -291,15 +291,13 @@ STOP!
             </child>
             <child>
               <object class="ttk.Frame" id="vfo_display_Frame" named="True">
-                <property name="height">200</property>
                 <property name="style">Normal.TFrame</property>
                 <property name="width">200</property>
                 <layout manager="grid">
                   <property name="column">1</property>
-                  <property name="ipadx">30</property>
-                  <property name="pady">2</property>
+                  <property name="padx">48 0</property>
                   <property name="row">0</property>
-                  <property name="sticky">w</property>
+                  <property name="sticky">e</property>
                 </layout>
                 <child>
                   <object class="ttk.Label" id="primary_VFO_Label" named="True">
@@ -310,9 +308,100 @@ STOP!
                     <property name="width">8</property>
                     <layout manager="pack">
                       <property name="anchor">e</property>
-                      <property name="expand">false</property>
-                      <property name="side">right</property>
+                      <property name="side">top</property>
                     </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Frame" id="frame1">
+                    <property name="height">10</property>
+                    <property name="style">Normal.TFrame</property>
+                    <property name="width">200</property>
+                    <layout manager="pack">
+                      <property name="anchor">e</property>
+                      <property name="padx">10 10</property>
+                      <property name="side">bottom</property>
+                    </layout>
+                    <child>
+                      <object class="ttk.Label" id="digit1_Highlight_Label" named="True">
+                        <property name="style">Heading4b.TLabel</property>
+                        <property name="width">6</property>
+                        <layout manager="pack">
+                          <property name="padx">12 0</property>
+                          <property name="side">left</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="digit2_Highlight_Label" named="True">
+                        <property name="style">Heading4b.TLabel</property>
+                        <property name="width">6</property>
+                        <layout manager="pack">
+                          <property name="padx">17 0</property>
+                          <property name="side">left</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="digit8_Highlight_Label" named="True">
+                        <property name="style">Heading4b.TLabel</property>
+                        <property name="width">6</property>
+                        <layout manager="pack">
+                          <property name="padx">16 0</property>
+                          <property name="side">left</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="digit7_Highlight_Label" named="True">
+                        <property name="style">Heading4b.TLabel</property>
+                        <property name="width">6</property>
+                        <layout manager="pack">
+                          <property name="padx">17 0</property>
+                          <property name="side">left</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="digit6_Highlight_Label" named="True">
+                        <property name="style">Heading4b.TLabel</property>
+                        <property name="width">6</property>
+                        <layout manager="pack">
+                          <property name="padx">17 0</property>
+                          <property name="side">left</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="digit5_Highlight_Label" named="True">
+                        <property name="style">Heading4b.TLabel</property>
+                        <property name="width">6</property>
+                        <layout manager="pack">
+                          <property name="padx">17 0</property>
+                          <property name="side">left</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="digit4_Highlight_Label" named="True">
+                        <property name="style">Heading4b.TLabel</property>
+                        <property name="width">6</property>
+                        <layout manager="pack">
+                          <property name="padx">17 0</property>
+                          <property name="side">left</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="digit3_Highlight_Label" named="True">
+                        <property name="style">Heading4b.TLabel</property>
+                        <property name="width">6</property>
+                        <layout manager="pack">
+                          <property name="padx">17 0</property>
+                          <property name="side">left</property>
+                        </layout>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -700,6 +789,29 @@ RECALL
                 <property name="state">normal</property>
                 <property name="value">0</property>
                 <layout manager="pack">
+                  <property name="side">top</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="tuning_Dial_Current_HZ_Rate_" named="True">
+                <property name="anchor">center</property>
+                <property name="style">Heading3b.TLabel</property>
+                <property name="text" translatable="yes">50hz</property>
+                <property name="width">8</property>
+                <layout manager="pack">
+                  <property name="side">top</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="center_Button" named="True">
+                <property name="command" type="command" cbtype="simple">center_Button_CB</property>
+                <property name="style">Button2b.TButton</property>
+                <property name="text" translatable="yes">Center</property>
+                <layout manager="pack">
+                  <property name="anchor">n</property>
+                  <property name="pady">5</property>
                   <property name="side">top</property>
                 </layout>
               </object>

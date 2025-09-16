@@ -318,86 +318,87 @@ STOP!
                     <property name="style">Normal.TFrame</property>
                     <property name="width">200</property>
                     <layout manager="pack">
-                      <property name="anchor">e</property>
-                      <property name="padx">10 10</property>
+                      <property name="anchor">w</property>
+                      <property name="padx">0</property>
                       <property name="side">bottom</property>
                     </layout>
                     <child>
                       <object class="ttk.Label" id="digit1_Highlight_Label" named="True">
-                        <property name="style">Heading4b.TLabel</property>
-                        <property name="width">6</property>
+                        <property name="style">OffLED.TLabel</property>
+                        <property name="width">10</property>
                         <layout manager="pack">
-                          <property name="padx">12 0</property>
+                          <property name="anchor">w</property>
+                          <property name="padx">7 0</property>
                           <property name="side">left</property>
                         </layout>
                       </object>
                     </child>
                     <child>
                       <object class="ttk.Label" id="digit2_Highlight_Label" named="True">
-                        <property name="style">Heading4b.TLabel</property>
-                        <property name="width">6</property>
+                        <property name="style">OffLED.TLabel</property>
+                        <property name="width">10</property>
                         <layout manager="pack">
-                          <property name="padx">17 0</property>
-                          <property name="side">left</property>
-                        </layout>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="ttk.Label" id="digit8_Highlight_Label" named="True">
-                        <property name="style">Heading4b.TLabel</property>
-                        <property name="width">6</property>
-                        <layout manager="pack">
-                          <property name="padx">16 0</property>
-                          <property name="side">left</property>
-                        </layout>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="ttk.Label" id="digit7_Highlight_Label" named="True">
-                        <property name="style">Heading4b.TLabel</property>
-                        <property name="width">6</property>
-                        <layout manager="pack">
-                          <property name="padx">17 0</property>
-                          <property name="side">left</property>
-                        </layout>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="ttk.Label" id="digit6_Highlight_Label" named="True">
-                        <property name="style">Heading4b.TLabel</property>
-                        <property name="width">6</property>
-                        <layout manager="pack">
-                          <property name="padx">17 0</property>
-                          <property name="side">left</property>
-                        </layout>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="ttk.Label" id="digit5_Highlight_Label" named="True">
-                        <property name="style">Heading4b.TLabel</property>
-                        <property name="width">6</property>
-                        <layout manager="pack">
-                          <property name="padx">17 0</property>
-                          <property name="side">left</property>
-                        </layout>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="ttk.Label" id="digit4_Highlight_Label" named="True">
-                        <property name="style">Heading4b.TLabel</property>
-                        <property name="width">6</property>
-                        <layout manager="pack">
-                          <property name="padx">17 0</property>
+                          <property name="padx">19 0</property>
                           <property name="side">left</property>
                         </layout>
                       </object>
                     </child>
                     <child>
                       <object class="ttk.Label" id="digit3_Highlight_Label" named="True">
-                        <property name="style">Heading4b.TLabel</property>
-                        <property name="width">6</property>
+                        <property name="style">OffLED.TLabel</property>
+                        <property name="width">10</property>
                         <layout manager="pack">
-                          <property name="padx">17 0</property>
+                          <property name="padx">19 0</property>
+                          <property name="side">left</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="digit4_Highlight_Label" named="True">
+                        <property name="style">OffLED.TLabel</property>
+                        <property name="width">10</property>
+                        <layout manager="pack">
+                          <property name="padx">19 0</property>
+                          <property name="side">left</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="digit5_Highlight_Label" named="True">
+                        <property name="style">OffLED.TLabel</property>
+                        <property name="width">10</property>
+                        <layout manager="pack">
+                          <property name="padx">19 0</property>
+                          <property name="side">left</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="digit6_Highlight_Label" named="True">
+                        <property name="style">OffLED.TLabel</property>
+                        <property name="width">10</property>
+                        <layout manager="pack">
+                          <property name="padx">19 0</property>
+                          <property name="side">left</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="digit7_Highlight_Label" named="True">
+                        <property name="style">OffLED.TLabel</property>
+                        <property name="width">10</property>
+                        <layout manager="pack">
+                          <property name="padx">19 0</property>
+                          <property name="side">left</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="digit8_Highlight_Label" named="True">
+                        <property name="style">OffLED.TLabel</property>
+                        <property name="width">10</property>
+                        <layout manager="pack">
+                          <property name="padx">19 0</property>
                           <property name="side">left</property>
                         </layout>
                       </object>

@@ -210,45 +210,37 @@ class piCECNextionUI(ttk.Frame):
         self.frame1.configure(height=10, style="Normal.TFrame", width=200)
         self.digit1_Highlight_Label = ttk.Label(
             self.frame1, name="digit1_highlight_label")
-        self.digit1_Highlight_Label.configure(
-            style="Heading4b.TLabel", width=6)
-        self.digit1_Highlight_Label.pack(padx="12 0", side="left")
+        self.digit1_Highlight_Label.configure(style="OffLED.TLabel", width=10)
+        self.digit1_Highlight_Label.pack(anchor="w", padx="7 0", side="left")
         self.digit2_Highlight_Label = ttk.Label(
             self.frame1, name="digit2_highlight_label")
-        self.digit2_Highlight_Label.configure(
-            style="Heading4b.TLabel", width=6)
-        self.digit2_Highlight_Label.pack(padx="17 0", side="left")
-        self.digit8_Highlight_Label = ttk.Label(
-            self.frame1, name="digit8_highlight_label")
-        self.digit8_Highlight_Label.configure(
-            style="Heading4b.TLabel", width=6)
-        self.digit8_Highlight_Label.pack(padx="16 0", side="left")
-        self.digit7_Highlight_Label = ttk.Label(
-            self.frame1, name="digit7_highlight_label")
-        self.digit7_Highlight_Label.configure(
-            style="Heading4b.TLabel", width=6)
-        self.digit7_Highlight_Label.pack(padx="17 0", side="left")
-        self.digit6_Highlight_Label = ttk.Label(
-            self.frame1, name="digit6_highlight_label")
-        self.digit6_Highlight_Label.configure(
-            style="Heading4b.TLabel", width=6)
-        self.digit6_Highlight_Label.pack(padx="17 0", side="left")
-        self.digit5_Highlight_Label = ttk.Label(
-            self.frame1, name="digit5_highlight_label")
-        self.digit5_Highlight_Label.configure(
-            style="Heading4b.TLabel", width=6)
-        self.digit5_Highlight_Label.pack(padx="17 0", side="left")
-        self.digit4_Highlight_Label = ttk.Label(
-            self.frame1, name="digit4_highlight_label")
-        self.digit4_Highlight_Label.configure(
-            style="Heading4b.TLabel", width=6)
-        self.digit4_Highlight_Label.pack(padx="17 0", side="left")
+        self.digit2_Highlight_Label.configure(style="OffLED.TLabel", width=10)
+        self.digit2_Highlight_Label.pack(padx="19 0", side="left")
         self.digit3_Highlight_Label = ttk.Label(
             self.frame1, name="digit3_highlight_label")
-        self.digit3_Highlight_Label.configure(
-            style="Heading4b.TLabel", width=6)
-        self.digit3_Highlight_Label.pack(padx="17 0", side="left")
-        self.frame1.pack(anchor="e", padx="10 10", side="bottom")
+        self.digit3_Highlight_Label.configure(style="OffLED.TLabel", width=10)
+        self.digit3_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit4_Highlight_Label = ttk.Label(
+            self.frame1, name="digit4_highlight_label")
+        self.digit4_Highlight_Label.configure(style="OffLED.TLabel", width=10)
+        self.digit4_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit5_Highlight_Label = ttk.Label(
+            self.frame1, name="digit5_highlight_label")
+        self.digit5_Highlight_Label.configure(style="OffLED.TLabel", width=10)
+        self.digit5_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit6_Highlight_Label = ttk.Label(
+            self.frame1, name="digit6_highlight_label")
+        self.digit6_Highlight_Label.configure(style="OffLED.TLabel", width=10)
+        self.digit6_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit7_Highlight_Label = ttk.Label(
+            self.frame1, name="digit7_highlight_label")
+        self.digit7_Highlight_Label.configure(style="OffLED.TLabel", width=10)
+        self.digit7_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit8_Highlight_Label = ttk.Label(
+            self.frame1, name="digit8_highlight_label")
+        self.digit8_Highlight_Label.configure(style="OffLED.TLabel", width=10)
+        self.digit8_Highlight_Label.pack(padx="19 0", side="left")
+        self.frame1.pack(anchor="w", padx=0, side="bottom")
         self.vfo_display_Frame.grid(column=1, padx="48 0", row=0, sticky="e")
         self.vfoA_Frame.grid(column=0, row=0, sticky="w")
         self.vfoB_Frame = ttk.Frame(self.frame2, name="vfob_frame")

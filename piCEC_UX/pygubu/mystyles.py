@@ -32,6 +32,7 @@ def setup_ttk_styles(master=None):
             'Heading2b': ('Arial',14, 'bold' ),
             'Heading3': ('Arial',12, 'bold' ),
             'Heading4': ('Arial',10, 'bold' ),
+            'Heading5': ('Fixed', 6),
             'Normal': ('Default', 10),
             'HeadingVFO': ('Fixed',82, 'bold' ),
             'Emphasis': ('Default',12, 'bold'),
@@ -43,6 +44,8 @@ def setup_ttk_styles(master=None):
     style.configure('Heading2b.TLabel',font=fontList['Heading2b'], background='gray', foreground='white')
     style.configure('Heading3b.TLabel',font=fontList['Heading3'], background='gray', foreground='white')
     style.configure('Heading4b.TLabel',font=fontList['Heading4'], background='gray', foreground='white')
+    style.configure('OffLED.TLabel', font=fontList['Heading5'], background='gray', foreground='gray')
+    style.configure('OnLED.TLabel', font=fontList['Heading5'], background='green', foreground='green')
     style.configure('GreenLED.TLabel',font=fontList['Heading2'], background='green', foreground='white')
     style.configure('RedLED.TLabel',font=fontList['Heading2'], background='red', foreground='white')
     style.configure('VFO.TLabel',font=fontList['HeadingVFO'], background='gray', foreground='white')

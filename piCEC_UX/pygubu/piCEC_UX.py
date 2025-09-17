@@ -42,6 +42,7 @@ myRadio = piRadio("com6", mainWindow, True) # windows
 mainWindow.attachRadio(myRadio)
 myRadio.openRadio()
 myRadio.readALLValues()
+mainWindow.initUX()
 
 root.after(500,myRadio.updateData)
 root.mainloop()

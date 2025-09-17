@@ -18,6 +18,34 @@ class piCECNextion(baseui.piCECNextionUI):
         self.DeepDebug = False
         self.CurrentDebug = True
 
+        self.rate_selection = {
+            0: self.tuning_Rate_Button,
+            1: self.digit1_Highlight_Label,
+            2: self.digit2_Highlight_Label,
+            3: self.digit3_Highlight_Label,
+            4: self.digit4_Highlight_Label,
+            5: self.digit5_Highlight_Label,
+            6: self.digit6_Highlight_Label,
+            7: self.digit7_Highlight_Label,
+            8: self.digit8_Highlight_Label,
+        }
+
+        self.rate_selection_multiplier = {
+            0: 0,
+            1: 1,
+            2: 10,
+            3: 100,
+            4: 1000,
+            5: 10000,
+            6: 100000,
+            7: 1000000,
+            8: 10000000,
+        }
+
+        self.current_rate_selection = 0
+        self.current_rate_multiplier = 0
+
+
         self.VFO_A = "VFO-A"                        # String used for label of VFO-A
         self.VFO_B = "VFO-B"                        # String used for label of VFO-B
         self.vfo_VAR.set(self.VFO_A)                #Specifies which VFO is active. Also
@@ -36,6 +64,8 @@ class piCECNextion(baseui.piCECNextionUI):
         self.last_VFODial_Reading = None
 
         self.tuning_Step_Selection_Frame.grid_remove()
+        self.tuning_Jogwheel.configure(scroll=True)
+        self.lastpoint = 0
 
 #   Constants
         #######################################################################################
@@ -149,6 +179,9 @@ class piCECNextion(baseui.piCECNextionUI):
     def attachRadio(self, radio):
         self.theRadio = radio
 
+    def initUX(self):
+        self.tuning_Multiplier_VAR.set("got it\nreally")
+
     ######################################################################################
     #   This looks up the command processing routing to be called via a dictionary
     #   based on the command type (characters 3,4 in the buffer after prelogue stripped
@@ -261,14 +294,67 @@ class piCECNextion(baseui.piCECNextionUI):
     def tuning_Jogwheel_CB(self):
         print("tuning_Jogwheel_CB called")
 
+        newFreq = (self.current_rate_multiplier * (self.tuning_Jogwheel.get() - self.lastpoint))+int(self.primary_VFO_VAR.get())
+        self.lastpoint = self.tuning_Jogwheel.get()
+        print("new freq from jog = ", newFreq)
+        self.Radio_Set_New_Frequency(newFreq)
 
-    def tuning_Jogwheel_DoubleClick_CB(self, event=None):
-        print("DoubleClick on tuning wheel")
-        self.tuning_Jogwheel.configure(text='000x n')
 
-    def center_Button_CB(self):
-        print("Center button CB")
 
+
+    def toggle_Digit_Highlight(self, light, Status):
+
+        if (Status):
+            if (isinstance(light, ttk.Button)):
+                light.configure(style='GreenButton2b.TButton')
+            else:
+                light.configure(style='OnLED.TLabel')
+        else:
+            if (isinstance(light, ttk.Button)):
+                light.configure(style='Button2b.TButton')
+            else:
+                light.configure(style='OffLED.TLabel')
+
+    #
+    #   When the tuning_Multiplier is clicked, it cycles through the digits in the VFO to allow them to be
+    #   manually tuned. The initial case the use of the preset tuning cycles is used, much in the same
+    #   way it would be if you are adjusting the physical tuning knob.
+    #
+    def tuning_Multiplier_Button_CB(self):
+        #
+        #   First turn off the old LED
+        #
+        self.toggle_Digit_Highlight(self.rate_selection[self.current_rate_selection], False)
+        #
+        #   Increment to the next slot and turn its LED on, check for rollover
+        #
+        self.current_rate_selection += 1
+        if self.current_rate_selection > len(self.rate_selection)-1:
+            self.current_rate_selection = 0
+        self.toggle_Digit_Highlight(self.rate_selection[self.current_rate_selection], True)
+
+        #
+        #   Set the frequency multiplier
+        #
+        self.current_rate_multiplier = self.rate_selection_multiplier[self.current_rate_selection]
+        #
+        #   Special case 0, which is the current value of the preset
+        #
+        if (self.current_rate_multiplier == 0):
+            self.current_rate_multiplier = int(self.tuning_Rate_VAR.get())
+        #
+        #   convert multiplier to string and simplify ranges using khz,mhz
+        #
+        if (self.current_rate_multiplier < 1000):
+            multiplier_string = str(int(self.current_rate_multiplier))+"Hz"
+        elif (self.current_rate_multiplier < 1000000):
+            multiplier_string = str(int(self.current_rate_multiplier/1000)) + "KHz"
+        else:
+            multiplier_string = str(int(self.current_rate_multiplier / 1000000)) + "MHz"
+
+        #   Now set the text on the multiplier button to reflect the new rate
+        #
+        self.tuning_Multiplier_VAR.set("Tuning Factor\nx"+ multiplier_string)
 
 
 #
@@ -386,11 +472,11 @@ class piCECNextion(baseui.piCECNextionUI):
 
         self.Radio_Set_IFS_Level(self.IFS_Jogwheel.get())
 
-    def tuning_Step_CB(self):
-        if self.CurrentDebug:
-            print("tuning_Step cb called")
-        else:
-            pass
+    # def tuning_Step_CB(self):
+    #     if self.CurrentDebug:
+    #         print("tuning_Step cb called")
+    #     else:
+    #         pass
 
 ########################################################################################
 #   End of Callbacks executed by the UX
@@ -401,6 +487,23 @@ class piCECNextion(baseui.piCECNextionUI):
 #   These routines are called to tell the MCU that an action has happened in the UX.
 #   Typically these should be used by the UX Callbacks
 ########################################################################################
+    def Radio_Freq_Encode(self, freq):
+        encodedBytes = bytearray()
+        intFreq = int(freq)
+        encodedBytes.append(intFreq & 0xff)
+
+        intFreq = (intFreq >> 8)
+        encodedBytes.append(intFreq & 0xff)
+
+        intFreq = (intFreq >> 8)
+        encodedBytes.append(intFreq & 0xff)
+
+        intFreq = (intFreq >> 8)
+        encodedBytes.append(intFreq & 0xff)
+        print("ecoded bytes =", encodedBytes)
+
+        return encodedBytes
+
     #
     #   This function tells the Radio that a new mode has been selected for
     #   the primary (displayed) VFO. After receiving the new mode, the
@@ -408,6 +511,11 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def Radio_Set_Tuning_Rate(self, rate: bytes):
         command = [self.toRadioCommandDict["TS_CMD_TUNESTEP"], rate, 0, 0, 0]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Set_New_Frequency(self, value):
+        fourBytes = self.Radio_Freq_Encode(value)
+        command = [self.toRadioCommandDict["TS_CMD_FREQ"],fourBytes[0],fourBytes[1],fourBytes[2],fourBytes[3]]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     #
@@ -478,6 +586,8 @@ class piCECNextion(baseui.piCECNextionUI):
             print("IFS value =", self.IFS_Jogwheel.get())
         command = [self.toRadioCommandDict["TS_CMD_IFS"], 0, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
+
+
 
     def Radio_Set_IFS_Level(self, level):
         if self.DeepDebug:
@@ -917,11 +1027,11 @@ class piCECNextion(baseui.piCECNextionUI):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.primary_VFO_VAR.set(value)
 
-        if self.DeepDebug:
-            print("vc get called:", "buffer =", buffer)
-            print("vc new frequency change")
-            print("value=", value, sep='*', end='*')
-            print("\n")
+        # if self.DeepDebug:
+        print("vc get called:", "buffer =", buffer)
+        print("vc new frequency change")
+        print("value=", value, sep='*', end='*')
+        print("\n")
     #
     #   The "cc" command indicates a change to a new mode for primary (e.g. USB, LSB, etc.)
     #

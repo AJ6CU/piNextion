@@ -208,38 +208,38 @@ class piCECNextionUI(ttk.Frame):
         self.primary_VFO_Label.pack(anchor="e", side="top")
         self.frame1 = ttk.Frame(self.vfo_display_Frame)
         self.frame1.configure(height=10, style="Normal.TFrame", width=200)
-        self.digit1_Highlight_Label = ttk.Label(
-            self.frame1, name="digit1_highlight_label")
-        self.digit1_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit1_Highlight_Label.pack(anchor="w", padx="7 0", side="left")
-        self.digit2_Highlight_Label = ttk.Label(
-            self.frame1, name="digit2_highlight_label")
-        self.digit2_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit2_Highlight_Label.pack(padx="19 0", side="left")
-        self.digit3_Highlight_Label = ttk.Label(
-            self.frame1, name="digit3_highlight_label")
-        self.digit3_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit3_Highlight_Label.pack(padx="19 0", side="left")
-        self.digit4_Highlight_Label = ttk.Label(
-            self.frame1, name="digit4_highlight_label")
-        self.digit4_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit4_Highlight_Label.pack(padx="19 0", side="left")
-        self.digit5_Highlight_Label = ttk.Label(
-            self.frame1, name="digit5_highlight_label")
-        self.digit5_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit5_Highlight_Label.pack(padx="19 0", side="left")
-        self.digit6_Highlight_Label = ttk.Label(
-            self.frame1, name="digit6_highlight_label")
-        self.digit6_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit6_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit8_Highlight_Label = ttk.Label(
+            self.frame1, name="digit8_highlight_label")
+        self.digit8_Highlight_Label.configure(style="OffLED.TLabel", width=10)
+        self.digit8_Highlight_Label.pack(padx="7 0", side="left")
         self.digit7_Highlight_Label = ttk.Label(
             self.frame1, name="digit7_highlight_label")
         self.digit7_Highlight_Label.configure(style="OffLED.TLabel", width=10)
         self.digit7_Highlight_Label.pack(padx="19 0", side="left")
-        self.digit8_Highlight_Label = ttk.Label(
-            self.frame1, name="digit8_highlight_label")
-        self.digit8_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit8_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit6_Highlight_Label = ttk.Label(
+            self.frame1, name="digit6_highlight_label")
+        self.digit6_Highlight_Label.configure(style="OffLED.TLabel", width=10)
+        self.digit6_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit5_Highlight_Label = ttk.Label(
+            self.frame1, name="digit5_highlight_label")
+        self.digit5_Highlight_Label.configure(style="OffLED.TLabel", width=10)
+        self.digit5_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit4_Highlight_Label = ttk.Label(
+            self.frame1, name="digit4_highlight_label")
+        self.digit4_Highlight_Label.configure(style="OffLED.TLabel", width=10)
+        self.digit4_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit3_Highlight_Label = ttk.Label(
+            self.frame1, name="digit3_highlight_label")
+        self.digit3_Highlight_Label.configure(style="OffLED.TLabel", width=10)
+        self.digit3_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit2_Highlight_Label = ttk.Label(
+            self.frame1, name="digit2_highlight_label")
+        self.digit2_Highlight_Label.configure(style="OffLED.TLabel", width=10)
+        self.digit2_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit1_Highlight_Label = ttk.Label(
+            self.frame1, name="digit1_highlight_label")
+        self.digit1_Highlight_Label.configure(style="OffLED.TLabel", width=10)
+        self.digit1_Highlight_Label.pack(anchor="w", padx="19 0", side="left")
         self.frame1.pack(anchor="w", padx=0, side="bottom")
         self.vfo_display_Frame.grid(column=1, padx="48 0", row=0, sticky="e")
         self.vfoA_Frame.grid(column=0, row=0, sticky="w")
@@ -450,19 +450,17 @@ class piCECNextionUI(ttk.Frame):
         self.tuning_Jogwheel.configure(scroll_steps=1, state="normal")
         self.tuning_Jogwheel.pack(side="top")
         self.tuning_Jogwheel.configure(command=self.tuning_Jogwheel_CB)
-        self.tuning_Jogwheel.bind(
-            "<Double-Button-1>",
-            self.tuning_Jogwheel_DoubleClick_CB,
-            add="+")
-        self.tuning_Dial_Current_HZ_Rate_ = ttk.Label(
-            self.frame3, name="tuning_dial_current_hz_rate_")
-        self.tuning_Dial_Current_HZ_Rate_.configure(
-            anchor="center", style="Heading3b.TLabel", text='50hz', width=8)
-        self.tuning_Dial_Current_HZ_Rate_.pack(side="top")
-        self.center_Button = ttk.Button(self.frame3, name="center_button")
-        self.center_Button.configure(style="Button2b.TButton", text='Center')
-        self.center_Button.pack(anchor="n", pady=5, side="top")
-        self.center_Button.configure(command=self.center_Button_CB)
+        self.tuning_Multiplier_Button = ttk.Button(
+            self.frame3, name="tuning_multiplier_button")
+        self.tuning_Multiplier_VAR = tk.StringVar(
+            value='Tuning Factor\nx 100mhz')
+        self.tuning_Multiplier_Button.configure(
+            style="Button2b.TButton",
+            text='Tuning Factor\nx 100mhz',
+            textvariable=self.tuning_Multiplier_VAR)
+        self.tuning_Multiplier_Button.pack(anchor="n", pady=5, side="top")
+        self.tuning_Multiplier_Button.configure(
+            command=self.tuning_Multiplier_Button_CB)
         self.frame3.grid(
             column=1,
             padx="20 0",
@@ -731,10 +729,7 @@ class piCECNextionUI(ttk.Frame):
     def tuning_Jogwheel_CB(self):
         pass
 
-    def tuning_Jogwheel_DoubleClick_CB(self, event=None):
-        pass
-
-    def center_Button_CB(self):
+    def tuning_Multiplier_Button_CB(self):
         pass
 
     def updateATTValue_CB(self):

@@ -183,6 +183,7 @@ class piRadio:
         if self.debugCommandDecoding:
             print(" function call =", bytes(temp))
         self.radioPort.write(self.tx_to_mcu_preamble + commandList + self.tx_to_mcu_postscript)
+        self.radioPort.flush()
         # for item in self.tx_to_mcu_preamble :
         #     self.radioPort.write(item)
         #     print(item)

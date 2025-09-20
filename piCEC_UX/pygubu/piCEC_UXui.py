@@ -208,14 +208,10 @@ class piCECNextionUI(ttk.Frame):
         self.primary_VFO_Label.pack(anchor="e", side="top")
         self.frame1 = ttk.Frame(self.vfo_display_Frame)
         self.frame1.configure(height=10, style="Normal.TFrame", width=200)
-        self.digit8_Highlight_Label = ttk.Label(
-            self.frame1, name="digit8_highlight_label")
-        self.digit8_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit8_Highlight_Label.pack(padx="7 0", side="left")
         self.digit7_Highlight_Label = ttk.Label(
             self.frame1, name="digit7_highlight_label")
         self.digit7_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit7_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit7_Highlight_Label.pack(padx="7 0", side="left")
         self.digit6_Highlight_Label = ttk.Label(
             self.frame1, name="digit6_highlight_label")
         self.digit6_Highlight_Label.configure(style="OffLED.TLabel", width=10)
@@ -440,8 +436,8 @@ class piCECNextionUI(ttk.Frame):
         self.frame3.configure(height=200, style="Normal.TFrame", width=200)
         self.tuning_Jogwheel = JogwheelCustom(
             self.frame3,
-            start=-10,
-            end=10,
+            start=0,
+            end=9,
             divisions=10,
             button_radius=25,
             value=0,

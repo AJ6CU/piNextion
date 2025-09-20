@@ -323,21 +323,11 @@ STOP!
                       <property name="side">bottom</property>
                     </layout>
                     <child>
-                      <object class="ttk.Label" id="digit8_Highlight_Label" named="True">
-                        <property name="style">OffLED.TLabel</property>
-                        <property name="width">10</property>
-                        <layout manager="pack">
-                          <property name="padx">7 0</property>
-                          <property name="side">left</property>
-                        </layout>
-                      </object>
-                    </child>
-                    <child>
                       <object class="ttk.Label" id="digit7_Highlight_Label" named="True">
                         <property name="style">OffLED.TLabel</property>
                         <property name="width">10</property>
                         <layout manager="pack">
-                          <property name="padx">19 0</property>
+                          <property name="padx">7 0</property>
                           <property name="side">left</property>
                         </layout>
                       </object>
@@ -783,10 +773,10 @@ RECALL
                 <property name="button_radius">25</property>
                 <property name="command" type="command" cbtype="simple">tuning_Jogwheel_CB</property>
                 <property name="divisions">10</property>
-                <property name="end">10</property>
+                <property name="end">9</property>
                 <property name="progress">False</property>
                 <property name="scroll_steps">1</property>
-                <property name="start">-10</property>
+                <property name="start">0</property>
                 <property name="state">normal</property>
                 <property name="value">0</property>
                 <layout manager="pack">

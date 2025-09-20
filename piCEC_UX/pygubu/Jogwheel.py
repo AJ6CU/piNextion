@@ -306,7 +306,56 @@ class Jogwheel(tk.Canvas):
         if self.previous_angle!=0:
             if self.command is not None:
                 self.command()
-        
+
+    def setSpecial(self, value):
+        """
+        This function is used to set the position of the needle
+        """
+
+        self.value = value
+        angle = (value - self.start) * (self.end - self.start_angle) / (self.max - self.start) + self.start_angle
+
+        if self.start < self.max:
+            if value < self.start:
+                self.value = self.start
+                value = self.start
+            elif value > self.max:
+                self.value = self.max
+                value = self.max
+        else:
+            if value > self.start:
+                self.value = self.start
+                value = self.start
+            elif value < self.max:
+                self.value = self.max
+                value = self.max
+
+        if self.progress:
+            extend_angle = angle - (self.start_angle + self.end_angle)
+            self.itemconfigure(self.arc_id, extent=extend_angle)
+
+        self.coords(
+            self.knob,
+            self.line_coordinates(
+                r1=0,
+                r2=self.radius / 2 - self.arc_pos - self.bt_radius,
+                angle=angle
+            )
+        )
+
+        if self.integer == False:
+            value = round(value, 2)
+        else:
+            value = int(value)
+
+        if self.text:
+            self.itemconfig(tagOrId='text', text=self.text + str(value), fill=self.text_color)
+
+        if self.previous_angle != 0:
+            if self.command is not None:
+                pass
+
+
     def get(self):
         """
         This function returns the current value of the meter

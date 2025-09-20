@@ -62,6 +62,9 @@ class piCECNextion(baseui.piCECNextionUI):
         self.tuning_Step_Selection_Frame.grid_remove()
         self.tuning_Jogwheel.configure(scroll=True)
         self.baselineJogValue = 0
+        self.saved_tuning_Rate_Selection = None
+        self.saved_tuning_Rate_VAR = None
+        self.update_Tuning_Button_Label = True
 
 #   Constants
         #######################################################################################
@@ -291,31 +294,28 @@ class piCECNextion(baseui.piCECNextionUI):
         self.tuning_Step_Selection_Frame.grid()
 
     def tuning_Jogwheel_CB(self):
-        print("tuning_Jogwheel_CB called")
-        print("self.currentVFO_Tuning_Rate=", self.currentVFO_Tuning_Rate)
-        print("self.tuning_Jogwheel.get()=",self.tuning_Jogwheel.get())
-        print("self.baselineJogValue=", self.baselineJogValue)
-        print("self.primary_VFO_VAR.get()", self.primary_VFO_VAR.get())
+        if self.DeepDebug:
+            print("tuning_Jogwheel_CB called")
+            print("self.currentVFO_Tuning_Rate=", self.currentVFO_Tuning_Rate)
+            print("self.tuning_Jogwheel.get()=",self.tuning_Jogwheel.get())
+            print("self.baselineJogValue=", self.baselineJogValue)
+            print("self.primary_VFO_VAR.get()", self.primary_VFO_VAR.get())
         #
         #   Get current Frequency and adjust back to baseline
         #
         newFreq =  int(self.primary_VFO_VAR.get()) - (self.currentVFO_Tuning_Rate * self.baselineJogValue)
         newFreq += self.currentVFO_Tuning_Rate * self.tuning_Jogwheel.get()
-        print("new freq from jog = ", newFreq)
+        if self.DeepDebug:
+            print("new freq from jog = ", newFreq)
         self.Radio_Set_New_Frequency(newFreq)
-        # else:
-        #     print("last and current are the same, no freq update")
+
 
     def find_msd_position(self, number_string):
-        """
-        Finds the index of the most significant digit in a string representation of a number.
+        # Finds the index of the most significant digit from the right in a string representation of a number.
 
-        Args:
-            number_string (str): The string representation of the number.
+        # Returns:
+        #     int or None: The index of the most significant digit, or None if no non-zero digit is found.
 
-        Returns:
-            int or None: The index of the most significant digit, or None if no non-zero digit is found.
-        """
         reversed_number_string = number_string[::-1].strip()  # neat trick to reverse a string
 
         for i, char in enumerate(reversed_number_string):
@@ -335,25 +335,29 @@ class piCECNextion(baseui.piCECNextionUI):
         #   get the VFO currently displayed
         #
         currentVFO = self.primary_VFO_VAR.get()
-        print("currentVFO=", currentVFO," ",sep="*")
+        if self.DeepDebug:
+            print("currentVFO=", currentVFO," ",sep="*")
         #
         #   reverse it so that least significant is in position 0
         #
         reversedVFO = currentVFO[::-1].strip()      # neat trick to reverse a string
-        print("reversedVFO=", reversedVFO," ",sep="*")
+        if self.DeepDebug:
+            print("reversedVFO=", reversedVFO," ",sep="*")
         #
         #   pad it on right with zeros so we have 8 characters
         #
         reversedVFO = reversedVFO.ljust(8,"0")
-        print(" 0 filled to 8 characters reversedVFO=", reversedVFO, " ",sep="*")
-        print("currentDigitPos=", self.currentDigitPos)
-        print("integer version=", int(reversedVFO[self.currentDigitPos]))
-        print("self.DigitPos_to_Powers_of_Ten[0]=", self.DigitPos_to_Powers_of_Ten[0])
+        if self.DeepDebug:
+            print(" 0 filled to 8 characters reversedVFO=", reversedVFO, " ",sep="*")
+            print("currentDigitPos=", self.currentDigitPos)
+            print("integer version=", int(reversedVFO[self.currentDigitPos]))
+            print("self.DigitPos_to_Powers_of_Ten[0]=", self.DigitPos_to_Powers_of_Ten[0])
         if (self.currentDigitPos == 0):
             if (self.currentVFO_Tuning_Rate != 0):
                 pos=self.find_msd_position(str(self.currentVFO_Tuning_Rate))
-                print("self.currentVFO_Tuning_Rate=", self.currentVFO_Tuning_Rate)
-                print("pos", pos)
+                if self.DeepDebug:
+                    print("self.currentVFO_Tuning_Rate=", self.currentVFO_Tuning_Rate)
+                    print("pos", pos)
                 return int(reversedVFO[pos])
             else:
                 return int(reversedVFO[2])
@@ -362,6 +366,42 @@ class piCECNextion(baseui.piCECNextionUI):
             #   now we can just return the character of the selected rate
             #
             return int(reversedVFO[self.currentDigitPos])
+        
+    def toggle_Tuning_Mode(self, mode):
+        if (mode == "direct tune"):
+            if (self.saved_tuning_Rate_Selection == None):        #None value indicates we *were* in "direct tune" mode
+                #
+                #   save state prior to going into Direct Moee
+                #
+                self.saved_tuning_Rate_Selection = self.tuning_Rate_Selection_VAR.get()
+                self.saved_tuning_Rate_VAR = self.tuning_Rate_VAR.get()
+                #
+                #   Sets label that displays current present with "Direct Tune" string
+                #
+                self.tuning_Rate_VAR.set("Direct Tune")
+                #   turn off any changes in the label due to a change in preset coming from the radio
+                self.update_Tuning_Button_Label = False
+                #   Disable the tuning rate button so selected preset cannot be changed while in direct tune
+                self.tuning_Rate_Button.configure(state='disabled')
+                #
+                #   Select the lowest tuning rate of the presets. The need to do this is the result of the original
+                #   CEC software using the rate preselects to truncate digits below the preset. For example.
+                #   if a preset of 100 was selected, then it would be impossible to set the dial in increments of 20
+                #   or 10 because it would be truncated to lower 100.
+                #
+                self.Radio_Set_Tuning_Rate(1)
+
+        else:       # Switching into pre-set tuning mode and have to restore the state
+            if (self.saved_tuning_Rate_Selection != None):          # dont restore unless it was previously saved
+                #   Allow updating of the Label for the selected preset
+                self.update_Tuning_Button_Label = True
+                #   Restore the saved states
+                self.tuning_Rate_VAR.set(self.saved_tuning_Rate_VAR)
+                self.Radio_Set_Tuning_Rate(int(self.saved_tuning_Rate_Selection))
+                #   Re-enable the button to select a preset
+                self.tuning_Rate_Button.configure(state='enabled')
+                #   indicate the saved states are now invalid
+                self.saved_tuning_Rate_Selection = None
 
 
     def toggle_Digit_Highlight(self, light, Status):
@@ -369,15 +409,18 @@ class piCECNextion(baseui.piCECNextionUI):
         if (Status):
             if (isinstance(light, ttk.Button)):
                 light.configure(style='GreenButton2b.TButton')
+                self.toggle_Tuning_Mode("preset tune")      # go into preset tune mode
+
             else:
                 light.configure(style='OnLED.TLabel')
-
+                self.toggle_Tuning_Mode("direct tune")      # go into direct tune mode
 
         else:
             if (isinstance(light, ttk.Button)):
                 light.configure(style='Button2b.TButton')
             else:
                 light.configure(style='OffLED.TLabel')
+
 
     #
     #   When the tuning_Multiplier is clicked, it cycles through the digits in the VFO to allow them to be
@@ -426,15 +469,18 @@ class piCECNextion(baseui.piCECNextionUI):
         #
         if (self.currentVFO_Tuning_Rate == 0):
             self.currentVFO_Tuning_Rate = int(self.tuning_Rate_VAR.get())
-            print("new because zero current_rate_multiplier=", self.currentVFO_Tuning_Rate)
+            if self.DeepDebug:
+                print("new because zero current_rate_multiplier=", self.currentVFO_Tuning_Rate)
 
     def updateJogTracking(self,newBaseline=True):
-        print("updating jogwheel, digit=", self.getVFOdigit())
-        print("current jogwheel position =", self.tuning_Jogwheel.get())
+        if self.DeepDebug:
+            print("updating jogwheel, digit=", self.getVFOdigit())
+            print("current jogwheel position =", self.tuning_Jogwheel.get())
 
         self.tuning_Jogwheel.setSpecial(self.getVFOdigit())
         if(newBaseline):
-            print("new baseline")
+            if self.DeepDebug:
+                print("new baseline")
             self.baselineJogValue = self.tuning_Jogwheel.get()
 
     def updateLabelTuning_Multiplier(self):
@@ -564,11 +610,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
         self.Radio_Set_IFS_Level(self.IFS_Jogwheel.get())
 
-    # def tuning_Step_CB(self):
-    #     if self.CurrentDebug:
-    #         print("tuning_Step cb called")
-    #     else:
-    #         pass
+
 
 ########################################################################################
 #   End of Callbacks executed by the UX
@@ -592,7 +634,8 @@ class piCECNextion(baseui.piCECNextionUI):
 
         intFreq = (intFreq >> 8)
         encodedBytes.append(intFreq & 0xff)
-        print("ecoded bytes =", encodedBytes)
+        if self.DeepDebug:
+            print("ecoded bytes =", encodedBytes)
 
         return encodedBytes
 
@@ -712,7 +755,7 @@ class piCECNextion(baseui.piCECNextionUI):
         self.tuning_Rate_1_Value_VAR.set(value)
 
 
-        if self.CurrentDebug:
+        if self.DeepDebug:
             print("v1 get called:", "buffer =", buffer)
             print("v1 tuning 1")
             print("value=", value, sep='*', end='*')
@@ -728,7 +771,7 @@ class piCECNextion(baseui.piCECNextionUI):
         # update multiple for individual tuning min to this one
         #
 
-        if self.CurrentDebug:
+        if self.DeepDebug:
             print("v2 get called:", "buffer =", buffer)
             print("v2 tuning 2")
             print("value=", value, sep='*', end='*')
@@ -742,7 +785,7 @@ class piCECNextion(baseui.piCECNextionUI):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.tuning_Rate_3_Value_VAR.set(value)
 
-        if self.CurrentDebug:
+        if self.DeepDebug:
             print("v3 get called:", "buffer =", buffer)
             print("v3 tuning 3")
             print("value=", value, sep='*', end='*')
@@ -757,7 +800,7 @@ class piCECNextion(baseui.piCECNextionUI):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.tuning_Rate_4_Value_VAR.set(value)
 
-        if self.CurrentDebug:
+        if self.DeepDebug:
             print("v4 get called:", "buffer =", buffer)
             print("v4 tuning 4")
             print("value=", value, sep='*', end='*')
@@ -771,7 +814,7 @@ class piCECNextion(baseui.piCECNextionUI):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.tuning_Rate_5_Value_VAR.set(value)
 
-        if self.CurrentDebug:
+        if self.DeepDebug:
             print("v5 get called:", "buffer =", buffer)
             print("v5 tuning 5")
             print("value=", value, sep='*', end='*')
@@ -787,24 +830,29 @@ class piCECNextion(baseui.piCECNextionUI):
 
         match value:
             case "5":
-                self.tuning_Rate_VAR.set(self.tuning_Rate_5_Value_VAR.get())
+                if (self.update_Tuning_Button_Label):
+                    self.tuning_Rate_VAR.set(self.tuning_Rate_5_Value_VAR.get())
                 self.tuning_Rate_Selection_VAR.set(5)
                 self.currentVFO_Tuning_Rate = int(self.tuning_Rate_5_Value_VAR.get())
 
             case "4":
-                self.tuning_Rate_VAR.set(self.tuning_Rate_4_Value_VAR.get())
+                if (self.update_Tuning_Button_Label):
+                    self.tuning_Rate_VAR.set(self.tuning_Rate_4_Value_VAR.get())
                 self.tuning_Rate_Selection_VAR.set(4)
                 self.currentVFO_Tuning_Rate = int(self.tuning_Rate_4_Value_VAR.get())
             case "3":
-                self.tuning_Rate_VAR.set(self.tuning_Rate_3_Value_VAR.get())
+                if (self.update_Tuning_Button_Label):
+                    self.tuning_Rate_VAR.set(self.tuning_Rate_3_Value_VAR.get())
                 self.tuning_Rate_Selection_VAR.set(3)
                 self.currentVFO_Tuning_Rate = int(self.tuning_Rate_3_Value_VAR.get())
             case "2":
-                self.tuning_Rate_VAR.set(self.tuning_Rate_2_Value_VAR.get())
+                if (self.update_Tuning_Button_Label):
+                    self.tuning_Rate_VAR.set(self.tuning_Rate_2_Value_VAR.get())
                 self.tuning_Rate_Selection_VAR.set(2)
                 self.currentVFO_Tuning_Rate = int(self.tuning_Rate_2_Value_VAR.get())
             case "1":
-                self.tuning_Rate_VAR.set(self.tuning_Rate_1_Value_VAR.get())
+                if (self.update_Tuning_Button_Label):
+                    self.tuning_Rate_VAR.set(self.tuning_Rate_1_Value_VAR.get())
                 self.tuning_Rate_Selection_VAR.set(1)
                 self.currentVFO_Tuning_Rate = int(self.tuning_Rate_1_Value_VAR.get())
 
@@ -813,7 +861,7 @@ class piCECNextion(baseui.piCECNextionUI):
         self.updateLabelTuning_Multiplier()
 
 
-        if self.CurrentDebug:
+        if self.DeepDebug:
             print("cn get called:", "buffer =", buffer)
             print("cn which tuning step (1-5)")
             print("value=", value, sep='*', end='*')
@@ -1071,7 +1119,8 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def vf_UX_ATT_Level(self, buffer):
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
-        print("buffer=",buffer)
+        if self.DeepDebug:
+            print("buffer=",buffer)
 
         #
         #   Zero Value indicated Radio turning off the ATT
@@ -1135,15 +1184,16 @@ class piCECNextion(baseui.piCECNextionUI):
         #
         #   Update position of needle, but do not change the baseline
         #
-        print("vc_UX called now updating jogtracking")
+        if self.DeepDebug:
+            print("vc_UX called now updating jogtracking")
         self.updateJogTracking()
 
 
-        # if self.DeepDebug:
-        print("vc get called:", "buffer =", buffer)
-        print("vc new frequency change")
-        print("value=", value, sep='*', end='*')
-        print("\n")
+        if self.DeepDebug:
+            print("vc get called:", "buffer =", buffer)
+            print("vc new frequency change")
+            print("value=", value, sep='*', end='*')
+            print("\n")
     #
     #   The "cc" command indicates a change to a new mode for primary (e.g. USB, LSB, etc.)
     #
@@ -1243,7 +1293,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def ck_UX_Set_CW_Key_Type(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        if self.DeepDebug:
+        if self.CurrentDebug:
             print("ck get called:", "buffer =", buffer)
             print("ck select key for cw")
             print("value=", value, sep='*', end='*')
@@ -1256,7 +1306,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def vs_UX_Set_CW_Speed(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        if self.DeepDebug:
+        if self.CurrentDebug:
             print("vs get called:", "buffer =", buffer)
             print("vs word/minute for keyer")
             print("value=", value, sep='*', end='*')
@@ -1268,7 +1318,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def vy_UX_Set_CW_Post_Delay(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        if self.DeepDebug:
+        if self.CurrentDebug:
             print("vy get called:", "buffer =", buffer)
             print("vy delay returning after cw key")
             print("value=", value, sep='*', end='*')
@@ -1281,7 +1331,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def ve_UX_Set_CW_Pre_Delay(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        if self.DeepDebug:
+        if self.CurrentDebug:
             print("ve get called:", "buffer =", buffer)
             print("ve start delay for first cw character")
             print("value=", value, sep='*', end='*')
@@ -1293,7 +1343,7 @@ class piCECNextion(baseui.piCECNextionUI):
     def cv_UX_VFO_Toggle(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
 
-        if self.DeepDebug:
+        if self.CurrentDebug:
             print("cv get called:", "buffer =", buffer)
             print("cv toggle vfo")
             print("value=", value, sep='*', end='*')

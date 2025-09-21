@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.5" author="PygubuDesigner 0.41.4">
+  <project>
+    <settings>
+      <setting id="name">Settings Window</setting>
+      <setting id="description">Used to save settings</setting>
+      <setting id="module_name">settings</setting>
+      <setting id="template">widget</setting>
+      <setting id="main_widget">settings_Window</setting>
+      <setting id="main_classname">settings</setting>
+      <setting id="main_menu" />
+      <setting id="output_dir">.</setting>
+      <setting id="output_dir2" />
+      <setting id="import_tkvariables">False</setting>
+      <setting id="use_ttk_styledefinition_file">False</setting>
+      <setting id="use_i18n">False</setting>
+      <setting id="all_ids_attributes">False</setting>
+      <setting id="generate_code_onsave">False</setting>
+      <setting id="use_window_centering_code">False</setting>
+      <setting id="ttk_style_definition_file" />
+    </settings>
+    <customwidgets />
+    <resources />
+  </project>
+  <object class="tk.Toplevel" id="settings_Window" named="True">
+    <property name="height">200</property>
+    <property name="title" translatable="yes">Settings</property>
+    <property name="width">200</property>
+    <child>
+      <object class="ttk.Checkbutton" id="checkbutton1">
+        <property name="text" translatable="yes">checkbutton1</property>
+        <layout manager="pack">
+          <property name="side">top</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="button1">
+        <property name="text" translatable="yes">button1</property>
+        <layout manager="pack">
+          <property name="side">top</property>
+        </layout>
+      </object>
+    </child>
+  </object>
+</interface>

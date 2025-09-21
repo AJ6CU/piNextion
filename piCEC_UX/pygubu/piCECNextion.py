@@ -4,6 +4,7 @@ import tkinter.ttk as ttk
 # from Cython.Compiler.Naming import self_cname
 
 import piCEC_UXui as baseui
+from settingsui import settingsUI
 import mystyles  # Styles definition module
 
 
@@ -221,6 +222,8 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def settings_CB(self):
         print("settings_CB")
+        settingsWindow = settingsUI (self.master)
+        settingsWindow.geometry("300x200")
 
     def vfo_CB(self):
         self.Radio_Toggle_VFO()

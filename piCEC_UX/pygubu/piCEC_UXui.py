@@ -281,21 +281,22 @@ class piCECNextionUI(ttk.Frame):
         self.tuning_Step_Frame = ttk.Frame(
             self.vfoB_Frame, name="tuning_step_frame")
         self.tuning_Step_Frame.configure(style="Normal.TFrame", width=200)
-        self.tuning_Rate_Button = ttk.Button(
-            self.tuning_Step_Frame, name="tuning_rate_button")
-        self.tuning_Rate_VAR = tk.StringVar(value='0')
-        self.tuning_Rate_Button.configure(
+        self.tuning_Preset_Button = ttk.Button(
+            self.tuning_Step_Frame, name="tuning_preset_button")
+        self.tuning_Preset_Label_VAR = tk.StringVar(value='0')
+        self.tuning_Preset_Button.configure(
             style="Button2b.TButton",
             text='0',
-            textvariable=self.tuning_Rate_VAR,
+            textvariable=self.tuning_Preset_Label_VAR,
             width=10)
-        self.tuning_Rate_Button.pack(padx="12 0", side="left")
-        self.tuning_Rate_Button.configure(command=self.tuning_Rate_CB)
-        self.tuning_Step_Units_Label = ttk.Label(
-            self.tuning_Step_Frame, name="tuning_step_units_label")
-        self.tuning_Step_Units_Label.configure(
+        self.tuning_Preset_Button.pack(padx="12 0", side="left")
+        self.tuning_Preset_Button.configure(
+            command=self.tuning_Preset_Select_CB)
+        self.tuning_Preset_Units_Label = ttk.Label(
+            self.tuning_Step_Frame, name="tuning_preset_units_label")
+        self.tuning_Preset_Units_Label.configure(
             style="Heading1.TLabel", text='Hz')
-        self.tuning_Step_Units_Label.pack(padx=15, side="left")
+        self.tuning_Preset_Units_Label.pack(padx=15, side="left")
         self.tuning_Step_Frame.pack(padx="75 0", pady="5 0", side="right")
         self.vfoB_Frame.grid(column=0, row=1, sticky="w")
         self.control_Meter_Tuning_Frame = ttk.Frame(
@@ -334,73 +335,78 @@ class piCECNextionUI(ttk.Frame):
         self.recall_Button.configure(command=self.recall_CB)
         self.signal_Control_Frame.grid(column=0, pady=10, row=0, sticky="n")
         self.secondary_menu_Frame.grid(column=0, row=0)
-        self.tuning_Step_Selection_Frame = ttk.Frame(
+        self.tuning_Preset_Selection_Frame = ttk.Frame(
             self.control_Meter_Tuning_Frame,
-            name="tuning_step_selection_frame")
-        self.tuning_Step_Selection_Frame.configure(
+            name="tuning_preset_selection_frame")
+        self.tuning_Preset_Selection_Frame.configure(
             height=200, style="Normal.TFrame", width=50)
-        self.tuning_Rate_5_Radiobutton = ttk.Radiobutton(
-            self.tuning_Step_Selection_Frame, name="tuning_rate_5_radiobutton")
-        self.tuning_Rate_5_Value_VAR = tk.StringVar(value='50000')
-        self.tuning_Rate_Selection_VAR = tk.StringVar(value='5')
-        self.tuning_Rate_5_Radiobutton.configure(
+        self.tuning_Preset_5_Radiobutton = ttk.Radiobutton(
+            self.tuning_Preset_Selection_Frame, name="tuning_preset_5_radiobutton")
+        self.tuning_Preset_5_VAR = tk.StringVar(value='50000')
+        self.tuning_Preset_Selection_VAR = tk.StringVar(value='5')
+        self.tuning_Preset_5_Radiobutton.configure(
             style="RadioButton3.TRadiobutton",
             text='50000',
-            textvariable=self.tuning_Rate_5_Value_VAR,
+            textvariable=self.tuning_Preset_5_VAR,
             value=5,
-            variable=self.tuning_Rate_Selection_VAR,
+            variable=self.tuning_Preset_Selection_VAR,
             width=11)
-        self.tuning_Rate_5_Radiobutton.pack(side="top")
-        self.tuning_Rate_5_Radiobutton.configure(command=self.tuning_Rate_5_CB)
-        self.tuning_Rate_4_Radiobutton = ttk.Radiobutton(
-            self.tuning_Step_Selection_Frame, name="tuning_rate_4_radiobutton")
-        self.tuning_Rate_4_Value_VAR = tk.StringVar(value='10000')
-        self.tuning_Rate_4_Radiobutton.configure(
+        self.tuning_Preset_5_Radiobutton.pack(side="top")
+        self.tuning_Preset_5_Radiobutton.configure(
+            command=self.tuning_Preset_5_CB)
+        self.tuning_Preset_4_Radiobutton = ttk.Radiobutton(
+            self.tuning_Preset_Selection_Frame, name="tuning_preset_4_radiobutton")
+        self.tuning_Preset_4_VAR = tk.StringVar(value='10000')
+        self.tuning_Preset_4_Radiobutton.configure(
             style="RadioButton3.TRadiobutton",
             text='10000',
-            textvariable=self.tuning_Rate_4_Value_VAR,
+            textvariable=self.tuning_Preset_4_VAR,
             value=4,
-            variable=self.tuning_Rate_Selection_VAR,
+            variable=self.tuning_Preset_Selection_VAR,
             width=11)
-        self.tuning_Rate_4_Radiobutton.pack(side="top")
-        self.tuning_Rate_4_Radiobutton.configure(command=self.tuning_Rate_4_CB)
-        self.tuning_Rate_3_Radiobutton = ttk.Radiobutton(
-            self.tuning_Step_Selection_Frame, name="tuning_rate_3_radiobutton")
-        self.tuning_Rate_3_Value_VAR = tk.StringVar(value='5000')
-        self.tuning_Rate_3_Radiobutton.configure(
+        self.tuning_Preset_4_Radiobutton.pack(side="top")
+        self.tuning_Preset_4_Radiobutton.configure(
+            command=self.tuning_Preset_4_CB)
+        self.tuning_Preset_3_Radiobutton = ttk.Radiobutton(
+            self.tuning_Preset_Selection_Frame, name="tuning_preset_3_radiobutton")
+        self.tuning_Preset_3_VAR = tk.StringVar(value='5000')
+        self.tuning_Preset_3_Radiobutton.configure(
             style="RadioButton3.TRadiobutton",
             text='5000',
-            textvariable=self.tuning_Rate_3_Value_VAR,
+            textvariable=self.tuning_Preset_3_VAR,
             value=3,
-            variable=self.tuning_Rate_Selection_VAR,
+            variable=self.tuning_Preset_Selection_VAR,
             width=11)
-        self.tuning_Rate_3_Radiobutton.pack(side="top")
-        self.tuning_Rate_3_Radiobutton.configure(command=self.tuning_Rate_3_CB)
-        self.tuning_Rate_2_Radiobutton = ttk.Radiobutton(
-            self.tuning_Step_Selection_Frame, name="tuning_rate_2_radiobutton")
-        self.tuning_Rate_2_Value_VAR = tk.StringVar(value='1000')
-        self.tuning_Rate_2_Radiobutton.configure(
+        self.tuning_Preset_3_Radiobutton.pack(side="top")
+        self.tuning_Preset_3_Radiobutton.configure(
+            command=self.tuning_Preset_3_CB)
+        self.tuning_Preset_2_Radiobutton = ttk.Radiobutton(
+            self.tuning_Preset_Selection_Frame, name="tuning_preset_2_radiobutton")
+        self.tuning_Preset_2_VAR = tk.StringVar(value='1000')
+        self.tuning_Preset_2_Radiobutton.configure(
             style="RadioButton3.TRadiobutton",
             text='1000',
-            textvariable=self.tuning_Rate_2_Value_VAR,
+            textvariable=self.tuning_Preset_2_VAR,
             value=2,
-            variable=self.tuning_Rate_Selection_VAR,
+            variable=self.tuning_Preset_Selection_VAR,
             width=11)
-        self.tuning_Rate_2_Radiobutton.pack(side="top")
-        self.tuning_Rate_2_Radiobutton.configure(command=self.tuning_Rate_2_CB)
-        self.tuning_Rate_1_Radiobutton = ttk.Radiobutton(
-            self.tuning_Step_Selection_Frame, name="tuning_rate_1_radiobutton")
-        self.tuning_Rate_1_Value_VAR = tk.StringVar(value='100')
-        self.tuning_Rate_1_Radiobutton.configure(
+        self.tuning_Preset_2_Radiobutton.pack(side="top")
+        self.tuning_Preset_2_Radiobutton.configure(
+            command=self.tuning_Preset_2_CB)
+        self.tuning_Preset_1_Radiobutton = ttk.Radiobutton(
+            self.tuning_Preset_Selection_Frame, name="tuning_preset_1_radiobutton")
+        self.tuning_Preset_1_VAR = tk.StringVar(value='100')
+        self.tuning_Preset_1_Radiobutton.configure(
             style="RadioButton3.TRadiobutton",
             text='100',
-            textvariable=self.tuning_Rate_1_Value_VAR,
+            textvariable=self.tuning_Preset_1_VAR,
             value=1,
-            variable=self.tuning_Rate_Selection_VAR,
+            variable=self.tuning_Preset_Selection_VAR,
             width=11)
-        self.tuning_Rate_1_Radiobutton.pack(side="top")
-        self.tuning_Rate_1_Radiobutton.configure(command=self.tuning_Rate_1_CB)
-        self.tuning_Step_Selection_Frame.grid(
+        self.tuning_Preset_1_Radiobutton.pack(side="top")
+        self.tuning_Preset_1_Radiobutton.configure(
+            command=self.tuning_Preset_1_CB)
+        self.tuning_Preset_Selection_Frame.grid(
             column=1, padx="24 0", pady=5, row=0, rowspan=3, sticky="nw")
         self.sMeter_Frame = ttk.Frame(
             self.control_Meter_Tuning_Frame,
@@ -442,8 +448,10 @@ class piCECNextionUI(ttk.Frame):
             button_radius=25,
             value=0,
             progress=False,
+            scroll=True,
+            scroll_steps=1,
             name="tuning_jogwheel")
-        self.tuning_Jogwheel.configure(scroll_steps=1, state="normal")
+        self.tuning_Jogwheel.configure(state="normal")
         self.tuning_Jogwheel.pack(side="top")
         self.tuning_Jogwheel.configure(command=self.tuning_Jogwheel_CB)
         self.tuning_Multiplier_Button = ttk.Button(
@@ -484,8 +492,9 @@ class piCECNextionUI(ttk.Frame):
             radius=200,
             button_radius=25,
             value=70,
+            scroll_steps=10,
             name="att_jogwheel")
-        self.ATT_Jogwheel.configure(scroll_steps=10, state="disabled")
+        self.ATT_Jogwheel.configure(state="disabled")
         self.ATT_Jogwheel.pack(anchor="center", padx=30, side="top")
         self.ATT_Jogwheel.configure(command=self.updateATTValue_CB)
         self.ATT_Jogwheel.bind(
@@ -515,8 +524,9 @@ class piCECNextionUI(ttk.Frame):
             radius=200,
             button_radius=25,
             value=0,
+            scroll_steps=150,
             name="ifs_jogwheel")
-        self.IFS_Jogwheel.configure(scroll_steps=150, state="disabled")
+        self.IFS_Jogwheel.configure(state="disabled")
         self.IFS_Jogwheel.pack(anchor="center", padx=30, side="top")
         self.IFS_Jogwheel.configure(command=self.updateIFSValue_CB)
         self.IFS_Jogwheel.bind(
@@ -692,7 +702,7 @@ class piCECNextionUI(ttk.Frame):
     def stop_CB(self):
         pass
 
-    def tuning_Rate_CB(self):
+    def tuning_Preset_Select_CB(self):
         pass
 
     def split_CB(self):
@@ -707,19 +717,19 @@ class piCECNextionUI(ttk.Frame):
     def recall_CB(self):
         pass
 
-    def tuning_Rate_5_CB(self):
+    def tuning_Preset_5_CB(self):
         pass
 
-    def tuning_Rate_4_CB(self):
+    def tuning_Preset_4_CB(self):
         pass
 
-    def tuning_Rate_3_CB(self):
+    def tuning_Preset_3_CB(self):
         pass
 
-    def tuning_Rate_2_CB(self):
+    def tuning_Preset_2_CB(self):
         pass
 
-    def tuning_Rate_1_CB(self):
+    def tuning_Preset_1_CB(self):
         pass
 
     def tuning_Jogwheel_CB(self):

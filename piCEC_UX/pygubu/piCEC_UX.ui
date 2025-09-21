@@ -486,11 +486,11 @@ STOP!
                   <property name="side">right</property>
                 </layout>
                 <child>
-                  <object class="ttk.Button" id="tuning_Rate_Button" named="True">
-                    <property name="command" type="command" cbtype="simple">tuning_Rate_CB</property>
+                  <object class="ttk.Button" id="tuning_Preset_Button" named="True">
+                    <property name="command" type="command" cbtype="simple">tuning_Preset_Select_CB</property>
                     <property name="style">Button2b.TButton</property>
                     <property name="text" translatable="yes">0</property>
-                    <property name="textvariable">string:tuning_Rate_VAR</property>
+                    <property name="textvariable">string:tuning_Preset_Label_VAR</property>
                     <property name="width">10</property>
                     <layout manager="pack">
                       <property name="padx">12 0</property>
@@ -499,7 +499,7 @@ STOP!
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.Label" id="tuning_Step_Units_Label" named="True">
+                  <object class="ttk.Label" id="tuning_Preset_Units_Label" named="True">
                     <property name="style">Heading1.TLabel</property>
                     <property name="text" translatable="yes">Hz</property>
                     <layout manager="pack">
@@ -602,7 +602,7 @@ RECALL
               </object>
             </child>
             <child>
-              <object class="ttk.Frame" id="tuning_Step_Selection_Frame" named="True">
+              <object class="ttk.Frame" id="tuning_Preset_Selection_Frame" named="True">
                 <property name="height">200</property>
                 <property name="style">Normal.TFrame</property>
                 <property name="width">50</property>
@@ -615,13 +615,13 @@ RECALL
                   <property name="sticky">nw</property>
                 </layout>
                 <child>
-                  <object class="ttk.Radiobutton" id="tuning_Rate_5_Radiobutton" named="True">
-                    <property name="command" type="command" cbtype="simple">tuning_Rate_5_CB</property>
+                  <object class="ttk.Radiobutton" id="tuning_Preset_5_Radiobutton" named="True">
+                    <property name="command" type="command" cbtype="simple">tuning_Preset_5_CB</property>
                     <property name="style">RadioButton3.TRadiobutton</property>
                     <property name="text" translatable="yes">50000</property>
-                    <property name="textvariable">string:tuning_Rate_5_Value_VAR</property>
+                    <property name="textvariable">string:tuning_Preset_5_VAR</property>
                     <property name="value">5</property>
-                    <property name="variable">string:tuning_Rate_Selection_VAR</property>
+                    <property name="variable">string:tuning_Preset_Selection_VAR</property>
                     <property name="width">11</property>
                     <layout manager="pack">
                       <property name="side">top</property>
@@ -629,13 +629,13 @@ RECALL
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.Radiobutton" id="tuning_Rate_4_Radiobutton" named="True">
-                    <property name="command" type="command" cbtype="simple">tuning_Rate_4_CB</property>
+                  <object class="ttk.Radiobutton" id="tuning_Preset_4_Radiobutton" named="True">
+                    <property name="command" type="command" cbtype="simple">tuning_Preset_4_CB</property>
                     <property name="style">RadioButton3.TRadiobutton</property>
                     <property name="text" translatable="yes">10000</property>
-                    <property name="textvariable">string:tuning_Rate_4_Value_VAR</property>
+                    <property name="textvariable">string:tuning_Preset_4_VAR</property>
                     <property name="value">4</property>
-                    <property name="variable">string:tuning_Rate_Selection_VAR</property>
+                    <property name="variable">string:tuning_Preset_Selection_VAR</property>
                     <property name="width">11</property>
                     <layout manager="pack">
                       <property name="side">top</property>
@@ -643,13 +643,13 @@ RECALL
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.Radiobutton" id="tuning_Rate_3_Radiobutton" named="True">
-                    <property name="command" type="command" cbtype="simple">tuning_Rate_3_CB</property>
+                  <object class="ttk.Radiobutton" id="tuning_Preset_3_Radiobutton" named="True">
+                    <property name="command" type="command" cbtype="simple">tuning_Preset_3_CB</property>
                     <property name="style">RadioButton3.TRadiobutton</property>
                     <property name="text" translatable="yes">5000</property>
-                    <property name="textvariable">string:tuning_Rate_3_Value_VAR</property>
+                    <property name="textvariable">string:tuning_Preset_3_VAR</property>
                     <property name="value">3</property>
-                    <property name="variable">string:tuning_Rate_Selection_VAR</property>
+                    <property name="variable">string:tuning_Preset_Selection_VAR</property>
                     <property name="width">11</property>
                     <layout manager="pack">
                       <property name="side">top</property>
@@ -657,13 +657,13 @@ RECALL
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.Radiobutton" id="tuning_Rate_2_Radiobutton" named="True">
-                    <property name="command" type="command" cbtype="simple">tuning_Rate_2_CB</property>
+                  <object class="ttk.Radiobutton" id="tuning_Preset_2_Radiobutton" named="True">
+                    <property name="command" type="command" cbtype="simple">tuning_Preset_2_CB</property>
                     <property name="style">RadioButton3.TRadiobutton</property>
                     <property name="text" translatable="yes">1000</property>
-                    <property name="textvariable">string:tuning_Rate_2_Value_VAR</property>
+                    <property name="textvariable">string:tuning_Preset_2_VAR</property>
                     <property name="value">2</property>
-                    <property name="variable">string:tuning_Rate_Selection_VAR</property>
+                    <property name="variable">string:tuning_Preset_Selection_VAR</property>
                     <property name="width">11</property>
                     <layout manager="pack">
                       <property name="side">top</property>
@@ -671,13 +671,13 @@ RECALL
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.Radiobutton" id="tuning_Rate_1_Radiobutton" named="True">
-                    <property name="command" type="command" cbtype="simple">tuning_Rate_1_CB</property>
+                  <object class="ttk.Radiobutton" id="tuning_Preset_1_Radiobutton" named="True">
+                    <property name="command" type="command" cbtype="simple">tuning_Preset_1_CB</property>
                     <property name="style">RadioButton3.TRadiobutton</property>
                     <property name="text" translatable="yes">100</property>
-                    <property name="textvariable">string:tuning_Rate_1_Value_VAR</property>
+                    <property name="textvariable">string:tuning_Preset_1_VAR</property>
                     <property name="value">1</property>
-                    <property name="variable">string:tuning_Rate_Selection_VAR</property>
+                    <property name="variable">string:tuning_Preset_Selection_VAR</property>
                     <property name="width">11</property>
                     <layout manager="pack">
                       <property name="side">top</property>
@@ -775,6 +775,7 @@ RECALL
                 <property name="divisions">10</property>
                 <property name="end">9</property>
                 <property name="progress">False</property>
+                <property name="scroll">True</property>
                 <property name="scroll_steps">1</property>
                 <property name="start">0</property>
                 <property name="state">normal</property>

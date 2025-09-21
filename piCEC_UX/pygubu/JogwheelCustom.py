@@ -57,6 +57,8 @@ class JogwheelCustom(Jogwheel):
                         button_color=self.buttonColor["normal"],
                         text_color=self.textColor["normal"]
                         )
+
+
     def configure(self, **kwargs):
         """
         This function contains some configurable options

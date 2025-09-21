@@ -19,7 +19,7 @@ class piCECNextion(baseui.piCECNextionUI):
         self.CurrentDebug = True
 
         self.rate_selection = {
-            0: self.tuning_Rate_Button,
+            0: self.tuning_Preset_Button,
             1: self.digit1_Highlight_Label,
             2: self.digit2_Highlight_Label,
             3: self.digit3_Highlight_Label,
@@ -59,12 +59,17 @@ class piCECNextion(baseui.piCECNextionUI):
 
         self.last_VFODial_Reading = None
 
-        self.tuning_Step_Selection_Frame.grid_remove()
+        self.tuning_Preset_Selection_Frame.grid_remove()
         self.tuning_Jogwheel.configure(scroll=True)
         self.baselineJogValue = 0
-        self.saved_tuning_Rate_Selection = None
-        self.saved_tuning_Rate_VAR = None
-        self.update_Tuning_Button_Label = True
+        self.saved_tuning_Preset_Selection = None       # This is a tristate variable.
+                                                        # If None, this means we are in
+                                                        # Preset mode.
+                                                        # When NOT None, this savesthe
+                                                        # Preset selection value from the
+                                                        # set of radiobuttons for the presets
+        self.saved_tuning_Preset_VAR = None
+        self.update_Tuning_Preset_Button_Label = True
 
 #   Constants
         #######################################################################################
@@ -75,12 +80,12 @@ class piCECNextion(baseui.piCECNextionUI):
         #######################################################################################
 
         self.MCU_Command_To_CB_Dict = {
-            "v1": self.v1_UX_Set_Tuning_Rate_1,
-            "v2": self.v2_UX_Set_Tuning_Rate_2,
-            "v3": self.v3_UX_Set_Tuning_Rate_3,
-            "v4": self.v4_UX_Set_Tuning_Rate_4,
-            "v5": self.v5_UX_Set_Tuning_Rate_5,
-            "cn": self.cn_UX_Set_Active_Tuning_Rate,
+            "v1": self.v1_UX_Set_Tuning_Preset_1,
+            "v2": self.v2_UX_Set_Tuning_Preset_2,
+            "v3": self.v3_UX_Set_Tuning_Preset_3,
+            "v4": self.v4_UX_Set_Tuning_Preset_4,
+            "v5": self.v5_UX_Set_Tuning_Preset_5,
+            "cn": self.cn_UX_Set_Active_Tuning_Preset,
             "ch": self.chGet,
             "vh": self.vhGet,
             "vo": self.voGet,
@@ -181,7 +186,6 @@ class piCECNextion(baseui.piCECNextionUI):
     def initUX(self):
         self.updateRateMultiplier()
         self.updateLabelTuning_Multiplier()
-        # self.DigitPos_to_Powers_of_Ten[0] = int(self.tuning_Rate_Selection_VAR.get())
         self.toggle_Digit_Highlight(self.rate_selection[self.currentDigitPos], True)
 
     ######################################################################################
@@ -269,29 +273,36 @@ class piCECNextion(baseui.piCECNextionUI):
                print("cw_info cb called allowed because lock button off")
 
 
-    def tuning_Rate_5_CB(self):
-        self.Radio_Set_Tuning_Rate(5)
-        self.tuning_Step_Selection_Frame.grid_remove()
+    def tuning_Preset_5_CB(self):
+        self.Radio_Set_Tuning_Preset(5)
+        self.tuning_Preset_Selection_Frame.grid_remove()
 
-    def tuning_Rate_4_CB(self):
-        self.Radio_Set_Tuning_Rate(4)
-        self.tuning_Step_Selection_Frame.grid_remove()
+    def tuning_Preset_4_CB(self):
+        self.Radio_Set_Tuning_Preset(4)
+        self.tuning_Preset_Selection_Frame.grid_remove()
 
-    def tuning_Rate_3_CB(self):
-        self.Radio_Set_Tuning_Rate(3)
-        self.tuning_Step_Selection_Frame.grid_remove()
+    def tuning_Preset_3_CB(self):
+        self.Radio_Set_Tuning_Preset(3)
+        self.tuning_Preset_Selection_Frame.grid_remove()
 
-    def tuning_Rate_2_CB(self):
-        self.Radio_Set_Tuning_Rate(2)
-        self.tuning_Step_Selection_Frame.grid_remove()
+    def tuning_Preset_2_CB(self):
+        self.Radio_Set_Tuning_Preset(2)
+        self.tuning_Preset_Selection_Frame.grid_remove()
 
-    def tuning_Rate_1_CB(self):
-        self.Radio_Set_Tuning_Rate(1)
-        self.tuning_Step_Selection_Frame.grid_remove()
+    def tuning_Preset_1_CB(self):
+        self.Radio_Set_Tuning_Preset(1)
+        self.tuning_Preset_Selection_Frame.grid_remove()
 
 
-    def tuning_Rate_CB(self):
-        self.tuning_Step_Selection_Frame.grid()
+    def tuning_Preset_Select_CB(self):
+        #
+        #   check if frame containing radiobuttons is displayed
+        #   if not, display it. If currently displayed, remove it
+        #
+        if (self.tuning_Preset_Selection_Frame.winfo_ismapped()):
+            self.tuning_Preset_Selection_Frame.grid_remove()
+        else:
+            self.tuning_Preset_Selection_Frame.grid()
 
     def tuning_Jogwheel_CB(self):
         if self.DeepDebug:
@@ -366,42 +377,53 @@ class piCECNextion(baseui.piCECNextionUI):
             #   now we can just return the character of the selected rate
             #
             return int(reversedVFO[self.currentDigitPos])
-        
+    #
+    #   This routine handles switching between Direct and "Preset" tuning mode
+    #   The complexity here comes from the original CEC software using the current
+    #   preset-1 (i.e. if Preset 3 was 100 and Preset 2 was 50, and we were on preset 3,
+    #   everything below Preset 3 would be zero'ed out. This means to allow direct
+    #   tune mode on the tens digit, we must first make the preset the lowest # (i.e. 1)
+    #   so that the tens digit is not masked out and turned to zero.
+    #   As a result, we need to save the state of the preset when we move to Direct Tune,
+    #   and then restore it as we exit Direct Tune and go into Preset mode.
+    #   Since the MCU can also force changes in preset, we must temporarily turn off
+    #   the updating of the label
+    #
     def toggle_Tuning_Mode(self, mode):
         if (mode == "direct tune"):
-            if (self.saved_tuning_Rate_Selection == None):        #None value indicates we *were* in "direct tune" mode
+            if (self.saved_tuning_Preset_Selection == None):        #None value indicates we *were* in "direct tune" mode
                 #
-                #   save state prior to going into Direct Moee
+                #   save state prior to going into Direct Mode
                 #
-                self.saved_tuning_Rate_Selection = self.tuning_Rate_Selection_VAR.get()
-                self.saved_tuning_Rate_VAR = self.tuning_Rate_VAR.get()
+                self.saved_tuning_Preset_Selection = self.tuning_Preset_Selection_VAR.get()
+                self.saved_tuning_Preset_VAR = self.tuning_Preset_Label_VAR.get()
                 #
                 #   Sets label that displays current present with "Direct Tune" string
                 #
-                self.tuning_Rate_VAR.set("Direct Tune")
+                self.tuning_Preset_Label_VAR.set("Direct Tune")
                 #   turn off any changes in the label due to a change in preset coming from the radio
-                self.update_Tuning_Button_Label = False
+                self.update_Tuning_Preset_Button_Label = False
                 #   Disable the tuning rate button so selected preset cannot be changed while in direct tune
-                self.tuning_Rate_Button.configure(state='disabled')
+                self.tuning_Preset_Button.configure(state='disabled')
                 #
                 #   Select the lowest tuning rate of the presets. The need to do this is the result of the original
                 #   CEC software using the rate preselects to truncate digits below the preset. For example.
                 #   if a preset of 100 was selected, then it would be impossible to set the dial in increments of 20
                 #   or 10 because it would be truncated to lower 100.
                 #
-                self.Radio_Set_Tuning_Rate(1)
+                self.Radio_Set_Tuning_Preset(1)
 
         else:       # Switching into pre-set tuning mode and have to restore the state
-            if (self.saved_tuning_Rate_Selection != None):          # dont restore unless it was previously saved
+            if (self.saved_tuning_Preset_Selection != None):          # dont restore unless it was previously saved
                 #   Allow updating of the Label for the selected preset
-                self.update_Tuning_Button_Label = True
+                self.update_Tuning_Preset_Button_Label = True
                 #   Restore the saved states
-                self.tuning_Rate_VAR.set(self.saved_tuning_Rate_VAR)
-                self.Radio_Set_Tuning_Rate(int(self.saved_tuning_Rate_Selection))
+                self.tuning_Preset_Label_VAR.set(self.saved_tuning_Preset_VAR)
+                self.Radio_Set_Tuning_Preset(int(self.saved_tuning_Preset_Selection))
                 #   Re-enable the button to select a preset
-                self.tuning_Rate_Button.configure(state='enabled')
+                self.tuning_Preset_Button.configure(state='enabled')
                 #   indicate the saved states are now invalid
-                self.saved_tuning_Rate_Selection = None
+                self.saved_tuning_Preset_Selection = None
 
 
     def toggle_Digit_Highlight(self, light, Status):
@@ -468,7 +490,7 @@ class piCECNextion(baseui.piCECNextionUI):
         #   Special case 0, which is the current value of the preset
         #
         if (self.currentVFO_Tuning_Rate == 0):
-            self.currentVFO_Tuning_Rate = int(self.tuning_Rate_VAR.get())
+            self.currentVFO_Tuning_Rate = int(self.tuning_Preset_Label_VAR.get())
             if self.DeepDebug:
                 print("new because zero current_rate_multiplier=", self.currentVFO_Tuning_Rate)
 
@@ -644,7 +666,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #   the primary (displayed) VFO. After receiving the new mode, the
     #   Radio will separately send back the mode to the UX
     #
-    def Radio_Set_Tuning_Rate(self, rate: bytes):
+    def Radio_Set_Tuning_Preset(self, rate: bytes):
         command = [self.toRadioCommandDict["TS_CMD_TUNESTEP"], rate, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
@@ -750,9 +772,9 @@ class piCECNextion(baseui.piCECNextionUI):
     #   The "v1" command is used for smallest tuning rate
     #
 
-    def v1_UX_Set_Tuning_Rate_1(self, buffer):
+    def v1_UX_Set_Tuning_Preset_1(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        self.tuning_Rate_1_Value_VAR.set(value)
+        self.tuning_Preset_1_VAR.set(value)
 
 
         if self.DeepDebug:
@@ -764,9 +786,9 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     #   The "v2" command is used for smallest tuning rate
     #
-    def v2_UX_Set_Tuning_Rate_2(self, buffer):
+    def v2_UX_Set_Tuning_Preset_2(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        self.tuning_Rate_2_Value_VAR.set(value)
+        self.tuning_Preset_2_VAR.set(value)
         #
         # update multiple for individual tuning min to this one
         #
@@ -781,9 +803,9 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     #   The "v3" command 1s used for the third (middle) tuning rate
     #
-    def v3_UX_Set_Tuning_Rate_3(self, buffer):
+    def v3_UX_Set_Tuning_Preset_3(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        self.tuning_Rate_3_Value_VAR.set(value)
+        self.tuning_Preset_3_VAR.set(value)
 
         if self.DeepDebug:
             print("v3 get called:", "buffer =", buffer)
@@ -796,9 +818,9 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     #   The "v4" command 1s used for the next largest tuning rate
     #
-    def v4_UX_Set_Tuning_Rate_4(self, buffer):
+    def v4_UX_Set_Tuning_Preset_4(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        self.tuning_Rate_4_Value_VAR.set(value)
+        self.tuning_Preset_4_VAR.set(value)
 
         if self.DeepDebug:
             print("v4 get called:", "buffer =", buffer)
@@ -810,9 +832,9 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     #   The "v5" command 1s used for the largest tuning rate
     #
-    def v5_UX_Set_Tuning_Rate_5(self, buffer):
+    def v5_UX_Set_Tuning_Preset_5(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        self.tuning_Rate_5_Value_VAR.set(value)
+        self.tuning_Preset_5_VAR.set(value)
 
         if self.DeepDebug:
             print("v5 get called:", "buffer =", buffer)
@@ -823,38 +845,38 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     #   The "cn" command indicates which tuning step is active (1(smallest) - 5(largest)
     #
-    def cn_UX_Set_Active_Tuning_Rate(self, buffer):
+    def cn_UX_Set_Active_Tuning_Preset(self, buffer):
 
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        self.tuning_Rate_Selection_VAR.set(value)
+        self.tuning_Preset_Selection_VAR.set(value)
 
         match value:
             case "5":
-                if (self.update_Tuning_Button_Label):
-                    self.tuning_Rate_VAR.set(self.tuning_Rate_5_Value_VAR.get())
-                self.tuning_Rate_Selection_VAR.set(5)
-                self.currentVFO_Tuning_Rate = int(self.tuning_Rate_5_Value_VAR.get())
+                if (self.update_Tuning_Preset_Button_Label):
+                    self.tuning_Preset_Label_VAR.set(self.tuning_Preset_5_VAR.get())
+                self.tuning_Preset_Selection_VAR.set(5)
+                self.currentVFO_Tuning_Rate = int(self.tuning_Preset_5_VAR.get())
 
             case "4":
-                if (self.update_Tuning_Button_Label):
-                    self.tuning_Rate_VAR.set(self.tuning_Rate_4_Value_VAR.get())
-                self.tuning_Rate_Selection_VAR.set(4)
-                self.currentVFO_Tuning_Rate = int(self.tuning_Rate_4_Value_VAR.get())
+                if (self.update_Tuning_Preset_Button_Label):
+                    self.tuning_Preset_Label_VAR.set(self.tuning_Preset_4_VAR.get())
+                self.tuning_Preset_Selection_VAR.set(4)
+                self.currentVFO_Tuning_Rate = int(self.tuning_Preset_4_VAR.get())
             case "3":
-                if (self.update_Tuning_Button_Label):
-                    self.tuning_Rate_VAR.set(self.tuning_Rate_3_Value_VAR.get())
-                self.tuning_Rate_Selection_VAR.set(3)
-                self.currentVFO_Tuning_Rate = int(self.tuning_Rate_3_Value_VAR.get())
+                if (self.update_Tuning_Preset_Button_Label):
+                    self.tuning_Preset_Label_VAR.set(self.tuning_Preset_3_VAR.get())
+                self.tuning_Preset_Selection_VAR.set(3)
+                self.currentVFO_Tuning_Rate = int(self.tuning_Preset_3_VAR.get())
             case "2":
-                if (self.update_Tuning_Button_Label):
-                    self.tuning_Rate_VAR.set(self.tuning_Rate_2_Value_VAR.get())
-                self.tuning_Rate_Selection_VAR.set(2)
-                self.currentVFO_Tuning_Rate = int(self.tuning_Rate_2_Value_VAR.get())
+                if (self.update_Tuning_Preset_Button_Label):
+                    self.tuning_Preset_Label_VAR.set(self.tuning_Preset_2_VAR.get())
+                self.tuning_Preset_Selection_VAR.set(2)
+                self.currentVFO_Tuning_Rate = int(self.tuning_Preset_2_VAR.get())
             case "1":
-                if (self.update_Tuning_Button_Label):
-                    self.tuning_Rate_VAR.set(self.tuning_Rate_1_Value_VAR.get())
-                self.tuning_Rate_Selection_VAR.set(1)
-                self.currentVFO_Tuning_Rate = int(self.tuning_Rate_1_Value_VAR.get())
+                if (self.update_Tuning_Preset_Button_Label):
+                    self.tuning_Preset_Label_VAR.set(self.tuning_Preset_1_VAR.get())
+                self.tuning_Preset_Selection_VAR.set(1)
+                self.currentVFO_Tuning_Rate = int(self.tuning_Preset_1_VAR.get())
 
         self.updateRateMultiplier()
         self.updateJogTracking()
@@ -865,7 +887,7 @@ class piCECNextion(baseui.piCECNextionUI):
             print("cn get called:", "buffer =", buffer)
             print("cn which tuning step (1-5)")
             print("value=", value, sep='*', end='*')
-            print("Value setting as", self.tuning_Rate_VAR.get())
+            print("Value setting as", self.tuning_Preset_Label_VAR.get())
             print("\n")
 
 
@@ -1020,7 +1042,7 @@ class piCECNextion(baseui.piCECNextionUI):
         self.rit_Button.configure(state="disabled")
         self.store_Button.configure(state="disabled")
         self.recall_Button.configure(state="disabled")
-        self.tuning_Rate_Button.configure(state="disabled")
+        self.tuning_Preset_Button.configure(state="disabled")
         self.ATT_Jogwheel.setStateDisabled()
         self.IFS_Jogwheel.setStateDisabled()
         self.tuning_Jogwheel.setStateDisabled()
@@ -1041,7 +1063,7 @@ class piCECNextion(baseui.piCECNextionUI):
         self.rit_Button.configure(state="normal")
         self.store_Button.configure(state="normal")
         self.recall_Button.configure(state="normal")
-        self.tuning_Rate_Button.configure(state="normal")
+        self.tuning_Preset_Button.configure(state="normal")
         if (self.ATT_Button_On == True):
             self.ATT_Jogwheel.setStateNormal()
         if (self.IFS_Button_On == True):

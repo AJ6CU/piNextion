@@ -5,6 +5,7 @@ import tkinter.ttk as ttk
 
 import piCEC_UXui as baseui
 from settingsui import settingsUI
+from cwSettingsui import cwSettingsUI
 import mystyles  # Styles definition module
 
 
@@ -15,7 +16,9 @@ class piCECNextion(baseui.piCECNextionUI):
             translator=None,
             on_first_object_cb=mystyles.setup_ttk_styles,
         )
-        self.theRadio = None
+        self.theRadio = None            # Object pointer for the Radio
+        self.cwSettingsWindow = None    # Object pointer for the CW Settinge Window
+        self.settingsWindow = None      # Object pointer for the General Settings Window
         self.DeepDebug = False
         self.CurrentDebug = True
 
@@ -222,8 +225,13 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def settings_CB(self):
         print("settings_CB")
-        settingsWindow = settingsUI (self.master)
-        settingsWindow.geometry("300x200")
+        self.settingsWindow = settingsUI (self.master)
+        self.settingsWindow.geometry("300x200")
+
+    def displayCWSettingsWindow(self):
+        print("Displaty CW settings Window")
+        self.cwSettingsWindow = cwSettingsUI (self.master)
+        # self.cwSettingsWindow.geometry("300x200")
 
     def vfo_CB(self):
         self.Radio_Toggle_VFO()
@@ -266,7 +274,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
          self.Radio_Change_Band(self.Text_To_BandChange["DOWN"])
 
-    def cw_info_CB(self, event=None):
+    def cwSettings_CB(self, event=None):
        if (self.lock_Button_On):
            if self.CurrentDebug:
                print("lock button on, ignore callback")
@@ -274,6 +282,7 @@ class piCECNextion(baseui.piCECNextionUI):
        else:
            if self.CurrentDebug:
                print("cw_info cb called allowed because lock button off")
+           self.displayCWSettingsWindow()
 
 
     def tuning_Preset_5_CB(self):

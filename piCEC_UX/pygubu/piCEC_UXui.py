@@ -655,7 +655,7 @@ class piCECNextionUI(ttk.Frame):
             padx="100 0",
             pady=20,
             side="left")
-        self.cw_Info_Frame.bind("<1>", self.cw_info_CB, add="")
+        self.cw_Info_Frame.bind("<1>", self.cwSettings_CB, add="")
         self.ATT_IFS_Adjust_Frame.pack(
             anchor="w",
             expand=True,
@@ -667,7 +667,7 @@ class piCECNextionUI(ttk.Frame):
             height=665,
             style="Normal.TFrame",
             width=850)
-        self.pack(anchor="nw", expand=True, fill="x", side="top")
+        # Layout for 'main_window' skipped in custom widget template.
 
     def settings_CB(self):
         pass
@@ -756,7 +756,7 @@ class piCECNextionUI(ttk.Frame):
     def IFS_Jogwheel_ButtonReleased_CB(self, event=None):
         pass
 
-    def cw_info_CB(self, event=None):
+    def cwSettings_CB(self, event=None):
         pass
 
 

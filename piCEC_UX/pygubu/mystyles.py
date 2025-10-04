@@ -85,8 +85,8 @@ def setup_ttk_styles(master=None):
     style.configure('Normal.TEntry',font=fontList['Normal'])
     style.configure('NoBorder.TEntry',font=fontList['Normal'], highlightthickness=0, borderwidth=0, bd=0)
     style.configure('Title.TFrame', background='blue', foreground='white')
-    style.configure('Heading2.TLabelframe.Label',font=fontList['Heading3'])
-    style.configure('Heading2.TLabelframe')
+    style.configure('Heading2.TLabelframe.Label', background='gray', bd=4, font=fontList['Heading2'])
+    style.configure('Heading2.TLabelframe', background='gray', bd=4)
     style.configure('Normal.TText', font=fontList['Heading3'])
 
     style.configure('Highlight.TFrame', background='blue', bd=4 )

@@ -919,7 +919,7 @@ x 100mhz</property>
             <property name="height">200</property>
             <property name="style">NormalOutline.TFrame</property>
             <property name="width">200</property>
-            <bind sequence="&lt;1&gt;" handler="cw_info_CB" add="" />
+            <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
             <layout manager="pack">
               <property name="anchor">nw</property>
               <property name="expand">false</property>
@@ -953,7 +953,7 @@ x 100mhz</property>
             <child>
               <object class="ttk.Label" id="tone_value_Label" named="True">
                 <property name="style">Heading3b.TLabel</property>
-                <property name="text" translatable="yes">700</property>
+                <property name="text" translatable="yes">799</property>
                 <property name="textvariable">string:tone_value_VAR</property>
                 <layout manager="grid">
                   <property name="column">1</property>
@@ -1011,7 +1011,7 @@ x 100mhz</property>
             <child>
               <object class="ttk.Label" id="key_speed_value_Label" named="True">
                 <property name="style">Heading3b.TLabel</property>
-                <property name="text" translatable="yes">15</property>
+                <property name="text" translatable="yes">1</property>
                 <property name="textvariable">string:key_speed_value_VAR</property>
                 <layout manager="grid">
                   <property name="column">1</property>
@@ -1038,7 +1038,7 @@ x 100mhz</property>
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="padx">0 3</property>
-                  <property name="row">4</property>
+                  <property name="row">5</property>
                   <property name="sticky">w</property>
                 </layout>
               </object>
@@ -1046,11 +1046,11 @@ x 100mhz</property>
             <child>
               <object class="ttk.Label" id="delay_returning_to_rx_value_Label" named="True">
                 <property name="style">Heading3b.TLabel</property>
-                <property name="text" translatable="yes">500</property>
+                <property name="text" translatable="yes">199</property>
                 <property name="textvariable">string:delay_returning_to_rx_value_VAR</property>
                 <layout manager="grid">
                   <property name="column">1</property>
-                  <property name="row">4</property>
+                  <property name="row">5</property>
                   <property name="sticky">w</property>
                 </layout>
               </object>
@@ -1061,7 +1061,7 @@ x 100mhz</property>
                 <property name="text" translatable="yes">ms</property>
                 <layout manager="grid">
                   <property name="column">2</property>
-                  <property name="row">4</property>
+                  <property name="row">5</property>
                   <property name="sticky">w</property>
                 </layout>
               </object>
@@ -1072,7 +1072,7 @@ x 100mhz</property>
                 <property name="text" translatable="yes">Delay-&gt;TX</property>
                 <layout manager="grid">
                   <property name="column">0</property>
-                  <property name="row">5</property>
+                  <property name="row">4</property>
                   <property name="sticky">w</property>
                 </layout>
               </object>
@@ -1080,11 +1080,11 @@ x 100mhz</property>
             <child>
               <object class="ttk.Label" id="delay_starting_tx_value_Label" named="True">
                 <property name="style">Heading3b.TLabel</property>
-                <property name="text" translatable="yes">250</property>
+                <property name="text" translatable="yes">299</property>
                 <property name="textvariable">string:delay_starting_tx_value_VAR</property>
                 <layout manager="grid">
                   <property name="column">1</property>
-                  <property name="row">5</property>
+                  <property name="row">4</property>
                   <property name="sticky">w</property>
                 </layout>
               </object>
@@ -1095,7 +1095,7 @@ x 100mhz</property>
                 <property name="text" translatable="yes">ms</property>
                 <layout manager="grid">
                   <property name="column">2</property>
-                  <property name="row">5</property>
+                  <property name="row">4</property>
                   <property name="sticky">w</property>
                 </layout>
               </object>

@@ -570,10 +570,10 @@ class piCECNextionUI(ttk.Frame):
         self.tone_Label.grid(column=0, row=1, sticky="w")
         self.tone_value_Label = ttk.Label(
             self.cw_Info_Frame, name="tone_value_label")
-        self.tone_value_VAR = tk.StringVar(value='700')
+        self.tone_value_VAR = tk.StringVar(value='799')
         self.tone_value_Label.configure(
             style="Heading3b.TLabel",
-            text='700',
+            text='799',
             textvariable=self.tone_value_VAR)
         self.tone_value_Label.grid(column=1, padx="0 2", row=1, sticky="w")
         self.tone_units_Label = ttk.Label(
@@ -598,10 +598,10 @@ class piCECNextionUI(ttk.Frame):
         self.key_speed_label.grid(column=0, row=3, sticky="w")
         self.key_speed_value_Label = ttk.Label(
             self.cw_Info_Frame, name="key_speed_value_label")
-        self.key_speed_value_VAR = tk.StringVar(value='15')
+        self.key_speed_value_VAR = tk.StringVar(value='1')
         self.key_speed_value_Label.configure(
             style="Heading3b.TLabel",
-            text='15',
+            text='1',
             textvariable=self.key_speed_value_VAR)
         self.key_speed_value_Label.grid(column=1, row=3, sticky="w")
         self.key_speed_units_Label = ttk.Label(
@@ -614,40 +614,40 @@ class piCECNextionUI(ttk.Frame):
         self.delay_returning_to_rx_Label.configure(
             style="Heading3b.TLabel", text='Delay->RX')
         self.delay_returning_to_rx_Label.grid(
-            column=0, padx="0 3", row=4, sticky="w")
+            column=0, padx="0 3", row=5, sticky="w")
         self.delay_returning_to_rx_value_Label = ttk.Label(
             self.cw_Info_Frame, name="delay_returning_to_rx_value_label")
-        self.delay_returning_to_rx_value_VAR = tk.StringVar(value='500')
+        self.delay_returning_to_rx_value_VAR = tk.StringVar(value='199')
         self.delay_returning_to_rx_value_Label.configure(
             style="Heading3b.TLabel",
-            text='500',
+            text='199',
             textvariable=self.delay_returning_to_rx_value_VAR)
         self.delay_returning_to_rx_value_Label.grid(
-            column=1, row=4, sticky="w")
+            column=1, row=5, sticky="w")
         self.delay_returning_to_rx_units_Label = ttk.Label(
             self.cw_Info_Frame, name="delay_returning_to_rx_units_label")
         self.delay_returning_to_rx_units_Label.configure(
             style="Heading3b.TLabel", text='ms')
         self.delay_returning_to_rx_units_Label.grid(
-            column=2, row=4, sticky="w")
+            column=2, row=5, sticky="w")
         self.delay_starting_tx_Label = ttk.Label(
             self.cw_Info_Frame, name="delay_starting_tx_label")
         self.delay_starting_tx_Label.configure(
             style="Heading3b.TLabel", text='Delay->TX')
-        self.delay_starting_tx_Label.grid(column=0, row=5, sticky="w")
+        self.delay_starting_tx_Label.grid(column=0, row=4, sticky="w")
         self.delay_starting_tx_value_Label = ttk.Label(
             self.cw_Info_Frame, name="delay_starting_tx_value_label")
-        self.delay_starting_tx_value_VAR = tk.StringVar(value='250')
+        self.delay_starting_tx_value_VAR = tk.StringVar(value='299')
         self.delay_starting_tx_value_Label.configure(
             style="Heading3b.TLabel",
-            text='250',
+            text='299',
             textvariable=self.delay_starting_tx_value_VAR)
-        self.delay_starting_tx_value_Label.grid(column=1, row=5, sticky="w")
+        self.delay_starting_tx_value_Label.grid(column=1, row=4, sticky="w")
         self.delay_starting_tx_units_Label = ttk.Label(
             self.cw_Info_Frame, name="delay_starting_tx_units_label")
         self.delay_starting_tx_units_Label.configure(
             style="Heading3b.TLabel", text='ms')
-        self.delay_starting_tx_units_Label.grid(column=2, row=5, sticky="w")
+        self.delay_starting_tx_units_Label.grid(column=2, row=4, sticky="w")
         self.cw_Info_Frame.pack(
             anchor="nw",
             expand=False,

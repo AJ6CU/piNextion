@@ -9,8 +9,21 @@ import cwSettingsui as baseui
 #
 
 class cwSettings(baseui.cwSettingsUI):
-    def __init__(self, master=None, **kw):
+    def __init__(self, master=None, mainWindow=None, **kw):
         super().__init__(master, **kw)
+        self.mainWindow = mainWindow
+
+    def setDirtyCB(self, dirty_CB):
+        self.dirty_CB = dirty_CB
+
+    def apply_CB(self):
+        print("outside apply CB")
+        self.mainWindow.dirty_DisplayCWSettings()
+        self.destroy()
+
+    def cancel_CB(self):
+        print("outside cancel CB")
+        self.destroy()
 
 
 if __name__ == "__main__":

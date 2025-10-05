@@ -44,6 +44,188 @@
             <layout manager="pack">
               <property name="side">top</property>
             </layout>
+            <child>
+              <object class="ttk.Frame" id="General_CW_Settings_Frame" named="True">
+                <property name="height">200</property>
+                <property name="style">Normal.TFrame</property>
+                <property name="width">200</property>
+                <layout manager="pack">
+                  <property name="padx">50 0</property>
+                  <property name="side">top</property>
+                </layout>
+                <child>
+                  <object class="ttk.Label" id="CW_KEY_TYPE_LABEL" named="True">
+                    <property name="style">Heading4.TLabel</property>
+                    <property name="text" translatable="yes">Key Type</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="pady">0 10</property>
+                      <property name="row">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="tk.OptionMenu" id="CW_KEY_TYPE_WIDGET" named="True">
+                    <property name="value">STRAIGHT</property>
+                    <property name="values">STRAIGHT,IAMBICA,IAMBICB</property>
+                    <property name="variable">string:key_type_value_VAR</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="row">0</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="CW_SIDETONE_LABEL" named="True">
+                    <property name="style">Heading4.TLabel</property>
+                    <property name="text" translatable="yes">Sidetone (HZ)</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="row">2</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Entry" id="CW_SIDETONE_WIDGET" named="True">
+                    <property name="justify">right</property>
+                    <property name="style">Normal.TEntry</property>
+                    <property name="text" translatable="yes">599</property>
+                    <property name="textvariable">string:tone_value_VAR</property>
+                    <property name="validate">focus</property>
+                    <property name="validatecommand" type="command" cbtype="entry_validate" args="%P %V">validate_CW_SIDETONE</property>
+                    <property name="width">10</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="row">2</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="CW_SPEED_WPM_LABEL" named="True">
+                    <property name="style">Heading4.TLabel</property>
+                    <property name="text" translatable="yes">Speed (WPM)</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="row">6</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Entry" id="CW_SPEED_WPM_WIDGET" named="True">
+                    <property name="justify">right</property>
+                    <property name="style">Normal.TEntry</property>
+                    <property name="textvariable">string:key_speed_value_VAR</property>
+                    <property name="validate">focus</property>
+                    <property name="validatecommand" type="command" cbtype="entry_validate" args="%P %V">validate_CW_SPEED_WPM</property>
+                    <property name="width">10</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="row">6</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="CW_START_MS_LABEL" named="True">
+                    <property name="style">Heading4.TLabel</property>
+                    <property name="text" translatable="yes">Delay Starting TX (ms)</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="row">10</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Entry" id="CW_START_MS_WIDGET" named="True">
+                    <property name="justify">right</property>
+                    <property name="style">Normal.TEntry</property>
+                    <property name="textvariable">string:delay_starting_tx_value_VAR</property>
+                    <property name="validate">focus</property>
+                    <property name="validatecommand" type="command" cbtype="entry_validate" args="%P %V">validate_CW_START_MS</property>
+                    <property name="width">10</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="row">10</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="CW_DELAY_MS_LABEL" named="True">
+                    <property name="style">Heading4.TLabel</property>
+                    <property name="text" translatable="yes">Delay Returning to RX (ms)</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="row">14</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Entry" id="CW_DELAY_MS_WIDGET" named="True">
+                    <property name="justify">right</property>
+                    <property name="style">Normal.TEntry</property>
+                    <property name="textvariable">string:delay_returning_to_rx_value_VAR</property>
+                    <property name="validate">focus</property>
+                    <property name="validatecommand" type="command" cbtype="entry_validate" args="%P %V">validate_CW_DELAY_MS</property>
+                    <property name="width">10</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="row">14</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="label209" named="True">
+                    <property name="style">Heading4.TLabel</property>
+                    <property name="text" translatable="yes">VFO Freq displays</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="pady">0 10</property>
+                      <property name="row">15</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="tk.OptionMenu" id="CW_DISPLAY_FREQ_WIDGET" named="True">
+                    <property name="value">TX</property>
+                    <property name="values">TX,RX</property>
+                    <property name="variable">string:CW_DISPLAY_FREQ</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="pady">10</property>
+                      <property name="row">15</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="tk.Text" id="text4" named="True">
+                    <property name="background">#eeeeee</property>
+                    <property name="borderwidth">2</property>
+                    <property name="font">TkMenuFont</property>
+                    <property name="foreground">black</property>
+                    <property name="height">4</property>
+                    <property name="padx">5</property>
+                    <property name="pady">5</property>
+                    <property name="relief">groove</property>
+                    <property name="state">disabled</property>
+                    <property name="takefocus">false</property>
+                    <property name="text" translatable="yes">When in CW mode, your VFO can display either your TX or RX frequency. TX seems to be generally the preferred choice. For more details, see:
+http://www.hamskey.com/2018/07/cw-frequency-in-ubitx.html
+</property>
+                    <property name="width">57</property>
+                    <property name="wrap">word</property>
+                    <layout manager="grid">
+                      <property name="column">2</property>
+                      <property name="padx">10 0</property>
+                      <property name="row">15</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
         <child>

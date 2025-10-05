@@ -4,8 +4,8 @@ import tkinter.ttk as ttk
 # from Cython.Compiler.Naming import self_cname
 
 import piCEC_UXui as baseui
-from settingsui import settingsUI
-from cwSettingsui import cwSettingsUI
+from settings import settings
+from cwSettings import cwSettings
 import mystyles  # Styles definition module
 
 
@@ -178,6 +178,12 @@ class piCECNextion(baseui.piCECNextionUI):
             "1": "VFO-B"
         }
 
+        self.CW_KeyType = {         # 0: straight, 1 : iambica, 2: iambicb
+            "0":"STRAIGHT",
+            "1":"IAMBICA",
+            "2":"IAMBICB"
+        }
+
         self.ATT_Status_Off = 0         #indicates that ATT has been turned off
 
     #####################################################################################
@@ -228,10 +234,40 @@ class piCECNextion(baseui.piCECNextionUI):
         self.settingsWindow = settingsUI (self.master)
         self.settingsWindow.geometry("300x200")
 
+    def getCurrentCWSettings(self):
+        self.cwSettingsWindow.tone_value_VAR.set(self.tone_value_VAR.get())
+        self.cwSettingsWindow.key_type_value_VAR.set(self.key_type_value_VAR.get())
+        self.cwSettingsWindow.key_speed_value_VAR.set(self.key_speed_value_VAR.get())
+        self.cwSettingsWindow.delay_starting_tx_value_VAR.set(self.delay_starting_tx_value_VAR.get())
+        self.cwSettingsWindow.delay_returning_to_rx_value_VAR.set(self.delay_returning_to_rx_value_VAR.get())
+
     def displayCWSettingsWindow(self):
         print("Displaty CW settings Window")
-        self.cwSettingsWindow = cwSettingsUI (self.master)
-        # self.cwSettingsWindow.geometry("300x200")
+        self.cwSettingsWindow = cwSettings (self.master, self)
+        print("calling current settings")
+        self.getCurrentCWSettings()
+        self.cwSettingsWindow.grab_set()  # This line makes the cw settings window modal
+        self.cwSettingsWindow.transient(self.master)  # Makes the cw settings appear above the mainwindow
+        self.master.wait_window(self.cwSettingsWindow)  # This pauses the main window until the cwsetting is closed
+
+
+    def dirty_DisplayCWSettings (self):
+        print("dirty display settings window")
+        if( self.cwSettingsWindow.tone_value_VAR.get() != self.tone_value_VAR.get()):
+            self.tone_value_VAR.set(self.cwSettingsWindow.tone_value_VAR.get())
+            print("dirty tone")
+        if (self.cwSettingsWindow.key_type_value_VAR.get() != self.key_type_value_VAR.get()):
+            self.key_type_value_VAR.set(self.cwSettingsWindow.key_type_value_VAR.get())
+            print("dirty key")
+        if (self.cwSettingsWindow.key_speed_value_VAR.get() != self.key_speed_value_VAR.get()):
+            self.key_speed_value_VAR.set(self.cwSettingsWindow.key_speed_value_VAR.get())
+            print("dirty speed")
+        if (self.cwSettingsWindow.delay_starting_tx_value_VAR.get() != self.delay_starting_tx_value_VAR.get()):
+            self.delay_starting_tx_value_VAR.set(self.cwSettingsWindow.delay_starting_tx_value_VAR.get())
+            print("dirty RX->TX delay")
+        if (self.cwSettingsWindow.delay_returning_to_rx_value_VAR.get() != self.delay_returning_to_rx_value_VAR.get()):
+            self.delay_returning_to_rx_value_VAR.set(self.cwSettingsWindow.delay_returning_to_rx_value_VAR.get())
+            print("dirty TX->RX delay")
 
     def vfo_CB(self):
         self.Radio_Toggle_VFO()
@@ -1315,6 +1351,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def vt_UX_SET_CW_Tone(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.tone_value_VAR.set(value)
         if self.CurrentDebug:
             print("vt get called:", "buffer =", buffer)
             print("vt tone for CW")
@@ -1327,10 +1364,13 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def ck_UX_Set_CW_Key_Type(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.key_type_value_VAR.set(self.CW_KeyType[value])
         if self.CurrentDebug:
             print("ck get called:", "buffer =", buffer)
             print("ck select key for cw")
             print("value=", value, sep='*', end='*')
+            print("0: straight, 1 : iambica, 2: iambicb")
+            print(self.key_type_value_VAR.get())
             print("\n")
 
 
@@ -1340,6 +1380,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def vs_UX_Set_CW_Speed(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.key_speed_value_VAR.set(value)
         if self.CurrentDebug:
             print("vs get called:", "buffer =", buffer)
             print("vs word/minute for keyer")
@@ -1352,6 +1393,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def vy_UX_Set_CW_Post_Delay(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.delay_returning_to_rx_value_VAR.set(value)
         if self.CurrentDebug:
             print("vy get called:", "buffer =", buffer)
             print("vy delay returning after cw key")
@@ -1365,6 +1407,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def ve_UX_Set_CW_Pre_Delay(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.delay_starting_tx_value_VAR.set(value)
         if self.CurrentDebug:
             print("ve get called:", "buffer =", buffer)
             print("ve start delay for first cw character")

@@ -7,6 +7,7 @@ import piCEC_UXui as baseui
 from settings import settings
 from cwSettings import cwSettings
 import mystyles  # Styles definition module
+from time import sleep
 
 
 class piCECNextion(baseui.piCECNextionUI):
@@ -112,6 +113,7 @@ class piCECNextion(baseui.piCECNextionUI):
             "ve": self.ve_UX_Set_CW_Pre_Delay,
             "cv": self.cv_UX_VFO_Toggle,            #sets active VFO, A=0, B=1
             "s0": self.s0Get,
+            "vn": self.vn_UX_ACK_Memory_Write,
             "cl": self.cl_UX_Lock_Screen,
             "cj": self.cj_UX_Speaker_Toggle,
             "cs": self.cs_UX_SPLIT_Toggle,
@@ -184,6 +186,12 @@ class piCECNextion(baseui.piCECNextionUI):
             "2":"IAMBICB"
         }
 
+        self.CW_KeyValue = {
+            "STRAIGHT": 0x0,
+            "IAMBICA": 0x01,
+            "IAMBICB": 0x02
+        }
+
         self.ATT_Status_Off = 0         #indicates that ATT has been turned off
 
     #####################################################################################
@@ -254,19 +262,22 @@ class piCECNextion(baseui.piCECNextionUI):
     def dirty_DisplayCWSettings (self):
         print("dirty display settings window")
         if( self.cwSettingsWindow.tone_value_VAR.get() != self.tone_value_VAR.get()):
-            self.tone_value_VAR.set(self.cwSettingsWindow.tone_value_VAR.get())
+            self.Radio_Set_CW_Tone(self.cwSettingsWindow.tone_value_VAR.get())
             print("dirty tone")
         if (self.cwSettingsWindow.key_type_value_VAR.get() != self.key_type_value_VAR.get()):
-            self.key_type_value_VAR.set(self.cwSettingsWindow.key_type_value_VAR.get())
+            self.Radio_Set_CW_Key_Type(self.cwSettingsWindow.key_type_value_VAR.get())
             print("dirty key")
         if (self.cwSettingsWindow.key_speed_value_VAR.get() != self.key_speed_value_VAR.get()):
-            self.key_speed_value_VAR.set(self.cwSettingsWindow.key_speed_value_VAR.get())
+            # self.key_speed_value_VAR.set(self.cwSettingsWindow.key_speed_value_VAR.get())
+            self.Radio_Set_CW_Key_Speed(self.cwSettingsWindow.key_speed_value_VAR.get())
             print("dirty speed")
         if (self.cwSettingsWindow.delay_starting_tx_value_VAR.get() != self.delay_starting_tx_value_VAR.get()):
-            self.delay_starting_tx_value_VAR.set(self.cwSettingsWindow.delay_starting_tx_value_VAR.get())
+            # self.delay_starting_tx_value_VAR.set(self.cwSettingsWindow.delay_starting_tx_value_VAR.get())
+            self.Radio_Set_CW_Delay_Starting_TX(self.cwSettingsWindow.delay_starting_tx_value_VAR.get())
             print("dirty RX->TX delay")
         if (self.cwSettingsWindow.delay_returning_to_rx_value_VAR.get() != self.delay_returning_to_rx_value_VAR.get()):
-            self.delay_returning_to_rx_value_VAR.set(self.cwSettingsWindow.delay_returning_to_rx_value_VAR.get())
+            # self.delay_returning_to_rx_value_VAR.set(self.cwSettingsWindow.delay_returning_to_rx_value_VAR.get())
+            self.Radio_Set_CW_Delay_Returning_To_RX(self.cwSettingsWindow.delay_returning_to_rx_value_VAR.get())
             print("dirty TX->RX delay")
 
     def vfo_CB(self):
@@ -811,6 +822,64 @@ class piCECNextion(baseui.piCECNextionUI):
             print("thirdByte=", thirdByte)
         command = [self.toRadioCommandDict["TS_CMD_IFSVALUE"], firstByte, secondByte, thirdByte, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
+
+
+    def Radio_Set_CW_Tone(self, tone):
+        # command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"], 0, 0, 0, 0, 0, 0, 0, 0]
+        # self.theRadio.sendCommandToMCU(bytes(command))
+        pass
+
+    def Radio_Set_CW_Key_Type(self, keyType):
+        #
+        #   first send command to officially change the keytype
+        #
+        command = [self.toRadioCommandDict["TS_CMD_KEYTYPE"], self.CW_KeyValue[keyType], 0, 0, 0]
+        self.theRadio.sendCommandToMCU(bytes(command))
+        #
+        #   Now have to write it to EEPROM as this is not one of the values that are automatically saved to EEPROM
+        #
+        keyTypeCommandLSB = 0x66
+        keyTypeCommandMSB = 0x01
+        keyTypeCommandLength = 0x01
+        keyTypeCommandValue =  self.CW_KeyValue[keyType]
+        checksum = (keyTypeCommandLSB + keyTypeCommandMSB + keyTypeCommandLength) % 256
+        print("checksum=", hex(checksum))
+
+        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"], keyTypeCommandLSB, keyTypeCommandMSB, keyTypeCommandLength, checksum, keyTypeCommandValue]
+        print("command=",command)
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+
+
+
+
+    def Radio_Set_CW_Key_Speed(self, keySpeed):
+        # command = [self.toRadioCommandDict["TS_CMD_WPM", 0, 0, 0]
+        # self.theRadio.sendCommandToMCU(bytes(command))
+        pass
+
+
+    def Radio_Set_CW_Delay_Starting_TX(self, startTXDelay):
+        # value stored to eeprom needs to be divided by 10
+        # keyTypeCommandLSB = 0x66
+        # keyTypeCommandMSB = 0x01
+        # keyTyoeCommandLength = 0x01
+        # keyTypeCommandValue =  self.CW_KeyValue[keyType]
+        # checksum = (keyTypeCommandLSB + keyTypeCommandMSB + keyTypeCommandLength) % 256
+        #
+        # command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"], keyTypeCommandLSB, keyTypeCommandMSB, keyTyoeCommandLength, checksum, keyTypeCommandValue]
+        # self.theRadio.sendCommandToMCU(bytes(command))
+        pass
+
+    def Radio_Set_CW_Delay_Returning_To_RX(self, returnRXDelay):
+        # value stored to eeprom needs to divided by 2
+        # command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"], 0, 0, 0, 0, 0]
+        # self.theRadio.sendCommandToMCU(bytes(command))
+        pass
+
+
+
+
 #   MCU Commands
 #########################################################################################
 ####    Start of command processing sent by Radio(MCU) to Screen
@@ -1055,6 +1124,31 @@ class piCECNextion(baseui.piCECNextionUI):
             print("buffer=", buffer)
         else:
             pass
+
+    def vn_UX_ACK_Memory_Write(self, buffer):
+        # if (pm.vn.val == 358) // key Type Write Complete
+        # {
+        #     nSendProcess.val = 11
+        # } else if (pm.vn.val == 28) // key Type Write Complete
+        # {
+        #     nSendProcess.val = 12
+        # } else if (pm.vn.val == 24) // key Type Write Complete
+        # {
+        #     nSendProcess.val = 13
+        # } else if (pm.vn.val == 258) // key Type Write Complete
+        # {
+        #     nSendProcess.val = 14
+        # } else if (pm.vn.val == 259) // key Type Write Complete
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+        if (int(value) == 358):
+            print("write complete for keychange")
+        else:
+            print("unknown return value for vnget=", value)
+        if self.CurrentDebug:
+            print("buffer=", buffer)
+        else:
+            pass
+
 
 
 

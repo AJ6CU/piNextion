@@ -1,5 +1,6 @@
 import serial
-import time
+from time import sleep
+from timeit import default_timer as timer
 
 #from piCEC_UX.pygubu.piCEC_UX import mainWindow
 
@@ -26,6 +27,8 @@ class piRadio:
         self.tx_to_mcu_postscript = b'\xff\xff\x73'     # all commands to MCU must end with these three numbers
 
         self.mcu_command_buffer =[]                     # buffer used to send bytes to MCU
+        self.time_of_last_sent = timer()                # used to avoid overloading MCU
+        self.minimum_time = 0.05
 
 
     def openRadio(self):
@@ -170,10 +173,18 @@ class piRadio:
 #   Send command to MCU
 #
     def sendCommandToMCU(self, commandList):
-        tx_mode_switch_USB2pre = b'\x59\x58\x68\x03'
-        tx_mode_switch_USB2com = b'\x02\x00\x00\x00'
-        tx_mode_switch_USB2post = b'\xff\xff\x73'
-        tx_mode_switch_USB2 = tx_mode_switch_USB2pre + tx_mode_switch_USB2com + tx_mode_switch_USB2post
+
+        currentTime = timer()
+        timeDiff = currentTime - self.time_of_last_sent
+
+        if (timeDiff < self.minimum_time):
+            sleep(self.minimum_time - timeDiff)
+        self.time_of_last_sent = currentTime
+
+        # tx_mode_switch_USB2pre = b'\x59\x58\x68\x03'
+        # tx_mode_switch_USB2com = b'\x02\x00\x00\x00'
+        # tx_mode_switch_USB2post = b'\xff\xff\x73'
+        # tx_mode_switch_USB2 = tx_mode_switch_USB2pre + tx_mode_switch_USB2com + tx_mode_switch_USB2post
         self.tx_to_mcu_preamble = b'\x59\x58\x68'  # all commands to MCU must start with these three bytes
         self.tx_to_mcu_postscript = b'\xff\xff\x73'  # all commands to MCU must end with these three numbers
         if self.debugCommandDecoding:
@@ -183,7 +194,8 @@ class piRadio:
         if self.debugCommandDecoding:
             print(" function call =", bytes(temp))
         self.radioPort.write(self.tx_to_mcu_preamble + commandList + self.tx_to_mcu_postscript)
-        self.radioPort.flush()
+
+        # self.radioPort.flush()
         # for item in self.tx_to_mcu_preamble :
         #     self.radioPort.write(item)
         #     print(item)

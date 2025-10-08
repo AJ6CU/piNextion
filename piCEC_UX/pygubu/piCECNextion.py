@@ -109,8 +109,8 @@ class piCECNextion(baseui.piCECNextionUI):
             "vt": self.vt_UX_SET_CW_Tone,
             "ck": self.ck_UX_Set_CW_Key_Type,
             "vs": self.vs_UX_Set_CW_Speed,
-            "vy": self.vy_UX_Set_CW_Post_Delay,
-            "ve": self.ve_UX_Set_CW_Pre_Delay,
+            "vy": self.vy_UX_Set_CW_Delay_Returning_to_RX,
+            "ve": self.ve_UX_Set_CW_Delay_Starting_TX,
             "cv": self.cv_UX_VFO_Toggle,            #sets active VFO, A=0, B=1
             "s0": self.s0Get,
             "vn": self.vn_UX_ACK_Memory_Write,
@@ -190,6 +190,16 @@ class piCECNextion(baseui.piCECNextionUI):
             "STRAIGHT": 0x0,
             "IAMBICA": 0x01,
             "IAMBICB": 0x02
+        }
+        self.lsb = 0                    # index of least significant eeprom mem address in list below
+        self.msb = 1                    # index of most significant eeprom emem address in list below
+        self.memLength = 2
+        self.EEPROM_Mem_Address = {
+            "cw_key_type": [ 0x66, 0x01, 0x01],
+            "cw_wpm": [ 0x1c, 0x0,0x04],
+            "cw_sidetone": [ 0x18, 0x0, 0x04],
+            "cw_Delay_Returning_to_RX": [0x02, 0x1, 0x01],  # eeprom value divided by 10
+            "cw_Delay_Starting_TX": [0x03, 0x1, 0x1]  # eeprom saved valued divided by 2
         }
 
         self.ATT_Status_Off = 0         #indicates that ATT has been turned off
@@ -719,6 +729,18 @@ class piCECNextion(baseui.piCECNextionUI):
             print("ecoded bytes =", encodedBytes)
 
         return encodedBytes
+    #
+    #   This convert a 16 bit number (either string or int) to an array of 2 bytes
+    #
+    def convert16BitToBytes(self, int16):
+        encodedBytes = bytearray()
+        number16 = int(int16)    # convert any strings to integer
+        encodedBytes.append(number16 & 0xff)
+
+        number16 = (number16 >> 8)
+        encodedBytes.append(number16 & 0xff)
+
+        return encodedBytes
 
     #
     #   This function tells the Radio that a new mode has been selected for
@@ -838,44 +860,121 @@ class piCECNextion(baseui.piCECNextionUI):
         #
         #   Now have to write it to EEPROM as this is not one of the values that are automatically saved to EEPROM
         #
-        keyTypeCommandLSB = 0x66
-        keyTypeCommandMSB = 0x01
-        keyTypeCommandLength = 0x01
-        keyTypeCommandValue =  self.CW_KeyValue[keyType]
-        checksum = (keyTypeCommandLSB + keyTypeCommandMSB + keyTypeCommandLength) % 256
+
+        checksum = (self.EEPROM_Mem_Address["cw_key_type"][self.lsb] + self.EEPROM_Mem_Address["cw_key_type"][self.msb]
+                    + self.EEPROM_Mem_Address["cw_key_type"][self.memLength]) % 256
         print("checksum=", hex(checksum))
 
-        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"], keyTypeCommandLSB, keyTypeCommandMSB, keyTypeCommandLength, checksum, keyTypeCommandValue]
+        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
+                   self.EEPROM_Mem_Address["cw_key_type"][self.lsb],
+                   self.EEPROM_Mem_Address["cw_key_type"][self.msb],
+                   self.EEPROM_Mem_Address["cw_key_type"][self.memLength],
+                   checksum,
+                   self.CW_KeyValue[keyType]
+                   ]
         print("command=",command)
         self.theRadio.sendCommandToMCU(bytes(command))
 
 
+    # "cw_sidetone": [0x18, 0x0],
+    # "cw_Delay_Returning_to_RX": [0x02, 0x1],
+    # "cw_Delay_Starting_TX": [0x03, 0x1]
 
 
 
     def Radio_Set_CW_Key_Speed(self, keySpeed):
-        # command = [self.toRadioCommandDict["TS_CMD_WPM", 0, 0, 0]
-        # self.theRadio.sendCommandToMCU(bytes(command))
-        pass
+
+        #
+        #
+        #   first send command to officially change the key speed
+        #   wpm directly saved. It is the dot length which is 1200/wpm
+        #
+
+        dotLength_ms = int(1200 / int(keySpeed))
+        command = [self.toRadioCommandDict["TS_CMD_WPM"], dotLength_ms, 0, 0]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+        print("in set_cw_key_speed, keySpeed=", keySpeed)
+        print("command=",command)
+
+        print("keySpeed=", int(keySpeed), "dotLength_ms=", dotLength_ms)
+
+        #
+        #   Now have to write it to EEPROM as this is not one of the values that are automatically saved to EEPROM
+        #
+
+        checksum = (self.EEPROM_Mem_Address["cw_wpm"][self.lsb] + self.EEPROM_Mem_Address["cw_wpm"][self.msb]
+                    + self.EEPROM_Mem_Address["cw_wpm"][self.memLength]) % 256
+        print("checksum=", hex(checksum))
+
+        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
+                   self.EEPROM_Mem_Address["cw_wpm"][self.lsb],
+                   self.EEPROM_Mem_Address["cw_wpm"][self.msb],
+                   self.EEPROM_Mem_Address["cw_wpm"][self.memLength],
+                   checksum,
+                   dotLength_ms,                # Eeprom allows up to two bytes for adjusted key,
+                                                    # but keychage without reboot only 1 byte
+                   0,0,0
+                   ]
+        print("command=", command)
+        self.theRadio.sendCommandToMCU(bytes(command))
 
 
     def Radio_Set_CW_Delay_Starting_TX(self, startTXDelay):
-        # value stored to eeprom needs to be divided by 10
-        # keyTypeCommandLSB = 0x66
-        # keyTypeCommandMSB = 0x01
-        # keyTyoeCommandLength = 0x01
-        # keyTypeCommandValue =  self.CW_KeyValue[keyType]
-        # checksum = (keyTypeCommandLSB + keyTypeCommandMSB + keyTypeCommandLength) % 256
         #
-        # command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"], keyTypeCommandLSB, keyTypeCommandMSB, keyTyoeCommandLength, checksum, keyTypeCommandValue]
-        # self.theRadio.sendCommandToMCU(bytes(command))
-        pass
+        #   Requires reboot to take effect
+        #
+        #
+        # adjust the wpm speed to format of EEPROM
+        #
+        adjustedStartTXDelay = int(int(startTXDelay)/2)
+
+        #
+        #   write it to EEPROM as will be picked up on next reboot
+        #
+
+        checksum = (self.EEPROM_Mem_Address["cw_Delay_Starting_TX"][self.lsb] + self.EEPROM_Mem_Address["cw_Delay_Starting_TX"][self.msb]
+                    + self.EEPROM_Mem_Address["cw_Delay_Starting_TX"][self.memLength]) % 256
+        print("checksum=", hex(checksum))
+
+        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
+                   self.EEPROM_Mem_Address["cw_Delay_Starting_TX"][self.lsb],
+                   self.EEPROM_Mem_Address["cw_Delay_Starting_TX"][self.msb],
+                   self.EEPROM_Mem_Address["cw_Delay_Starting_TX"][self.memLength],
+                   checksum,
+                   adjustedStartTXDelay
+                   ]
+        print("command=", command)
+        self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Set_CW_Delay_Returning_To_RX(self, returnRXDelay):
-        # value stored to eeprom needs to divided by 2
-        # command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"], 0, 0, 0, 0, 0]
-        # self.theRadio.sendCommandToMCU(bytes(command))
-        pass
+        # value stored to eeprom needs to divided by 10
+        #
+        #   Requires reboot to take effect
+        #
+        #
+        # adjust the wpm speed to format of EEPROM
+        #
+        adjustedReturnToRXDelay = int(int(returnRXDelay) / 10)
+
+        #
+        #   write it to EEPROM as will be picked up on next reboot
+        #
+
+        checksum = (self.EEPROM_Mem_Address["cw_Delay_Returning_to_RX"][self.lsb] +
+                    self.EEPROM_Mem_Address["cw_Delay_Returning_to_RX"][self.msb]
+                    + self.EEPROM_Mem_Address["cw_Delay_Returning_to_RX"][self.memLength]) % 256
+        print("checksum=", hex(checksum))
+
+        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
+                   self.EEPROM_Mem_Address["cw_Delay_Returning_to_RX"][self.lsb],
+                   self.EEPROM_Mem_Address["cw_Delay_Returning_to_RX"][self.msb],
+                   self.EEPROM_Mem_Address["cw_Delay_Returning_to_RX"][self.memLength],
+                   checksum,
+                   adjustedReturnToRXDelay
+                   ]
+        print("command=", command)
+        self.theRadio.sendCommandToMCU(bytes(command))
 
 
 
@@ -1140,14 +1239,20 @@ class piCECNextion(baseui.piCECNextionUI):
         #     nSendProcess.val = 14
         # } else if (pm.vn.val == 259) // key Type Write Complete
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        if (int(value) == 358):
-            print("write complete for keychange")
-        else:
-            print("unknown return value for vnget=", value)
         if self.CurrentDebug:
+            print("vn get called:", "buffer =", buffer)
             print("buffer=", buffer)
-        else:
-            pass
+            if (int(value) == 358):
+                print("write complete for keychange")
+            elif (int(value) == 28):
+                print("write complete for new WPM")
+            elif (int(value) == 259):
+                print("write complete for new RX->TX")
+            elif (int(value) == 258):
+                print("write complete for new TX->RX")
+            else:
+                print("unknown command from vn_")
+
 
 
 
@@ -1474,24 +1579,26 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def vs_UX_Set_CW_Speed(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        self.key_speed_value_VAR.set(value)
+        self.key_speed_value_VAR.set(str(int(1200/int(value))))
         if self.CurrentDebug:
             print("vs get called:", "buffer =", buffer)
             print("vs word/minute for keyer")
-            print("value=", value, sep='*', end='*')
+            print("raw value=", value, sep='*', end='*')
+            print("adjusted value=", self.key_speed_value_VAR.get(), sep='*', end='*')
             print("\n")
 
 
     #
     #   The "vy" command stores delay returning after last cw character
     #
-    def vy_UX_Set_CW_Post_Delay(self, buffer):
+    def vy_UX_Set_CW_Delay_Returning_to_RX(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        self.delay_returning_to_rx_value_VAR.set(value)
+        self.delay_returning_to_rx_value_VAR.set(str(int(value)*10))
         if self.CurrentDebug:
             print("vy get called:", "buffer =", buffer)
             print("vy delay returning after cw key")
-            print("value=", value, sep='*', end='*')
+            print("raw value=", value, sep='*', end='*')
+            print("adjusted  value=", self.delay_returning_to_rx_value_VAR.get(), sep='*', end='*')
             print("\n")
 
 
@@ -1499,13 +1606,14 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     #   The "ve" command stores delay prior to TX 1st cw character
     #
-    def ve_UX_Set_CW_Pre_Delay(self, buffer):
+    def ve_UX_Set_CW_Delay_Starting_TX(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        self.delay_starting_tx_value_VAR.set(value)
+        self.delay_starting_tx_value_VAR.set(str(int(value)*2))
         if self.CurrentDebug:
             print("ve get called:", "buffer =", buffer)
             print("ve start delay for first cw character")
-            print("value=", value, sep='*', end='*')
+            print("raw value=", value, sep='*', end='*')
+            print("adjusted value=", self.delay_starting_tx_value_VAR.get(), sep='*', end='*')
             print("\n")
 
     #

@@ -278,6 +278,29 @@ class piCECNextionUI(ttk.Frame):
             padx="70 0",
             pady=10,
             side="left")
+        self.channel_Name_Frame = ttk.Frame(
+            self.vfoB_Frame, name="channel_name_frame")
+        self.channel_Name_Frame.configure(
+            height=200, style="Normal.TFrame", width=200)
+        self.channel_Label = ttk.Label(
+            self.channel_Name_Frame, name="channel_label")
+        self.channel_Label.configure(
+            style="Heading4b.TLabel", text='Channel:', width=10)
+        self.channel_Label.pack(anchor="nw", padx="0 10", side="left")
+        self.channel_Name_Label = ttk.Label(
+            self.channel_Name_Frame, name="channel_name_label")
+        self.channel_Name_VAR = tk.StringVar(value='None')
+        self.channel_Name_Label.configure(
+            style="Heading4b.TLabel",
+            text='None',
+            textvariable=self.channel_Name_VAR)
+        self.channel_Name_Label.pack(anchor="nw", side="left")
+        self.channel_Name_Frame.pack(
+            expand=False,
+            fill="y",
+            padx="70 0",
+            pady=10,
+            side="left")
         self.tuning_Step_Frame = ttk.Frame(
             self.vfoB_Frame, name="tuning_step_frame")
         self.tuning_Step_Frame.configure(style="Normal.TFrame", width=200)

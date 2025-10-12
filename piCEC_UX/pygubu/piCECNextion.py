@@ -173,6 +173,7 @@ class piCECNextion(baseui.piCECNextionUI):
         }
 
         self.Text_To_ModeNum = {
+            "DFT":0,
             "LSB": 2,
             "USB":3,
             "CWL":4,
@@ -303,20 +304,32 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def displaymemToVFOWindow(self):
 
-
-
-
         print("Memory->VFO Settings Windows Called")
-        self.memToVFOWindow = memToVFO(self.master, self, self.changeChannels)
+        self.memToVFOWindow = memToVFO(self.master, self, self.changeChannel)
         self.memToVFOWindow.transient(self.master)
         self.Radio_Req_Channel_Freqs()
         self.Radio_Req_Channel_Labels()
+        self.Radio_Req_Channel_Show_Labels()
 
-    def changeChannels(self,chnl):
-        print("changeChannel Callback chnl=",chnl)
-        print("channel label", memToVFO.channelList[chnl].Label_VAR.get(),
-              "Freq=", memToVFO.channelList[chnl].Freq_VAR.get(),
-              "mode=", memToVFO.channelList[chnl].Mode_VAR.get())
+    def changeChannel(self, label, freq, mode, showLabel):
+        print("changeChannel Callback")
+        print("channel label", label,
+              "Freq=", freq,
+              "mode=", mode,
+              "show label", showLabel)
+
+        print("type=", type(showLabel))
+
+        self.Radio_Set_New_Frequency(freq)
+        self.Radio_Set_Mode(self.Text_To_ModeNum[mode])
+
+        if (int(showLabel)):
+            print("setting show label")
+            self.channel_Name_VAR.set(label)
+        else:
+            print("turning off show label")
+            self.channel_Name_VAR.set("N/A  ")
+
 
     def Radio_Req_Channel_Freqs(self):
 
@@ -330,6 +343,13 @@ class piCECNextion(baseui.piCECNextionUI):
         base = 0xc7
         for i in range(9):
             command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x5, 0x57]
+            self.theRadio.sendCommandToMCU(bytes(command))
+            base += 0x6
+
+    def Radio_Req_Channel_Show_Labels(self):
+        base = 0xc6
+        for i in range(9):
+            command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x1, 0x57]
             self.theRadio.sendCommandToMCU(bytes(command))
             base += 0x6
 
@@ -1277,6 +1297,10 @@ class piCECNextion(baseui.piCECNextionUI):
             print("buffer=", buffer)
 
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        print("value=", value, sep='*', end='*')
+        print("length=", len(value))
+
+
 
         try:
             int(value,16)
@@ -1285,11 +1309,21 @@ class piCECNextion(baseui.piCECNextionUI):
             is_number = False
 
         if(is_number):
+            print("thinks it is a number")
             freq = int(value,16) & 0x1FFFFFFF
             mode = (int(value,16) >> 29) & 0x7
             self.memToVFOWindow.setChanneFreqMode(freq, mode)
         else:
-            self.memToVFOWindow.setChannelLabel(value)
+            if(len(value) == 1):
+                if (ord(value) == 0):
+                    # print("show label is a 0")
+                    self.memToVFOWindow.setChannelShowLabel(False)
+                elif(ord(value) == 3):
+                    # print("show label is a 3")
+                    self.memToVFOWindow.setChannelShowLabel(True)
+            else:
+                # print("thinks it is a channel")
+                self.memToVFOWindow.setChannelLabel(value)
 
 
 

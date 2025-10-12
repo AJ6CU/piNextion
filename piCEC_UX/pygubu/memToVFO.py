@@ -31,9 +31,14 @@ class memToVFO(baseui.memToVFOUI):
             memToVFO.currentChannel = 0
 
     def setChanneFreqMode(self, freq, mode):
-
         memToVFO.channelList[memToVFO.currentChannel].Freq_VAR.set(str(freq))
         memToVFO.channelList[memToVFO.currentChannel].Mode_VAR.set(self.mainWindow.modeNum_To_TextDict[str(mode)])
+        memToVFO.currentChannel += 1
+        if memToVFO.currentChannel == len(self.channelList):
+            memToVFO.currentChannel = 0
+
+    def setChannelShowLabel(self, showFlag):
+        memToVFO.channelList[memToVFO.currentChannel].showLabel_VAR.set(showFlag)
         memToVFO.currentChannel += 1
         if memToVFO.currentChannel == len(self.channelList):
             memToVFO.currentChannel = 0

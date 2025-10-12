@@ -28,7 +28,7 @@ class piRadio:
 
         self.mcu_command_buffer =[]                     # buffer used to send bytes to MCU
         self.time_of_last_sent = timer()                # used to avoid overloading MCU
-        self.minimum_time = 0.05
+        self.minimum_time = .075
 
 
     def openRadio(self):
@@ -179,7 +179,7 @@ class piRadio:
 
         if (timeDiff < self.minimum_time):
             sleep(self.minimum_time - timeDiff)
-        self.time_of_last_sent = currentTime
+        self.time_of_last_sent = timer()
 
         # tx_mode_switch_USB2pre = b'\x59\x58\x68\x03'
         # tx_mode_switch_USB2com = b'\x02\x00\x00\x00'

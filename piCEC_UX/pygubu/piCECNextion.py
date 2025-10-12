@@ -4,8 +4,12 @@ import tkinter.ttk as ttk
 # from Cython.Compiler.Naming import self_cname
 
 import piCEC_UXui as baseui
+# from piCEC_UX import myRadio
 from settings import settings
 from cwSettings import cwSettings
+from memToVFO import memToVFO
+from vfoToMem import vfoToMem
+
 import mystyles  # Styles definition module
 from time import sleep
 
@@ -20,6 +24,8 @@ class piCECNextion(baseui.piCECNextionUI):
         self.theRadio = None            # Object pointer for the Radio
         self.cwSettingsWindow = None    # Object pointer for the CW Settinge Window
         self.settingsWindow = None      # Object pointer for the General Settings Window
+        self.memToVFOWindow = None      # object pointer for the Memory-> VFO Window
+        self.vfoToMemWindow = None      # object pointer for the VFO->Memory Window
         self.DeepDebug = False
         self.CurrentDebug = True
 
@@ -113,6 +119,7 @@ class piCECNextion(baseui.piCECNextionUI):
             "ve": self.ve_UX_Set_CW_Delay_Starting_TX,
             "cv": self.cv_UX_VFO_Toggle,            #sets active VFO, A=0, B=1
             "s0": self.s0Get,
+            "sh": self.sh_UX_Get_Memory,
             "vn": self.vn_UX_ACK_Memory_Write,
             "cl": self.cl_UX_Lock_Screen,
             "cj": self.cj_UX_Speaker_Toggle,
@@ -158,6 +165,7 @@ class piCECNextion(baseui.piCECNextionUI):
             "TS_CMD_UBITX_REBOOT":95    # Reboot
         }
         self.modeNum_To_TextDict = {
+            "0":"DFT",
             "2":"LSB",
             "3":"USB",
             "4":"CWL",
@@ -268,7 +276,6 @@ class piCECNextion(baseui.piCECNextionUI):
         self.cwSettingsWindow.transient(self.master)  # Makes the cw settings appear above the mainwindow
         self.master.wait_window(self.cwSettingsWindow)  # This pauses the main window until the cwsetting is closed
 
-
     def dirty_DisplayCWSettings (self):
         print("dirty display settings window")
         if( self.cwSettingsWindow.tone_value_VAR.get() != self.tone_value_VAR.get()):
@@ -289,6 +296,41 @@ class piCECNextion(baseui.piCECNextionUI):
             # self.delay_returning_to_rx_value_VAR.set(self.cwSettingsWindow.delay_returning_to_rx_value_VAR.get())
             self.Radio_Set_CW_Delay_Returning_To_RX(self.cwSettingsWindow.delay_returning_to_rx_value_VAR.get())
             print("dirty TX->RX delay")
+    #
+    #   This routine makes requests from the MCU for all the Channel Frequencies, Mode, and Labels
+    #   The actual setting of the corresponding values awaits the response of the eeprom
+    #   packages sent by the MCU via the "sh_UX_Get_Memory" function
+    #
+    def displaymemToVFOWindow(self):
+
+
+
+
+        print("Memory->VFO Settings Windows Called")
+        self.memToVFOWindow = memToVFO(self.master, self)
+        self.memToVFOWindow.transient(self.master)
+        self.Radio_Req_Channel_Freqs()
+        self.Radio_Req_Channel_Labels()
+
+
+    def Radio_Req_Channel_Freqs(self):
+
+        base = 0x76
+        for i in range(11):
+            command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x4, 0x48]
+            self.theRadio.sendCommandToMCU(bytes(command))
+            base += 0x4
+
+    def Radio_Req_Channel_Labels(self):
+        base = 0xc7
+        for i in range(9):
+            command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x5, 0x57]
+            self.theRadio.sendCommandToMCU(bytes(command))
+            base += 0x6
+
+    def displayvfoToMemWindow(self):
+        print("VFO->Memory Settings Windows Called")
+        self.vfoToMemWindow = vfoToMem(self.master, self)
 
     def vfo_CB(self):
         self.Radio_Toggle_VFO()
@@ -612,14 +654,12 @@ class piCECNextion(baseui.piCECNextionUI):
     def store_CB(self):
         if self.CurrentDebug:
             print("store_CB")
-        else:
-            pass
+        self.displayvfoToMemWindow()
 
     def recall_CB(self):
         if self.CurrentDebug:
             print("recall_CB")
-        else:
-            pass
+        self.displaymemToVFOWindow()
     #
     #   The following routines handles the ATT jogwheel.
     #   Basically any click with no movement will toggle
@@ -979,6 +1019,8 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
 
+
+
 #   MCU Commands
 #########################################################################################
 ####    Start of command processing sent by Radio(MCU) to Screen
@@ -1223,6 +1265,29 @@ class piCECNextion(baseui.piCECNextionUI):
             print("buffer=", buffer)
         else:
             pass
+
+    def sh_UX_Get_Memory(self, buffer):
+        if self.CurrentDebug:
+            print("sh memory fetched called")
+            print("buffer=", buffer)
+
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+
+        try:
+            int(value,16)
+            is_number = True
+        except ValueError:
+            is_number = False
+
+        if(is_number):
+            freq = int(value,16) & 0x1FFFFFFF
+            mode = (int(value,16) >> 29) & 0x7
+            self.memToVFOWindow.setChanneFreqMode(freq, mode)
+        else:
+            self.memToVFOWindow.setChannelLabel(value)
+
+
+
 
     def vn_UX_ACK_Memory_Write(self, buffer):
         # if (pm.vn.val == 358) // key Type Write Complete

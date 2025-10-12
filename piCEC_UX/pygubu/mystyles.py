@@ -100,6 +100,3 @@ def setup_ttk_styles(master=None):
 
 
 
-
-
-

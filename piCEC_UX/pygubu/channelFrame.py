@@ -9,13 +9,20 @@ import channelFrameui as baseui
 #
 
 class channelFrame(baseui.channelFrameUI):
+    channelCount = 0
+    changeChannelCallback = None
     def __init__(self, master=None, **kw):
         super().__init__(master, **kw)
+        self.channelInstance = channelFrame.channelCount
+        channelFrame.channelCount += 1
 
     def mem_go_button(self, widget_id):
         print("go button called")
-        print("widget id:", widget_id)
-        print("parent", self.master.winfo_children())
+        print("instance count =", self.channelInstance)
+        channelFrame.changeChannelCallback(self.channelInstance)
+
+    def setParentCallback(self, callback):
+       channelFrame.changeChannelCallback = callback
 
 
 if __name__ == "__main__":

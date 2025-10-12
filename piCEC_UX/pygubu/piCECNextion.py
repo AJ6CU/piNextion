@@ -307,11 +307,16 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
         print("Memory->VFO Settings Windows Called")
-        self.memToVFOWindow = memToVFO(self.master, self)
+        self.memToVFOWindow = memToVFO(self.master, self, self.changeChannels)
         self.memToVFOWindow.transient(self.master)
         self.Radio_Req_Channel_Freqs()
         self.Radio_Req_Channel_Labels()
 
+    def changeChannels(self,chnl):
+        print("changeChannel Callback chnl=",chnl)
+        print("channel label", memToVFO.channelList[chnl].Label_VAR.get(),
+              "Freq=", memToVFO.channelList[chnl].Freq_VAR.get(),
+              "mode=", memToVFO.channelList[chnl].Mode_VAR.get())
 
     def Radio_Req_Channel_Freqs(self):
 

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import tkinter as tk
 import memToVFOui as baseui
+from channelFrame import channelFrame
 
 
 #
@@ -11,7 +12,7 @@ class memToVFO(baseui.memToVFOUI):
     channelList = []
     currentChannel = 0
 
-    def __init__(self, master=None, mainWindow=None, **kw):
+    def __init__(self, master=None, mainWindow=None, changeChannelCallback=None, **kw):
 
 
         super().__init__(master, **kw)
@@ -19,6 +20,7 @@ class memToVFO(baseui.memToVFOUI):
 
         for child in self.scrolledMemoryFrame.innerframe.winfo_children():
             memToVFO.channelList.append(child)
+        channelFrame.changeChannelCallback = changeChannelCallback
         # print("channel name =", self.channelList[1].channel_Label_VAR.get())
         print("total channels=", len(self.channelList))
 
@@ -35,6 +37,8 @@ class memToVFO(baseui.memToVFOUI):
         memToVFO.currentChannel += 1
         if memToVFO.currentChannel == len(self.channelList):
             memToVFO.currentChannel = 0
+
+
 
     def apply_CB(self):
         print("memToVFO apply CB")

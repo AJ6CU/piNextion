@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 import tkinter as tk
 import tkinter.ttk as ttk
+from channelWrite10PlusFrame import channelWrite10PlusFrame
+from channelWriteFrame import channelWriteFrame
+from pygubu.widgets.scrolledframe import ScrolledFrame
 
 
 def i18n_translator_noop(value):
@@ -49,55 +52,152 @@ class vfoToMemUI(tk.Toplevel):
 
         labelframe1 = ttk.Labelframe(self)
         labelframe1.configure(
-            height=400,
             style="Heading2.TLabelframe",
             text='VFO->Memory',
-            width=600)
+            width=500)
         # First object created
         on_first_object_cb(labelframe1)
 
         frame1 = ttk.Frame(labelframe1)
-        frame1.configure(height=200, style="Normal.TFrame", width=200)
-        self.VFO_To_Mem_Frame = ttk.Frame(frame1, name="vfo_to_mem_frame")
-        self.VFO_To_Mem_Frame.configure(
-            height=200, style="Normal.TFrame", width=200)
-        self.VFO_to_Mem_Label = ttk.Label(
-            self.VFO_To_Mem_Frame, name="vfo_to_mem_label")
-        self.VFO_to_Mem_Label.configure(
-            style="Heading4.TLabel", text='Delete Me\n')
-        self.VFO_to_Mem_Label.grid(column=0, row=2, sticky="w")
-        self.VFO_To_Mem_Freq_Entry = ttk.Entry(
-            self.VFO_To_Mem_Frame, name="vfo_to_mem_freq_entry")
-        self.VFO_To_Mem_Freq_Entry.configure(
-            justify="right",
-            style="Normal.TEntry",
-            validate="none",
+        frame1.configure(style="Normal.TFrame", width=200)
+        self.display_Current_VFO_Frame = ttk.Frame(
+            frame1, name="display_current_vfo_frame")
+        self.display_Current_VFO_Frame.configure(
+            height=24, style="Normal.TFrame", width=450)
+        self.current_VFO_Heading_Label = ttk.Label(
+            self.display_Current_VFO_Frame,
+            name="current_vfo_heading_label")
+        self.current_VFO_Heading_Label.configure(
+            style="Heading1b.TLabel", text='Current VFO:')
+        self.current_VFO_Heading_Label.pack(
+            anchor="center", padx="75 0", side="left")
+        self.channel_Text_Label = ttk.Label(
+            self.display_Current_VFO_Frame,
+            name="channel_text_label")
+        self.channel_Text_Label.configure(
+            style="Heading2b.TLabel", text='Channel:')
+        self.channel_Text_Label.pack(padx="10 0", side="left")
+        self.current_Channel = ttk.Label(
+            self.display_Current_VFO_Frame,
+            name="current_channel")
+        self.current_Channel_VAR = tk.StringVar(value='Not Saved')
+        self.current_Channel.configure(
+            style="Heading2bi.TLabel",
+            text='Not Saved',
+            textvariable=self.current_Channel_VAR,
             width=10)
-        _text_ = '599'
-        self.VFO_To_Mem_Freq_Entry.delete("0", "end")
-        self.VFO_To_Mem_Freq_Entry.insert("0", _text_)
-        self.VFO_To_Mem_Freq_Entry.grid(column=1, row=2)
-        self.VFO_To_Mem_Frame.pack(padx="50 0", side="top")
-        frame1.pack(side="top")
-        self.closingFrame = ttk.Frame(labelframe1, name="closingframe")
+        self.current_Channel.pack(padx="5 0", side="left")
+        self.current_VFO_Label = ttk.Label(
+            self.display_Current_VFO_Frame,
+            name="current_vfo_label")
+        self.current_VFO_VAR = tk.StringVar(value='99.999.99')
+        self.current_VFO_Label.configure(
+            style="Heading2b.TLabel",
+            text='99.999.99',
+            textvariable=self.current_VFO_VAR)
+        self.current_VFO_Label.pack(padx="10 0", side="left")
+        self.current_Mode_Label = ttk.Label(
+            self.display_Current_VFO_Frame,
+            name="current_mode_label")
+        self.current_Mode_VAR = tk.StringVar(value='CWL')
+        self.current_Mode_Label.configure(
+            style="Heading2b.TLabel",
+            text='CWL',
+            textvariable=self.current_Mode_VAR)
+        self.current_Mode_Label.pack(expand=False, padx="10 10", side="left")
+        self.display_Current_VFO_Frame.pack(
+            anchor="center", expand=False, fill="x", padx=10, pady="10 0")
+        scrolledframe2 = ScrolledFrame(frame1, scrolltype="both")
+        scrolledframe2.innerframe.configure(
+            height=350,
+            relief="raised",
+            style="Normal.TFrame",
+            takefocus=True,
+            width=500)
+        scrolledframe2.configure(usemousewheel=True)
+        self.channel_Write_1_Frame = channelWriteFrame(
+            scrolledframe2.innerframe, name="channel_write_1_frame")
+        self.channel_Write_1_Frame.pack(side="top")
+        self.channel_Write_2_Frame = channelWriteFrame(
+            scrolledframe2.innerframe, name="channel_write_2_frame")
+        self.channel_Write_2_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_3_Frame = channelWriteFrame(
+            scrolledframe2.innerframe, name="channel_write_3_frame")
+        self.channel_Write_3_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_4_Frame = channelWriteFrame(
+            scrolledframe2.innerframe, name="channel_write_4_frame")
+        self.channel_Write_4_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_5_Frame = channelWriteFrame(
+            scrolledframe2.innerframe, name="channel_write_5_frame")
+        self.channel_Write_5_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_6_Frame = channelWriteFrame(
+            scrolledframe2.innerframe, name="channel_write_6_frame")
+        self.channel_Write_6_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_7_Frame = channelWriteFrame(
+            scrolledframe2.innerframe, name="channel_write_7_frame")
+        self.channel_Write_7_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_8_Frame = channelWriteFrame(
+            scrolledframe2.innerframe, name="channel_write_8_frame")
+        self.channel_Write_8_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_9_Frame = channelWriteFrame(
+            scrolledframe2.innerframe, name="channel_write_9_frame")
+        self.channel_Write_9_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_10_Frame = channelWrite10PlusFrame(
+            scrolledframe2.innerframe, name="channel_write_10_frame")
+        self.channel_Write_10_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_11_Frame = channelWrite10PlusFrame(
+            scrolledframe2.innerframe, name="channel_write_11_frame")
+        self.channel_Write_11_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_12_Frame = channelWrite10PlusFrame(
+            scrolledframe2.innerframe, name="channel_write_12_frame")
+        self.channel_Write_12_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_13_Frame = channelWrite10PlusFrame(
+            scrolledframe2.innerframe, name="channel_write_13_frame")
+        self.channel_Write_13_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_14_Frame = channelWrite10PlusFrame(
+            scrolledframe2.innerframe, name="channel_write_14_frame")
+        self.channel_Write_14_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_15_Frame = channelWrite10PlusFrame(
+            scrolledframe2.innerframe, name="channel_write_15_frame")
+        self.channel_Write_15_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_16_Frame = channelWrite10PlusFrame(
+            scrolledframe2.innerframe, name="channel_write_16_frame")
+        self.channel_Write_16_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_17_Frame = channelWrite10PlusFrame(
+            scrolledframe2.innerframe, name="channel_write_17_frame")
+        self.channel_Write_17_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_18_Frame = channelWrite10PlusFrame(
+            scrolledframe2.innerframe, name="channel_write_18_frame")
+        self.channel_Write_18_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_19_Frame = channelWrite10PlusFrame(
+            scrolledframe2.innerframe, name="channel_write_19_frame")
+        self.channel_Write_19_Frame.pack(pady="5 0", side="top")
+        self.channel_Write_20_Frame = channelWrite10PlusFrame(
+            scrolledframe2.innerframe, name="channel_write_20_frame")
+        self.channel_Write_20_Frame.pack(pady="5 0", side="top")
+        scrolledframe2.pack(
+            anchor="center",
+            expand=True,
+            fill="both",
+            pady="20 0")
+        self.closingFrame = ttk.Frame(frame1, name="closingframe")
         self.closingFrame.configure(
             height=50, style="Normal.TFrame", width=200)
         self.apply_Button = ttk.Button(self.closingFrame, name="apply_button")
-        self.apply_Button.configure(style="Button2b.TButton", text='Apply')
+        self.apply_Button.configure(style="Button2b.TButton", text='Write')
         self.apply_Button.pack(anchor="center", padx=10, side="left")
         self.apply_Button.configure(command=self.apply_CB)
         self.cancel_Buttom = ttk.Button(
             self.closingFrame, name="cancel_buttom")
-        self.cancel_Buttom.configure(style="Button2b.TButton", text='Cancel')
+        self.cancel_Buttom.configure(style="Button2b.TButton", text='Close')
         self.cancel_Buttom.pack(anchor="center", padx=10, side="left")
         self.cancel_Buttom.configure(command=self.cancel_CB)
-        self.closingFrame.pack(
-            anchor="center",
-            expand=False,
-            pady=10,
-            side="top")
+        self.closingFrame.pack(pady=20, side="bottom")
+        frame1.pack(expand=True, fill="both", side="top")
+        frame1.pack_propagate(0)
         labelframe1.pack(expand=True, fill="both", side="top")
-        self.configure(height=400, width=600)
+        labelframe1.pack_propagate(0)
+        self.configure(height=450, width=600)
         # Layout for 'vfo_to_mem' skipped in custom widget template.
 
     def apply_CB(self):

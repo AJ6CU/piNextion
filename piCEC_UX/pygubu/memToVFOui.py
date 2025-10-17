@@ -54,15 +54,64 @@ class memToVFOUI(tk.Toplevel):
             height=400,
             style="Heading2.TLabelframe",
             text='Memory -> VFO',
-            width=300)
+            width=500)
         # First object created
         on_first_object_cb(self.labelframe1)
 
+        self.frame1 = ttk.Frame(self.labelframe1)
+        self.frame1.configure(height=200, style="Normal.TFrame", width=200)
+        self.display_Current_VFO_Frame = ttk.Frame(
+            self.frame1, name="display_current_vfo_frame")
+        self.display_Current_VFO_Frame.configure(
+            height=24, style="Normal.TFrame", width=450)
+        self.current_VFO_Heading_Label = ttk.Label(
+            self.display_Current_VFO_Frame,
+            name="current_vfo_heading_label")
+        self.current_VFO_Heading_Label.configure(
+            style="Heading1b.TLabel", text='Current VFO:')
+        self.current_VFO_Heading_Label.pack(
+            anchor="center", padx="75 0", side="left")
+        self.channel_Text_Label = ttk.Label(
+            self.display_Current_VFO_Frame,
+            name="channel_text_label")
+        self.channel_Text_Label.configure(
+            style="Heading2b.TLabel", text='Channel:')
+        self.channel_Text_Label.pack(padx="10 0", side="left")
+        self.current_Channel = ttk.Label(
+            self.display_Current_VFO_Frame,
+            name="current_channel")
+        self.current_Channel_VAR = tk.StringVar(value='Not Saved')
+        self.current_Channel.configure(
+            style="Heading2bi.TLabel",
+            text='Not Saved',
+            textvariable=self.current_Channel_VAR,
+            width=10)
+        self.current_Channel.pack(padx="5 0", side="left")
+        self.current_VFO_Label = ttk.Label(
+            self.display_Current_VFO_Frame,
+            name="current_vfo_label")
+        self.current_VFO_VAR = tk.StringVar(value='99.999.99')
+        self.current_VFO_Label.configure(
+            style="Heading2b.TLabel",
+            text='99.999.99',
+            textvariable=self.current_VFO_VAR)
+        self.current_VFO_Label.pack(padx="10 0", side="left")
+        self.current_Mode_Label = ttk.Label(
+            self.display_Current_VFO_Frame,
+            name="current_mode_label")
+        self.current_Mode_VAR = tk.StringVar(value='CWL')
+        self.current_Mode_Label.configure(
+            style="Heading2b.TLabel",
+            text='CWL',
+            textvariable=self.current_Mode_VAR)
+        self.current_Mode_Label.pack(expand=False, padx="10 10", side="left")
+        self.display_Current_VFO_Frame.pack(
+            anchor="center", expand=False, fill="x", padx=10, pady="10 0")
         self.scrolledMemoryFrame = ScrolledFrame(
-            self.labelframe1, scrolltype="both", name="scrolledmemoryframe")
+            self.frame1, scrolltype="both", name="scrolledmemoryframe")
         self.scrolledMemoryFrame.innerframe.configure(
-            style="Normal.TFrame", width=400)
-        self.scrolledMemoryFrame.configure(usemousewheel=False)
+            height=350, relief="raised", style="Normal.TFrame", width=500)
+        self.scrolledMemoryFrame.configure(usemousewheel=True)
         self.channelFrame1 = channelFrame(
             self.scrolledMemoryFrame.innerframe,
             name="channelframe1")
@@ -107,8 +156,13 @@ class memToVFOUI(tk.Toplevel):
             self.scrolledMemoryFrame.innerframe,
             name="channelframe11")
         self.channelFrame11.pack(side="top")
-        self.scrolledMemoryFrame.pack(expand=True, fill="x", side="top")
-        self.closingFrame = ttk.Frame(self.labelframe1, name="closingframe")
+        self.scrolledMemoryFrame.pack(
+            anchor="center",
+            expand=True,
+            fill="both",
+            pady="20 0",
+            side="top")
+        self.closingFrame = ttk.Frame(self.frame1, name="closingframe")
         self.closingFrame.configure(
             height=50, style="Normal.TFrame", width=200)
         self.apply_Button = ttk.Button(self.closingFrame, name="apply_button")
@@ -123,10 +177,13 @@ class memToVFOUI(tk.Toplevel):
         self.closingFrame.pack(
             anchor="center",
             expand=False,
-            pady=10,
-            side="top")
+            pady=20,
+            side="bottom")
+        self.frame1.pack(expand=True, fill="both", side="top")
+        self.frame1.pack_propagate(0)
         self.labelframe1.pack(expand=True, fill="both", side="top")
-        self.configure(height=400, width=400)
+        self.labelframe1.pack_propagate(0)
+        self.configure(height=450, width=600)
         # Layout for 'mem_to_VFO_Window' skipped in custom widget template.
 
     def apply_CB(self):

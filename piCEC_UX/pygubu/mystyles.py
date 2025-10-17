@@ -16,7 +16,7 @@
 #   automatically reflected in Pygubu Designer.
 # --------------------
 
-import tkinter as tk
+# import tkinter as tk
 import tkinter.ttk as ttk
 #import sv_ttk
 
@@ -28,8 +28,10 @@ def setup_ttk_styles(master=None):
     style.theme_use('default')
 
     fontList = {'Heading1': ('Times New Roman',24, 'bold' ),
+            'Heading1b': ('Arial', 20, 'bold'),
             'Heading2': ('Arial',18, 'bold' ),
             'Heading2b': ('Arial',14, 'bold' ),
+            'Heading2bi': ('Arial', 14, 'bold', 'italic'),
             'Heading3': ('Arial',12, 'bold' ),
             'Heading4': ('Arial',10, 'bold' ),
             'Heading5': ('Fixed', 6),
@@ -40,8 +42,10 @@ def setup_ttk_styles(master=None):
             'Symbol3': ('Symbol',12, 'bold')}
 
     style.configure('Heading1.TLabel',font=fontList['Heading1'], background='gray', foreground='white')
+    style.configure('Heading1b.TLabel', font=fontList['Heading1b'], background='gray', foreground='white')
     style.configure('Heading2.TLabel',font=fontList['Heading2'])
     style.configure('Heading2b.TLabel',font=fontList['Heading2b'], background='gray', foreground='white')
+    style.configure('Heading2bi.TLabel', font=fontList['Heading2bi'], background='gray', foreground='white')
     style.configure('Heading3b.TLabel',font=fontList['Heading3'], background='gray', foreground='white')
     style.configure('Heading4b.TLabel',font=fontList['Heading4'], background='gray', foreground='white')
     style.configure('OffLED.TLabel', font=fontList['Heading5'], background='gray', foreground='gray')
@@ -79,10 +83,13 @@ def setup_ttk_styles(master=None):
     style.configure('CheckboxNormal.TCheckbutton',font=fontList['Normal'])
     style.configure('CheckboxNormalNoBorder.TCheckbutton',font=fontList['Normal'],highlightthickness=0, borderwidth=0, bd=0)
     style.configure('CheckboxEmphasis.TCheckbutton',font=fontList['Emphasis'])
-    style.configure('ComboBox3.TCombobox',font=fontList['Heading3'])
+    style.configure('ComboBox2.TCombobox',font=fontList['Heading2'])
+    style.configure('ComboBox2b.TCombobox', font=fontList['Heading2b'])
+    style.configure('ComboBox3.TCombobox', font=fontList['Heading3'])
     style.configure('ComboBox4.TCombobox',font=fontList['Heading4'])
     style.configure('ComboBox4White.TCombobox',font=fontList['Heading4'],foreground='white')
     style.configure('Normal.TEntry',font=fontList['Normal'])
+    style.configure('Entry2b.TEntry', font=fontList['Heading2'])
     style.configure('NoBorder.TEntry',font=fontList['Normal'], highlightthickness=0, borderwidth=0, bd=0)
     style.configure('Title.TFrame', background='blue', foreground='white')
     style.configure('Heading2.TLabelframe.Label', background='gray', bd=4, font=fontList['Heading2'])

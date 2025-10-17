@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.5" author="PygubuDesigner 0.41.4">
+  <project>
+    <settings>
+      <setting id="name">channel write frame</setting>
+      <setting id="description">an individual frame to contain channel information for the vfo-&gt;mem function</setting>
+      <setting id="module_name">channelWriteFrame</setting>
+      <setting id="template">widget</setting>
+      <setting id="main_widget">channelWrite</setting>
+      <setting id="main_classname">channelWriteFrame</setting>
+      <setting id="main_menu" />
+      <setting id="output_dir" />
+      <setting id="output_dir2" />
+      <setting id="import_tkvariables">False</setting>
+      <setting id="use_ttk_styledefinition_file">True</setting>
+      <setting id="use_i18n">False</setting>
+      <setting id="all_ids_attributes">False</setting>
+      <setting id="generate_code_onsave">False</setting>
+      <setting id="use_window_centering_code">False</setting>
+      <setting id="ttk_style_definition_file">mystyles.py</setting>
+    </settings>
+    <customwidgets />
+    <resources />
+  </project>
+  <object class="ttk.Frame" id="channelWrite" named="True">
+    <property name="height">200</property>
+    <property name="style">Normal.TFrame</property>
+    <property name="width">200</property>
+    <layout manager="pack">
+      <property name="side">top</property>
+    </layout>
+    <child>
+      <object class="ttk.Button" id="mem_Write_Select_Button" named="True">
+        <property name="command" type="command" cbtype="simple">mem_Select_Write_CB</property>
+        <property name="style">Button2b.TButton</property>
+        <property name="text" translatable="yes">Select</property>
+        <property name="textvariable">string:mem_Channel_Select_VAR</property>
+        <layout manager="grid">
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Entry" id="channel_Name_Entry" named="True">
+        <property name="style">Normal.TEntry</property>
+        <property name="textvariable">string:Label_VAR</property>
+        <property name="width">10</property>
+        <layout manager="grid">
+          <property name="column">1</property>
+          <property name="padx">10 0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="freq_Label" named="True">
+        <property name="style">Heading2b.TLabel</property>
+        <property name="text" translatable="yes">99.999.999</property>
+        <property name="textvariable">string:Freq_VAR</property>
+        <layout manager="grid">
+          <property name="column">2</property>
+          <property name="padx">10 0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="pygubu.widgets.Combobox" id="mode_Combobox" named="True">
+        <property name="keyvariable">string:Mode_VAR</property>
+        <property name="postcommand" type="command" cbtype="simple">select_Channel_Mode_Default</property>
+        <property name="state">normal</property>
+        <property name="style">ComboBox2b.TCombobox</property>
+        <property name="values">Default LSB USB CWL CWU</property>
+        <property name="width">8</property>
+        <layout manager="grid">
+          <property name="column">3</property>
+          <property name="padx">10 0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="pygubu.widgets.Combobox" id="show_Label_Combobox" named="True">
+        <property name="keyvariable">string:showLabel_VAR</property>
+        <property name="postcommand" type="command" cbtype="simple">select_Channel_Showlabel_Default</property>
+        <property name="state">normal</property>
+        <property name="style">ComboBox2b.TCombobox</property>
+        <property name="values">Yes No</property>
+        <property name="width">5</property>
+        <layout manager="grid">
+          <property name="column">4</property>
+          <property name="padx">10 0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+  </object>
+</interface>

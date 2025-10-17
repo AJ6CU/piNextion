@@ -48,19 +48,17 @@ class channelFrameUI(ttk.Frame):
         super().__init__(master, **kw)
 
         self.Go_Button = ttk.Button(self, name="go_button")
-        self.go_Channel_CB = tk.StringVar(value='QSY')
+        self.go_Button_Text_VAR = tk.StringVar(value='QSY')
         self.Go_Button.configure(
             style="Button2b.TButton",
             text='QSY',
-            textvariable=self.go_Channel_CB,
+            textvariable=self.go_Button_Text_VAR,
             width=8)
         # First object created
         on_first_object_cb(self.Go_Button)
 
         self.Go_Button.grid(column=0, row=0, sticky="w")
-        def Go_Button_cmd_(): self.mem_go_button("Go_Button")
-
-        self.Go_Button.configure(command=Go_Button_cmd_)
+        self.Go_Button.configure(command=self.mem_go_button)
         self.channel_Label = ttk.Label(self, name="channel_label")
         self.Label_VAR = tk.StringVar(value='CH01 ')
         self.channel_Label.configure(
@@ -88,7 +86,7 @@ class channelFrameUI(ttk.Frame):
         self.configure(height=200, style="Normal.TFrame", width=200)
         # Layout for 'channelFrame' skipped in custom widget template.
 
-    def mem_go_button(self, widget_id):
+    def mem_go_button(self):
         pass
 
 

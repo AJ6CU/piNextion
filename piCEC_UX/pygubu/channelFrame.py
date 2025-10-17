@@ -17,7 +17,7 @@ class channelFrame(baseui.channelFrameUI):
         self.showLabel_VAR = tk.StringVar(value='0')
         channelFrame.channelCount += 1
 
-    def mem_go_button(self, widget_id):
+    def mem_go_button(self):
         print("go button called")
         print("instance count =", self.channelInstance)
         # channelFrame.changeChannelCallback(self.channelInstance)

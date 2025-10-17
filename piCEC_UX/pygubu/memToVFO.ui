@@ -225,6 +225,7 @@
                 <child>
                   <object class="projectcustom.channelFrame" id="channelFrame11" named="True">
                     <layout manager="pack">
+                      <property name="pady">0 15</property>
                       <property name="side">top</property>
                     </layout>
                   </object>

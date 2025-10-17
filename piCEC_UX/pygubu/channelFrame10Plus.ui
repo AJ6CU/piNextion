@@ -2,12 +2,12 @@
 <interface version="1.5" author="PygubuDesigner 0.41.4">
   <project>
     <settings>
-      <setting id="name">channel write frame</setting>
-      <setting id="description">an individual frame to contain channel information for the vfo-&gt;mem function</setting>
-      <setting id="module_name">channelWriteFrame</setting>
+      <setting id="name">channelFrame10Plus</setting>
+      <setting id="description">Generic reusable Frame for reading Channels &gt;10 from Memory</setting>
+      <setting id="module_name">channelFrame10Plus</setting>
       <setting id="template">widget</setting>
-      <setting id="main_widget">channelWrite</setting>
-      <setting id="main_classname">channelWriteFrame</setting>
+      <setting id="main_widget">channelFrame10Plus</setting>
+      <setting id="main_classname">channelFrame10Plus</setting>
       <setting id="main_menu" />
       <setting id="output_dir" />
       <setting id="output_dir2" />
@@ -22,78 +22,68 @@
     <customwidgets />
     <resources />
   </project>
-  <object class="ttk.Frame" id="channelWrite" named="True">
+  <object class="ttk.Frame" id="channelFrame10Plus" named="True">
     <property name="height">200</property>
     <property name="style">Normal.TFrame</property>
     <property name="width">200</property>
     <layout manager="pack">
       <property name="expand">true</property>
-      <property name="fill">y</property>
+      <property name="fill">x</property>
       <property name="side">top</property>
     </layout>
     <child>
-      <object class="ttk.Button" id="mem_Write_Select_Button" named="True">
-        <property name="command" type="command" cbtype="simple">mem_Select_Write_CB</property>
+      <object class="ttk.Button" id="Go_Button" named="True">
+        <property name="command" type="command" cbtype="simple">mem_go_button</property>
         <property name="style">Button2b.TButton</property>
-        <property name="text" translatable="yes">Select</property>
-        <property name="textvariable">string:mem_Channel_Select_VAR</property>
+        <property name="text" translatable="yes">QSY</property>
+        <property name="textvariable">string:go_Button_Text_VAR</property>
+        <property name="width">8</property>
         <layout manager="grid">
           <property name="column">0</property>
           <property name="row">0</property>
+          <property name="sticky">w</property>
         </layout>
       </object>
     </child>
     <child>
-      <object class="ttk.Entry" id="channel_Name_Entry" named="True">
-        <property name="style">Normal.TEntry</property>
+      <object class="ttk.Label" id="channel_Label" named="True">
+        <property name="style">Heading2bi.TLabel</property>
+        <property name="text" translatable="yes">Channel 11</property>
         <property name="textvariable">string:Label_VAR</property>
-        <property name="width">10</property>
+        <property name="width">12</property>
         <layout manager="grid">
           <property name="column">1</property>
           <property name="padx">10 0</property>
           <property name="row">0</property>
+          <property name="sticky">w</property>
         </layout>
       </object>
     </child>
     <child>
-      <object class="ttk.Label" id="freq_Label" named="True">
+      <object class="ttk.Label" id="freq_label" named="True">
         <property name="style">Heading2b.TLabel</property>
         <property name="text" translatable="yes">99.999.999</property>
         <property name="textvariable">string:Freq_VAR</property>
+        <property name="width">10</property>
         <layout manager="grid">
           <property name="column">2</property>
           <property name="padx">10 0</property>
           <property name="row">0</property>
+          <property name="sticky">w</property>
         </layout>
       </object>
     </child>
     <child>
-      <object class="pygubu.widgets.Combobox" id="mode_Combobox" named="True">
-        <property name="keyvariable">string:Mode_VAR</property>
-        <property name="postcommand" type="command" cbtype="simple">select_Channel_Mode_Default</property>
-        <property name="state">normal</property>
-        <property name="style">ComboBox2b.TCombobox</property>
-        <property name="values">Default LSB USB CWL CWU</property>
-        <property name="width">8</property>
+      <object class="ttk.Label" id="mode_Label" named="True">
+        <property name="style">Heading2b.TLabel</property>
+        <property name="text" translatable="yes">CWL</property>
+        <property name="textvariable">string:Mode_VAR</property>
+        <property name="width">5</property>
         <layout manager="grid">
           <property name="column">3</property>
           <property name="padx">10 0</property>
           <property name="row">0</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="pygubu.widgets.Combobox" id="show_Label_Combobox" named="True">
-        <property name="keyvariable">string:showLabel_VAR</property>
-        <property name="postcommand" type="command" cbtype="simple">select_Channel_Showlabel_Default</property>
-        <property name="state">normal</property>
-        <property name="style">ComboBox2b.TCombobox</property>
-        <property name="values">Yes No</property>
-        <property name="width">5</property>
-        <layout manager="grid">
-          <property name="column">4</property>
-          <property name="padx">10 0</property>
-          <property name="row">0</property>
+          <property name="sticky">w</property>
         </layout>
       </object>
     </child>

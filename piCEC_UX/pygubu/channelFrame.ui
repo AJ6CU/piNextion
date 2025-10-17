@@ -27,6 +27,8 @@
     <property name="style">Normal.TFrame</property>
     <property name="width">200</property>
     <layout manager="pack">
+      <property name="expand">true</property>
+      <property name="fill">y</property>
       <property name="side">top</property>
     </layout>
     <child>
@@ -45,10 +47,10 @@
     </child>
     <child>
       <object class="ttk.Label" id="channel_Label" named="True">
-        <property name="style">Heading3b.TLabel</property>
+        <property name="style">Heading2b.TLabel</property>
         <property name="text" translatable="yes">CH01 </property>
         <property name="textvariable">string:Label_VAR</property>
-        <property name="width">5</property>
+        <property name="width">12</property>
         <layout manager="grid">
           <property name="column">1</property>
           <property name="padx">10 0</property>
@@ -59,7 +61,7 @@
     </child>
     <child>
       <object class="ttk.Label" id="freq_label" named="True">
-        <property name="style">Heading3b.TLabel</property>
+        <property name="style">Heading2b.TLabel</property>
         <property name="text" translatable="yes">99.999.999</property>
         <property name="textvariable">string:Freq_VAR</property>
         <property name="width">10</property>
@@ -73,7 +75,7 @@
     </child>
     <child>
       <object class="ttk.Label" id="mode_Label" named="True">
-        <property name="style">Heading3b.TLabel</property>
+        <property name="style">Heading2b.TLabel</property>
         <property name="text" translatable="yes">CWL</property>
         <property name="textvariable">string:Mode_VAR</property>
         <property name="width">5</property>

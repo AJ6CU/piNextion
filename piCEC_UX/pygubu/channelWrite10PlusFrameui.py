@@ -61,6 +61,15 @@ class channelWrite10PlusFrameUI(ttk.Frame):
         self.mem_Write_Select_Button.grid(column=0, row=0)
         self.mem_Write_Select_Button.configure(
             command=self.mem_Select_Write_CB)
+        self.Label = ttk.Label(self, name="label")
+        self.Label_VAR = tk.StringVar(value='Channel 11')
+        self.Label.configure(
+            state="normal",
+            style="Heading2bi.TLabel",
+            text='Channel 11',
+            textvariable=self.Label_VAR,
+            width=12)
+        self.Label.grid(column=1, padx="10 0", row=0)
         self.freq_Label = ttk.Label(self, name="freq_label")
         self.Freq_VAR = tk.StringVar(value='99.999.999')
         self.freq_Label.configure(
@@ -90,15 +99,6 @@ class channelWrite10PlusFrameUI(ttk.Frame):
         self.show_Label_Combobox.grid(column=4, padx="10 0", row=0)
         self.show_Label_Combobox.configure(
             postcommand=self.select_Channel_Showlabel_Default)
-        self.Label = ttk.Label(self, name="label")
-        self.Label_VAR = tk.StringVar(value='Channel 11')
-        self.Label.configure(
-            state="normal",
-            style="Heading2bi.TLabel",
-            text='Channel 11',
-            textvariable=self.Label_VAR,
-            width=12)
-        self.Label.grid(column=1, padx="10 0", row=0)
         self.configure(height=200, style="Normal.TFrame", width=200)
         # Layout for 'channelWrite10Plus' skipped in custom widget template.
 

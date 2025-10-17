@@ -2,6 +2,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from channelFrame import channelFrame
+from channelFrame10Plus import channelFrame10Plus
 from pygubu.widgets.scrolledframe import ScrolledFrame
 
 
@@ -140,22 +141,47 @@ class memToVFOUI(tk.Toplevel):
             self.scrolledMemoryFrame.innerframe,
             name="channelframe7")
         self.channelFrame7.pack(pady="0 15", side="top")
-        self.channelframe8 = channelFrame(
+        self.channelFrame8 = channelFrame(
             self.scrolledMemoryFrame.innerframe,
             name="channelframe8")
-        self.channelframe8.pack(pady="0 15", side="top")
-        self.channelframe9 = channelFrame(
+        self.channelFrame8.pack(pady="0 15", side="top")
+        self.channelFrame9 = channelFrame(
             self.scrolledMemoryFrame.innerframe,
             name="channelframe9")
-        self.channelframe9.pack(pady="0 15", side="top")
-        self.channelframe10 = channelFrame(
-            self.scrolledMemoryFrame.innerframe,
-            name="channelframe10")
-        self.channelframe10.pack(pady="0 15", side="top")
-        self.channelFrame11 = channelFrame(
-            self.scrolledMemoryFrame.innerframe,
-            name="channelframe11")
-        self.channelFrame11.pack(side="top")
+        self.channelFrame9.pack(pady="0 15", side="top")
+        self.channelFrame10 = channelFrame10Plus(
+            self.scrolledMemoryFrame.innerframe, name="channelframe10")
+        self.channelFrame10.pack(pady="0 15", side="top")
+        self.channelFrame11 = channelFrame10Plus(
+            self.scrolledMemoryFrame.innerframe, name="channelframe11")
+        self.channelFrame11.pack(pady="0 15", side="top")
+        self.channelFrame12 = channelFrame10Plus(
+            self.scrolledMemoryFrame.innerframe, name="channelframe12")
+        self.channelFrame12.pack(pady="0 15", side="top")
+        self.channelFrame13 = channelFrame10Plus(
+            self.scrolledMemoryFrame.innerframe, name="channelframe13")
+        self.channelFrame13.pack(pady="0 15", side="top")
+        self.channelFrame14 = channelFrame10Plus(
+            self.scrolledMemoryFrame.innerframe, name="channelframe14")
+        self.channelFrame14.pack(pady="0 15", side="top")
+        self.channelFrame15 = channelFrame10Plus(
+            self.scrolledMemoryFrame.innerframe, name="channelframe15")
+        self.channelFrame15.pack(pady="0 15", side="top")
+        self.channelFrame16 = channelFrame10Plus(
+            self.scrolledMemoryFrame.innerframe, name="channelframe16")
+        self.channelFrame16.pack(pady="0 15", side="top")
+        self.channelFrame17 = channelFrame10Plus(
+            self.scrolledMemoryFrame.innerframe, name="channelframe17")
+        self.channelFrame17.pack(pady="0 15", side="top")
+        self.channelFrame18 = channelFrame10Plus(
+            self.scrolledMemoryFrame.innerframe, name="channelframe18")
+        self.channelFrame18.pack(pady="0 15", side="top")
+        self.channelFrame19 = channelFrame10Plus(
+            self.scrolledMemoryFrame.innerframe, name="channelframe19")
+        self.channelFrame19.pack(pady="0 15", side="top")
+        self.channelFrame20 = channelFrame10Plus(
+            self.scrolledMemoryFrame.innerframe, name="channelframe20")
+        self.channelFrame20.pack(pady="0 15", side="top")
         self.scrolledMemoryFrame.pack(
             anchor="center",
             expand=True,

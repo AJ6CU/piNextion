@@ -27,6 +27,8 @@
     <property name="style">Normal.TFrame</property>
     <property name="width">200</property>
     <layout manager="pack">
+      <property name="expand">true</property>
+      <property name="fill">y</property>
       <property name="side">top</property>
     </layout>
     <child>
@@ -37,6 +39,20 @@
         <property name="textvariable">string:mem_Channel_Select_VAR</property>
         <layout manager="grid">
           <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="Label" named="True">
+        <property name="state">normal</property>
+        <property name="style">Heading2bi.TLabel</property>
+        <property name="text" translatable="yes">Channel 11</property>
+        <property name="textvariable">string:Label_VAR</property>
+        <property name="width">12</property>
+        <layout manager="grid">
+          <property name="column">1</property>
+          <property name="padx">10 0</property>
           <property name="row">0</property>
         </layout>
       </object>
@@ -78,20 +94,6 @@
         <property name="width">5</property>
         <layout manager="grid">
           <property name="column">4</property>
-          <property name="padx">10 0</property>
-          <property name="row">0</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="ttk.Label" id="Label" named="True">
-        <property name="state">normal</property>
-        <property name="style">Heading2bi.TLabel</property>
-        <property name="text" translatable="yes">Channel 11</property>
-        <property name="textvariable">string:Label_VAR</property>
-        <property name="width">12</property>
-        <layout manager="grid">
-          <property name="column">1</property>
           <property name="padx">10 0</property>
           <property name="row">0</property>
         </layout>

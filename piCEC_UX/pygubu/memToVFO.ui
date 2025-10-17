@@ -21,6 +21,7 @@
     </settings>
     <customwidgets>
       <customwidget path="channelFramebo.py" />
+      <customwidget path="channelFrame10Plusbo.py" />
     </customwidgets>
     <resources />
   </project>
@@ -199,7 +200,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="projectcustom.channelFrame" id="channelframe8" named="True">
+                  <object class="projectcustom.channelFrame" id="channelFrame8" named="True">
                     <layout manager="pack">
                       <property name="pady">0 15</property>
                       <property name="side">top</property>
@@ -207,7 +208,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="projectcustom.channelFrame" id="channelframe9" named="True">
+                  <object class="projectcustom.channelFrame" id="channelFrame9" named="True">
                     <layout manager="pack">
                       <property name="pady">0 15</property>
                       <property name="side">top</property>
@@ -215,7 +216,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="projectcustom.channelFrame" id="channelframe10" named="True">
+                  <object class="projectcustom.channelFrame10Plus" id="channelFrame10" named="True">
                     <layout manager="pack">
                       <property name="pady">0 15</property>
                       <property name="side">top</property>
@@ -223,7 +224,79 @@
                   </object>
                 </child>
                 <child>
-                  <object class="projectcustom.channelFrame" id="channelFrame11" named="True">
+                  <object class="projectcustom.channelFrame10Plus" id="channelFrame11" named="True">
+                    <layout manager="pack">
+                      <property name="pady">0 15</property>
+                      <property name="side">top</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="projectcustom.channelFrame10Plus" id="channelFrame12" named="True">
+                    <layout manager="pack">
+                      <property name="pady">0 15</property>
+                      <property name="side">top</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="projectcustom.channelFrame10Plus" id="channelFrame13" named="True">
+                    <layout manager="pack">
+                      <property name="pady">0 15</property>
+                      <property name="side">top</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="projectcustom.channelFrame10Plus" id="channelFrame14" named="True">
+                    <layout manager="pack">
+                      <property name="pady">0 15</property>
+                      <property name="side">top</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="projectcustom.channelFrame10Plus" id="channelFrame15" named="True">
+                    <layout manager="pack">
+                      <property name="pady">0 15</property>
+                      <property name="side">top</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="projectcustom.channelFrame10Plus" id="channelFrame16" named="True">
+                    <layout manager="pack">
+                      <property name="pady">0 15</property>
+                      <property name="side">top</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="projectcustom.channelFrame10Plus" id="channelFrame17" named="True">
+                    <layout manager="pack">
+                      <property name="pady">0 15</property>
+                      <property name="side">top</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="projectcustom.channelFrame10Plus" id="channelFrame18" named="True">
+                    <layout manager="pack">
+                      <property name="pady">0 15</property>
+                      <property name="side">top</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="projectcustom.channelFrame10Plus" id="channelFrame19" named="True">
+                    <layout manager="pack">
+                      <property name="pady">0 15</property>
+                      <property name="side">top</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="projectcustom.channelFrame10Plus" id="channelFrame20" named="True">
                     <layout manager="pack">
                       <property name="pady">0 15</property>
                       <property name="side">top</property>

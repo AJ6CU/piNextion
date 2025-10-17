@@ -26,7 +26,7 @@ def image_loader_default(master, image_name: str):
 #
 # Base class definition
 #
-class channelFrameUI(ttk.Frame):
+class channelFrame10PlusUI(ttk.Frame):
     def __init__(
         self,
         master=None,
@@ -60,10 +60,10 @@ class channelFrameUI(ttk.Frame):
         self.Go_Button.grid(column=0, row=0, sticky="w")
         self.Go_Button.configure(command=self.mem_go_button)
         self.channel_Label = ttk.Label(self, name="channel_label")
-        self.Label_VAR = tk.StringVar(value='CH01 ')
+        self.Label_VAR = tk.StringVar(value='Channel 11')
         self.channel_Label.configure(
-            style="Heading2b.TLabel",
-            text='CH01 ',
+            style="Heading2bi.TLabel",
+            text='Channel 11',
             textvariable=self.Label_VAR,
             width=12)
         self.channel_Label.grid(column=1, padx="10 0", row=0, sticky="w")
@@ -84,7 +84,7 @@ class channelFrameUI(ttk.Frame):
             width=5)
         self.mode_Label.grid(column=3, padx="10 0", row=0, sticky="w")
         self.configure(height=200, style="Normal.TFrame", width=200)
-        # Layout for 'channelFrame' skipped in custom widget template.
+        # Layout for 'channelFrame10Plus' skipped in custom widget template.
 
     def mem_go_button(self):
         pass
@@ -92,6 +92,6 @@ class channelFrameUI(ttk.Frame):
 
 if __name__ == "__main__":
     root = tk.Tk()
-    widget = channelFrameUI(root)
+    widget = channelFrame10PlusUI(root)
     widget.pack(expand=True, fill="both")
     root.mainloop()

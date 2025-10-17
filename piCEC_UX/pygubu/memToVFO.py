@@ -20,14 +20,21 @@ class memToVFO(baseui.memToVFOUI):
 
         for child in self.scrolledMemoryFrame.innerframe.winfo_children():
             memToVFO.channelList.append(child)
-        channelFrame.changeChannelCallback = changeChannelCallback
+            child.changeChannelCallback = changeChannelCallback
+        # channelFrame.changeChannelCallback = changeChannelCallback
+        # channelFrame10Plus.changeChannelCallback = changeChannelCallback
         # print("channel name =", self.channelList[1].channel_Label_VAR.get())
         print("total channels=", len(self.channelList))
 
     def setChannelLabel(self, label):
-        memToVFO.channelList[memToVFO.currentChannel].Label_VAR.set(label)
-        memToVFO.currentChannel += 1
-        if memToVFO.currentChannel == 9:
+        if memToVFO.currentChannel < len(self.channelList):
+            if (label.isspace()) or (memToVFO.currentChannel > 8):
+                memToVFO.channelList[memToVFO.currentChannel].Label_VAR.set("Channel " + str(memToVFO.currentChannel))
+            else:
+                memToVFO.channelList[memToVFO.currentChannel].Label_VAR.set(label)
+
+            memToVFO.currentChannel += 1
+        else:
             memToVFO.currentChannel = 0
 
     def setChanneFreqMode(self, freq, mode):
@@ -40,7 +47,7 @@ class memToVFO(baseui.memToVFOUI):
     def setChannelShowLabel(self, showFlag):
         memToVFO.channelList[memToVFO.currentChannel].showLabel_VAR.set(showFlag)
         memToVFO.currentChannel += 1
-        if memToVFO.currentChannel == len(self.channelList):
+        if memToVFO.currentChannel == 9:
             memToVFO.currentChannel = 0
 
 

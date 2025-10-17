@@ -334,10 +334,12 @@ class piCECNextion(baseui.piCECNextionUI):
     def Radio_Req_Channel_Freqs(self):
 
         base = 0x76
-        for i in range(11):
+        for i in range(len(memToVFO.channelList)):
             command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x4, 0x48]
+            print("command=", command)
             self.theRadio.sendCommandToMCU(bytes(command))
             base += 0x4
+        base = 0x76
 
     def Radio_Req_Channel_Labels(self):
         base = 0xc7
@@ -345,6 +347,7 @@ class piCECNextion(baseui.piCECNextionUI):
             command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x5, 0x57]
             self.theRadio.sendCommandToMCU(bytes(command))
             base += 0x6
+        base = 0xc7
 
     def Radio_Req_Channel_Show_Labels(self):
         base = 0xc6
@@ -352,6 +355,7 @@ class piCECNextion(baseui.piCECNextionUI):
             command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x1, 0x57]
             self.theRadio.sendCommandToMCU(bytes(command))
             base += 0x6
+        base = 0xc6
 
     def displayvfoToMemWindow(self):
         print("VFO->Memory Settings Windows Called")
@@ -1312,6 +1316,7 @@ class piCECNextion(baseui.piCECNextionUI):
             print("thinks it is a number")
             freq = int(value,16) & 0x1FFFFFFF
             mode = (int(value,16) >> 29) & 0x7
+            print("mode=", mode, type(mode))
             self.memToVFOWindow.setChanneFreqMode(freq, mode)
         else:
             if(len(value) == 1):

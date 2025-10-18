@@ -29,7 +29,7 @@ def image_loader_default(master, image_name: str):
 #
 # Base class definition
 #
-class memToVFOUI(tk.Toplevel):
+class channelsUI(tk.Toplevel):
     def __init__(
         self,
         master=None,
@@ -50,18 +50,18 @@ class memToVFOUI(tk.Toplevel):
 
         super().__init__(master, **kw)
 
-        self.labelframe1 = ttk.Labelframe(self)
-        self.labelframe1.configure(
+        labelframe1 = ttk.Labelframe(self)
+        labelframe1.configure(
             style="Heading2.TLabelframe",
             text='Frequency Channels',
             width=500)
         # First object created
-        on_first_object_cb(self.labelframe1)
+        on_first_object_cb(labelframe1)
 
-        self.frame1 = ttk.Frame(self.labelframe1)
-        self.frame1.configure(style="Normal.TFrame", width=200)
+        frame1 = ttk.Frame(labelframe1)
+        frame1.configure(style="Normal.TFrame", width=200)
         self.display_Current_VFO_Frame = ttk.Frame(
-            self.frame1, name="display_current_vfo_frame")
+            frame1, name="display_current_vfo_frame")
         self.display_Current_VFO_Frame.configure(
             height=24, style="Normal.TFrame", width=450)
         self.current_VFO_Heading_Label = ttk.Label(
@@ -107,8 +107,7 @@ class memToVFOUI(tk.Toplevel):
         self.current_Mode_Label.pack(expand=False, padx="10 10", side="left")
         self.display_Current_VFO_Frame.grid(
             column=0, pady="15 0", row=0, sticky="new")
-        self.header_Line_Frame = ttk.Frame(
-            self.frame1, name="header_line_frame")
+        self.header_Line_Frame = ttk.Frame(frame1, name="header_line_frame")
         self.header_Line_Frame.configure(
             height=24, style="Normal.TFrame", width=200)
         self.channel_header_Label = ttk.Label(
@@ -140,74 +139,74 @@ class memToVFOUI(tk.Toplevel):
             style="Heading2b.TLabel", text='Scan Set')
         self.scan_Set_Label.grid(column=6, padx="20 0", row=0)
         self.header_Line_Frame.grid(column=0, pady="20 0", row=1, sticky="new")
-        self.scrolledMemoryFrame = ScrolledFrame(
-            self.frame1, scrolltype="both", name="scrolledmemoryframe")
-        self.scrolledMemoryFrame.innerframe.configure(
+        self.scrolledChannelFrame = ScrolledFrame(
+            frame1, scrolltype="both", name="scrolledchannelframe")
+        self.scrolledChannelFrame.innerframe.configure(
             relief="raised", style="Normal.TFrame", width=500)
-        self.scrolledMemoryFrame.configure(usemousewheel=True)
+        self.scrolledChannelFrame.configure(usemousewheel=True)
         self.frequencyChannel1 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel1")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel1")
         self.frequencyChannel1.pack(side="top")
         self.frequencyChannel2 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel2")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel2")
         self.frequencyChannel2.pack(pady="10 0", side="top")
         self.frequencyChannel3 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel3")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel3")
         self.frequencyChannel3.pack(pady="10 0", side="top")
         self.frequencyChannel4 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel4")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel4")
         self.frequencyChannel4.pack(pady="10 0", side="top")
         self.frequencyChannel5 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel5")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel5")
         self.frequencyChannel5.pack(pady="10 0", side="top")
         self.frequencyChannel6 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel6")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel6")
         self.frequencyChannel6.pack(pady="10 0", side="top")
         self.frequencyChannel7 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel7")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel7")
         self.frequencyChannel7.pack(pady="10 0", side="top")
         self.frequencyChannel8 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel8")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel8")
         self.frequencyChannel8.pack(pady="10 0", side="top")
         self.frequencyChannel9 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel9")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel9")
         self.frequencyChannel9.pack(pady="10 0", side="top")
         self.frequencyChannel10 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel10")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel10")
         self.frequencyChannel10.pack(pady="10 0", side="top")
         self.frequencyChannel11 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel11")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel11")
         self.frequencyChannel11.pack(pady="10 0", side="top")
         self.frequencyChannel12 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel12")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel12")
         self.frequencyChannel12.pack(pady="10 0", side="top")
         self.frequencyChannel13 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel13")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel13")
         self.frequencyChannel13.pack(pady="10 0", side="top")
         self.frequencyChannel14 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel14")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel14")
         self.frequencyChannel14.pack(pady="10 0", side="top")
         self.frequencyChannel15 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel15")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel15")
         self.frequencyChannel15.pack(pady="10 0", side="top")
         self.frequencyChannel16 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel16")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel16")
         self.frequencyChannel16.pack(pady="10 0", side="top")
         self.frequencyChannel17 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel17")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel17")
         self.frequencyChannel17.pack(pady="10 0", side="top")
         self.frequencyChannel18 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel18")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel18")
         self.frequencyChannel18.pack(pady="10 0", side="top")
         self.frequencyChannel19 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel19")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel19")
         self.frequencyChannel19.pack(pady="10 0", side="top")
         self.frequencyChannel20 = frequencyChannel(
-            self.scrolledMemoryFrame.innerframe, name="frequencychannel20")
+            self.scrolledChannelFrame.innerframe, name="frequencychannel20")
         self.frequencyChannel20.pack(pady="10 0", side="top")
-        self.scrolledMemoryFrame.grid(
+        self.scrolledChannelFrame.grid(
             column=0, pady="5 0", row=2, sticky="nsew")
-        self.closingFrame = ttk.Frame(self.frame1, name="closingframe")
+        self.closingFrame = ttk.Frame(frame1, name="closingframe")
         self.closingFrame.configure(
             height=50,
             relief="raised",
@@ -277,12 +276,12 @@ class memToVFOUI(tk.Toplevel):
             sticky="ns")
         self.close_Button.configure(command=self.close_Channel_CB)
         self.closingFrame.grid(column=0, padx=15, pady=15, row=3, sticky="ew")
-        self.frame1.pack(expand=True, fill="both", side="top")
-        self.frame1.rowconfigure(2, minsize=400)
-        self.labelframe1.pack(expand=True, fill="both", side="top")
-        self.labelframe1.pack_propagate(0)
+        frame1.pack(expand=True, fill="both", side="top")
+        frame1.rowconfigure(2, minsize=400)
+        labelframe1.pack(expand=True, fill="both", side="top")
+        labelframe1.pack_propagate(0)
         self.configure(height=575, width=600)
-        # Layout for 'mem_to_VFO_Window' skipped in custom widget template.
+        # Layout for 'channels_Window' skipped in custom widget template.
 
     def go_Channel_CB(self):
         pass
@@ -305,6 +304,6 @@ class memToVFOUI(tk.Toplevel):
 
 if __name__ == "__main__":
     root = tk.Tk()
-    widget = memToVFOUI(root)
+    widget = channelsUI(root)
     widget.pack(expand=True, fill="both")
     root.mainloop()

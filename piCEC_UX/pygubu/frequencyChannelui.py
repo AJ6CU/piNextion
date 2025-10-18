@@ -27,7 +27,7 @@ def image_loader_default(master, image_name: str):
 #
 # Base class definition
 #
-class channelWriteFrameUI(ttk.Frame):
+class frequencyChannelUI(ttk.Frame):
     def __init__(
         self,
         master=None,
@@ -130,6 +130,6 @@ class channelWriteFrameUI(ttk.Frame):
 
 if __name__ == "__main__":
     root = tk.Tk()
-    widget = channelWriteFrameUI(root)
+    widget = frequencyChannelUI(root)
     widget.pack(expand=True, fill="both")
     root.mainloop()

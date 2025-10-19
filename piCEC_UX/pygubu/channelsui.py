@@ -114,7 +114,7 @@ class channelsUI(tk.Toplevel):
             self.header_Line_Frame, name="channel_header_label")
         self.channel_header_Label.configure(
             style="Heading2b.TLabel", text='Channel')
-        self.channel_header_Label.grid(column=0, padx="65 0", row=0)
+        self.channel_header_Label.grid(column=0, padx="106 0", row=0)
         self.name_Header_Label = ttk.Label(
             self.header_Line_Frame, name="name_header_label")
         self.name_Header_Label.configure(style="Heading2b.TLabel", text='Name')
@@ -123,11 +123,11 @@ class channelsUI(tk.Toplevel):
             self.header_Line_Frame, name="frequency_header_label")
         self.frequency_Header_Label.configure(
             style="Heading2b.TLabel", text='Frequency')
-        self.frequency_Header_Label.grid(column=2, padx="14 0", row=0)
+        self.frequency_Header_Label.grid(column=2, padx="17 0", row=0)
         self.mode_Header_Label = ttk.Label(
             self.header_Line_Frame, name="mode_header_label")
         self.mode_Header_Label.configure(style="Heading2b.TLabel", text='Mode')
-        self.mode_Header_Label.grid(column=4, padx="30 0", row=0)
+        self.mode_Header_Label.grid(column=4, padx="36 0", row=0)
         self.showLabel_Header_Label = ttk.Label(
             self.header_Line_Frame, name="showlabel_header_label")
         self.showLabel_Header_Label.configure(

@@ -307,9 +307,9 @@ class piCECNextion(baseui.piCECNextionUI):
         print("Memory->VFO Settings Windows Called")
         self.channelWindow = channels(self.master, self, self.channelSelect_CB)
         self.channelWindow.transient(self.master)
-        # self.Radio_Req_Channel_Freqs()
-        # self.Radio_Req_Channel_Labels()
-        # self.Radio_Req_Channel_Show_Labels()
+        self.Radio_Req_Channel_Freqs()
+        self.Radio_Req_Channel_Labels()
+        self.Radio_Req_Channel_Show_Labels()
 
     def channelSelect_CB(self, channelNumber):
         print("channel_CB called, channelNum =", channelNumber)
@@ -344,7 +344,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def Radio_Req_Channel_Labels(self):
         base = 0xc7
-        for i in range(9):
+        for i in range(10):
             command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x5, 0x57]
             self.theRadio.sendCommandToMCU(bytes(command))
             base += 0x6
@@ -352,7 +352,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def Radio_Req_Channel_Show_Labels(self):
         base = 0xc6
-        for i in range(9):
+        for i in range(10):
             command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x1, 0x57]
             self.theRadio.sendCommandToMCU(bytes(command))
             base += 0x6
@@ -1302,8 +1302,6 @@ class piCECNextion(baseui.piCECNextionUI):
         print("value=", value, sep='*', end='*')
         print("length=", len(value))
 
-
-
         try:
             int(value,16)
             is_number = True
@@ -1315,18 +1313,18 @@ class piCECNextion(baseui.piCECNextionUI):
             freq = int(value,16) & 0x1FFFFFFF
             mode = (int(value,16) >> 29) & 0x7
             print("mode=", mode, type(mode))
-            # self.memToVFOWindow.setChanneFreqMode(freq, mode)
+            self.channelWindow.setChanneFreqMode(freq, mode)
         else:
             if(len(value) == 1):
                 if (ord(value) == 0):
                     print("show label is a 0")
-                    # self.memToVFOWindow.setChannelShowLabel(False)
+                    self.channelWindow.setChannelShowLabel("No")
                 elif(ord(value) == 3):
                     print("show label is a 3")
-                    # self.memToVFOWindow.setChannelShowLabel(True)
+                    self.channelWindow.setChannelShowLabel("Yes")
             else:
                 print("thinks it is a channel")
-                # self.memToVFOWindow.setChannelLabel(value)
+                self.channelWindow.setChannelLabel(value)
 
 
 

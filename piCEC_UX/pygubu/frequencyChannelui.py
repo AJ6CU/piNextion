@@ -48,6 +48,17 @@ class frequencyChannelUI(ttk.Frame):
 
         super().__init__(master, **kw)
 
+        self.channel_Number_Label = ttk.Label(
+            self, name="channel_number_label")
+        self.channel_Number_VAR = tk.StringVar()
+        self.channel_Number_Label.configure(
+            style="Heading2bi.TLabel",
+            textvariable=self.channel_Number_VAR,
+            width=10)
+        # First object created
+        on_first_object_cb(self.channel_Number_Label)
+
+        self.channel_Number_Label.grid(column=0, row=0, sticky="w")
         self.channel_Select_Button = ttk.Button(
             self, name="channel_select_button")
         self.channel_Select_VAR = tk.StringVar(value='Select')
@@ -55,19 +66,16 @@ class frequencyChannelUI(ttk.Frame):
             style="Button2b.TButton",
             text='Select',
             textvariable=self.channel_Select_VAR)
-        # First object created
-        on_first_object_cb(self.channel_Select_Button)
-
-        self.channel_Select_Button.grid(column=0, row=0)
+        self.channel_Select_Button.grid(column=1, padx="10 0", row=0)
         self.channel_Select_Button.configure(command=self.channel_Select_CB)
         self.channel_Name_Entry = ttk.Entry(self, name="channel_name_entry")
         self.channel_Label_VAR = tk.StringVar()
         self.channel_Name_Entry.configure(
             justify="left",
-            style="Normal.TEntry",
+            style="Entry2b.TEntry",
             textvariable=self.channel_Label_VAR,
             width=5)
-        self.channel_Name_Entry.grid(column=1, padx="10 0", row=0, sticky="w")
+        self.channel_Name_Entry.grid(column=2, padx="10 0", row=0, sticky="w")
         self.freq_Label = ttk.Label(self, name="freq_label")
         self.channel_Freq_VAR = tk.StringVar()
         self.freq_Label.configure(
@@ -75,7 +83,7 @@ class frequencyChannelUI(ttk.Frame):
             style="Heading2b.TLabel",
             textvariable=self.channel_Freq_VAR,
             width=10)
-        self.freq_Label.grid(column=2, padx="10 0", row=0, sticky="w")
+        self.freq_Label.grid(column=3, padx="10 0", row=0, sticky="w")
         self.mode_Combobox = Combobox(self, name="mode_combobox")
         self.channel_Mode_VAR = tk.StringVar()
         self.mode_Combobox.configure(
@@ -83,9 +91,9 @@ class frequencyChannelUI(ttk.Frame):
             keyvariable=self.channel_Mode_VAR,
             state="normal",
             style="ComboBox2b.TCombobox",
-            values='Default LSB USB CWL CWU',
+            values='DFT LSB USB CWL CWU',
             width=8)
-        self.mode_Combobox.grid(column=3, padx="10 0", row=0)
+        self.mode_Combobox.grid(column=4, padx="10 0", row=0)
         self.show_Label_Combobox = Combobox(self, name="show_label_combobox")
         self.channel_ShowLabel_VAR = tk.StringVar()
         self.show_Label_Combobox.configure(
@@ -95,7 +103,7 @@ class frequencyChannelUI(ttk.Frame):
             style="ComboBox2b.TCombobox",
             values='Yes No',
             width=5)
-        self.show_Label_Combobox.grid(column=4, padx="10 0", row=0)
+        self.show_Label_Combobox.grid(column=5, padx="10 0", row=0)
         self.scan_Set_Combobox = Combobox(self, name="scan_set_combobox")
         self.channel_ScanSet_VAR = tk.StringVar()
         self.scan_Set_Combobox.configure(
@@ -105,7 +113,7 @@ class frequencyChannelUI(ttk.Frame):
             style="ComboBox2b.TCombobox",
             values='None Scan1 Scan2 Scan3 Scan4',
             width=5)
-        self.scan_Set_Combobox.grid(column=5, padx="10 0", row=0)
+        self.scan_Set_Combobox.grid(column=6, padx="10 0", row=0)
         self.configure(height=200, style="Normal.TFrame", width=200)
         # Layout for 'frequencyChannel' skipped in custom widget template.
 

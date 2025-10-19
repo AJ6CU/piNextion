@@ -10,6 +10,7 @@ import channelsui as baseui
 
 class channels(baseui.channelsUI):
     channelList = []
+    currentChannel = 0
 
     def __init__(self, master=None, mainWindow=None, channelCallback=None, **kw):
         super().__init__(master, **kw)
@@ -23,11 +24,12 @@ class channels(baseui.channelsUI):
             #
             # Set defaults
             #
-            child.channel_Label_Default()
-            child.channel_Freq_Default()
-            child.select_Channel_Mode_Default()
-            child.select_Channel_Showlabel_Default()
-            child.select_ScanSet_Default()
+            child.channel_Number_Default()
+            child.Label_Default()
+            child.Freq_Default()
+            child.Mode_Default()
+            child.Showlabel_Default()
+            child.ScanSet_Default()
             self.scan_Select_Channel_Default()
 
 
@@ -35,6 +37,26 @@ class channels(baseui.channelsUI):
 
     def scan_Select_Channel_Default(self):
         self.scan_Select_Channel_VAR.set("None")
+
+    def setChanneFreqMode(self, freq, mode):
+        channels.channelList[channels.currentChannel].Set_Freq(str(freq))
+        channels.channelList[channels.currentChannel].Set_Mode(self.mainWindow.modeNum_To_TextDict[str(mode)])
+        channels.currentChannel += 1
+        if channels.currentChannel == len(self.channelList):
+            channels.currentChannel = 0
+
+    def setChannelLabel(self, label):
+        if channels.currentChannel < 10:
+            channels.channelList[channels.currentChannel].Set_Label(label)
+            channels.currentChannel += 1
+        if channels.currentChannel == 10:
+            channels.currentChannel = 0
+
+    def setChannelShowLabel(self, showFlag):
+        channels.channelList[channels.currentChannel].Set_ShowLabel(showFlag)
+        channels.currentChannel += 1
+        if channels.currentChannel == 10:
+            channels.currentChannel = 0
 
 
 

@@ -7,9 +7,9 @@ import piCEC_UXui as baseui
 # from piCEC_UX import myRadio
 from settings import settings
 from cwSettings import cwSettings
-from memToVFO import memToVFO
-from vfoToMem import vfoToMem
-
+# from memToVFO import memToVFO
+# from vfoToMem import vfoToMem
+from channels import channels
 import mystyles  # Styles definition module
 from time import sleep
 
@@ -24,7 +24,7 @@ class piCECNextion(baseui.piCECNextionUI):
         self.theRadio = None            # Object pointer for the Radio
         self.cwSettingsWindow = None    # Object pointer for the CW Settinge Window
         self.settingsWindow = None      # Object pointer for the General Settings Window
-        self.memToVFOWindow = None      # object pointer for the Memory-> VFO Window
+        self.channelWindow = None      # object pointer for the Memory-> VFO Window
         self.vfoToMemWindow = None      # object pointer for the VFO->Memory Window
         self.DeepDebug = False
         self.CurrentDebug = True
@@ -302,39 +302,40 @@ class piCECNextion(baseui.piCECNextionUI):
     #   The actual setting of the corresponding values awaits the response of the eeprom
     #   packages sent by the MCU via the "sh_UX_Get_Memory" function
     #
-    def displaymemToVFOWindow(self):
+    def displayChannelWindow(self):
 
         print("Memory->VFO Settings Windows Called")
-        self.memToVFOWindow = memToVFO(self.master, self, self.changeChannel)
-        self.memToVFOWindow.transient(self.master)
-        self.Radio_Req_Channel_Freqs()
-        self.Radio_Req_Channel_Labels()
-        self.Radio_Req_Channel_Show_Labels()
+        self.channelWindow = channels(self.master, self, self.channelSelect_CB)
+        self.channelWindow.transient(self.master)
+        # self.Radio_Req_Channel_Freqs()
+        # self.Radio_Req_Channel_Labels()
+        # self.Radio_Req_Channel_Show_Labels()
 
-    def changeChannel(self, label, freq, mode, showLabel):
-        print("changeChannel Callback")
-        print("channel label", label,
-              "Freq=", freq,
-              "mode=", mode,
-              "show label", showLabel)
-
-        print("type=", type(showLabel))
-
-        self.Radio_Set_New_Frequency(freq)
-        self.Radio_Set_Mode(self.Text_To_ModeNum[mode])
-
-        if (int(showLabel)):
-            print("setting show label")
-            self.channel_Name_VAR.set(label)
-        else:
-            print("turning off show label")
-            self.channel_Name_VAR.set("N/A  ")
+    def channelSelect_CB(self, channelNumber):
+        print("channel_CB called, channelNum =", channelNumber)
+        # print("changeChannel Callback")
+        # print("channel label", label,
+        #       "Freq=", freq,
+        #       "mode=", mode,
+        #       "show label", showLabel)
+        #
+        # print("type=", type(showLabel))
+        #
+        # self.Radio_Set_New_Frequency(freq)
+        # self.Radio_Set_Mode(self.Text_To_ModeNum[mode])
+        #
+        # if (int(showLabel)):
+        #     print("setting show label")
+        #     self.channel_Name_VAR.set(label)
+        # else:
+        #     print("turning off show label")
+        #     self.channel_Name_VAR.set("N/A  ")
 
 
     def Radio_Req_Channel_Freqs(self):
 
         base = 0x76
-        for i in range(len(memToVFO.channelList)):
+        for i in range(len(channels.channelList)):
             command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x4, 0x48]
             print("command=", command)
             self.theRadio.sendCommandToMCU(bytes(command))
@@ -357,9 +358,9 @@ class piCECNextion(baseui.piCECNextionUI):
             base += 0x6
         base = 0xc6
 
-    def displayvfoToMemWindow(self):
-        print("VFO->Memory Settings Windows Called")
-        self.vfoToMemWindow = vfoToMem(self.master, self)
+    # def displayvfoToMemWindow(self):
+    #     print("VFO->Memory Settings Windows Called")
+    #     self.vfoToMemWindow = vfoToMem(self.master, self)
 
     def vfo_CB(self):
         self.Radio_Toggle_VFO()
@@ -680,15 +681,12 @@ class piCECNextion(baseui.piCECNextionUI):
     def rit_CB(self):
         self.Radio_Toggle_RIT()
 
-    def store_CB(self):
-        if self.CurrentDebug:
-            print("store_CB")
-        self.displayvfoToMemWindow()
 
-    def recall_CB(self):
+
+    def channels_CB(self):
         if self.CurrentDebug:
             print("recall_CB")
-        self.displaymemToVFOWindow()
+        self.displayChannelWindow()
     #
     #   The following routines handles the ATT jogwheel.
     #   Basically any click with no movement will toggle
@@ -1317,18 +1315,18 @@ class piCECNextion(baseui.piCECNextionUI):
             freq = int(value,16) & 0x1FFFFFFF
             mode = (int(value,16) >> 29) & 0x7
             print("mode=", mode, type(mode))
-            self.memToVFOWindow.setChanneFreqMode(freq, mode)
+            # self.memToVFOWindow.setChanneFreqMode(freq, mode)
         else:
             if(len(value) == 1):
                 if (ord(value) == 0):
-                    # print("show label is a 0")
-                    self.memToVFOWindow.setChannelShowLabel(False)
+                    print("show label is a 0")
+                    # self.memToVFOWindow.setChannelShowLabel(False)
                 elif(ord(value) == 3):
-                    # print("show label is a 3")
-                    self.memToVFOWindow.setChannelShowLabel(True)
+                    print("show label is a 3")
+                    # self.memToVFOWindow.setChannelShowLabel(True)
             else:
-                # print("thinks it is a channel")
-                self.memToVFOWindow.setChannelLabel(value)
+                print("thinks it is a channel")
+                # self.memToVFOWindow.setChannelLabel(value)
 
 
 

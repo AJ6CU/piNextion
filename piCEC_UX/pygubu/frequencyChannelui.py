@@ -61,70 +61,55 @@ class frequencyChannelUI(ttk.Frame):
         self.channel_Select_Button.grid(column=0, row=0)
         self.channel_Select_Button.configure(command=self.channel_Select_CB)
         self.channel_Name_Entry = ttk.Entry(self, name="channel_name_entry")
-        self.Label_VAR = tk.StringVar()
+        self.channel_Label_VAR = tk.StringVar()
         self.channel_Name_Entry.configure(
             justify="left",
             style="Normal.TEntry",
-            textvariable=self.Label_VAR,
+            textvariable=self.channel_Label_VAR,
             width=5)
         self.channel_Name_Entry.grid(column=1, padx="10 0", row=0, sticky="w")
         self.freq_Label = ttk.Label(self, name="freq_label")
-        self.Freq_VAR = tk.StringVar(value='99.999.999')
+        self.channel_Freq_VAR = tk.StringVar()
         self.freq_Label.configure(
             anchor="w",
             style="Heading2b.TLabel",
-            text='99.999.999',
-            textvariable=self.Freq_VAR)
+            textvariable=self.channel_Freq_VAR,
+            width=10)
         self.freq_Label.grid(column=2, padx="10 0", row=0, sticky="w")
         self.mode_Combobox = Combobox(self, name="mode_combobox")
-        self.Mode_VAR = tk.StringVar()
+        self.channel_Mode_VAR = tk.StringVar()
         self.mode_Combobox.configure(
             justify="center",
-            keyvariable=self.Mode_VAR,
+            keyvariable=self.channel_Mode_VAR,
             state="normal",
             style="ComboBox2b.TCombobox",
             values='Default LSB USB CWL CWU',
             width=8)
         self.mode_Combobox.grid(column=3, padx="10 0", row=0)
-        self.mode_Combobox.configure(
-            postcommand=self.select_Channel_Mode_Default)
         self.show_Label_Combobox = Combobox(self, name="show_label_combobox")
-        self.showLabel_VAR = tk.StringVar()
+        self.channel_ShowLabel_VAR = tk.StringVar()
         self.show_Label_Combobox.configure(
             justify="center",
-            keyvariable=self.showLabel_VAR,
+            keyvariable=self.channel_ShowLabel_VAR,
             state="normal",
             style="ComboBox2b.TCombobox",
             values='Yes No',
             width=5)
         self.show_Label_Combobox.grid(column=4, padx="10 0", row=0)
-        self.show_Label_Combobox.configure(
-            postcommand=self.select_Channel_Showlabel_Default)
         self.scan_Set_Combobox = Combobox(self, name="scan_set_combobox")
-        self.scanSet_VAR = tk.StringVar()
+        self.channel_ScanSet_VAR = tk.StringVar()
         self.scan_Set_Combobox.configure(
             justify="center",
-            keyvariable=self.scanSet_VAR,
+            keyvariable=self.channel_ScanSet_VAR,
             state="normal",
             style="ComboBox2b.TCombobox",
             values='None Scan1 Scan2 Scan3 Scan4',
             width=5)
         self.scan_Set_Combobox.grid(column=5, padx="10 0", row=0)
-        self.scan_Set_Combobox.configure(
-            postcommand=self.select_scanSet_Default)
         self.configure(height=200, style="Normal.TFrame", width=200)
         # Layout for 'frequencyChannel' skipped in custom widget template.
 
     def channel_Select_CB(self):
-        pass
-
-    def select_Channel_Mode_Default(self):
-        pass
-
-    def select_Channel_Showlabel_Default(self):
-        pass
-
-    def select_scanSet_Default(self):
         pass
 
 

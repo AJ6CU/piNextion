@@ -25,6 +25,7 @@
     <resources />
   </project>
   <object class="tk.Toplevel" id="channels_Window" named="True">
+    <property name="geometry">600x575</property>
     <property name="height">575</property>
     <property name="width">600</property>
     <containerlayout manager="pack">
@@ -424,7 +425,6 @@
                   <object class="pygubu.widgets.Combobox" id="scan_Select_Combobox" named="True">
                     <property name="justify">center</property>
                     <property name="keyvariable">string:scan_Select_Channel_VAR</property>
-                    <property name="postcommand" type="command" cbtype="simple">scan_Select_Channel_Default_CB</property>
                     <property name="style">ComboBox2b.TCombobox</property>
                     <property name="values">None Scan1 Scan2 Scan3 Scan4</property>
                     <property name="width">5</property>

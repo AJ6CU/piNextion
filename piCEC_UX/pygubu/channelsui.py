@@ -241,8 +241,6 @@ class channelsUI(tk.Toplevel):
             width=5)
         self.scan_Select_Combobox.grid(
             column=2, padx="10 0", row=0, sticky="ns")
-        self.scan_Select_Combobox.configure(
-            postcommand=self.scan_Select_Channel_Default_CB)
         self.scan_Button = ttk.Button(self.closingFrame, name="scan_button")
         self.scan_Channel_VAR = tk.StringVar(value='Scan')
         self.scan_Button.configure(
@@ -281,15 +279,13 @@ class channelsUI(tk.Toplevel):
         labelframe1.pack(expand=True, fill="both", side="top")
         labelframe1.pack_propagate(0)
         self.configure(height=575, width=600)
+        self.geometry("600x575")
         # Layout for 'channels_Window' skipped in custom widget template.
 
     def go_Channel_CB(self):
         pass
 
     def save_Channel_CB(self):
-        pass
-
-    def scan_Select_Channel_Default_CB(self):
         pass
 
     def scan_Channel_CB(self):

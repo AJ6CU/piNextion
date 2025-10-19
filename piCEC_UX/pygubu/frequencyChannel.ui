@@ -47,7 +47,7 @@
       <object class="ttk.Entry" id="channel_Name_Entry" named="True">
         <property name="justify">left</property>
         <property name="style">Normal.TEntry</property>
-        <property name="textvariable">string:Label_VAR</property>
+        <property name="textvariable">string:channel_Label_VAR</property>
         <property name="width">5</property>
         <layout manager="grid">
           <property name="column">1</property>
@@ -61,8 +61,8 @@
       <object class="ttk.Label" id="freq_Label" named="True">
         <property name="anchor">w</property>
         <property name="style">Heading2b.TLabel</property>
-        <property name="text" translatable="yes">99.999.999</property>
-        <property name="textvariable">string:Freq_VAR</property>
+        <property name="textvariable">string:channel_Freq_VAR</property>
+        <property name="width">10</property>
         <layout manager="grid">
           <property name="column">2</property>
           <property name="padx">10 0</property>
@@ -74,8 +74,7 @@
     <child>
       <object class="pygubu.widgets.Combobox" id="mode_Combobox" named="True">
         <property name="justify">center</property>
-        <property name="keyvariable">string:Mode_VAR</property>
-        <property name="postcommand" type="command" cbtype="simple">select_Channel_Mode_Default</property>
+        <property name="keyvariable">string:channel_Mode_VAR</property>
         <property name="state">normal</property>
         <property name="style">ComboBox2b.TCombobox</property>
         <property name="values">Default LSB USB CWL CWU</property>
@@ -90,8 +89,7 @@
     <child>
       <object class="pygubu.widgets.Combobox" id="show_Label_Combobox" named="True">
         <property name="justify">center</property>
-        <property name="keyvariable">string:showLabel_VAR</property>
-        <property name="postcommand" type="command" cbtype="simple">select_Channel_Showlabel_Default</property>
+        <property name="keyvariable">string:channel_ShowLabel_VAR</property>
         <property name="state">normal</property>
         <property name="style">ComboBox2b.TCombobox</property>
         <property name="values">Yes No</property>
@@ -106,8 +104,7 @@
     <child>
       <object class="pygubu.widgets.Combobox" id="scan_Set_Combobox" named="True">
         <property name="justify">center</property>
-        <property name="keyvariable">string:scanSet_VAR</property>
-        <property name="postcommand" type="command" cbtype="simple">select_scanSet_Default</property>
+        <property name="keyvariable">string:channel_ScanSet_VAR</property>
         <property name="state">normal</property>
         <property name="style">ComboBox2b.TCombobox</property>
         <property name="values">None Scan1 Scan2 Scan3 Scan4</property>

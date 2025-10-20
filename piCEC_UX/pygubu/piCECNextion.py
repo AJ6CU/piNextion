@@ -1317,18 +1317,18 @@ class piCECNextion(baseui.piCECNextionUI):
             freq = int(value,16) & 0x1FFFFFFF
             mode = (int(value,16) >> 29) & 0x7
             print("mode=", mode, type(mode))
-            self.channelWindow.setChanneFreqMode(freq, mode)
+            self.channelWindow.EEPROM_SetChanneFreqMode(freq, mode)
         else:
             if(len(value) == 1):
                 if (ord(value) == 0):
                     print("show label is a 0")
-                    self.channelWindow.setChannelShowLabel("No")
+                    self.channelWindow.EEPROM_SetChannelShowLabel("No")
                 elif(ord(value) == 3):
                     print("show label is a 3")
-                    self.channelWindow.setChannelShowLabel("Yes")
+                    self.channelWindow.EEPROM_SetChannelShowLabel("Yes")
             else:
                 print("thinks it is a channel")
-                self.channelWindow.setChannelLabel(value)
+                self.channelWindow.EEPROM_SetChannelLabel(value)
 
 
 

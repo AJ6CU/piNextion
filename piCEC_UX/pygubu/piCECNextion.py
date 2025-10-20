@@ -217,6 +217,17 @@ class piCECNextion(baseui.piCECNextionUI):
             "channel_ShowLabel": [0xc6, 0x2, 0x1, 0x57, 0x6,  0xa]
         }
 
+        #
+        #   These three variables are used to track which memory location (or "slot")
+        #   that the retreived memory is from. This is needed because the MCU does not
+        #   send any info on which memory location is associated with the value sent back
+        #   to the Nextion. It assumes (hopefully corrcctly) that they appear in order.
+        #
+        self.EEPROM_Current_Slot_Freq = 0
+        self.EEPROM_Current_Slot_Label = 0
+        self.EEPROM_Current_Slot_ShowLabel = 0
+
+
         self.ATT_Status_Off = 0         #indicates that ATT has been turned off
 
     #####################################################################################
@@ -1297,6 +1308,7 @@ class piCECNextion(baseui.piCECNextionUI):
         else:
             pass
 
+
     def sh_UX_Get_Memory(self, buffer):
         if self.CurrentDebug:
             print("sh memory fetched called")
@@ -1317,18 +1329,41 @@ class piCECNextion(baseui.piCECNextionUI):
             freq = int(value,16) & 0x1FFFFFFF
             mode = (int(value,16) >> 29) & 0x7
             print("mode=", mode, type(mode))
-            self.channelWindow.EEPROM_SetChanneFreqMode(freq, mode)
+            self.channelWindow.EEPROM_SetChanneFreqMode(
+                self.EEPROM_Current_Slot_Freq,
+                freq,
+                mode)
+            self.EEPROM_Current_Slot_Freq += 1
+            if (self.EEPROM_Current_Slot_Freq ==
+                    self.EEPROM_Mem_Address["channel_freq_Mode"][self.totalSlots]):
+                self.EEPROM_Current_Slot_Freq = 0
         else:
             if(len(value) == 1):
                 if (ord(value) == 0):
                     print("show label is a 0")
-                    self.channelWindow.EEPROM_SetChannelShowLabel("No")
+                    self.channelWindow.EEPROM_SetChannelShowLabel(
+                        self.EEPROM_Current_Slot_ShowLabel,
+                        "No")
+
                 elif(ord(value) == 3):
                     print("show label is a 3")
-                    self.channelWindow.EEPROM_SetChannelShowLabel("Yes")
+                    self.channelWindow.EEPROM_SetChannelShowLabel(
+                        self.EEPROM_Current_Slot_ShowLabel,
+                        "Yes")
+
+                self.EEPROM_Current_Slot_ShowLabel += 1
+                if (self.EEPROM_Current_Slot_ShowLabel ==
+                        self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]):
+                    self.EEPROM_Current_Slot_ShowLabel = 0
             else:
                 print("thinks it is a channel")
-                self.channelWindow.EEPROM_SetChannelLabel(value)
+                self.channelWindow.EEPROM_SetChannelLabel(
+                    self.EEPROM_Current_Slot_Label,
+                    value)
+                self.EEPROM_Current_Slot_Label += 1
+                if (self.EEPROM_Current_Slot_Label ==
+                        self.EEPROM_Mem_Address["channel_Label"][self.totalSlots]):
+                    self.EEPROM_Current_Slot_Label = 0
 
 
 

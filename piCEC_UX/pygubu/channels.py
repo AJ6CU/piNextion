@@ -38,25 +38,15 @@ class channels(baseui.channelsUI):
     def scan_Select_Channel_Default(self):
         self.scan_Select_Channel_VAR.set("None")
 
-    def EEPROM_SetChanneFreqMode(self, freq, mode):
-        channels.channelList[channels.currentChannel].Set_Freq(str(freq))
-        channels.channelList[channels.currentChannel].Set_Mode(self.mainWindow.modeNum_To_TextDict[str(mode)])
-        channels.currentChannel += 1
-        if channels.currentChannel == len(self.channelList):
-            channels.currentChannel = 0
+    def EEPROM_SetChanneFreqMode(self, channelNum,freq, mode):
+        channels.channelList[channelNum].Set_Freq(str(freq))
+        channels.channelList[channelNum].Set_Mode(self.mainWindow.modeNum_To_TextDict[str(mode)])
 
-    def EEPROM_SetChannelLabel(self, label):
-        if channels.currentChannel < 10:
-            channels.channelList[channels.currentChannel].Set_Label(label)
-            channels.currentChannel += 1
-        if channels.currentChannel == 10:
-            channels.currentChannel = 0
+    def EEPROM_SetChannelLabel(self, channelNum, label):
+        channels.channelList[channelNum].Set_Label(label)
 
-    def EEPROM_SetChannelShowLabel(self, showFlag):
-        channels.channelList[channels.currentChannel].Set_ShowLabel(showFlag)
-        channels.currentChannel += 1
-        if channels.currentChannel == 10:
-            channels.currentChannel = 0
+    def EEPROM_SetChannelShowLabel(self, channelNum, showFlag):
+        channels.channelList[channelNum].Set_ShowLabel(showFlag)
 
 
 

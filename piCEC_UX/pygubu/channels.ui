@@ -393,7 +393,7 @@
                 </layout>
                 <child>
                   <object class="ttk.Button" id="go_Channel_Button" named="True">
-                    <property name="command" type="command" cbtype="simple">go_Channel_CB</property>
+                    <property name="command" type="command" cbtype="simple">QSY_Channel_CB</property>
                     <property name="compound">none</property>
                     <property name="state">normal</property>
                     <property name="style">Button2b.TButton</property>

@@ -82,6 +82,8 @@ class piCECNextion(baseui.piCECNextionUI):
         self.saved_tuning_Preset_VAR = None
         self.update_Tuning_Preset_Button_Label = True
 
+        self.channelSelection = None                    # assigned to channel number when selected in channels
+
 #   Constants
         #######################################################################################
         #   Dictionaries that follow are used to lookup textual values based on internal
@@ -324,12 +326,15 @@ class piCECNextion(baseui.piCECNextionUI):
         print("Memory->VFO Settings Windows Called")
         self.channelWindow = channels(self.master, self, self.channelSelect_CB)
         self.channelWindow.transient(self.master)
+        self.channelWindow.update_Current_Frequency (self.primary_VFO_VAR.get())
+        self.channelWindow.update_Current_Mode (self.primary_Mode_VAR.get())
         self.Radio_Req_Channel_Freqs()
         self.Radio_Req_Channel_Labels()
         self.Radio_Req_Channel_Show_Labels()
 
     def channelSelect_CB(self, channelNumber):
         print("channel_CB called, channelNum =", channelNumber)
+        self.channelSelection = channelNumber
 
     def Radio_Req_Channel_Freqs(self):
 
@@ -1594,6 +1599,8 @@ class piCECNextion(baseui.piCECNextionUI):
     def vc_UX_Set_Primary_VFO_Frequency(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.primary_VFO_VAR.set(value)
+        if self.channelWindow != None:      #  Only update frequency if the channel window has been created once
+            self.channelWindow.update_Current_Frequency(self.primary_VFO_VAR.get())
         #
         #   Update position of needle, but do not change the baseline
         #
@@ -1613,6 +1620,9 @@ class piCECNextion(baseui.piCECNextionUI):
     def cc_UX_Set_Primary_Mode(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.primary_Mode_VAR.set(self.modeNum_To_TextDict[value])
+        if self.channelWindow != None:  # Only update frequency if the channel window has been created once
+            print("updating mode in channel")
+            self.channelWindow.update_Current_Mode(self.primary_Mode_VAR.get())
         if self.DeepDebug:
             print("cc get called:", "buffer =", buffer)
             print("cc new mode change")

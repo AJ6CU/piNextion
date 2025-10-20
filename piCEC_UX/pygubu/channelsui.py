@@ -220,7 +220,7 @@ class channelsUI(tk.Toplevel):
             style="Button2b.TButton",
             text='QSY Channel')
         self.go_Channel_Button.grid(column=0, pady="2 0", row=0, sticky="ns")
-        self.go_Channel_Button.configure(command=self.go_Channel_CB)
+        self.go_Channel_Button.configure(command=self.QSY_Channel_CB)
         self.save_Channel_Button = ttk.Button(
             self.closingFrame, name="save_channel_button")
         self.save_Channel_Button.configure(
@@ -282,7 +282,7 @@ class channelsUI(tk.Toplevel):
         self.geometry("600x575")
         # Layout for 'channels_Window' skipped in custom widget template.
 
-    def go_Channel_CB(self):
+    def QSY_Channel_CB(self):
         pass
 
     def save_Channel_CB(self):

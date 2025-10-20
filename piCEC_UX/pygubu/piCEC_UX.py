@@ -43,6 +43,17 @@ mainWindow.attachRadio(myRadio)
 myRadio.openRadio()
 myRadio.readALLValues()
 mainWindow.initUX()
+#
+# master = tk.Tk()
+#
+#
+# def update():
+#     # do things
+#     master.after(1000, update)  # call update again after 1 second
+#
+#
+# update()  # begin updates
+# master.mainloop()
 
 root.after(500,myRadio.updateData)
 root.mainloop()

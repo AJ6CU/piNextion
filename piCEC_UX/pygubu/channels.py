@@ -32,8 +32,14 @@ class channels(baseui.channelsUI):
             child.ScanSet_Default()
             self.scan_Select_Channel_Default()
 
-
             self.channelCount += 1
+
+    def update_Current_Frequency(self, freq):
+        self.current_VFO_VAR.set(freq)
+
+    def update_Current_Mode(self, mode):
+        self.current_Mode_VAR.set(mode)
+
 
     def scan_Select_Channel_Default(self):
         self.scan_Select_Channel_VAR.set("None")
@@ -47,6 +53,9 @@ class channels(baseui.channelsUI):
 
     def EEPROM_SetChannelShowLabel(self, channelNum, showFlag):
         channels.channelList[channelNum].Set_ShowLabel(showFlag)
+
+    def QSY_Channel_CB(self):
+        pass
 
 
 

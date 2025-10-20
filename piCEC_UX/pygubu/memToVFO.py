@@ -50,6 +50,9 @@ class memToVFO(baseui.memToVFOUI):
         if memToVFO.currentChannel == 9:
             memToVFO.currentChannel = 0
 
+    def attach_Frequency_Var(self, freqVar):
+        self.current_VFO_VAR = freqVar
+
 
 
     def apply_CB(self):

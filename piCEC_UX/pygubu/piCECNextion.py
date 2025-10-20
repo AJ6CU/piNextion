@@ -203,12 +203,18 @@ class piCECNextion(baseui.piCECNextionUI):
         self.lsb = 0                    # index of least significant eeprom mem address in list below
         self.msb = 1                    # index of most significant eeprom emem address in list below
         self.memLength = 2
+        self.charFlag = 3
+        self.memOffset = 4
+        self.totalSlots = 5
         self.EEPROM_Mem_Address = {
-            "cw_key_type": [ 0x66, 0x01, 0x01],
-            "cw_wpm": [ 0x1c, 0x0,0x04],
-            "cw_sidetone": [ 0x18, 0x0, 0x04],
-            "cw_Delay_Returning_to_RX": [0x02, 0x1, 0x01],  # eeprom value divided by 10
-            "cw_Delay_Starting_TX": [0x03, 0x1, 0x1]  # eeprom saved valued divided by 2
+            "cw_key_type": [ 0x66, 0x01, 0x01, 0x0, 0x0, 0x1],
+            "cw_wpm": [ 0x1c, 0x0, 0x04, 0x0, 0x0, 0x1],
+            "cw_sidetone": [ 0x18, 0x0, 0x04, 0x0, 0x0, 0x1],
+            "cw_Delay_Returning_to_RX": [0x02, 0x1, 0x01, 0x0, 0x0, 0x1],  # eeprom value divided by 10
+            "cw_Delay_Starting_TX": [0x03, 0x1, 0x1, 0x0, 0x0,  0x1],  # eeprom saved valued divided by 2
+            "channel_freq_Mode": [0x76, 0x2, 0x4, 0x48, 0x4, 0x14], # 0x48 indicates a integer number
+            "channel_Label": [0xc7, 0x2, 0x5, 0x57, 0x6, 0xa], # 0x57 indicates it is a character
+            "channel_ShowLabel": [0xc6, 0x2, 0x1, 0x57, 0x6,  0xa]
         }
 
         self.ATT_Status_Off = 0         #indicates that ATT has been turned off
@@ -313,54 +319,52 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def channelSelect_CB(self, channelNumber):
         print("channel_CB called, channelNum =", channelNumber)
-        # print("changeChannel Callback")
-        # print("channel label", label,
-        #       "Freq=", freq,
-        #       "mode=", mode,
-        #       "show label", showLabel)
-        #
-        # print("type=", type(showLabel))
-        #
-        # self.Radio_Set_New_Frequency(freq)
-        # self.Radio_Set_Mode(self.Text_To_ModeNum[mode])
-        #
-        # if (int(showLabel)):
-        #     print("setting show label")
-        #     self.channel_Name_VAR.set(label)
-        # else:
-        #     print("turning off show label")
-        #     self.channel_Name_VAR.set("N/A  ")
-
 
     def Radio_Req_Channel_Freqs(self):
 
-        base = 0x76
-        for i in range(len(channels.channelList)):
-            command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x4, 0x48]
+        base = self.EEPROM_Mem_Address["channel_freq_Mode"][self.lsb]
+        for i in range(self.EEPROM_Mem_Address["channel_freq_Mode"][self.totalSlots]):
+            command = [self.toRadioCommandDict["TS_CMD_READMEM"],
+                       base,
+                       self.EEPROM_Mem_Address["channel_freq_Mode"][self.msb],
+                       self.EEPROM_Mem_Address["channel_freq_Mode"][self.memLength],
+                       self.EEPROM_Mem_Address["channel_freq_Mode"][self.charFlag]
+                       ]
             print("command=", command)
             self.theRadio.sendCommandToMCU(bytes(command))
-            base += 0x4
-        base = 0x76
+            base += self.EEPROM_Mem_Address["channel_freq_Mode"][self.memOffset]
+
+        base = self.EEPROM_Mem_Address["channel_freq_Mode"][self.lsb]
 
     def Radio_Req_Channel_Labels(self):
-        base = 0xc7
-        for i in range(10):
-            command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x5, 0x57]
+        base = self.EEPROM_Mem_Address["channel_Label"][self.lsb]
+        for i in range(self.EEPROM_Mem_Address["channel_Label"][self.totalSlots]):
+            command = [self.toRadioCommandDict["TS_CMD_READMEM"],
+                       base,
+                       self.EEPROM_Mem_Address["channel_Label"][self.msb],
+                       self.EEPROM_Mem_Address["channel_Label"][self.memLength],
+                       self.EEPROM_Mem_Address["channel_Label"][self.charFlag]
+                       ]
             self.theRadio.sendCommandToMCU(bytes(command))
-            base += 0x6
-        base = 0xc7
+            base += self.EEPROM_Mem_Address["channel_Label"][self.memOffset]
+
+        base = self.EEPROM_Mem_Address["channel_Label"][self.lsb]
 
     def Radio_Req_Channel_Show_Labels(self):
-        base = 0xc6
-        for i in range(10):
-            command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x1, 0x57]
+        base = self.EEPROM_Mem_Address["channel_ShowLabel"][self.lsb]
+        for i in range(self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]):
+            command = [self.toRadioCommandDict["TS_CMD_READMEM"],
+                       base,
+                       self.EEPROM_Mem_Address["channel_ShowLabel"][self.msb],
+                       self.EEPROM_Mem_Address["channel_ShowLabel"][self.memLength],
+                       self.EEPROM_Mem_Address["channel_ShowLabel"][self.charFlag]
+                       ]
             self.theRadio.sendCommandToMCU(bytes(command))
-            base += 0x6
-        base = 0xc6
+            base += self.EEPROM_Mem_Address["channel_ShowLabel"][self.memOffset]
 
-    # def displayvfoToMemWindow(self):
-    #     print("VFO->Memory Settings Windows Called")
-    #     self.vfoToMemWindow = vfoToMem(self.master, self)
+        base = self.EEPROM_Mem_Address["channel_ShowLabel"][self.lsb]
+
+
 
     def vfo_CB(self):
         self.Radio_Toggle_VFO()

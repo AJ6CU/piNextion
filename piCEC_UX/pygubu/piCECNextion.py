@@ -82,7 +82,7 @@ class piCECNextion(baseui.piCECNextionUI):
         self.saved_tuning_Preset_VAR = None
         self.update_Tuning_Preset_Button_Label = True
 
-        self.channelSelection = None                    # assigned to channel number when selected in channels
+        # self.channelSelection = None                    # assigned to channel number when selected in channels
 
 #   Constants
         #######################################################################################
@@ -176,7 +176,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
         self.Text_To_ModeNum = {
             "DFT":0,
-            "LSB": 2,
+            "LSB":2,
             "USB":3,
             "CWL":4,
             "CWU":5
@@ -322,9 +322,8 @@ class piCECNextion(baseui.piCECNextionUI):
     #   packages sent by the MCU via the "sh_UX_Get_Memory" function
     #
     def displayChannelWindow(self):
+        self.channelWindow = channels(self.master, self)
 
-        print("Memory->VFO Settings Windows Called")
-        self.channelWindow = channels(self.master, self, self.channelSelect_CB)
         self.channelWindow.transient(self.master)
         self.channelWindow.update_Current_Frequency (self.primary_VFO_VAR.get())
         self.channelWindow.update_Current_Mode (self.primary_Mode_VAR.get())
@@ -332,9 +331,9 @@ class piCECNextion(baseui.piCECNextionUI):
         self.Radio_Req_Channel_Labels()
         self.Radio_Req_Channel_Show_Labels()
 
-    def channelSelect_CB(self, channelNumber):
-        print("channel_CB called, channelNum =", channelNumber)
-        self.channelSelection = channelNumber
+    # def channelSelect_CB(self, channelNumber):
+    #     print("channel_CB called, channelNum =", channelNumber)
+    #     self.channelSelection = channelNumber
 
     def Radio_Req_Channel_Freqs(self):
 

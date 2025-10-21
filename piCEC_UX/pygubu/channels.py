@@ -12,15 +12,17 @@ class channels(baseui.channelsUI):
     channelList = []
     currentChannel = 0
 
-    def __init__(self, master=None, mainWindow=None, channelCallback=None, **kw):
+    def __init__(self, master=None, mainWindow=None, **kw):
         super().__init__(master, **kw)
         self.mainWindow = mainWindow
-        self.channelCount = 0
+        self.channelSlotCount = 0
+        self.channelSlotSelection = None
+
 
         for child in self.scrolledChannelFrame.innerframe.winfo_children():
             channels.channelList.append(child)
-            child.assignChannelSelect_CB(channelCallback)
-            child.assignChannelNum(self.channelCount)
+            child.assignChannelSelect_CB(self.channelSlot_CB)
+            child.assignChannelNum(self.channelSlotCount)
             #
             # Set defaults
             #
@@ -30,9 +32,9 @@ class channels(baseui.channelsUI):
             child.Mode_Default()
             child.Showlabel_Default()
             child.ScanSet_Default()
-            self.scan_Select_Channel_Default()
 
-            self.channelCount += 1
+            self.channelSlotCount += 1
+        self.scan_Select_Channel_Default()
 
     def update_Current_Frequency(self, freq):
         self.current_VFO_VAR.set(freq)
@@ -54,10 +56,33 @@ class channels(baseui.channelsUI):
     def EEPROM_SetChannelShowLabel(self, channelNum, showFlag):
         channels.channelList[channelNum].Set_ShowLabel(showFlag)
 
-    def QSY_Channel_CB(self):
-        pass
+    def QSY_Channel_CB(self):               # method called when Channel->VFO
+        print("qsy_CB called")
+        self.mainWindow.Radio_Set_New_Frequency(channels.channelList[self.channelSlotSelection].Get_Freq())
+        self.mainWindow.Radio_Set_Mode(self.mainWindow.Text_To_ModeNum[channels.channelList[self.channelSlotSelection].Get_Mode()])
 
+    def save_Channel_CB(self):              # method called to write current VFO to channel
+        print("saveChannel_CB called")
 
+    def scan_Channel_CB(self):              # method called to start channel scanning
+        print("scanChannel_CB called")
+
+    def refresh_Channel_CB(self):           # method called when user wants to refresh channels from EEPROM
+        print("refresh_CB called")
+
+    def close_Channel_CB(self):             # method called when window closed
+        print("close_CB called")
+
+    def channelSlot_CB(self, slotNumber):
+        print("channel_CB called, channel=", slotNumber+1, "channel slot =", slotNumber)
+        if self.channelSlotSelection != None:
+            channels.channelList[self.channelSlotSelection].channel_Select_Button.configure(
+                style="Button2b.TButton")
+            channels.channelList[self.channelSlotSelection].channel_Select_VAR.set("Select")  # unselect the prior one
+        self.channelSlotSelection = slotNumber
+        channels.channelList[self.channelSlotSelection].channel_Select_Button.configure(
+                style="Button2bipressed.TButton")
+        channels.channelList[self.channelSlotSelection].channel_Select_VAR.set("Selected") # select the new one
 
 
 if __name__ == "__main__":

@@ -106,6 +106,8 @@ class channels(baseui.channelsUI):
                 style="Button2bipressed.TButton")
         channels.channelList[self.channelSlotSelection].channel_Select_VAR.set("Selected") # select the new one
 
+    def save_All_Channels_CB(self):
+        print("save_All_Channels_CB called")
 
 if __name__ == "__main__":
     root = tk.Tk()

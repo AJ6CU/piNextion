@@ -60,7 +60,9 @@ class frequencyChannel(baseui.frequencyChannelUI):
     def Get_Mode(self):
         return self.channel_Mode_VAR.get()
     def Set_Mode(self, mode):
+        print("in set mode, mode=", mode, type(mode))
         self.channel_Mode_VAR.set(mode)
+        print ("return from channel_Mode_VAR.set")
     def Mode_Default(self):
         self.Set_Mode("CWU")
 

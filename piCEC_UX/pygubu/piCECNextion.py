@@ -322,18 +322,24 @@ class piCECNextion(baseui.piCECNextionUI):
     #   packages sent by the MCU via the "sh_UX_Get_Memory" function
     #
     def displayChannelWindow(self):
-        self.channelWindow = channels(self.master, self)
+        if self.channelWindow == None:
+            self.channelWindow = channels(self.master, self, self.refresh_CB)
+            self.channelWindow.transient(self.master)
+            self.channelWindow.update_Current_Frequency (self.primary_VFO_VAR.get())
+            self.channelWindow.update_Current_Mode (self.primary_Mode_VAR.get())
+            self.Radio_Req_Channel_Freqs()
+            self.Radio_Req_Channel_Labels()
+            self.Radio_Req_Channel_Show_Labels()
+        else:
+            self.channelWindow.deiconify()
+            self.channelWindow.current_Channel_VAR.set("Not Saved")
 
-        self.channelWindow.transient(self.master)
-        self.channelWindow.update_Current_Frequency (self.primary_VFO_VAR.get())
-        self.channelWindow.update_Current_Mode (self.primary_Mode_VAR.get())
-        self.Radio_Req_Channel_Freqs()
-        self.Radio_Req_Channel_Labels()
-        self.Radio_Req_Channel_Show_Labels()
-
-    # def channelSelect_CB(self, channelNumber):
-    #     print("channel_CB called, channelNum =", channelNumber)
-    #     self.channelSelection = channelNumber
+    def refresh_CB(self):
+        print("outdide refresh called")
+        self.channelWindow.destroy()
+        self.channelWindow = None
+        currentChannel = 0
+        self.displayChannelWindow()
 
     def Radio_Req_Channel_Freqs(self):
 
@@ -650,8 +656,11 @@ class piCECNextion(baseui.piCECNextionUI):
         #   Special case 0, which is the current value of the preset
         #
         if (self.currentVFO_Tuning_Rate == 0):
-            self.currentVFO_Tuning_Rate = int(self.tuning_Preset_Label_VAR.get())
-            if self.DeepDebug:
+           if self.tuning_Preset_Label_VAR.get() == "Direct Tune":
+               self.Radio_Set_Tuning_Preset(1)
+           else:
+               self.currentVFO_Tuning_Rate = int(self.tuning_Preset_Label_VAR.get())
+           if self.DeepDebug:
                 print("new because zero current_rate_multiplier=", self.currentVFO_Tuning_Rate)
 
     def updateJogTracking(self,newBaseline=True):
@@ -1332,6 +1341,7 @@ class piCECNextion(baseui.piCECNextionUI):
             print("thinks it is a number")
             freq = int(value,16) & 0x1FFFFFFF
             mode = (int(value,16) >> 29) & 0x7
+            print("freq=", freq)
             print("mode=", mode, type(mode))
             self.channelWindow.EEPROM_SetChanneFreqMode(
                 self.EEPROM_Current_Slot_Freq,

@@ -219,6 +219,8 @@ class piCECNextion(baseui.piCECNextionUI):
             "channel_ShowLabel": [0xc6, 0x2, 0x1, 0x57, 0x6,  0xa]
         }
 
+        self.memReadingState = "Freq"
+
         #
         #   These three variables are used to track which memory location (or "slot")
         #   that the retreived memory is from. This is needed because the MCU does not
@@ -277,7 +279,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def settings_CB(self):
         print("settings_CB")
-        self.settingsWindow = settingsUI (self.master)
+        self.settingsWindow = settings (self.master)
         self.settingsWindow.geometry("300x200")
 
     def getCurrentCWSettings(self):
@@ -827,15 +829,15 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     #   This convert a 16 bit number (either string or int) to an array of 2 bytes
     #
-    def convert16BitToBytes(self, int16):
-        encodedBytes = bytearray()
-        number16 = int(int16)    # convert any strings to integer
-        encodedBytes.append(number16 & 0xff)
-
-        number16 = (number16 >> 8)
-        encodedBytes.append(number16 & 0xff)
-
-        return encodedBytes
+    # def convert16BitToBytes(self, int16):
+    #     encodedBytes = bytearray()
+    #     number16 = int(int16)    # convert any strings to integer
+    #     encodedBytes.append(number16 & 0xff)
+    #
+    #     number16 = (number16 >> 8)
+    #     encodedBytes.append(number16 & 0xff)
+    #
+    #     return encodedBytes
 
     #
     #   This function tells the Radio that a new mode has been selected for
@@ -923,6 +925,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def Radio_Set_IFS_Level(self, level):
+        # MJH replace with self.Radio_Freq_Encode(value)
         if self.DeepDebug:
             print("IFS Set Level =", level)
         intLevel = int(level)
@@ -970,10 +973,6 @@ class piCECNextion(baseui.piCECNextionUI):
         print("command=",command)
         self.theRadio.sendCommandToMCU(bytes(command))
 
-
-    # "cw_sidetone": [0x18, 0x0],
-    # "cw_Delay_Returning_to_RX": [0x02, 0x1],
-    # "cw_Delay_Starting_TX": [0x03, 0x1]
 
 
 
@@ -1071,9 +1070,115 @@ class piCECNextion(baseui.piCECNextionUI):
         print("command=", command)
         self.theRadio.sendCommandToMCU(bytes(command))
 
+    def Radio_Write_EEPROM_Channel_FreqMode (self, channelNum, freq, mode ):
+        print("Radio_Write_EEPROM_Channel_Freq called")
+
+# self.lsb = 0                    # index of least significant eeprom mem address in list below
+#         self.msb = 1                    # index of most significant eeprom emem address in list below
+#         self.memLength = 2
+#         self.charFlag = 3
+#         self.memOffset = 4
+#         self.totalSlots = 5
+#         self.EEPROM_Mem_Address = {
+#             "cw_key_type": [ 0x66, 0x01, 0x01, 0x0, 0x0, 0x1],
+#             "cw_wpm": [ 0x1c, 0x0, 0x04, 0x0, 0x0, 0x1],
+#             "cw_sidetone": [ 0x18, 0x0, 0x04, 0x0, 0x0, 0x1],
+#             "cw_Delay_Returning_to_RX": [0x02, 0x1, 0x01, 0x0, 0x0, 0x1],  # eeprom value divided by 10
+#             "cw_Delay_Starting_TX": [0x03, 0x1, 0x1, 0x0, 0x0,  0x1],  # eeprom saved valued divided by 2
+#             "channel_freq_Mode": [0x76, 0x2, 0x4, 0x48, 0x4, 0x14], # 0x48 indicates a integer number
+#             "channel_Label": [0xc7, 0x2, 0x5, 0x57, 0x6, 0xa], # 0x57 indicates it is a character
+#             "channel_ShowLabel": [0xc6, 0x2, 0x1, 0x57, 0x6,  0xa]
+#         }
+#         print("freq=", freq, "mode=", mode, "conversion=",int(self.Text_To_ModeNum[mode]),int(self.Text_To_ModeNum[mode])<<29)
+
+        encoded_data = (int(freq) & 0x1FFFFFFF) + ((int(self.Text_To_ModeNum[mode])& 0x7)<<29)
+        # print("encoded_data=", hex(encoded_data), encoded_data)
+
+        encodedBytes = self.Radio_Freq_Encode(str(encoded_data))
+
+        lsb = (channelNum*self.EEPROM_Mem_Address["channel_freq_Mode"][self.memOffset]) + self.EEPROM_Mem_Address["channel_freq_Mode"][self.lsb]
+        msb = self.EEPROM_Mem_Address["channel_freq_Mode"][self.msb]
+        totalBytes = self.EEPROM_Mem_Address["channel_freq_Mode"][self.memLength]
+
+        # print("In Radio_Write_EEPROM_Channel_FreqMode")
+        # print("lsb=", lsb, ", msb=", msb, ", totalBytes=", totalBytes)
+
+
+        checksum = (lsb + msb + totalBytes) % 256
+        # print("checksum=", hex(checksum))
+        # print("encodedBytes=", encodedBytes)
+        # print("bytes=", hex(encodedBytes[0]), hex(encodedBytes[1]), hex(encodedBytes[2]), hex(encodedBytes[3]))
+
+        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
+                   lsb,
+                   msb,
+                   totalBytes,
+                   checksum,
+                   encodedBytes[0], encodedBytes[1], encodedBytes[2], encodedBytes[3]
+                   ]
+
+        print("command=", command)
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Write_EEPROM_Channel_Label (self, channelNum, label ):
+        print("Radio_Write_EEPROM_Channel_Label called")
+
+
+        lsb = ((channelNum * self.EEPROM_Mem_Address["channel_Label"][self.memOffset]) +
+               self.EEPROM_Mem_Address["channel_Label"][self.lsb])
+        msb = self.EEPROM_Mem_Address["channel_Label"][self.msb]
+        totalBytes = self.EEPROM_Mem_Address["channel_Label"][self.memLength]
+
+        # strip blanks
+        noBlankLabel = label.strip()
+        labelBytes = bytes(noBlankLabel.ljust(totalBytes), 'utf-8')
 
 
 
+        print("In Radio_Write_EEPROM_Channel_Label")
+        print("lsb=", lsb, ", msb=", msb, ", totalBytes=", totalBytes)
+
+        checksum = (lsb + msb + totalBytes) % 256
+        # print("checksum=", hex(checksum))
+        # print("encodedBytes=", encodedBytes)
+        # print("bytes=", hex(encodedBytes[0]), hex(encodedBytes[1]), hex(encodedBytes[2]), hex(encodedBytes[3]))
+        print("labelBytes=", labelBytes, "labelBytes[0]", labelBytes[0], "labelBytes[1]", labelBytes[1],sep='*')
+        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
+                   lsb,
+                   msb,
+                   totalBytes,
+                   checksum,
+                   labelBytes[0], labelBytes[1], labelBytes[2], labelBytes[3], labelBytes[4]
+                   ]
+
+        print("command=", command)
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Write_EEPROM_Channel_ShowLabel (self, channelNum, showLabel ):
+        print("Radio_Write_EEPROM_Channel_ShowLabel called")
+
+        lsb = (channelNum * self.EEPROM_Mem_Address["channel_ShowLabel"][self.memOffset]) + \
+              self.EEPROM_Mem_Address["channel_ShowLabel"][self.lsb]
+        msb = self.EEPROM_Mem_Address["channel_ShowLabel"][self.msb]
+        totalBytes = self.EEPROM_Mem_Address["channel_ShowLabel"][self.memLength]
+
+        checksum = (lsb + msb + totalBytes) % 256
+
+        if showLabel == 'Yes':
+            value = 0x3
+        else:
+            value = 0x0
+
+        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
+                   lsb,
+                   msb,
+                   totalBytes,
+                   checksum,
+                   value
+                   ]
+
+        print("command=", command)
+        self.theRadio.sendCommandToMCU(bytes(command))
 
 
 #   MCU Commands
@@ -1331,18 +1436,10 @@ class piCECNextion(baseui.piCECNextionUI):
         print("value=", value, sep='*', end='*')
         print("length=", len(value))
 
-        try:
-            int(value,16)
-            is_number = True
-        except ValueError:
-            is_number = False
-
-        if(is_number):
-            print("thinks it is a number")
+        if (self.memReadingState == "Freq"):
             freq = int(value,16) & 0x1FFFFFFF
             mode = (int(value,16) >> 29) & 0x7
-            print("freq=", freq)
-            print("mode=", mode, type(mode))
+
             self.channelWindow.EEPROM_SetChanneFreqMode(
                 self.EEPROM_Current_Slot_Freq,
                 freq,
@@ -1351,33 +1448,85 @@ class piCECNextion(baseui.piCECNextionUI):
             if (self.EEPROM_Current_Slot_Freq ==
                     self.EEPROM_Mem_Address["channel_freq_Mode"][self.totalSlots]):
                 self.EEPROM_Current_Slot_Freq = 0
-        else:
-            if(len(value) == 1):
-                if (ord(value) == 0):
-                    print("show label is a 0")
-                    self.channelWindow.EEPROM_SetChannelShowLabel(
-                        self.EEPROM_Current_Slot_ShowLabel,
-                        "No")
+                self.memReadingState = "Label"
+        elif (self.memReadingState == "Label"):
 
-                elif(ord(value) == 3):
-                    print("show label is a 3")
-                    self.channelWindow.EEPROM_SetChannelShowLabel(
-                        self.EEPROM_Current_Slot_ShowLabel,
-                        "Yes")
+            self.channelWindow.EEPROM_SetChannelLabel(
+                self.EEPROM_Current_Slot_Label,
+                value)
+            self.EEPROM_Current_Slot_Label += 1
+            if (self.EEPROM_Current_Slot_Label ==
+                    self.EEPROM_Mem_Address["channel_Label"][self.totalSlots]):
+                self.EEPROM_Current_Slot_Label = 0
+                self.memReadingState = "ShowLabel"
+        elif (self.memReadingState == "ShowLabel"):
+            if (ord(value) == 0):
+                print("show label is a 0")
+                self.channelWindow.EEPROM_SetChannelShowLabel(
+                    self.EEPROM_Current_Slot_ShowLabel,
+                    "No")
 
-                self.EEPROM_Current_Slot_ShowLabel += 1
-                if (self.EEPROM_Current_Slot_ShowLabel ==
-                        self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]):
-                    self.EEPROM_Current_Slot_ShowLabel = 0
             else:
-                print("thinks it is a channel")
-                self.channelWindow.EEPROM_SetChannelLabel(
-                    self.EEPROM_Current_Slot_Label,
-                    value)
-                self.EEPROM_Current_Slot_Label += 1
-                if (self.EEPROM_Current_Slot_Label ==
-                        self.EEPROM_Mem_Address["channel_Label"][self.totalSlots]):
-                    self.EEPROM_Current_Slot_Label = 0
+                print("show label is a 3")
+                self.channelWindow.EEPROM_SetChannelShowLabel(
+                    self.EEPROM_Current_Slot_ShowLabel,
+                    "Yes")
+
+            self.EEPROM_Current_Slot_ShowLabel += 1
+            if (self.EEPROM_Current_Slot_ShowLabel ==
+                    self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]):
+                self.EEPROM_Current_Slot_ShowLabel = 0
+                self.memReadingState = "Freq"
+        else:
+            print("unknown memory fetch state")
+
+        # try:
+        #     int(value,16)
+        #     is_number = True
+        # except ValueError:
+        #     is_number = False
+        #
+        # if(is_number):
+        #     print("thinks it is a number")
+        #     freq = int(value,16) & 0x1FFFFFFF
+        #     mode = (int(value,16) >> 29) & 0x7
+        #     print("freq=", freq)
+        #     print("mode=", mode, type(mode))
+        #     self.channelWindow.EEPROM_SetChanneFreqMode(
+        #         self.EEPROM_Current_Slot_Freq,
+        #         freq,
+        #         mode)
+        #     self.EEPROM_Current_Slot_Freq += 1
+        #     if (self.EEPROM_Current_Slot_Freq ==
+        #             self.EEPROM_Mem_Address["channel_freq_Mode"][self.totalSlots]):
+        #         self.EEPROM_Current_Slot_Freq = 0
+        # else:
+        #     if(len(value) == 1):
+        #         if (ord(value) == 0):
+        #             print("show label is a 0")
+        #             self.channelWindow.EEPROM_SetChannelShowLabel(
+        #                 self.EEPROM_Current_Slot_ShowLabel,
+        #                 "No")
+        #
+        #         elif(ord(value) == 3):
+        #             print("show label is a 3")
+        #             self.channelWindow.EEPROM_SetChannelShowLabel(
+        #                 self.EEPROM_Current_Slot_ShowLabel,
+        #                 "Yes")
+        #
+        #         self.EEPROM_Current_Slot_ShowLabel += 1
+        #         if (self.EEPROM_Current_Slot_ShowLabel ==
+        #                 self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]):
+        #             self.EEPROM_Current_Slot_ShowLabel = 0
+        #     else:
+        #         print("thinks it is a channel")
+        #         self.channelWindow.EEPROM_SetChannelLabel(
+        #             self.EEPROM_Current_Slot_Label,
+        #             value)
+        #         self.EEPROM_Current_Slot_Label += 1
+        #         if (self.EEPROM_Current_Slot_Label ==
+        #                 self.EEPROM_Mem_Address["channel_Label"][self.totalSlots]):
+        #             self.EEPROM_Current_Slot_Label = 0
 
 
 
@@ -1401,15 +1550,15 @@ class piCECNextion(baseui.piCECNextionUI):
             print("vn get called:", "buffer =", buffer)
             print("buffer=", buffer)
             if (int(value) == 358):
-                print("write complete for keychange")
+                print("write complete for keychange, mem=", int(value))
             elif (int(value) == 28):
-                print("write complete for new WPM")
+                print("write complete for new WPM, mem=", int(value))
             elif (int(value) == 259):
-                print("write complete for new RX->TX")
+                print("write complete for new RX->TX, mem=", int(value))
             elif (int(value) == 258):
-                print("write complete for new TX->RX")
+                print("write complete for new TX->RX, mem=", int(value))
             else:
-                print("unknown command from vn_")
+                print("memory location write complete, mem=", int(value))
 
 
 

@@ -53,6 +53,11 @@ class channels(baseui.channelsUI):
         self.scan_Select_Channel_VAR.set("None")
 
     def EEPROM_SetChanneFreqMode(self, channelNum,freq, mode):
+        print("EEPROM_SetChanneFreqMode")
+        print("channelNum:",channelNum)
+        print("freq:",freq)
+        print("mode:",mode)
+
         channels.channelList[channelNum].Set_Freq(str(freq))
 
         # print("EEPROM_SetChanneFreqMode", channels.channelList[channelNum].Get_Freq())
@@ -80,8 +85,25 @@ class channels(baseui.channelsUI):
         self.mainWindow.Radio_Set_New_Frequency(channels.channelList[self.channelSlotSelection].Get_Freq())
         self.mainWindow.Radio_Set_Mode(self.mainWindow.Text_To_ModeNum[channels.channelList[self.channelSlotSelection].Get_Mode()])
         self.current_Channel_VAR.set(channels.channelList[self.channelSlotSelection].Get_Label())
+
     def save_Channel_CB(self):              # method called to write current VFO to channel
         print("saveChannel_CB called")
+        channels.channelList[self.channelSlotSelection].Set_Freq(self.current_VFO_VAR.get())
+        channels.channelList[self.channelSlotSelection].Set_Mode(self.current_Mode_VAR.get())
+
+        self.mainWindow.Radio_Write_EEPROM_Channel_FreqMode(
+            self.channelSlotSelection,
+            self.current_VFO_VAR.get(),
+            self.current_Mode_VAR.get())
+
+        self.mainWindow.Radio_Write_EEPROM_Channel_Label(
+            self.channelSlotSelection,
+            channels.channelList[self.channelSlotSelection].Get_Label())
+
+        self.mainWindow.Radio_Write_EEPROM_Channel_ShowLabel(
+            self.channelSlotSelection,
+            channels.channelList[self.channelSlotSelection].Get_ShowLabel()
+        )
 
     def scan_Channel_CB(self):              # method called to start channel scanning
         print("scanChannel_CB called")

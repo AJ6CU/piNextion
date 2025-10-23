@@ -63,6 +63,7 @@
         <property name="style">Entry2b.TEntry</property>
         <property name="textvariable">string:channel_Label_VAR</property>
         <property name="width">5</property>
+        <bind sequence="&lt;KeyPress&gt;" handler="channel_Name_Changed_CB" add="True" />
         <layout manager="grid">
           <property name="column">2</property>
           <property name="padx">5 0</property>
@@ -93,6 +94,7 @@
         <property name="style">ComboBox2b.TCombobox</property>
         <property name="values">DFT LSB USB CWL CWU</property>
         <property name="width">8</property>
+        <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="Channel_Mode_Changed_CB" add="" />
         <layout manager="grid">
           <property name="column">4</property>
           <property name="padx">5 0</property>
@@ -108,6 +110,7 @@
         <property name="style">ComboBox2b.TCombobox</property>
         <property name="values">Yes No</property>
         <property name="width">5</property>
+        <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="Channel_ShowLabel_Changed_CB" add="True" />
         <layout manager="grid">
           <property name="column">5</property>
           <property name="padx">5 0</property>
@@ -123,6 +126,7 @@
         <property name="style">ComboBox2b.TCombobox</property>
         <property name="values">None Scan1 Scan2 Scan3 Scan4</property>
         <property name="width">5</property>
+        <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="Channel_ScanSet_Changed_CB" add="True" />
         <layout manager="grid">
           <property name="column">6</property>
           <property name="padx">5 0</property>
@@ -131,7 +135,8 @@
       </object>
     </child>
     <child>
-      <object class="ttk.Label" id="label1">
+      <object class="ttk.Label" id="dirtyChannel_Label" named="True">
+        <property name="style">GreenLED.TLabel</property>
         <property name="width">2</property>
         <layout manager="grid">
           <property name="column">7</property>

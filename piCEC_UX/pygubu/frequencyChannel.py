@@ -13,6 +13,7 @@ class frequencyChannel(baseui.frequencyChannelUI):
         super().__init__(master, **kw)
         self.myChannelNum = 0
         self.selectCallback = None
+        self.dirty = False
 
     def assignChannelNum(self, channelNum):
         self.myChannelNum = channelNum
@@ -90,6 +91,33 @@ class frequencyChannel(baseui.frequencyChannelUI):
         self.channel_ScanSet_VAR.set(scanset)
     def ScanSet_Default(self):
         self.Set_ScanSet("None")
+
+    def channel_Dirty(self):
+        if (not self.dirty):
+            self.dirtyChannel_Label.configure(style="RedLED.TLabel")
+            self.dirty = True
+
+    def channel_Not_Dirty(self):
+        if (self.dirty):
+            self.dirtyChannel_Label.configure(style="GreenLED.TLabel")
+            self.dirty = False
+
+    def channel_Name_Changed_CB(self, event=None):
+        print("channel_Name_Changed_CB called")
+        self.channel_Dirty()
+
+    def Channel_Mode_Changed_CB(self, event=None):
+        print("channel_Mode_Changed_CB called")
+        self.channel_Dirty()
+
+    def Channel_ShowLabel_Changed_CB(self, event=None):
+        print("channel_ShowLabel_Changed_CB called")
+        self.channel_Dirty()
+
+    def Channel_ScanSet_Changed_CB(self, event=None):
+        print("channel_ScanSet_Changed_CB called")
+        self.channel_Dirty()
+
 
 
 

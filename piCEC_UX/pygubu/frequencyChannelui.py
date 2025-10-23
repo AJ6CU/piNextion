@@ -77,6 +77,8 @@ class frequencyChannelUI(ttk.Frame):
             textvariable=self.channel_Label_VAR,
             width=5)
         self.channel_Name_Entry.grid(column=2, padx="5 0", row=0, sticky="w")
+        self.channel_Name_Entry.bind(
+            "<KeyPress>", self.channel_Name_Changed_CB, add="+")
         self.freq_Label = ttk.Label(self, name="freq_label")
         self.channel_Freq_VAR = tk.StringVar()
         self.freq_Label.configure(
@@ -95,6 +97,10 @@ class frequencyChannelUI(ttk.Frame):
             values='DFT LSB USB CWL CWU',
             width=8)
         self.mode_Combobox.grid(column=4, padx="5 0", row=0)
+        self.mode_Combobox.bind(
+            "<<ComboboxSelected>>",
+            self.Channel_Mode_Changed_CB,
+            add="")
         self.show_Label_Combobox = Combobox(self, name="show_label_combobox")
         self.channel_ShowLabel_VAR = tk.StringVar()
         self.show_Label_Combobox.configure(
@@ -105,6 +111,10 @@ class frequencyChannelUI(ttk.Frame):
             values='Yes No',
             width=5)
         self.show_Label_Combobox.grid(column=5, padx="5 0", row=0)
+        self.show_Label_Combobox.bind(
+            "<<ComboboxSelected>>",
+            self.Channel_ShowLabel_Changed_CB,
+            add="+")
         self.scan_Set_Combobox = Combobox(self, name="scan_set_combobox")
         self.channel_ScanSet_VAR = tk.StringVar()
         self.scan_Set_Combobox.configure(
@@ -115,13 +125,29 @@ class frequencyChannelUI(ttk.Frame):
             values='None Scan1 Scan2 Scan3 Scan4',
             width=5)
         self.scan_Set_Combobox.grid(column=6, padx="5 0", row=0)
-        label1 = ttk.Label(self)
-        label1.configure(width=2)
-        label1.grid(column=7, padx="10 5", row=0)
+        self.scan_Set_Combobox.bind(
+            "<<ComboboxSelected>>",
+            self.Channel_ScanSet_Changed_CB,
+            add="+")
+        self.dirtyChannel_Label = ttk.Label(self, name="dirtychannel_label")
+        self.dirtyChannel_Label.configure(style="GreenLED.TLabel", width=2)
+        self.dirtyChannel_Label.grid(column=7, padx="10 5", row=0)
         self.configure(height=200, style="Normal.TFrame", width=200)
         # Layout for 'frequencyChannel' skipped in custom widget template.
 
     def channel_Select_CB(self):
+        pass
+
+    def channel_Name_Changed_CB(self, event=None):
+        pass
+
+    def Channel_Mode_Changed_CB(self, event=None):
+        pass
+
+    def Channel_ShowLabel_Changed_CB(self, event=None):
+        pass
+
+    def Channel_ScanSet_Changed_CB(self, event=None):
         pass
 
 

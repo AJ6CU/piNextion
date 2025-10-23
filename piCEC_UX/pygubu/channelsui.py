@@ -136,7 +136,12 @@ class channelsUI(tk.Toplevel):
             self.header_Line_Frame, name="scan_set_label")
         self.scan_Set_Label.configure(
             style="Heading2b.TLabel", text='Scan Set')
-        self.scan_Set_Label.grid(column=6, padx="11 50", row=0)
+        self.scan_Set_Label.grid(column=6, padx="11 7", row=0)
+        self.dirtyIndicator_Label = ttk.Label(
+            self.header_Line_Frame, name="dirtyindicator_label")
+        self.dirtyIndicator_Label.configure(
+            style="Heading2b.TLabel", text='Saved')
+        self.dirtyIndicator_Label.grid(column=7, row=0)
         self.header_Line_Frame.grid(column=0, pady="25 0", row=1, sticky="n")
         self.scrolledChannelFrame = ScrolledFrame(
             frame1, scrolltype="both", name="scrolledchannelframe")
@@ -204,30 +209,31 @@ class channelsUI(tk.Toplevel):
             self.scrolledChannelFrame.innerframe, name="frequencychannel20")
         self.frequencyChannel20.pack(anchor="w", pady="10 0", side="top")
         self.scrolledChannelFrame.grid(
-            column=0, columnspan=2, pady="5 0", row=2, sticky="nsew")
+            column=0, pady="5 0", row=2, sticky="nsew")
         self.scrolledChannelFrame.pack_propagate(0)
         self.channelEdit_Frame = ttk.Frame(frame1, name="channeledit_frame")
         self.channelEdit_Frame.configure(style="Normal.TFrame", width=200)
-        self.go_Channel_Button = ttk.Button(
-            self.channelEdit_Frame, name="go_channel_button")
-        self.go_Channel_Button.configure(
+        self.ChannelToVFO_Button = ttk.Button(
+            self.channelEdit_Frame, name="channeltovfo_button")
+        self.ChannelToVFO_Button.configure(
             compound="none",
             state="normal",
             style="Button2b.TButton",
             text='Channel->VFO',
             width=12)
-        self.go_Channel_Button.grid(column=0, columnspan=2, row=0, sticky="w")
-        self.go_Channel_Button.configure(command=self.QSY_Channel_CB)
-        self.save_Channel_Button = ttk.Button(
-            self.channelEdit_Frame, name="save_channel_button")
-        self.save_Channel_Button.configure(
+        self.ChannelToVFO_Button.grid(
+            column=0, columnspan=2, row=0, sticky="w")
+        self.ChannelToVFO_Button.configure(command=self.ChannelToVFO_CB)
+        self.VFOToChannel_Button = ttk.Button(
+            self.channelEdit_Frame, name="vfotochannel_button")
+        self.VFOToChannel_Button.configure(
             state="normal",
             style="Button2b.TButton",
             text='VFO->Channel',
             width=12)
-        self.save_Channel_Button.grid(
+        self.VFOToChannel_Button.grid(
             column=0, columnspan=2, pady="50 0", row=1, sticky="w")
-        self.save_Channel_Button.configure(command=self.save_Channel_CB)
+        self.VFOToChannel_Button.configure(command=self.VFOToChannel_CB)
         self.scan_Button = ttk.Button(
             self.channelEdit_Frame, name="scan_button")
         self.scan_Channel_VAR = tk.StringVar(value='Scan')
@@ -250,28 +256,28 @@ class channelsUI(tk.Toplevel):
         self.scan_Select_Combobox.grid(
             column=1, padx="10 0", pady="50 0", row=2, sticky="w")
         self.channelEdit_Frame.grid(
-            column=2,
+            column=1,
             padx="10 0",
             pady="100 0",
             row=2,
-            sticky="ne")
+            sticky="nw")
         self.channelEdit_Frame.grid_anchor("center")
         self.closingFrame = ttk.Frame(frame1, name="closingframe")
         self.closingFrame.configure(style="Normal.TFrame", width=600)
-        self.button1 = ttk.Button(self.closingFrame, name="button1")
-        self.button1.configure(
+        self.saveChannel_Button = ttk.Button(
+            self.closingFrame, name="savechannel_button")
+        self.saveChannel_Button.configure(
             state="normal",
             style="Button2b.TButton",
             text='Save Channel')
-        self.button1.grid(column=0, row=0)
-        self.button1.configure(command=self.save_All_Channels_CB)
-        self.save_All_Channels_Button = ttk.Button(
-            self.closingFrame, name="save_all_channels_button")
-        self.save_All_Channels_Button.configure(
+        self.saveChannel_Button.grid(column=0, row=0)
+        self.saveChannel_Button.configure(command=self.saveChannel_CB)
+        self.saveAllChannels_Button = ttk.Button(
+            self.closingFrame, name="saveallchannels_button")
+        self.saveAllChannels_Button.configure(
             state="normal", style="Button2b.TButton", text='Save All')
-        self.save_All_Channels_Button.grid(column=1, padx="10 0", row=0)
-        self.save_All_Channels_Button.configure(
-            command=self.save_All_Channels_CB)
+        self.saveAllChannels_Button.grid(column=1, padx="10 0", row=0)
+        self.saveAllChannels_Button.configure(command=self.saveAllChannels_CB)
         self.refresh_Button = ttk.Button(
             self.closingFrame, name="refresh_button")
         self.refresh_Button.configure(style="Button2b.TButton", text='Refresh')
@@ -289,16 +295,19 @@ class channelsUI(tk.Toplevel):
         self.geometry("725x600")
         # Layout for 'channels_Window' skipped in custom widget template.
 
-    def QSY_Channel_CB(self):
+    def ChannelToVFO_CB(self):
         pass
 
-    def save_Channel_CB(self):
+    def VFOToChannel_CB(self):
         pass
 
     def scan_Channel_CB(self):
         pass
 
-    def save_All_Channels_CB(self):
+    def saveChannel_CB(self):
+        pass
+
+    def saveAllChannels_CB(self):
         pass
 
     def refresh_Channel_CB(self):

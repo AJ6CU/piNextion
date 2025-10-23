@@ -75,8 +75,8 @@ class channels(baseui.channelsUI):
     def EEPROM_SetChannelShowLabel(self, channelNum, showFlag):
         channels.channelList[channelNum].Set_ShowLabel(showFlag)
 
-    def QSY_Channel_CB(self):               # method called when Channel->VFO
-        print("qsy_CB called")
+    def ChannelToVFO_CB(self):               # method called when Channel->VFO
+        print("ChannelToVFO_CB called")
         #
         #   Save tuning preset to restore on close
         #
@@ -86,10 +86,11 @@ class channels(baseui.channelsUI):
         self.mainWindow.Radio_Set_Mode(self.mainWindow.Text_To_ModeNum[channels.channelList[self.channelSlotSelection].Get_Mode()])
         self.current_Channel_VAR.set(channels.channelList[self.channelSlotSelection].Get_Label())
 
-    def save_Channel_CB(self):              # method called to write current VFO to channel
+    def VFOToChannel_CB(self):              # method called to write current VFO to channel
         print("saveChannel_CB called")
         channels.channelList[self.channelSlotSelection].Set_Freq(self.current_VFO_VAR.get())
         channels.channelList[self.channelSlotSelection].Set_Mode(self.current_Mode_VAR.get())
+        channels.channelList[self.channelSlotSelection].channel_Dirty()
 
         self.mainWindow.Radio_Write_EEPROM_Channel_FreqMode(
             self.channelSlotSelection,
@@ -104,6 +105,8 @@ class channels(baseui.channelsUI):
             self.channelSlotSelection,
             channels.channelList[self.channelSlotSelection].Get_ShowLabel()
         )
+
+       
 
     def scan_Channel_CB(self):              # method called to start channel scanning
         print("scanChannel_CB called")
@@ -128,8 +131,16 @@ class channels(baseui.channelsUI):
                 style="Button2bipressed.TButton")
         channels.channelList[self.channelSlotSelection].channel_Select_VAR.set("Selected") # select the new one
 
-    def save_All_Channels_CB(self):
+    def saveChannel_CB(self):
+        print("saveChannel_CB called")
+        channels.channelList[self.channelSlotSelection].channel_Not_Dirty()
+
+    def saveAllChannels_CB(self):
         print("save_All_Channels_CB called")
+        for aChannel in range(self.channelSlotCount):
+            channels.channelList[aChannel].channel_Not_Dirty()
+
+
 
 if __name__ == "__main__":
     root = tk.Tk()

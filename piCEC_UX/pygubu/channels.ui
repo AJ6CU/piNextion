@@ -193,7 +193,17 @@
                     <property name="text" translatable="yes">Scan Set</property>
                     <layout manager="grid">
                       <property name="column">6</property>
-                      <property name="padx">11 50</property>
+                      <property name="padx">11 7</property>
+                      <property name="row">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="dirtyIndicator_Label" named="True">
+                    <property name="style">Heading2b.TLabel</property>
+                    <property name="text" translatable="yes">Saved</property>
+                    <layout manager="grid">
+                      <property name="column">7</property>
                       <property name="row">0</property>
                     </layout>
                   </object>
@@ -208,7 +218,6 @@
                 <property name="usemousewheel">true</property>
                 <layout manager="grid">
                   <property name="column">0</property>
-                  <property name="columnspan">2</property>
                   <property name="pady">5 0</property>
                   <property name="row">2</property>
                   <property name="sticky">nsew</property>
@@ -402,18 +411,18 @@
                 <property name="style">Normal.TFrame</property>
                 <property name="width">200</property>
                 <layout manager="grid">
-                  <property name="column">2</property>
+                  <property name="column">1</property>
                   <property name="padx">10 0</property>
                   <property name="pady">100 0</property>
                   <property name="row">2</property>
-                  <property name="sticky">ne</property>
+                  <property name="sticky">nw</property>
                 </layout>
                 <containerlayout manager="grid">
                   <property name="anchor">center</property>
                 </containerlayout>
                 <child>
-                  <object class="ttk.Button" id="go_Channel_Button" named="True">
-                    <property name="command" type="command" cbtype="simple">QSY_Channel_CB</property>
+                  <object class="ttk.Button" id="ChannelToVFO_Button" named="True">
+                    <property name="command" type="command" cbtype="simple">ChannelToVFO_CB</property>
                     <property name="compound">none</property>
                     <property name="state">normal</property>
                     <property name="style">Button2b.TButton</property>
@@ -428,8 +437,8 @@
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.Button" id="save_Channel_Button" named="True">
-                    <property name="command" type="command" cbtype="simple">save_Channel_CB</property>
+                  <object class="ttk.Button" id="VFOToChannel_Button" named="True">
+                    <property name="command" type="command" cbtype="simple">VFOToChannel_CB</property>
                     <property name="state">normal</property>
                     <property name="style">Button2b.TButton</property>
                     <property name="text" translatable="yes">VFO-&gt;Channel</property>
@@ -487,8 +496,8 @@
                   <property name="row">3</property>
                 </layout>
                 <child>
-                  <object class="ttk.Button" id="button1" named="True">
-                    <property name="command" type="command" cbtype="simple">save_All_Channels_CB</property>
+                  <object class="ttk.Button" id="saveChannel_Button" named="True">
+                    <property name="command" type="command" cbtype="simple">saveChannel_CB</property>
                     <property name="state">normal</property>
                     <property name="style">Button2b.TButton</property>
                     <property name="text" translatable="yes">Save Channel</property>
@@ -499,8 +508,8 @@
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.Button" id="save_All_Channels_Button" named="True">
-                    <property name="command" type="command" cbtype="simple">save_All_Channels_CB</property>
+                  <object class="ttk.Button" id="saveAllChannels_Button" named="True">
+                    <property name="command" type="command" cbtype="simple">saveAllChannels_CB</property>
                     <property name="state">normal</property>
                     <property name="style">Button2b.TButton</property>
                     <property name="text" translatable="yes">Save All</property>

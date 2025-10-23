@@ -215,8 +215,10 @@ class piCECNextion(baseui.piCECNextionUI):
             "cw_Delay_Returning_to_RX": [0x02, 0x1, 0x01, 0x0, 0x0, 0x1],  # eeprom value divided by 10
             "cw_Delay_Starting_TX": [0x03, 0x1, 0x1, 0x0, 0x0,  0x1],  # eeprom saved valued divided by 2
             "channel_freq_Mode": [0x76, 0x2, 0x4, 0x48, 0x4, 0x14], # 0x48 indicates a integer number
-            "channel_Label": [0xc7, 0x2, 0x5, 0x57, 0x6, 0xa], # 0x57 indicates it is a character
-            "channel_ShowLabel": [0xc6, 0x2, 0x1, 0x57, 0x6,  0xa]
+            "channel_Label": [0xc7, 0x2, 0x5, 0x57, 0x6, 0x9],  # should be 0xa for total, but bug with v2 cec
+                                                                # 0x57 indicates it is a character
+            "channel_ShowLabel": [0xc6, 0x2, 0x1, 0x57, 0x6,  0x9] # should be 0xa for total, but bug with v2 cec
+                                                                # 0x57 indicates it is a character
         }
 
         self.memReadingState = "Freq"
@@ -1454,6 +1456,8 @@ class piCECNextion(baseui.piCECNextionUI):
             self.channelWindow.EEPROM_SetChannelLabel(
                 self.EEPROM_Current_Slot_Label,
                 value)
+            if self.EEPROM_Current_Slot_Label == 9:
+                    print("label slot=", self.EEPROM_Current_Slot_Label, "value=", value, sep='*', end='*')
             self.EEPROM_Current_Slot_Label += 1
             if (self.EEPROM_Current_Slot_Label ==
                     self.EEPROM_Mem_Address["channel_Label"][self.totalSlots]):
@@ -1479,55 +1483,6 @@ class piCECNextion(baseui.piCECNextionUI):
                 self.memReadingState = "Freq"
         else:
             print("unknown memory fetch state")
-
-        # try:
-        #     int(value,16)
-        #     is_number = True
-        # except ValueError:
-        #     is_number = False
-        #
-        # if(is_number):
-        #     print("thinks it is a number")
-        #     freq = int(value,16) & 0x1FFFFFFF
-        #     mode = (int(value,16) >> 29) & 0x7
-        #     print("freq=", freq)
-        #     print("mode=", mode, type(mode))
-        #     self.channelWindow.EEPROM_SetChanneFreqMode(
-        #         self.EEPROM_Current_Slot_Freq,
-        #         freq,
-        #         mode)
-        #     self.EEPROM_Current_Slot_Freq += 1
-        #     if (self.EEPROM_Current_Slot_Freq ==
-        #             self.EEPROM_Mem_Address["channel_freq_Mode"][self.totalSlots]):
-        #         self.EEPROM_Current_Slot_Freq = 0
-        # else:
-        #     if(len(value) == 1):
-        #         if (ord(value) == 0):
-        #             print("show label is a 0")
-        #             self.channelWindow.EEPROM_SetChannelShowLabel(
-        #                 self.EEPROM_Current_Slot_ShowLabel,
-        #                 "No")
-        #
-        #         elif(ord(value) == 3):
-        #             print("show label is a 3")
-        #             self.channelWindow.EEPROM_SetChannelShowLabel(
-        #                 self.EEPROM_Current_Slot_ShowLabel,
-        #                 "Yes")
-        #
-        #         self.EEPROM_Current_Slot_ShowLabel += 1
-        #         if (self.EEPROM_Current_Slot_ShowLabel ==
-        #                 self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]):
-        #             self.EEPROM_Current_Slot_ShowLabel = 0
-        #     else:
-        #         print("thinks it is a channel")
-        #         self.channelWindow.EEPROM_SetChannelLabel(
-        #             self.EEPROM_Current_Slot_Label,
-        #             value)
-        #         self.EEPROM_Current_Slot_Label += 1
-        #         if (self.EEPROM_Current_Slot_Label ==
-        #                 self.EEPROM_Mem_Address["channel_Label"][self.totalSlots]):
-        #             self.EEPROM_Current_Slot_Label = 0
-
 
 
 

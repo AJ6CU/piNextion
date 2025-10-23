@@ -39,7 +39,7 @@ class frequencyChannel(baseui.frequencyChannelUI):
     def Set_Label(self, label):
         self.channel_Label_VAR.set(label)
     def Label_Default(self):
-        if self.myChannelNum < 10:
+        if self.myChannelNum < 9:
             self.Set_Label("AVAIL")
         else:
             self.Set_Label("*N/A*")
@@ -74,7 +74,7 @@ class frequencyChannel(baseui.frequencyChannelUI):
     def Set_ShowLabel(self, label):
         self.channel_ShowLabel_VAR.set(label)
     def Showlabel_Default(self):
-        if self.myChannelNum < 10:
+        if self.myChannelNum < 9:
             self.Set_ShowLabel("Yes")
         else:
             self.Set_ShowLabel("No")

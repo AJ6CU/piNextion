@@ -33,7 +33,7 @@
     </layout>
     <child>
       <object class="ttk.Label" id="channel_Number_Label" named="True">
-        <property name="style">Heading2bi.TLabel</property>
+        <property name="style">Heading3bi.TLabel</property>
         <property name="textvariable">string:channel_Number_VAR</property>
         <property name="width">10</property>
         <layout manager="grid">
@@ -49,9 +49,10 @@
         <property name="style">Button2b.TButton</property>
         <property name="text" translatable="yes">Select</property>
         <property name="textvariable">string:channel_Select_VAR</property>
+        <property name="width">8</property>
         <layout manager="grid">
           <property name="column">1</property>
-          <property name="padx">10 0</property>
+          <property name="padx">5 0</property>
           <property name="row">0</property>
         </layout>
       </object>
@@ -64,7 +65,7 @@
         <property name="width">5</property>
         <layout manager="grid">
           <property name="column">2</property>
-          <property name="padx">10 0</property>
+          <property name="padx">5 0</property>
           <property name="row">0</property>
           <property name="sticky">w</property>
         </layout>
@@ -78,7 +79,7 @@
         <property name="width">10</property>
         <layout manager="grid">
           <property name="column">3</property>
-          <property name="padx">10 0</property>
+          <property name="padx">5 0</property>
           <property name="row">0</property>
           <property name="sticky">w</property>
         </layout>
@@ -94,7 +95,7 @@
         <property name="width">8</property>
         <layout manager="grid">
           <property name="column">4</property>
-          <property name="padx">10 0</property>
+          <property name="padx">5 0</property>
           <property name="row">0</property>
         </layout>
       </object>
@@ -109,7 +110,7 @@
         <property name="width">5</property>
         <layout manager="grid">
           <property name="column">5</property>
-          <property name="padx">10 0</property>
+          <property name="padx">5 0</property>
           <property name="row">0</property>
         </layout>
       </object>
@@ -124,7 +125,17 @@
         <property name="width">5</property>
         <layout manager="grid">
           <property name="column">6</property>
-          <property name="padx">10 0</property>
+          <property name="padx">5 0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="label1">
+        <property name="width">2</property>
+        <layout manager="grid">
+          <property name="column">7</property>
+          <property name="padx">10 5</property>
           <property name="row">0</property>
         </layout>
       </object>

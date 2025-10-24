@@ -24,6 +24,8 @@ class channels(baseui.channelsUI):
         self.channelSlotSelection = None
         self.savePreset =  int(self.mainWindow.tuning_Preset_Selection_VAR.get())
         self.refreshCallback = refreshCallback
+        self.scanToggle = "Start"
+        self.timerID = None
 
 
         for child in self.scrolledChannelFrame.innerframe.winfo_children():
@@ -93,8 +95,23 @@ class channels(baseui.channelsUI):
         channels.channelList[self.channelSlotSelection].Set_Mode(self.current_Mode_VAR.get())
         channels.channelList[self.channelSlotSelection].channel_Dirty()
 
+    def startScan(self):
+        print("startScan called")
+        self.timerID=self.master.after(5000, self.startScan)
+
+    def stopScan(self):
+        print("Stopping scan")
+        self.master.after_cancel(self.timerID)
+
     def scan_Channel_CB(self):              # method called to start channel scanning
         print("scanChannel_CB called")
+        if self.scanToggle == "Start":
+            self.startScan()
+            self.scanToggle = "Stop"
+        else:
+            self.stopScan()
+            self.scanToggle = "Start"
+
 
     def refresh_Channel_CB(self):           # method called when user wants to refresh channels from EEPROM
         print("refresh_CB called within channels")

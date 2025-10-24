@@ -79,14 +79,14 @@ class frequencyChannelUI(ttk.Frame):
         self.channel_Name_Entry.grid(column=2, padx="5 0", row=0, sticky="w")
         self.channel_Name_Entry.bind(
             "<KeyPress>", self.channel_Name_Changed_CB, add="+")
-        self.freq_Label = ttk.Label(self, name="freq_label")
+        self.freq_Entry = ttk.Entry(self, name="freq_entry")
         self.channel_Freq_VAR = tk.StringVar()
-        self.freq_Label.configure(
-            anchor="w",
-            style="Heading2b.TLabel",
+        self.freq_Entry.configure(
+            style="Entry2b.TEntry",
             textvariable=self.channel_Freq_VAR,
-            width=10)
-        self.freq_Label.grid(column=3, padx="5 0", row=0, sticky="w")
+            width=8)
+        self.freq_Entry.grid(column=3, padx="5 0", row=0, sticky="w")
+        self.freq_Entry.bind("<Key>", self.Channel_Freq_Changed_CB, add="+")
         self.mode_Combobox = Combobox(self, name="mode_combobox")
         self.channel_Mode_VAR = tk.StringVar()
         self.mode_Combobox.configure(
@@ -139,6 +139,9 @@ class frequencyChannelUI(ttk.Frame):
         pass
 
     def channel_Name_Changed_CB(self, event=None):
+        pass
+
+    def Channel_Freq_Changed_CB(self, event=None):
         pass
 
     def Channel_Mode_Changed_CB(self, event=None):

@@ -73,11 +73,11 @@
       </object>
     </child>
     <child>
-      <object class="ttk.Label" id="freq_Label" named="True">
-        <property name="anchor">w</property>
-        <property name="style">Heading2b.TLabel</property>
+      <object class="ttk.Entry" id="freq_Entry" named="True">
+        <property name="style">Entry2b.TEntry</property>
         <property name="textvariable">string:channel_Freq_VAR</property>
-        <property name="width">10</property>
+        <property name="width">8</property>
+        <bind sequence="&lt;Key&gt;" handler="Channel_Freq_Changed_CB" add="True" />
         <layout manager="grid">
           <property name="column">3</property>
           <property name="padx">5 0</property>

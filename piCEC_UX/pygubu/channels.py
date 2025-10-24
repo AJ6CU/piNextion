@@ -98,12 +98,19 @@ class channels(baseui.channelsUI):
 
     def refresh_Channel_CB(self):           # method called when user wants to refresh channels from EEPROM
         print("refresh_CB called within channels")
+        self.confirmExitorWriteDirty()
         self.refreshCallback()
+
 
     def close_Channel_CB(self):             # method called when window closed
         print("close_CB called")
 
+        self.confirmExitorWriteDirty()
 
+        self.mainWindow.Radio_Set_Tuning_Preset(self.savePreset)
+        self.withdraw()
+
+    def confirmExitorWriteDirty(self):
         for channelNum in range(len(self.channelList)):
             if (channels.channelList[channelNum].dirty):
                 response = messagebox.askyesno("Confirmation",
@@ -113,9 +120,6 @@ class channels(baseui.channelsUI):
                 if response:  # True if "Yes" is clicked
                     self.saveAllChannels_CB()
                 break
-
-        self.mainWindow.Radio_Set_Tuning_Preset(self.savePreset)
-        self.withdraw()
 
     def channelSlot_CB(self, slotNumber):
         print("channel_CB called, channel=", slotNumber+1, "channel slot =", slotNumber)

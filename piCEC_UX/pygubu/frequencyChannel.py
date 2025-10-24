@@ -106,6 +106,10 @@ class frequencyChannel(baseui.frequencyChannelUI):
         print("channel_Name_Changed_CB called")
         self.channel_Dirty()
 
+    def Channel_Freq_Changed_CB(self, event=None):
+        print("channel_Freq_Changed_CB called")
+        self.channel_Dirty()
+
     def Channel_Mode_Changed_CB(self, event=None):
         print("channel_Mode_Changed_CB called")
         self.channel_Dirty()

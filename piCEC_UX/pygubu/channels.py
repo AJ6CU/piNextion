@@ -2,6 +2,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import channelsui as baseui
+from tkinter import messagebox
 
 
 #
@@ -92,22 +93,6 @@ class channels(baseui.channelsUI):
         channels.channelList[self.channelSlotSelection].Set_Mode(self.current_Mode_VAR.get())
         channels.channelList[self.channelSlotSelection].channel_Dirty()
 
-        self.mainWindow.Radio_Write_EEPROM_Channel_FreqMode(
-            self.channelSlotSelection,
-            self.current_VFO_VAR.get(),
-            self.current_Mode_VAR.get())
-
-        self.mainWindow.Radio_Write_EEPROM_Channel_Label(
-            self.channelSlotSelection,
-            channels.channelList[self.channelSlotSelection].Get_Label())
-
-        self.mainWindow.Radio_Write_EEPROM_Channel_ShowLabel(
-            self.channelSlotSelection,
-            channels.channelList[self.channelSlotSelection].Get_ShowLabel()
-        )
-
-       
-
     def scan_Channel_CB(self):              # method called to start channel scanning
         print("scanChannel_CB called")
 
@@ -117,6 +102,18 @@ class channels(baseui.channelsUI):
 
     def close_Channel_CB(self):             # method called when window closed
         print("close_CB called")
+
+
+        for channelNum in range(len(self.channelList)):
+            if (channels.channelList[channelNum].dirty):
+                response = messagebox.askyesno("Confirmation",
+                                               "Not all channels have been saved to EEPROM\nDo you want to save these channels?")
+
+                # Process the user's response
+                if response:  # True if "Yes" is clicked
+                    self.saveAllChannels_CB()
+                break
+
         self.mainWindow.Radio_Set_Tuning_Preset(self.savePreset)
         self.withdraw()
 
@@ -131,14 +128,34 @@ class channels(baseui.channelsUI):
                 style="Button2bipressed.TButton")
         channels.channelList[self.channelSlotSelection].channel_Select_VAR.set("Selected") # select the new one
 
+    def saveChannel(self,channelNum):
+        print("saveChannel called")
+        if  (channels.channelList[channelNum].dirty):
+            channels.channelList[channelNum].channel_Not_Dirty()
+            print("channel dirty=",channelNum)
+
+            self.mainWindow.Radio_Write_EEPROM_Channel_FreqMode(
+                channelNum,
+                channels.channelList[channelNum].Get_Freq(),
+                channels.channelList[channelNum].Get_Mode())
+
+            self.mainWindow.Radio_Write_EEPROM_Channel_Label(
+                channelNum,
+                channels.channelList[channelNum].Get_Label())
+
+            self.mainWindow.Radio_Write_EEPROM_Channel_ShowLabel(
+                channelNum,
+                channels.channelList[channelNum].Get_ShowLabel()
+            )
+
     def saveChannel_CB(self):
         print("saveChannel_CB called")
-        channels.channelList[self.channelSlotSelection].channel_Not_Dirty()
+        self.saveChannel(self.channelSlotSelection)
 
     def saveAllChannels_CB(self):
         print("save_All_Channels_CB called")
-        for aChannel in range(self.channelSlotCount):
-            channels.channelList[aChannel].channel_Not_Dirty()
+        for aChannel in range(len(self.channelList)):
+            self.saveChannel(aChannel)
 
 
 

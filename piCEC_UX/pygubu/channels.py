@@ -28,7 +28,7 @@ class channels(baseui.channelsUI):
         self.scanRunning = False
         self.scanTimer = None
         self.scanSetSelected = None
-        self.scan_Select_Channel_VAR.set("None")
+        self.scan_Select_Channel_Default()
         self.scanIndex = None
         self.scanList = []
 
@@ -129,6 +129,8 @@ class channels(baseui.channelsUI):
 
 
         print("scanning channel = ", self.scanList[self.scanIndex]+1)
+        self.channelSlot_CB(self.scanList[self.scanIndex])
+        self.ChannelToVFO_CB()
         self.scanIndex += 1
 
         if self.scanIndex == len(self.scanList):

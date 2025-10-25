@@ -24,8 +24,12 @@ class channels(baseui.channelsUI):
         self.channelSlotSelection = None
         self.savePreset =  int(self.mainWindow.tuning_Preset_Selection_VAR.get())
         self.refreshCallback = refreshCallback
-        self.scanToggle = "Start"
-        self.timerID = None
+
+        self.scanRunning = False
+        self.scanTimer = None
+        self.scanSetSelected = None
+        self.scanIndex = None
+
 
 
         for child in self.scrolledChannelFrame.innerframe.winfo_children():
@@ -97,20 +101,49 @@ class channels(baseui.channelsUI):
 
     def startScan(self):
         print("startScan called")
-        self.timerID=self.master.after(5000, self.startScan)
+        self.scanRunning = True
+        self.scan_Channel_ButtonText_VAR.set("Stop Scan")
+        self.scanIndex = 0
+        self.performScan()
+
+
+    def performScan(self):
+        print ("performing scan=", self.scanSetSelected, self.scanIndex)
+        # outofRange = True
+        if (self.scanIndex == len(channels.channelList)):
+            self.scanIndex = 0
+        for i in range(self.scanIndex, len(channels.channelList)):
+            outofRange = False
+            if self.scanSetSelected == channels.channelList[i].Get_ScanSet():
+                print("scanning channel = ",i+1)
+                break
+        self.scanIndex = i+1
+        # if (outofRange):
+        #     self.scanIndex = 0
+        # elif (self.scanIndex == len(channels.channelList)):
+        #     self.scanIndex = 0
+        # else:
+        #     self.scanIndex = i + 1
+
+        self.scanTimer = self.master.after(2000, self.performScan)
 
     def stopScan(self):
         print("Stopping scan")
-        self.master.after_cancel(self.timerID)
+        self.scanRunning = False
+        self.scan_Channel_ButtonText_VAR.set("Run Scan")
+        self.master.after_cancel(self.scanTimer)
+        self.scanIndex = 0
 
     def scan_Channel_CB(self):              # method called to start channel scanning
         print("scanChannel_CB called")
-        if self.scanToggle == "Start":
-            self.startScan()
-            self.scanToggle = "Stop"
-        else:
+        if self.scanRunning:
             self.stopScan()
-            self.scanToggle = "Start"
+        else:
+            self.startScan()
+
+    def runScan_Selection_CB(self, event=None):
+        self.scanSetSelected = self.scan_Select_Channel_VAR.get()
+
 
 
     def refresh_Channel_CB(self):           # method called when user wants to refresh channels from EEPROM

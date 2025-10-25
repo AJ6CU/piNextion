@@ -236,12 +236,12 @@ class channelsUI(tk.Toplevel):
         self.VFOToChannel_Button.configure(command=self.VFOToChannel_CB)
         self.scan_Button = ttk.Button(
             self.channelEdit_Frame, name="scan_button")
-        self.scan_Channel_VAR = tk.StringVar(value='Scan')
+        self.scan_Channel_ButtonText_VAR = tk.StringVar(value='Run Scan')
         self.scan_Button.configure(
             style="Button2b.TButton",
-            text='Scan',
-            textvariable=self.scan_Channel_VAR,
-            width=6)
+            text='Run Scan',
+            textvariable=self.scan_Channel_ButtonText_VAR,
+            width=12)
         self.scan_Button.grid(column=0, pady="50 0", row=2, sticky="w")
         self.scan_Button.configure(command=self.scan_Channel_CB)
         self.scan_Select_Combobox = Combobox(
@@ -254,7 +254,11 @@ class channelsUI(tk.Toplevel):
             values='None Scan1 Scan2 Scan3 Scan4',
             width=5)
         self.scan_Select_Combobox.grid(
-            column=1, padx="10 0", pady="50 0", row=2, sticky="w")
+            column=0, padx="10 0", pady="10 0", row=3, sticky="e")
+        self.scan_Select_Combobox.bind(
+            "<<ComboboxSelected>>",
+            self.runScan_Selection_CB,
+            add="+")
         self.channelEdit_Frame.grid(
             column=1,
             padx="10 0",
@@ -287,7 +291,7 @@ class channelsUI(tk.Toplevel):
         self.close_Button.configure(style="Button2b.TButton", text='Close')
         self.close_Button.grid(column=3, padx="10 0", row=0)
         self.close_Button.configure(command=self.close_Channel_CB)
-        self.closingFrame.grid(column=0, padx=15, pady=15, row=3)
+        self.closingFrame.grid(column=0, padx=15, pady=15, row=4)
         frame1.pack(expand=True, fill="x", side="top")
         frame1.rowconfigure(2, minsize=400)
         labelframe1.pack(expand=True, fill="both", side="top")
@@ -302,6 +306,9 @@ class channelsUI(tk.Toplevel):
         pass
 
     def scan_Channel_CB(self):
+        pass
+
+    def runScan_Selection_CB(self, event=None):
         pass
 
     def saveChannel_CB(self):

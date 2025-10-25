@@ -456,9 +456,9 @@
                   <object class="ttk.Button" id="scan_Button" named="True">
                     <property name="command" type="command" cbtype="simple">scan_Channel_CB</property>
                     <property name="style">Button2b.TButton</property>
-                    <property name="text" translatable="yes">Scan</property>
-                    <property name="textvariable">string:scan_Channel_VAR</property>
-                    <property name="width">6</property>
+                    <property name="text" translatable="yes">Run Scan</property>
+                    <property name="textvariable">string:scan_Channel_ButtonText_VAR</property>
+                    <property name="width">12</property>
                     <layout manager="grid">
                       <property name="column">0</property>
                       <property name="pady">50 0</property>
@@ -474,12 +474,13 @@
                     <property name="style">ComboBox2b.TCombobox</property>
                     <property name="values">None Scan1 Scan2 Scan3 Scan4</property>
                     <property name="width">5</property>
+                    <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="runScan_Selection_CB" add="True" />
                     <layout manager="grid">
-                      <property name="column">1</property>
+                      <property name="column">0</property>
                       <property name="padx">10 0</property>
-                      <property name="pady">50 0</property>
-                      <property name="row">2</property>
-                      <property name="sticky">w</property>
+                      <property name="pady">10 0</property>
+                      <property name="row">3</property>
+                      <property name="sticky">e</property>
                     </layout>
                   </object>
                 </child>
@@ -493,7 +494,7 @@
                   <property name="column">0</property>
                   <property name="padx">15</property>
                   <property name="pady">15</property>
-                  <property name="row">3</property>
+                  <property name="row">4</property>
                 </layout>
                 <child>
                   <object class="ttk.Button" id="saveChannel_Button" named="True">

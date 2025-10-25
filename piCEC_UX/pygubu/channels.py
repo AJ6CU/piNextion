@@ -28,7 +28,9 @@ class channels(baseui.channelsUI):
         self.scanRunning = False
         self.scanTimer = None
         self.scanSetSelected = None
+        self.scan_Select_Channel_VAR.set("None")
         self.scanIndex = None
+        self.scanList = []
 
 
 
@@ -104,26 +106,33 @@ class channels(baseui.channelsUI):
         self.scanRunning = True
         self.scan_Channel_ButtonText_VAR.set("Stop Scan")
         self.scanIndex = 0
+        self.scanList = []
+
+        if self.scan_Select_Channel_VAR.get() == "None":
+            print("must select a scan set to scan")
+            self.stopScan()
+            return
+
+        for i in range(len(channels.channelList)):
+            if self.scanSetSelected == channels.channelList[i].Get_ScanSet():
+                self.scanList.append(i)
+
+        if len(self.scanList) == 0:
+            print("no channels found to scan")
+            self.stopScan()
+            return
+
         self.performScan()
 
 
     def performScan(self):
-        print ("performing scan=", self.scanSetSelected, self.scanIndex)
-        # outofRange = True
-        if (self.scanIndex == len(channels.channelList)):
+
+
+        print("scanning channel = ", self.scanList[self.scanIndex]+1)
+        self.scanIndex += 1
+
+        if self.scanIndex == len(self.scanList):
             self.scanIndex = 0
-        for i in range(self.scanIndex, len(channels.channelList)):
-            outofRange = False
-            if self.scanSetSelected == channels.channelList[i].Get_ScanSet():
-                print("scanning channel = ",i+1)
-                break
-        self.scanIndex = i+1
-        # if (outofRange):
-        #     self.scanIndex = 0
-        # elif (self.scanIndex == len(channels.channelList)):
-        #     self.scanIndex = 0
-        # else:
-        #     self.scanIndex = i + 1
 
         self.scanTimer = self.master.after(2000, self.performScan)
 
@@ -131,7 +140,9 @@ class channels(baseui.channelsUI):
         print("Stopping scan")
         self.scanRunning = False
         self.scan_Channel_ButtonText_VAR.set("Run Scan")
-        self.master.after_cancel(self.scanTimer)
+        if self.scanTimer != None:
+            self.master.after_cancel(self.scanTimer)
+            self.scanTimer = None
         self.scanIndex = 0
 
     def scan_Channel_CB(self):              # method called to start channel scanning

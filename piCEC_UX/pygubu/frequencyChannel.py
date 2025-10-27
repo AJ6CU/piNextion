@@ -89,8 +89,9 @@ class frequencyChannel(baseui.frequencyChannelUI):
         return self.channel_ScanSet_VAR.get()
     def Set_ScanSet(self, scanset):
         self.channel_ScanSet_VAR.set(scanset)
-    def ScanSet_Default(self):
-        self.Set_ScanSet("None")
+    def ScanSet_Default(self, value):
+        self.Set_ScanSet(value)
+
 
     def channel_Dirty(self):
         if (not self.dirty):

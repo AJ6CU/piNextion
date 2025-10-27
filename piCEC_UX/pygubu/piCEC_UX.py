@@ -6,6 +6,8 @@ import pygubu
 # import piCEC_UXui as baseui
 from piCECNextion import piCECNextion
 from piRadio import piRadio
+from configuration import configuration
+
 
 # import mystyles  # Styles definition module
 
@@ -18,6 +20,7 @@ from piRadio import piRadio
 # W// perhaps a new compiler issue. Have to cast everything first and then you can add them
 # W//#define conv4BytesToLong(lsb,lsb1,lsb2,msb) (unsigned long)(((int)(msb<<24)) + ((int)(lsb2<<16)) + ((int)(lsb1<<8))+lsb);
 # define conv4BytesToLong(lsb,lsb1,lsb2,msb) (unsigned long)(((long)msb<<24) + ((long)lsb2<<16) + ((long)lsb1<<8)+ (long)lsb);
+# globals(config_Data)
 
 
 
@@ -28,32 +31,27 @@ from piRadio import piRadio
 #
 
 
+config = configuration()
 
 
 root = tk.Tk()
 mainWindow = piCECNextion(root)
 mainWindow.pack(expand=True, fill="both")
 
+
+
+
 # myRadio = piRadio("/dev/ttyS0", mainWindow)  # linux
 # myRadio = piRadio("com6", mainWindow, True) # windows
 # myRadio = piRadio("/dev/cu.usbmodem141301", mainWindow) # macos
-myRadio = piRadio("/dev/cu.usbserial-00000000", mainWindow) # macos
-
+myRadio = piRadio(config.getComPort(), mainWindow) # macos
+mainWindow.attachConfig(config)
 mainWindow.attachRadio(myRadio)
 myRadio.openRadio()
 myRadio.readALLValues()
 mainWindow.initUX()
-#
-# master = tk.Tk()
-#
-#
-# def update():
-#     # do things
-#     master.after(1000, update)  # call update again after 1 second
-#
-#
-# update()  # begin updates
-# master.mainloop()
 
-root.after(500,myRadio.updateData)
+
+
+root.after(10,myRadio.updateData)
 root.mainloop()

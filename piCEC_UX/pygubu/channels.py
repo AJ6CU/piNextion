@@ -13,12 +13,13 @@ class channels(baseui.channelsUI):
     channelList = []
     currentChannel = 0
 
-    def __init__(self, master=None, mainWindow=None, refreshCallback=None,  **kw):
+    def __init__(self, master=None, mainWindow=None, refreshCallback=None, configData=None, **kw):
 
         channels.channelList = []
         channels.currentChannel = 0
         super().__init__(master, **kw)
         self.mainWindow = mainWindow
+        self.configData = configData
         self.protocol("WM_DELETE_WINDOW", self.close_Channel_CB)
         self.channelSlotCount = 0
         self.channelSlotSelection = None
@@ -46,7 +47,7 @@ class channels(baseui.channelsUI):
             child.Freq_Default()
             child.Mode_Default()
             child.Showlabel_Default()
-            child.ScanSet_Default()
+            child.ScanSet_Default(self.configData.getscanSetSettings(self.channelSlotCount))
 
             self.channelSlotCount += 1
         self.scan_Select_Channel_Default()
@@ -212,8 +213,11 @@ class channels(baseui.channelsUI):
 
             self.mainWindow.Radio_Write_EEPROM_Channel_ShowLabel(
                 channelNum,
-                channels.channelList[channelNum].Get_ShowLabel()
-            )
+                channels.channelList[channelNum].Get_ShowLabel())
+
+            self.configData.setscanSetSettings(channelNum,
+                                               channels.channelList[channelNum].Get_ScanSet())
+
 
     def saveChannel_CB(self):
         print("saveChannel_CB called")

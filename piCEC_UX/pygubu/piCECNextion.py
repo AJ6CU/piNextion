@@ -4,11 +4,9 @@ import tkinter.ttk as ttk
 # from Cython.Compiler.Naming import self_cname
 
 import piCEC_UXui as baseui
-# from piCEC_UX import myRadio
 from settings import settings
 from cwSettings import cwSettings
-# from memToVFO import memToVFO
-# from vfoToMem import vfoToMem
+
 from channels import channels
 import mystyles  # Styles definition module
 from time import sleep
@@ -21,6 +19,7 @@ class piCECNextion(baseui.piCECNextionUI):
             translator=None,
             on_first_object_cb=mystyles.setup_ttk_styles,
         )
+        self.configData = None    # Saves the configuration data object address
         self.theRadio = None            # Object pointer for the Radio
         self.cwSettingsWindow = None    # Object pointer for the CW Settinge Window
         self.settingsWindow = None      # Object pointer for the General Settings Window
@@ -243,6 +242,9 @@ class piCECNextion(baseui.piCECNextionUI):
     def attachRadio(self, radio):
         self.theRadio = radio
 
+    def attachConfig(self, config):
+        self.configData = config
+
     def initUX(self):
         self.updateRateMultiplier()
         self.updateLabelTuning_Multiplier()
@@ -327,7 +329,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def displayChannelWindow(self):
         if self.channelWindow == None:
-            self.channelWindow = channels(self.master, self, self.refresh_CB)
+            self.channelWindow = channels(self.master, self, self.refresh_CB, self.configData)
             self.channelWindow.transient(self.master)
             self.channelWindow.update_Current_Frequency (self.primary_VFO_VAR.get())
             self.channelWindow.update_Current_Mode (self.primary_Mode_VAR.get())
@@ -1124,7 +1126,11 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def Radio_Write_EEPROM_Channel_Label (self, channelNum, label ):
         print("Radio_Write_EEPROM_Channel_Label called")
-
+        #
+        #   Don't write to EEPROMs Channel labels 10+
+        #
+        if channelNum > self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]:
+            return
 
         lsb = ((channelNum * self.EEPROM_Mem_Address["channel_Label"][self.memOffset]) +
                self.EEPROM_Mem_Address["channel_Label"][self.lsb])
@@ -1158,6 +1164,12 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def Radio_Write_EEPROM_Channel_ShowLabel (self, channelNum, showLabel ):
         print("Radio_Write_EEPROM_Channel_ShowLabel called")
+
+        #
+        #   Don't write to EEPROMs showLabels 10+
+        #
+        if channelNum > self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]:
+            return
 
         lsb = (channelNum * self.EEPROM_Mem_Address["channel_ShowLabel"][self.memOffset]) + \
               self.EEPROM_Mem_Address["channel_ShowLabel"][self.lsb]

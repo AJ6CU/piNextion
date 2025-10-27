@@ -63,21 +63,10 @@ class channels(baseui.channelsUI):
         self.scan_Select_Channel_VAR.set("None")
 
     def EEPROM_SetChanneFreqMode(self, channelNum,freq, mode):
-        print("EEPROM_SetChanneFreqMode")
-        print("channelNum:",channelNum)
-        print("freq:",freq)
-        print("mode:",mode)
 
         channels.channelList[channelNum].Set_Freq(str(freq))
 
-        # print("EEPROM_SetChanneFreqMode", channels.channelList[channelNum].Get_Freq())
-        # print("channel mode type=", type(mode), "mode=", mode)
-        # temp = self.mainWindow.modeNum_To_TextDict[str(mode)]
-        # print("temp=", temp, type(temp))
-
         channels.channelList[channelNum].Set_Mode(self.mainWindow.modeNum_To_TextDict[str(mode)])
-        # print("finished setChannelFreqMode")
-
 
     def EEPROM_SetChannelLabel(self, channelNum, label):
         channels.channelList[channelNum].Set_Label(label)
@@ -86,31 +75,34 @@ class channels(baseui.channelsUI):
         channels.channelList[channelNum].Set_ShowLabel(showFlag)
 
     def ChannelToVFO_CB(self):               # method called when Channel->VFO
-        print("ChannelToVFO_CB called")
-        #
-        #   Save tuning preset to restore on close
-        #
-        # self.savePreset =  int(self.mainWindow.tuning_Preset_Selection_VAR.get())
+
+        if self.channelSlotSelection == None:
+            messagebox.showinfo("Information", "Must SELECT a channel first.",
+                                parent=self)
+            return
         self.mainWindow.Radio_Set_Tuning_Preset(1)
         self.mainWindow.Radio_Set_New_Frequency(channels.channelList[self.channelSlotSelection].Get_Freq())
         self.mainWindow.Radio_Set_Mode(self.mainWindow.Text_To_ModeNum[channels.channelList[self.channelSlotSelection].Get_Mode()])
         self.current_Channel_VAR.set(channels.channelList[self.channelSlotSelection].Get_Label())
 
     def VFOToChannel_CB(self):              # method called to write current VFO to channel
-        print("saveChannel_CB called")
+        if self.channelSlotSelection == None:
+            messagebox.showinfo("Information", "Must SELECT a channel first.",
+                                parent=self)
+            return
         channels.channelList[self.channelSlotSelection].Set_Freq(self.current_VFO_VAR.get())
         channels.channelList[self.channelSlotSelection].Set_Mode(self.current_Mode_VAR.get())
         channels.channelList[self.channelSlotSelection].channel_Dirty()
 
     def startScan(self):
-        print("startScan called")
         self.scanRunning = True
         self.scan_Channel_ButtonText_VAR.set("Stop Scan")
         self.scanIndex = 0
         self.scanList = []
 
         if self.scan_Select_Channel_VAR.get() == "None":
-            print("must select a scan set to scan")
+            messagebox.showinfo("Information", "Must SELECT a set of Channels to Scan before clicking the Scan Button",
+                                parent=self)
             self.stopScan()
             return
 
@@ -119,7 +111,8 @@ class channels(baseui.channelsUI):
                 self.scanList.append(i)
 
         if len(self.scanList) == 0:
-            print("no channels found to scan")
+            messagebox.showinfo("Information", "No Channels attached to this Scan Set.",
+                                parent=self)
             self.stopScan()
             return
 
@@ -128,8 +121,6 @@ class channels(baseui.channelsUI):
 
     def performScan(self):
 
-
-        print("scanning channel = ", self.scanList[self.scanIndex]+1)
         self.channelSlot_CB(self.scanList[self.scanIndex])
         self.ChannelToVFO_CB()
         self.scanIndex += 1
@@ -140,7 +131,6 @@ class channels(baseui.channelsUI):
         self.scanTimer = self.master.after(2000, self.performScan)
 
     def stopScan(self):
-        print("Stopping scan")
         self.scanRunning = False
         self.scan_Channel_ButtonText_VAR.set("Run Scan")
         if self.scanTimer != None:
@@ -149,7 +139,6 @@ class channels(baseui.channelsUI):
         self.scanIndex = 0
 
     def scan_Channel_CB(self):              # method called to start channel scanning
-        print("scanChannel_CB called")
         if self.scanRunning:
             self.stopScan()
         else:
@@ -161,16 +150,12 @@ class channels(baseui.channelsUI):
 
 
     def refresh_Channel_CB(self):           # method called when user wants to refresh channels from EEPROM
-        print("refresh_CB called within channels")
         self.confirmExitorWriteDirty()
         self.refreshCallback()
 
 
     def close_Channel_CB(self):             # method called when window closed
-        print("close_CB called")
-
         self.confirmExitorWriteDirty()
-
         self.mainWindow.Radio_Set_Tuning_Preset(self.savePreset)
         self.withdraw()
 
@@ -186,21 +171,26 @@ class channels(baseui.channelsUI):
                 break
 
     def channelSlot_CB(self, slotNumber):
-        print("channel_CB called, channel=", slotNumber+1, "channel slot =", slotNumber)
         if self.channelSlotSelection != None:
             channels.channelList[self.channelSlotSelection].channel_Select_Button.configure(
                 style="Button2b.TButton")
             channels.channelList[self.channelSlotSelection].channel_Select_VAR.set("Select")  # unselect the prior one
-        self.channelSlotSelection = slotNumber
-        channels.channelList[self.channelSlotSelection].channel_Select_Button.configure(
-                style="Button2bipressed.TButton")
-        channels.channelList[self.channelSlotSelection].channel_Select_VAR.set("Selected") # select the new one
+
+        if self.channelSlotSelection == slotNumber:         #Unselect if already selected
+            self.channelSlotSelection = None
+        else:
+            self.channelSlotSelection = slotNumber
+            channels.channelList[self.channelSlotSelection].channel_Select_Button.configure(
+                    style="Button2bipressed.TButton")
+            channels.channelList[self.channelSlotSelection].channel_Select_VAR.set("Selected") # select the new one
 
     def saveChannel(self,channelNum):
-        print("saveChannel called")
+        if channelNum == None:
+            messagebox.showinfo("Information", "No Channel Selected to Save",
+                                parent=self)
+            return
         if  (channels.channelList[channelNum].dirty):
             channels.channelList[channelNum].channel_Not_Dirty()
-            print("channel dirty=",channelNum)
 
             self.mainWindow.Radio_Write_EEPROM_Channel_FreqMode(
                 channelNum,
@@ -220,11 +210,9 @@ class channels(baseui.channelsUI):
 
 
     def saveChannel_CB(self):
-        print("saveChannel_CB called")
         self.saveChannel(self.channelSlotSelection)
 
     def saveAllChannels_CB(self):
-        print("save_All_Channels_CB called")
         for aChannel in range(len(self.channelList)):
             self.saveChannel(aChannel)
 

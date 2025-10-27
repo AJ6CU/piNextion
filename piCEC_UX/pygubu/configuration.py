@@ -21,7 +21,6 @@ class configuration:
                                                     "Default values saved in" + configuration_file +
                                                     "\nReview and edit this file if needed",
                                                     parent=master)
-                print("return from messagebox")
                 self.writeDefaults()
             else:
                 self.config_data = json.load(config_file)
@@ -31,7 +30,7 @@ class configuration:
                                                 "Default values saved in" + configuration_file +
                                                 "\nReview and edit this file if needed",
                                                 parent=master)
-            print("return from messagebox")
+
             self.writeDefaults()
 
     def writeDefaults(self):

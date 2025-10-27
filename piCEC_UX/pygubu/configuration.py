@@ -52,7 +52,8 @@ class configuration:
                            [5, "None"], [6, "None"], [7, "None"], [8, "None"], [9, "None"],
                            [10, "None"], [11, "None"], [12, "None"], [13, "None"], [14, "None"],
                            [15, "None"], [16, "None"], [17, "None"], [18, "None"], [19, "None"]
-                       ]}
+                       ],
+                        "scan_On_Station_Time":10000}
         # json.dump(config_data, config_file)
         self.saveConfig()
 
@@ -61,11 +62,19 @@ class configuration:
     def setComPort(self,port):
         self.config_data["serialPort"] = port
 
-    def getscanSetSettings(self, channel):
+    def get_ScanSet_Settings(self, channel):
         return self.config_data["scanSetSettings"][channel][1]
-    def setscanSetSettings(self, channel, scanSet):
+    def set_ScanSet_Settings(self, channel, scanSet):
         self.config_data["scanSetSettings"][channel][1] = scanSet
         self.saveConfig()
+
+    def get_Scan_On_Station_Time(self):
+        return self.config_data["scan_On_Station_Time"]
+
+    def set_Scan_On_Station_Time(self, time):
+        self.config_data["scan_On_Station_Time"] = time
+        
+
 
     def saveConfig(self):
         config_file = open(configuration_file, 'w')

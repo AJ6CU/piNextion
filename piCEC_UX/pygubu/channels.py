@@ -29,7 +29,6 @@ class channels(baseui.channelsUI):
         self.scanRunning = False
         self.scanTimer = None
         self.scanSetSelected = None
-        self.scan_Select_Channel_Default()
         self.scanIndex = None
         self.scanList = []
 
@@ -47,10 +46,11 @@ class channels(baseui.channelsUI):
             child.Freq_Default()
             child.Mode_Default()
             child.Showlabel_Default()
-            child.ScanSet_Default(self.configData.getscanSetSettings(self.channelSlotCount))
+            child.ScanSet_Default(self.configData.get_ScanSet_Settings(self.channelSlotCount))
 
             self.channelSlotCount += 1
         self.scan_Select_Channel_Default()
+        self.scan_Station_Time_Default()
 
     def update_Current_Frequency(self, freq):
         self.current_VFO_VAR.set(freq)
@@ -61,6 +61,9 @@ class channels(baseui.channelsUI):
 
     def scan_Select_Channel_Default(self):
         self.scan_Select_Channel_VAR.set("None")
+
+    def scan_Station_Time_Default(self):
+        self.scan_Time_On_Station = self.configData.get_Scan_On_Station_Time()
 
     def EEPROM_SetChanneFreqMode(self, channelNum,freq, mode):
 
@@ -127,8 +130,7 @@ class channels(baseui.channelsUI):
 
         if self.scanIndex == len(self.scanList):
             self.scanIndex = 0
-
-        self.scanTimer = self.master.after(2000, self.performScan)
+        self.scanTimer = self.master.after(self.scan_Time_On_Station, self.performScan)
 
     def stopScan(self):
         self.scanRunning = False
@@ -205,7 +207,7 @@ class channels(baseui.channelsUI):
                 channelNum,
                 channels.channelList[channelNum].Get_ShowLabel())
 
-            self.configData.setscanSetSettings(channelNum,
+            self.configData.set_ScanSet_Settings(channelNum,
                                                channels.channelList[channelNum].Get_ScanSet())
 
 

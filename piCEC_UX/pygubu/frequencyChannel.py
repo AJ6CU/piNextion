@@ -61,9 +61,7 @@ class frequencyChannel(baseui.frequencyChannelUI):
     def Get_Mode(self):
         return self.channel_Mode_VAR.get()
     def Set_Mode(self, mode):
-        print("in set mode, mode=", mode, type(mode))
         self.channel_Mode_VAR.set(mode)
-        print ("return from channel_Mode_VAR.set")
     def Mode_Default(self):
         self.Set_Mode("CWU")
 
@@ -104,23 +102,18 @@ class frequencyChannel(baseui.frequencyChannelUI):
             self.dirty = False
 
     def channel_Name_Changed_CB(self, event=None):
-        print("channel_Name_Changed_CB called")
         self.channel_Dirty()
 
     def Channel_Freq_Changed_CB(self, event=None):
-        print("channel_Freq_Changed_CB called")
         self.channel_Dirty()
 
     def Channel_Mode_Changed_CB(self, event=None):
-        print("channel_Mode_Changed_CB called")
         self.channel_Dirty()
 
     def Channel_ShowLabel_Changed_CB(self, event=None):
-        print("channel_ShowLabel_Changed_CB called")
         self.channel_Dirty()
 
     def Channel_ScanSet_Changed_CB(self, event=None):
-        print("channel_ScanSet_Changed_CB called")
         self.channel_Dirty()
 
 

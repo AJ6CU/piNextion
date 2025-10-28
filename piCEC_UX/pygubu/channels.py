@@ -24,6 +24,7 @@ class channels(baseui.channelsUI):
         self.channelSlotCount = 0
         self.channelSlotSelection = None
         self.savePreset =  int(self.mainWindow.tuning_Preset_Selection_VAR.get())
+        self.mainWindow.Radio_Set_Tuning_Preset(1)
         self.refreshCallback = refreshCallback
 
         self.scanRunning = False
@@ -83,7 +84,7 @@ class channels(baseui.channelsUI):
             messagebox.showinfo("Information", "Must SELECT a channel first.",
                                 parent=self)
             return
-        self.mainWindow.Radio_Set_Tuning_Preset(1)
+
         self.mainWindow.Radio_Set_New_Frequency(channels.channelList[self.channelSlotSelection].Get_Freq())
         self.mainWindow.Radio_Set_Mode(self.mainWindow.Text_To_ModeNum[channels.channelList[self.channelSlotSelection].Get_Mode()])
         self.current_Channel_VAR.set(channels.channelList[self.channelSlotSelection].Get_Label())
@@ -118,12 +119,10 @@ class channels(baseui.channelsUI):
                                 parent=self)
             self.stopScan()
             return
-
         self.performScan()
 
 
     def performScan(self):
-
         self.channelSlot_CB(self.scanList[self.scanIndex])
         self.ChannelToVFO_CB()
         self.scanIndex += 1

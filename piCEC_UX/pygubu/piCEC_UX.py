@@ -3,6 +3,7 @@ import pathlib
 import tkinter as tk
 import tkinter.ttk as ttk
 import pygubu
+from time import sleep
 # import piCEC_UXui as baseui
 from piCECNextion import piCECNextion
 from piRadio import piRadio
@@ -48,10 +49,11 @@ myRadio = piRadio(config.getComPort(), mainWindow) # macos
 mainWindow.attachConfig(config)
 mainWindow.attachRadio(myRadio)
 myRadio.openRadio()
+
+myRadio.rebootRadio()
+
 myRadio.readALLValues()
 mainWindow.initUX()
-
-
 
 root.after(10,myRadio.updateData)
 root.mainloop()

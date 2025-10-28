@@ -62,6 +62,10 @@ class piRadio:
         command = buffer[3]  + buffer[4]
         self.mainWindow.delegate_command_processing (command, buffer)
 
+    def rebootRadio(self):
+        # self.openRadio()
+        command=[0x5f,0x6c,0x48,0x45,0x59]
+        self.sendCommandToMCU(bytes(command))
 
 #
 #   Read and process all the values sent at startup of radio
@@ -102,12 +106,12 @@ class piRadio:
                             #         print(f"{item:<{4}}", end="")
                             #     print("")
 
-                                decoded_buffer_hex = [item.hex() for item in buffer]
+                            # decoded_buffer_hex = [item.hex() for item in buffer]
                                 # for item in decoded_buffer_hex:
                                 #     print(f"{item:<{4}}", end="")
                                 # print("")
 
-                                decoded_buffer_ord = [ord(item) for item in buffer]
+                            # decoded_buffer_ord = [ord(item) for item in buffer]
                                 # for item in decoded_buffer_ord:
                                 #     print(f"{item:<{4}}", end="")
                                 # print("")

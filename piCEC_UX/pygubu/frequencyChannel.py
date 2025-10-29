@@ -2,6 +2,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import frequencyChannelui as baseui
+from VirtualNumericKeyboard import VirtualNumericKeyboard
 
 
 #
@@ -54,6 +55,9 @@ class frequencyChannel(baseui.frequencyChannelUI):
         self.channel_Freq_VAR.set(freq)
     def Freq_Default(self):
         self.Set_Freq("14032000")
+
+    def numeric_Keypad_CB(self, event=None):
+        keypad = VirtualNumericKeyboard(self, self.channel_Freq_VAR,8)
 
     #
     #   Get/Set mode combo box

@@ -60,8 +60,10 @@ def setup_ttk_styles(master=None):
     style.configure('Normal.TLabel',font=fontList['Normal'])
     style.configure('Symbol1.TLabel',font=fontList['Symbol1'])
     style.configure('Button1.TButton',font=fontList['Heading1'])
+    style.configure('Button1Raised.TButton', font=fontList['Heading1'], relief='raised')
     style.configure('Button2.TButton',font=fontList['Heading2'])
     style.configure('Button2b.TButton',font=fontList['Heading2b'], justify='center')
+    style.configure('Button2Raised.TButton', font=fontList['Heading2'], justify='center', relief='raised')
     style.configure('Button2bipressed.TButton', relief='sunken', font=fontList['Heading2bi'], justify='center')
     # style.configure('Button2bcentered.TButton', font=fontList['Heading2b'],justify='center')
 
@@ -92,8 +94,11 @@ def setup_ttk_styles(master=None):
     style.configure('ComboBox4.TCombobox',font=fontList['Heading4'])
     style.configure('ComboBox4White.TCombobox',font=fontList['Heading4'],foreground='white')
     style.configure('Normal.TEntry',font=fontList['Normal'])
+
+    style.configure('Entry1b.TEntry', font=fontList['Heading1'])
     style.configure('Entry2b.TEntry', font=fontList['Heading2'])
     style.configure('NoBorder.TEntry',font=fontList['Normal'], highlightthickness=0, borderwidth=0, bd=0)
+
     style.configure('Title.TFrame', background='blue', foreground='white')
     style.configure('Heading2.TLabelframe.Label', background='gray', bd=4, font=fontList['Heading2'])
     style.configure('Heading2.TLabelframe', background='gray', bd=4)

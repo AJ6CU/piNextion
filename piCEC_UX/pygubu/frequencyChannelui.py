@@ -86,7 +86,14 @@ class frequencyChannelUI(ttk.Frame):
             textvariable=self.channel_Freq_VAR,
             width=8)
         self.freq_Entry.grid(column=3, padx="5 0", row=0, sticky="w")
-        self.freq_Entry.bind("<Key>", self.Channel_Freq_Changed_CB, add="+")
+        self.freq_Entry.bind(
+            "<Double-Button-1>",
+            self.numeric_Keypad_CB,
+            add="+")
+        self.freq_Entry.bind(
+            "<FocusOut>",
+            self.Channel_Freq_Changed_CB,
+            add="+")
         self.mode_Combobox = Combobox(self, name="mode_combobox")
         self.channel_Mode_VAR = tk.StringVar()
         self.mode_Combobox.configure(
@@ -139,6 +146,9 @@ class frequencyChannelUI(ttk.Frame):
         pass
 
     def channel_Name_Changed_CB(self, event=None):
+        pass
+
+    def numeric_Keypad_CB(self, event=None):
         pass
 
     def Channel_Freq_Changed_CB(self, event=None):

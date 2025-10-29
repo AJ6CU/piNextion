@@ -77,8 +77,7 @@
         <property name="style">Entry2b.TEntry</property>
         <property name="textvariable">string:channel_Freq_VAR</property>
         <property name="width">8</property>
-        <bind sequence="&lt;Double-Button-1&gt;" handler="numeric_Keypad_CB" add="True" />
-        <bind sequence="&lt;FocusOut&gt;" handler="Channel_Freq_Changed_CB" add="True" />
+        <bind sequence="&lt;Button&gt;" handler="numeric_Keypad_CB" add="True" />
         <layout manager="grid">
           <property name="column">3</property>
           <property name="padx">5 0</property>

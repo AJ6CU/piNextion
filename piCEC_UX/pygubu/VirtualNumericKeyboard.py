@@ -10,7 +10,11 @@ class VirtualNumericKeyboard(tk.Toplevel):
         self.fieldStrVar = fieldStrVar
         self.maxDigits = maxDigits
 
+        self.originalValue=self.fieldStrVar.get()
+
         super().__init__(master, **kw)
+
+        self.protocol("WM_DELETE_WINDOW", self.enter)
 
         self.messageTooLong = "Too Many Digits, Max = " + str(self.maxDigits)
         self.messageEmpty = ""
@@ -57,6 +61,8 @@ class VirtualNumericKeyboard(tk.Toplevel):
     def enter(self,event=None):
         cursor = ' '
         self.fieldStrVar.set(self.fieldStrVar.get().replace(cursor,''))
+        if self.originalValue !=self.fieldStrVar.get():
+            self.master.Channel_Freq_Changed_CB()
         self.destroy()
 
     def press(self,t):

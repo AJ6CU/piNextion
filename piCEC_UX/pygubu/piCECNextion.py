@@ -129,7 +129,7 @@ class piCECNextion(baseui.piCECNextionUI):
             "cr": self.cr_UX_RIT_Toggle,
             "vf": self.vf_UX_ATT_Level,
             "vi": self.vi_UX_IFS_Level,
-            "ci": self.ci_UX_IFA_State_Set,
+            "ci": self.ci_UX_IFS_State_Set,
             "cx": self.cx_UX_TX_Stop_Toggle
         }
 
@@ -734,23 +734,20 @@ class piCECNextion(baseui.piCECNextionUI):
             self.IFS_Jogwheel.lastValue = self.IFS_Jogwheel.get()
 
     def IFS_Jogwheel_ButtonReleased_CB(self, event=None):
-        print("jogwheel released")
         if (self.lock_Button_On == False):
             currentValue = self.IFS_Jogwheel.get()
             if self.IFS_Jogwheel.lastValue == currentValue:
                 self.toggleIFS_State()
             else:
-                print("Setting level after release")
                 self.Radio_Set_IFS_Level(currentValue)
-                print("returning from set level")
+
 
     def toggleIFS_State(self):
         self.Radio_Toggle_IFS()
 
     def updateIFSValue_CB(self):
-        print("updating IFS CB, get =",self.IFS_Jogwheel.get())
         self.Radio_Set_IFS_Level(self.IFS_Jogwheel.get())
-        print("Returning from IFS CB, get=",self.IFS_Jogwheel.get())
+
 
 
 
@@ -863,7 +860,6 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def Radio_Set_IFS_Level(self, level):
         # MJH replace with self.Radio_Freq_Encode(value)
-        print("Setting IFS level to " + str(level))
 
         intLevel = int(level)
 
@@ -1368,8 +1364,6 @@ class piCECNextion(baseui.piCECNextionUI):
         self.ATT_Jogwheel.setStateDisabled()
         self.IFS_Jogwheel.setStateDisabled()
         self.tuning_Jogwheel.setStateDisabled()
-        self.tuning_Jogwheel.unbind("<Double-Button-1>")
-        self.center_Button.configure(state="disabled")
 
     #
     #   Reset all widgets to their "normal" state after the  unlock happens
@@ -1391,11 +1385,6 @@ class piCECNextion(baseui.piCECNextionUI):
         if (self.IFS_Button_On == True):
             self.IFS_Jogwheel.setStateNormal()
         self.tuning_Jogwheel.setStateNormal()
-        self.tuning_Jogwheel.bind(
-            "<Double-Button-1>",
-            self.tuning_Jogwheel_DoubleClick_CB,
-            add="+")
-        self.center_Button.configure(state="normal")
 
     # def labelScale_Set_State(self, labeledScale, newstate):
     #     #
@@ -1455,13 +1444,22 @@ class piCECNextion(baseui.piCECNextionUI):
             self.ATT_Status_VAR.set("ATT (OFF)")
             self.ATT_Button_On = False
         else:
-            self.ATT_Jogwheel.setStateNormal()
-            self.ATT_Status_VAR.set("ATT (ON)")
-            self.ATT_Button_On = True
-            self.ATT_Jogwheel.set(value)            # Set UX to value acked by MCU
+            if self.ATT_Jogwheel.state == 'disabled':
+                self.ATT_Jogwheel.setStateNormal()
+                self.ATT_Status_VAR.set("ATT (ON)")
+                self.ATT_Button_On = True
+            #
+            # mjh normally ux should be set to the value ack-ed by mcu. Problem with this
+            # with jog wheels is that they jerk around too much because of all the callbacks
+            # This can also cause oscillation where are reported and stored in jogwheel
+            # much after and so when correcting generate more old traffic.
+            # On balance the chance of a lost packet is pretty low, so best option is to not
+            # repond to the ack-ed value from the MCU
+            #
+            # self.ATT_Jogwheel.set(value)            # Set UX to value acked by MCU
 
 
-    def ci_UX_IFA_State_Set(self, buffer):
+    def ci_UX_IFS_State_Set(self, buffer):
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
 
         if (value == 0):                            # Zero value indicates IFS being turned off
@@ -1476,8 +1474,17 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def vi_UX_IFS_Level(self, buffer):      #verification by MCU of new value
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
-
-        self.IFS_Jogwheel.set(value)
+        #
+        # mjh normally ux should be set to the value ack-ed by mcu. Problem with this
+        # with jog wheels is that they jerk around too much because of all the callbacks
+        # This can also cause oscillation where are reported and stored in jogwheel
+        # much after and so when correcting generate more old traffic.
+        # On balance the chance of a lost packet is pretty low, so best option is to not
+        # repond to the ack-ed value from the MCU
+        #
+        # print("MCU Reporting vi_UX_IFS_Level", value)
+        # self.IFS_Jogwheel.set(value)
+        # print("MCU After setting vi_UX_IFS_Level get", self.IFS_Jogwheel.get())
 
 
     def cx_UX_TX_Stop_Toggle(self, buffer):

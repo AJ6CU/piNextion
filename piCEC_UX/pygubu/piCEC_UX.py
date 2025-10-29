@@ -52,8 +52,11 @@ myRadio.openRadio()
 
 myRadio.rebootRadio()
 
+sleep(.5)
 myRadio.readALLValues()
+sleep(2)
 mainWindow.initUX()
+sleep(.5)
 
 root.after(10,myRadio.updateData)
 root.mainloop()

@@ -859,17 +859,9 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def Radio_Set_IFS_Level(self, level):
-        # MJH replace with self.Radio_Freq_Encode(value)
+        encodedBytes = self.Radio_Freq_Encode(str(level))
 
-        intLevel = int(level)
-
-        firstByte = intLevel & 0xff
-
-        secondByte = (intLevel >> 8) & 0xff
-
-        thirdByte = (intLevel >> 16) & 0xff
-
-        command = [self.toRadioCommandDict["TS_CMD_IFSVALUE"], firstByte, secondByte, thirdByte, 0]
+        command = [self.toRadioCommandDict["TS_CMD_IFSVALUE"], encodedBytes[0], encodedBytes[1], encodedBytes[2], 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
 

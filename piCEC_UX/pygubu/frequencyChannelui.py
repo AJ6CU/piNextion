@@ -78,7 +78,7 @@ class frequencyChannelUI(ttk.Frame):
             width=5)
         self.channel_Name_Entry.grid(column=2, padx="5 0", row=0, sticky="w")
         self.channel_Name_Entry.bind(
-            "<KeyPress>", self.channel_Name_Changed_CB, add="+")
+            "<Button>", self.alphanumeric_Keypad_CB, add="+")
         self.freq_Entry = ttk.Entry(self, name="freq_entry")
         self.channel_Freq_VAR = tk.StringVar()
         self.freq_Entry.configure(
@@ -138,7 +138,7 @@ class frequencyChannelUI(ttk.Frame):
     def channel_Select_CB(self):
         pass
 
-    def channel_Name_Changed_CB(self, event=None):
+    def alphanumeric_Keypad_CB(self, event=None):
         pass
 
     def numeric_Keypad_CB(self, event=None):

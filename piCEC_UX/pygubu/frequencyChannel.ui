@@ -63,7 +63,7 @@
         <property name="style">Entry2b.TEntry</property>
         <property name="textvariable">string:channel_Label_VAR</property>
         <property name="width">5</property>
-        <bind sequence="&lt;KeyPress&gt;" handler="channel_Name_Changed_CB" add="True" />
+        <bind sequence="&lt;Button&gt;" handler="alphanumeric_Keypad_CB" add="True" />
         <layout manager="grid">
           <property name="column">2</property>
           <property name="padx">5 0</property>

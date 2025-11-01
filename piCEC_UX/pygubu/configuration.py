@@ -62,6 +62,11 @@ class configuration:
     def setComPort(self,port):
         self.config_data["serialPort"] = port
 
+    def updateComPort(self, port):
+        if (self.config_data["serialPort"] != port):
+            self.setComPort(port)
+            self.saveConfig()
+
     def get_ScanSet_Settings(self, channel):
         return self.config_data["scanSetSettings"][channel][1]
     def set_ScanSet_Settings(self, channel, scanSet):

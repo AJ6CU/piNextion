@@ -8,6 +8,8 @@ from time import sleep
 from piCECNextion import piCECNextion
 from piRadio import piRadio
 from configuration import configuration
+from comportManager import comportManager
+
 
 
 # import mystyles  # Styles definition module
@@ -22,8 +24,39 @@ from configuration import configuration
 # W//#define conv4BytesToLong(lsb,lsb1,lsb2,msb) (unsigned long)(((int)(msb<<24)) + ((int)(lsb2<<16)) + ((int)(lsb1<<8))+lsb);
 # define conv4BytesToLong(lsb,lsb1,lsb2,msb) (unsigned long)(((long)msb<<24) + ((long)lsb2<<16) + ((long)lsb1<<8)+ (long)lsb);
 # globals(config_Data)
+config=None
+root = None
+mainWindow = None
+comPort = None
+myRadio = None
 
 
+
+def gotValidPort (foundPort):
+    if foundPort:
+        if comPort.openSelectedComPort():
+            comPort.comportMessage_Frame.pack_forget()
+            startMainWindow()
+
+
+def startMainWindow():
+    mainWindow.place(x=0, y=0)
+    config.updateComPort(comPort.getSelectedComPort())
+    print(config.getComPort())
+    myRadio = piRadio(comPort.getComPortDesc(), mainWindow, config) # macos
+    mainWindow.attachConfig(config)
+    mainWindow.attachRadio(myRadio)
+    # myRadio.openRadio()
+
+    myRadio.rebootRadio()
+
+    sleep(.5)
+    myRadio.readALLValues()
+    sleep(2)
+    mainWindow.initUX()
+    sleep(.5)
+
+    myRadio.updateData()
 
 
 
@@ -36,27 +69,9 @@ config = configuration()
 
 
 root = tk.Tk()
+root.geometry("1086x660")
 mainWindow = piCECNextion(root)
-mainWindow.pack(expand=True, fill="both")
+comPort = comportManager(root, ###need to test existing port### gotValidPort)
+comPort.place(relx=0.8, rely=1.0, anchor="s")
 
-
-
-
-# myRadio = piRadio("/dev/ttyS0", mainWindow)  # linux
-# myRadio = piRadio("com6", mainWindow, True) # windows
-# myRadio = piRadio("/dev/cu.usbmodem141301", mainWindow) # macos
-myRadio = piRadio(config.getComPort(), mainWindow) # macos
-mainWindow.attachConfig(config)
-mainWindow.attachRadio(myRadio)
-myRadio.openRadio()
-
-myRadio.rebootRadio()
-
-sleep(.5)
-myRadio.readALLValues()
-sleep(2)
-mainWindow.initUX()
-sleep(.5)
-
-root.after(10,myRadio.updateData)
 root.mainloop()

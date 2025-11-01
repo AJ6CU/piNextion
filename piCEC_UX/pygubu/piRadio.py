@@ -2,15 +2,16 @@ import serial
 from time import sleep
 from timeit import default_timer as timer
 
-#from piCEC_UX.pygubu.piCEC_UX import mainWindow
+from comportManager import *
 
 
 class piRadio:
-    def __init__(self, serialPort, window, debugFlag=True):
+    def __init__(self, serialPort, window, configObj, debugFlag=True):
         self.debugCommandDecoding = debugFlag
         self.tty = serialPort
         self.mainWindow = window
-        self.radioPort = None
+        self.radioPort = serialPort
+        self.configObj = configObj
 
 
 #   note on external device to MCU protocol
@@ -37,9 +38,44 @@ class piRadio:
             print("***opening port to radio***")
         try:
             self.radioPort = serial.Serial(self.tty, 9600, timeout=0)
-        except serial.SerialException as e:
-            print(f"Serial port error: {e}")
+        except:
+            return   #serial.SerialException as e:
+        #     print("bad serial port")
+        #     comport = comportManager(self.mainWindow)
+        #     comport.grab_set()  # This line makes the cw settings window modal
+        #     self.tty = comport.getSelectedComPort()
+        #     print ("tty =", self.tty)
+        #     self.radioPort = serial.Serial(self.tty, 9600, timeout=0)
+        #     self.configObj.setComPort(self.tty)
+        #     self.configObj.saveConfig()
         return
+
+#     f(self.openSelectedComPort()):  # Was able to open the com port or it was already openned
+#     port = self.getComPortDesc()
+#     try:
+#         port.write(theCommand)
+#     except:
+#         if (self.resetComPort()):  # Successful was able to reset serial port, try again
+#             port = self.getComPortDesc()
+#
+#             try:  # Try one more time...
+#                 port.write(theCommand)
+#             except:
+#                 tkinter.messagebox.showerror(title="ERROR",
+#                                              message="Communication failed to uBITX. Unplug the USB cable, power cycle your radio, reconnect and try again. \nEXITING")
+#                 sys.exit(-1)
+#         else:
+#             tkinter.messagebox.showerror(title="ERROR",
+#                                          message="Communication failed to uBITX. Unplug the USB cable, power cycle your radio, reconnect and try again. \nEXITING")
+#             sys.exit(-1)
+#     # port.flush()
+#     return port
+#
+# else:
+# tkinter.messagebox.showerror(title="ERROR",
+#                              message="Unexpected error trying to open serial communications to uBITX. Unplug the USB cable, power cycle your radio, reconnect and try again. \nEXITING")
+# sys.exit(-1)
+
 
 
 

@@ -682,9 +682,9 @@ class piCECNextionUI(ttk.Frame):
             side="top")
         self.configure(
             borderwidth=5,
-            height=665,
+            height=700,
             style="Normal.TFrame",
-            width=850)
+            width=1280)
         # Layout for 'main_window' skipped in custom widget template.
 
     def settings_CB(self):

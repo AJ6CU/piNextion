@@ -19,7 +19,6 @@ from globalvars import *
 class comportManager(baseui.comportManagerUI):
 
     waitTime = 5
-    # last_com_port_selected = "INVALID"
 
 
     def __init__(self, master=None, actionButtonStateChange=None, **kw):
@@ -34,19 +33,38 @@ class comportManager(baseui.comportManagerUI):
         self.updateComPorts()               #preload the available com ports
         self.comPortsOptionMenu.configure(width=15)
 
+    def validateComPort(self, port):
+        #
+        #   if it is valid, it will be on list of updated comports
+        #
+        if (port in self.comPortList):
+            return True
+        else:
+            return False
+
+    def forceUseOfThisPort(self, port):
+        savePort = self.availableComPorts_VAR.get()
+        self.availableComPorts_VAR.set(port)
+        if(self.openSelectedComPort()):
+            return True
+        else:
+            #
+            #   Reset selected port
+            #
+            self.availableComPorts_VAR.set(savePort)
+            return False
+
+
     def openSelectedComPort (self):
         comPort = self.getSelectedComPort()                    # get the selected com port
 
         try:
-            print("in open try block")
             RS232 = serial.Serial(comPort, BAUD, timeout=5, stopbits=1, parity=serial.PARITY_NONE, xonxoff=0, rtscts=0)
         except: # FileNotFoundError:
-            print("failed to open serial port")
             return False
         else:
             self.open_com_port = RS232
-            # sleep (comportManager.waitTime)                # if the com port has not been previously opened, must wait for
-                                                            # processor to reset.
+            # sleep (comportManager.waitTime)                # this does not seem to be required for at least the pico
             return True
 
 
@@ -64,8 +82,8 @@ class comportManager(baseui.comportManagerUI):
         self.comPortsOptionMenu.set_menu(*self.comPortList)  # put found ports into the option menu
 
 
-    def radioSerialPortSelected_CB(self, *args):
-        self.actionButton_CB(True)                                  #signal to parent that we have a valid selection
+    def radioSerialPortSelected_CB(self, *args):                # callback specified by UX, connected to main
+        self.actionButton_CB()
 
 
     def getSelectedComPort(self):

@@ -32,32 +32,30 @@ myRadio = None
 
 
 
-def gotValidPort (foundPort):
-    if foundPort:
-        if comPort.openSelectedComPort():
-            comPort.comportMessage_Frame.pack_forget()
-            startMainWindow()
-
+def gotValidPort ():
+    if comPort.openSelectedComPort():
+        comPort.comportMessage_Frame.pack_forget()
+        startMainWindow()
+#
+#   once a valid port is found, then we can start the main window.
+#
 
 def startMainWindow():
-    mainWindow.place(x=0, y=0)
-    config.updateComPort(comPort.getSelectedComPort())
-    print(config.getComPort())
-    myRadio = piRadio(comPort.getComPortDesc(), mainWindow, config) # macos
-    mainWindow.attachConfig(config)
-    mainWindow.attachRadio(myRadio)
-    # myRadio.openRadio()
+    mainWindow.place(x=0, y=0)                          # place the mainWindow on the screen
+    config.updateComPort(comPort.getSelectedComPort())  # update the config file if necessary because of comport selection
+    myRadio = piRadio(comPort.getComPortDesc(), mainWindow, config) # Initialize the Radio object with selected port
 
-    myRadio.rebootRadio()
+    mainWindow.attachConfig(config)         # Need to make config available to mainWindow (load channels and perhaps more later)
+    mainWindow.attachRadio(myRadio)         # tell the mainWindow how to talk to the radio
 
-    sleep(.5)
-    myRadio.readALLValues()
-    sleep(2)
-    mainWindow.initUX()
-    sleep(.5)
+    myRadio.rebootRadio()                   # We reboot the radio because it sends a bunch of initialization values on startup
+                                            # to the Nextion screen. We need to capture them
 
-    myRadio.updateData()
+    myRadio.readALLValues()                 # Now after reboot, read in the initialization values
 
+    mainWindow.initUX()                     # With the initialization values read in, we can perform some initialization functions
+                                            # like setting up tuning rate
+    myRadio.updateData()                    # This process looks for new Radio data. It is scheduled to be run again after completion
 
 
 #
@@ -65,13 +63,22 @@ def startMainWindow():
 #
 
 
-config = configuration()
-
-
 root = tk.Tk()
 root.geometry("1086x660")
+
+config = configuration(root)                    # Read in config data, if missing preload with defaults
+                                                # Root is passed to allow popup error messages
+
+
 mainWindow = piCECNextion(root)
-comPort = comportManager(root, ###need to test existing port### gotValidPort)
+comPort = comportManager(root, gotValidPort)
 comPort.place(relx=0.8, rely=1.0, anchor="s")
+#
+#   First try to use the port in config. If valid, just open it
+#
+
+if comPort.validateComPort(config.getComPort()):                #test if config port exists in list of ports
+    if (comPort.forceUseOfThisPort(config.getComPort())):                          #force it and try to open, if good, then we can start main
+        gotValidPort()
 
 root.mainloop()

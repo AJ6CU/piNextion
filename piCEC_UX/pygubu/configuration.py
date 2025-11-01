@@ -16,7 +16,7 @@ class configuration:
             config_file=open(configuration_file, 'r+')
 
             if (os.stat(configuration_file).st_size == 0):
-                top = tk.Toplevel()
+                # top = tk.Toplevel(master)
                 messagebox.showinfo("Information", "Empty configuration file was found\n" +
                                                     "Default values saved in" + configuration_file +
                                                     "\nReview and edit this file if needed",
@@ -26,6 +26,7 @@ class configuration:
                 self.config_data = json.load(config_file)
                 config_file.close()
         except FileNotFoundError:
+            # top = tk.Toplevel(master)
             messagebox.showinfo("Information", "No configuration file was found\n" +
                                                 "Default values saved in" + configuration_file +
                                                 "\nReview and edit this file if needed",

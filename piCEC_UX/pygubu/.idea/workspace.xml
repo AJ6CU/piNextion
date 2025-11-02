@@ -106,7 +106,7 @@
       <workItem from="1761927965977" duration="2866000" />
       <workItem from="1761931345919" duration="9549000" />
       <workItem from="1761950533548" duration="51348000" />
-      <workItem from="1762051152877" duration="1460000" />
+      <workItem from="1762051152877" duration="5310000" />
     </task>
     <servers />
   </component>
@@ -118,7 +118,7 @@
     <SUITE FILE_PATH="coverage/pygubu$vkeyboard_pyw.coverage" NAME="vkeyboard.pyw Coverage Results" MODIFIED="1762006023269" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
     <SUITE FILE_PATH="coverage/pygubu$VirtualKeyboard.coverage" NAME="VirtualKeyboard Coverage Results" MODIFIED="1762035572673" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pygubu$piCEC_UX.coverage" NAME="piCEC_UX Coverage Results" MODIFIED="1761956792852" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/pygubu$piCEC.coverage" NAME="piCEC Coverage Results" MODIFIED="1762052612926" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/pygubu$piCEC.coverage" NAME="piCEC Coverage Results" MODIFIED="1762094445971" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/pygubu$frequencyChannel.coverage" NAME="frequencyChannel Coverage Results" MODIFIED="1762035780527" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

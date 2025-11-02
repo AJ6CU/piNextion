@@ -10,15 +10,37 @@ class VirtualKeyboard(tk.Toplevel):
         self.master = master
         self.fieldStrVar = fieldStrVar
         self.localStrVar = StringVar()
-        self.localStrVar.set(self.fieldStrVar.get())
-
         self.maxChars = maxChars
 
-        self.originalValue=self.fieldStrVar.get()
-        self.fieldStrVar.set(self.originalValue.replace(" ",""))
-        self.currentPos = len(self.fieldStrVar.get())
-        self.maxChars = maxChars
+        self.localStrVar.set(self.fieldStrVar.get().replace(" ",""))
+        self.currentPos = len(self.localStrVar.get())
+
         self.cursor = ' '
+        self.shift_status = False
+
+        self.uppercase ={
+                        "`":"~",
+                        "1":"!",
+                        "2":"@",
+                        "3":"#",
+                        "4":"$",
+                        "5":"%",
+                        "6":"^",
+                        "7":"&",
+                        "8":"*",
+                        "9":"(",
+                        "0":")",
+                        "-":"_",
+                        "=":"+",
+                        "[":"{",
+                        "]":"}",
+                        ";":":",
+                        "'":'"',
+                        "\\":"|",
+                        ",":"<",
+                        ".":">",
+                        "/":"?"
+                        }
 
 
 
@@ -27,8 +49,7 @@ class VirtualKeyboard(tk.Toplevel):
 
 
         self.messageTooLong = "Too Many Chars, Max = " + str(self.maxChars)
-
-        self.currentPos = len(self.fieldStrVar.get())
+        self.messageNoBackslash = "Backslash (\\) not allowed in channel name"
 
         # self.protocol("WM_DELETE_WINDOW", self.enter)
         self.grab_set()  # This line makes the cw settings window modal
@@ -181,7 +202,7 @@ class VirtualKeyboard(tk.Toplevel):
         keyframe5.rowconfigure(0, weight=1)
 
         # create row5buttons
-        self.entryField = ttk.Entry(keyframe5, style='Entry2Raised.TEntry',textvariable=self.localStrVar)
+        self.entryField = ttk.Entry(keyframe5, style='Entry1b.TEntry',textvariable=self.localStrVar, width=10)
         keyframe5.columnconfigure(0, weight=0)
 
 
@@ -252,7 +273,10 @@ class VirtualKeyboard(tk.Toplevel):
 
         for key in self.row4keys:
             ind = self.row4keys.index(key)
-            self.row4buttons[ind].config(command=lambda x=key: self.vpresskey(x))
+            if key == "left shift" or key == "right shift":
+                self.row4buttons[ind].config(command=self.shift)
+            else:
+                self.row4buttons[ind].config(command=lambda x=key: self.vpresskey(x))
 
         for key in self.row5keys:
             ind = self.row5keys.index(key)
@@ -282,12 +306,13 @@ class VirtualKeyboard(tk.Toplevel):
         # self.mainframe.pack(fill="both", expand=True, padx=5, pady=5)
         # self.configure(background="gray", height=200, width=200)
 
-    # def clear(self,event=None):
-    #     cursor = ' '
-    #     self.fieldStrVar.set("")
-    #     self.currentPos = 0
-    #     self.message.set(self.messageEmpty)
-    #
+    def shift (self,event=None):
+        print("shift event")
+        if self.shift_status == True:
+            self.shift_status = False
+        else:
+            self.shift_status = True
+
     def backspace(self):
         if self.currentPos != 0:
             first_half = self.localStrVar.get()[:self.currentPos-1].replace(self.cursor, '')
@@ -297,8 +322,9 @@ class VirtualKeyboard(tk.Toplevel):
 
     def enter(self,event=None):
         label = self.localStrVar.get().replace(self.cursor, '')
-        self.fieldStrVar.set(label.ljust(5))
-        if self.originalValue !=self.fieldStrVar.get():
+        self.localStrVar.set(label.ljust(5))
+        if self.localStrVar.get() !=self.fieldStrVar.get():
+            self.fieldStrVar.set(self.localStrVar.get())
             self.master.Channel_Freq_Changed_CB()
         self.destroy()
 
@@ -344,6 +370,16 @@ class VirtualKeyboard(tk.Toplevel):
 
     def vpresskey(self,t):
         if len(self.localStrVar.get().replace(self.cursor,"")) < self.maxChars:
+            if t == "\\":
+                warning = messagebox.showinfo("Warning", self.messageNoBackslash, parent=self)
+                return
+
+            if self.shift_status:
+                if t.isalpha():
+                    t=t.upper()
+                else:
+                    t = self.uppercase[t]
+
             first_half = self.localStrVar.get()[:self.currentPos].replace(self.cursor,'')
             second_half = self.localStrVar.get()[self.currentPos+1:].replace(self.cursor,'')
             self.localStrVar.set(first_half + t + self.cursor + second_half)

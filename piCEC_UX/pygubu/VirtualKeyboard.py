@@ -8,9 +8,16 @@ class VirtualKeyboard(tk.Toplevel):
     def __init__(self, master=None, fieldStrVar=None, maxChars=None, **kw):
         self.master = master
         self.fieldStrVar = fieldStrVar
+        self.localStrVar = StringVar()
+        self.localStrVar.set(self.fieldStrVar.get())
+
         self.maxChars = maxChars
 
         self.originalValue=self.fieldStrVar.get()
+        self.fieldStrVar.set(self.originalValue.replace(" ",""))
+        self.currentPos = len(self.fieldStrVar.get())
+        self.maxChars = maxChars
+        self.cursor = ' '
 
 
 
@@ -26,7 +33,7 @@ class VirtualKeyboard(tk.Toplevel):
 
         self.currentPos = len(self.fieldStrVar.get())
 
-        self.protocol("WM_DELETE_WINDOW", self.enter)
+        # self.protocol("WM_DELETE_WINDOW", self.enter)
         self.grab_set()  # This line makes the cw settings window modal
         # self.transient(self.master)  # Makes the appear above the mainwindow
 
@@ -40,7 +47,7 @@ class VirtualKeyboard(tk.Toplevel):
         self.row2keys = ["q", "w", "e", "r", "t", "y", 'u', 'i', 'o', 'p', '[', ']', 'enter']
         self.row3keys = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", '\\', 'home', 'end']
         self.row4keys = ["left shift", 'z', 'x', 'c', 'v', 'b', 'n', 'm',',', '.', '/', 'right shift']
-        self.row5keys = ['spacebar']
+        self.row5keys = ['spacebar','left', 'right']
 
         # buttons for each row
         self.row1buttons = []
@@ -110,7 +117,7 @@ class VirtualKeyboard(tk.Toplevel):
             elif key == "]":
                 self.row2buttons[ind].config(text="}\n]")
             elif key == "enter":
-                self.row2buttons[ind].config(text="Enter", width=8)
+                self.row2buttons[ind].config(text="Enter")
             else:
                 self.row2buttons[ind].config(text=key.title())
 
@@ -177,13 +184,25 @@ class VirtualKeyboard(tk.Toplevel):
         keyframe5.rowconfigure(0, weight=1)
 
         # create row5buttons
-        self.entryField = ttk.Entry(keyframe5, style='Entry2Raised.TEntry',textvariable=self.fieldStrVar)
-        # for key in self.row5keys:
-        #     ind = self.row5keys.index(key)
-        #     if ind == 3:
-        keyframe5.columnconfigure(1, weight=12)
-            # else:
-        keyframe5.columnconfigure(0, weight=1)
+        self.entryField = ttk.Entry(keyframe5, style='Entry2Raised.TEntry',textvariable=self.localStrVar)
+        keyframe5.columnconfigure(0, weight=0)
+
+        for key in self.row5keys:
+            ind = self.row5keys.index(key)
+            appendrow5(ttk.Button(keyframe5, style='Button2Raised.TButton', width=3))
+            if key == "spacebar":
+                print("space found, ind=", ind)
+                keyframe5.columnconfigure(ind+1, weight=12)
+                self.row5buttons[ind].config(text="Space", width=24)
+            elif key == "left":
+                self.row5buttons[ind].config(text="<--", width=3)
+                keyframe5.columnconfigure(ind + 1, weight=1)
+            elif key == "right":
+                self.row5buttons[ind].config(text="-->", width=3)
+                keyframe5.columnconfigure(ind + 1, weight=1)
+            else:
+                self.row5buttons[ind].config(text=key.title(), width=3)
+
         #
         #
         #     if key == "spacebar":
@@ -192,11 +211,13 @@ class VirtualKeyboard(tk.Toplevel):
         #         self.row5buttons[ind].config(text=key.title())
 
             # self.row5buttons[ind].grid(row=0, column=ind, sticky="NSEW", ipadx=8, ipady=8)
-        appendrow5(ttk.Button(keyframe5, style='Button2Raised.TButton', width=3))
+
+
         self.entryField.grid(row=0, column=0, sticky="NSEW", ipadx=8, ipady=8)
-        self.row5buttons[0].config(text="Space", width=10)
-        self.row5buttons[0].grid(row=0, column=1, sticky="NSEW", ipadx=8, ipady=8)
-        self.row5buttons[0].config(command=lambda x=key: self.vpresskey(" "))
+        for key in self.row5keys:
+            ind = self.row5keys.index(key)
+            print("row5 index =", ind)
+            self.row5buttons[ind].grid(row=0, column=ind+1, sticky="NSEW", ipadx=8, ipady=8)
 
 
 
@@ -209,24 +230,42 @@ class VirtualKeyboard(tk.Toplevel):
 
         for key in self.row1keys:
             ind = self.row1keys.index(key)
-            self.row1buttons[ind].config(command=lambda x=key: self.vpresskey(x))
+            if key == "backspace":
+                self.row1buttons[ind].config(command=self.backspace)
+            else:
+                self.row1buttons[ind].config(command=lambda x=key: self.vpresskey(x))
 
         for key in self.row2keys:
             ind = self.row2keys.index(key)
-            self.row2buttons[ind].config(command=lambda x=key: self.vpresskey(x))
+            if key == "enter":
+                self.row2buttons[ind].config(command=self.enter)
+            else:
+                self.row2buttons[ind].config(command=lambda x=key: self.vpresskey(x))
 
 
         for key in self.row3keys:
             ind = self.row3keys.index(key)
-            self.row3buttons[ind].config(command=lambda x=key: self.vpresskey(x))
+            if key == "home":
+                self.row3buttons[ind].config(command=self.home)
+            elif key == "end":
+                self.row3buttons[ind].config(command=self.end)
+            else:
+                self.row3buttons[ind].config(command=lambda x=key: self.vpresskey(x))
 
         for key in self.row4keys:
             ind = self.row4keys.index(key)
             self.row4buttons[ind].config(command=lambda x=key: self.vpresskey(x))
 
-        # for key in self.row5keys:
-        #     ind = self.row5keys.index(key)
-        #     self.row5buttons[ind].config(command=lambda x=key: self.vpresskey(" "))
+        for key in self.row5keys:
+            ind = self.row5keys.index(key)
+            if key == "spacebar":
+                self.row5buttons[ind].config(command=lambda x=key: self.vpresskey(" "))
+            elif key == "left":
+                self.row5buttons[ind].config(command=self.moveLeft)
+            elif key == "right":
+                self.row5buttons[ind].config(command=self.moveRight)
+            else:
+                self.row5buttons[ind].config(command=lambda x=key: self.vpresskey(x))
 
 
 
@@ -251,14 +290,49 @@ class VirtualKeyboard(tk.Toplevel):
     #     self.currentPos = 0
     #     self.message.set(self.messageEmpty)
     #
+    def backspace(self):
+        if self.currentPos != 0:
+            first_half = self.localStrVar.get()[:self.currentPos-1].replace(self.cursor, '')
+            second_half = self.localStrVar.get()[self.currentPos + 1:].replace(self.cursor, '')
+            self.localStrVar.set(first_half + self.cursor + second_half)
+            self.currentPos -= 1
+
     def enter(self,event=None):
-        # cursor = ' '
-        # self.fieldStrVar.set(self.fieldStrVar.get().replace(cursor,''))
-        # if self.originalValue !=self.fieldStrVar.get():
-        #     self.master.Channel_Freq_Changed_CB()
+        label = self.localStrVar.get().replace(self.cursor, '')
+        self.fieldStrVar.set(label.ljust(5))
         self.destroy()
 
+    def home(self):
+        print("home called")
+        label = self.localStrVar.get().replace(self.cursor, "")
+        self.localStrVar.set(self.cursor + label)
+        self.currentPos = 0
+
+    def end(self):
+        print("end called")
+        label = self.localStrVar.get().replace(self.cursor, "")
+        self.localStrVar.set(label+self.cursor)
+        self.currentPos = len(self.localStrVar.get())-1
+
+    def moveLeft(self):
+        print("move left called")
+
+    def moveRight(self):
+        print("move right called")
+
+
+
+
+
+
     def vpresskey(self,t):
+        if self.currentPos < self.maxChars:
+            first_half = self.localStrVar.get()[:self.currentPos].replace(self.cursor,'')
+            second_half = self.localStrVar.get()[self.currentPos+1:].replace(self.cursor,'')
+            self.localStrVar.set(first_half + t + self.cursor + second_half)
+            self.currentPos += 1
+        else:
+            self.message.set(self.messageTooLong)
         # cursor = ' '
         # if t == "Del":
         #     self.currentPos -=  1
@@ -284,5 +358,4 @@ class VirtualKeyboard(tk.Toplevel):
         #         self.currentPos += 1
         #     else:
         #         self.message.set(self.messageTooLong)
-        print("vpresskey", t)
-        self.fieldStrVar.set(self.fieldStrVar.get() + t)
+

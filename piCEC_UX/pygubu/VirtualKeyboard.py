@@ -1,4 +1,9 @@
 #!/usr/bin/python3
+#
+#   Based on code available at: https://github.com/AbhiK002/virtual-keyboard
+#   The license for this original code is MIT, which allows modification and redistribution under more restrictive license
+#   In this case GPL V3.0
+#
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import StringVar
@@ -6,19 +11,21 @@ from tkinter import messagebox
 
 
 class VirtualKeyboard(tk.Toplevel):
-    def __init__(self, master=None, fieldStrVar=None, maxChars=None, **kw):
+    def __init__(self, master=None, fieldStrVar=None, dirtyCallback=None, maxChars=None, **kw):
         self.master = master
         self.fieldStrVar = fieldStrVar
-        self.localStrVar = StringVar()
+        self.localStrVar = StringVar()      # we work with this local value and then write it back into the original on "enter" key
+        self.dirty_CB = dirtyCallback
         self.maxChars = maxChars
 
-        self.localStrVar.set(self.fieldStrVar.get().replace(" ",""))
+        self.localStrVar.set(self.fieldStrVar.get().replace(" ",""))        # Labels are blank padded to 5 chars
         self.currentPos = len(self.localStrVar.get())
 
-        self.cursor = ' '
-        self.shift_status = False
 
-        self.uppercase ={
+        self.cursor = "\u2581"                           # Cursor current a space, but could change this
+        self.shift_status = False                   # tracks the shift key. When true, use upper case. click on/off to toggle
+
+        self.uppercase ={                           # Used to map to upper case if shift key is on
                         "`":"~",
                         "1":"!",
                         "2":"@",
@@ -45,20 +52,20 @@ class VirtualKeyboard(tk.Toplevel):
 
 
         super().__init__(self.master, **kw)
-
-
-
+        #
+        #       Two possible error messages.
+        #
         self.messageTooLong = "Too Many Chars, Max = " + str(self.maxChars)
         self.messageNoBackslash = "Backslash (\\) not allowed in channel name"
 
-        # self.protocol("WM_DELETE_WINDOW", self.enter)
-        self.grab_set()  # This line makes the cw settings window modal
-        # self.transient(self.master)  # Makes the appear above the mainwindow
+        self.grab_set()                 # This line makes the window modal
+        self.transient(self.master)     # Puts the keyboard on top of the underlying window that called up the keyboard
 
-        toplevel_offsetx, toplevel_offsety = self.master.winfo_x() , self.master.winfo_y()
-        padx = 0  # the padding you need.
-        pady = 0
-        self.geometry(f"+{toplevel_offsetx + padx}+{toplevel_offsety + pady}")
+
+
+        #
+        #   Rows of the keyboard
+        #
 
 
         self.row1keys = ["`", "1", "2", "3", "4", "5", "6", "7","8", "9", "0", "-", "=", "backspace"]
@@ -85,23 +92,29 @@ class VirtualKeyboard(tk.Toplevel):
         for i in range(5):
             self.master.rowconfigure(i, weight=1)
 
+        #
+        #   Row 1 Button Creation
+        #
+
         # create a frame for row1buttons
         keyframe1 = ttk.Frame(self, height=1)
         keyframe1.rowconfigure(0, weight=1)
 
-        # create row1buttons
+        # create row1buttons. special case some keys that need wider keys (like backspace)
         for key in self.row1keys:
             ind = self.row1keys.index(key)
-            if ind == 13:
+            if key == "backspace":
                 keyframe1.columnconfigure(ind, weight=2)
             else:
                 keyframe1.columnconfigure(ind, weight=1)
-            appendrow1(ttk.Button(keyframe1,style='Button2Raised.TButton', width=3))
+            appendrow1(ttk.Button(keyframe1,style='Button1Raised.TButton', width=3))
             if key == "backspace":
                 self.row1buttons[ind].config(text=key.title(), width=8)
 
             self.row1buttons[ind].grid(row=0, column=ind, sticky="NSEW", ipadx=8, ipady=8)
-
+        #
+        #   For symbol and numeric keys, add in the second level selected on shift
+        #
         self.row1buttons[0].config(text="~\n`")
         self.row1buttons[1].config(text="!\n1")
         self.row1buttons[2].config(text="@\n2")
@@ -116,32 +129,39 @@ class VirtualKeyboard(tk.Toplevel):
         self.row1buttons[11].config(text="_\n-")
         self.row1buttons[12].config(text="+\n=")
 
-        # Row 2
+        #
+        # Row 2 Creation
+        #
 
         # create a frame for row2buttons
         keyframe2 = ttk.Frame(self, width=1)
         keyframe2.rowconfigure(0, weight=1)
 
-        # create row2buttons
+        # create row2buttons. Special case some keys that need more space (like enter key)
         for key in self.row2keys:
             ind = self.row2keys.index(key)
-            if ind == 13:
+
+            if key == "enter":              # Only Enter key needs additional weight because it is larger
                 keyframe2.columnconfigure(ind, weight=2)
             else:
                 keyframe2.columnconfigure(ind, weight=1)
-            appendrow2(ttk.Button(keyframe2,style='Button2Raised.TButton', width=3))
+
+            appendrow2(ttk.Button(keyframe2,style='Button1Raised.TButton', width=3))
+
             if key ==  "[":
                 self.row2buttons[ind].config(text="{\n[")
             elif key == "]":
                 self.row2buttons[ind].config(text="}\n]")
             elif key == "enter":
-                self.row2buttons[ind].config(text="Enter")
+                self.row2buttons[ind].config(text="Enter", width=7)
             else:
                 self.row2buttons[ind].config(text=key.title())
 
             self.row2buttons[ind].grid(row=0, column=ind, sticky="NSEW", ipadx=8, ipady=8)
 
-        #   Row 3
+        #
+        #   Row 3 creation
+        #
 
         # create a frame for row3buttons
         keyframe3 = ttk.Frame(self, height=1)
@@ -150,8 +170,14 @@ class VirtualKeyboard(tk.Toplevel):
         # create row4buttons
         for key in self.row3keys:
             ind = self.row3keys.index(key)
-            keyframe3.columnconfigure(ind, weight=1)
-            appendrow3(ttk.Button(keyframe3,style='Button2Raised.TButton', width=3))
+
+            if key == "home" or key == "end":                   # Special case home and end that need greater size
+                keyframe3.columnconfigure(ind, weight=2)
+                appendrow3(ttk.Button(keyframe3,style='Button1Raised.TButton', width=4))
+            else:
+                keyframe3.columnconfigure(ind, weight=1)
+                appendrow3(ttk.Button(keyframe3, style='Button1Raised.TButton', width=3))
+
             if key == ";":
                 self.row3buttons[ind].config(text=":\n;")
             elif key == "'":
@@ -163,8 +189,10 @@ class VirtualKeyboard(tk.Toplevel):
 
             self.row3buttons[ind].grid(row=0, column=ind, sticky="NSEW", ipadx=8, ipady=8)
 
+        #
+        # Row 4 Creation
+        #
 
-    # Row 4
         # create a frame for row4buttons
         keyframe4 = ttk.Frame(self, height=1)
         keyframe4.rowconfigure(0, weight=1)
@@ -172,11 +200,13 @@ class VirtualKeyboard(tk.Toplevel):
         # create row4buttons
         for key in self.row4keys:
             ind = self.row4keys.index(key)
-            if ind == 0 or ind == 11:
+
+            if key == "left shift" or key == "right shift":     # Special case left and right movement because larger
                 keyframe4.columnconfigure(ind, weight=3)
             else:
                 keyframe4.columnconfigure(ind, weight=1)
-            appendrow4(ttk.Button(keyframe4,style='Button2Raised.TButton', width=3))
+
+            appendrow4(ttk.Button(keyframe4,style='Button1Raised.TButton', width=3))
 
             if key == ",":
                 self.row4buttons[ind].config(text="<\n,")
@@ -194,48 +224,42 @@ class VirtualKeyboard(tk.Toplevel):
                 self.row4buttons[ind].config(text=key.title())
 
             self.row4buttons[ind].grid(row=0, column=ind, sticky="NSEW", ipadx=8, ipady=8)
-
-    #   ROW 5  #
+        #
+        #   ROW 5  Creation
+        #
 
         # create a frame for row5buttons
         keyframe5 = ttk.Frame(self, height=1)
         keyframe5.rowconfigure(0, weight=1)
 
-        # create row5buttons
-        self.entryField = ttk.Entry(keyframe5, style='Entry1b.TEntry',textvariable=self.localStrVar, width=10)
+        #   This row has a special entry field that displays what the user is typing. This is necessary because the
+        #   keyboard is so large that on smaller screens it will overlap the window where the information will end up
+        #
+        self.entryField = ttk.Entry(keyframe5, style='Entry1b.TEntry',font=('Arial',18, 'italic' ), textvariable=self.localStrVar, width=6)
         keyframe5.columnconfigure(0, weight=0)
 
 
         for key in self.row5keys:
             ind = self.row5keys.index(key)
-            appendrow5(ttk.Button(keyframe5, style='Button2Raised.TButton', width=3))
+
+            appendrow5(ttk.Button(keyframe5, style='Button1Raised.TButton', width=3))
+
             if key == "spacebar":
-                print("space found, ind=", ind)
                 keyframe5.columnconfigure(ind+1, weight=12)
                 self.row5buttons[ind].config(text="Space", width=24)
             elif key == "left":
-                self.row5buttons[ind].config(text="<--", width=3)
+                self.row5buttons[ind].config(text="\u2190", width=3)
                 keyframe5.columnconfigure(ind + 1, weight=1)
             elif key == "right":
-                self.row5buttons[ind].config(text="-->", width=3)
+                self.row5buttons[ind].config(text="\u2192", width=3)
                 keyframe5.columnconfigure(ind + 1, weight=1)
             else:
                 self.row5buttons[ind].config(text=key.title(), width=3)
-
-        #
-        #
-        #     if key == "spacebar":
-        #         self.row5buttons[ind].config(text="Space", width=10)
-        #     else:
-        #         self.row5buttons[ind].config(text=key.title())
-
-            # self.row5buttons[ind].grid(row=0, column=ind, sticky="NSEW", ipadx=8, ipady=8)
 
 
         self.entryField.grid(row=0, column=0, sticky="NSEW", ipadx=8, ipady=8)
         for key in self.row5keys:
             ind = self.row5keys.index(key)
-            print("row5 index =", ind)
             self.row5buttons[ind].grid(row=0, column=ind+1, sticky="NSEW", ipadx=8, ipady=8)
 
 
@@ -246,6 +270,11 @@ class VirtualKeyboard(tk.Toplevel):
         keyframe3.grid(row=3, sticky="NSEW", padx=9)
         keyframe4.grid(row=4, sticky="NSEW", padx=9)
         keyframe5.grid(row=5, sticky="NSEW", padx=9)
+
+        #
+        #   Now add the callbacks for each key. Most of the time it will be just "vpresskey". But other
+        #   keys like enter, left and right arrow, backspace etc. need special handling
+        #
 
         for key in self.row1keys:
             ind = self.row1keys.index(key)
@@ -289,84 +318,85 @@ class VirtualKeyboard(tk.Toplevel):
             else:
                 self.row5buttons[ind].config(command=lambda x=key: self.vpresskey(x))
 
-
-
-
-        # for r, row in enumerate(rows, 1):
-        #     for c, t in enumerate(row):
-        #         ttk.Button(self.mainframe, style='Button2Raised.TButton',text="\n"+t+"\n", width=6, command=lambda t=t: self.press(t)).grid(row=r, column=c,pady=1,padx="0 1")
-        #
-        # ttk.Button(self.mainframe, style='Button2Raised.TButton',text="\nClear\n", width=9, command=self.clear).grid(row=len(rows)+1,column=0, columnspan=2,sticky='w',pady=1,padx="0 1")
-        # ttk.Button(self.mainframe, style='Button2Raised.TButton', text="\nEnter\n", width=9, command=self.enter).grid(row=len(rows)+1, column=1,columnspan=2,sticky='e',pady=1,padx=1)
-        # ttk.Entry(self.mainframe, style='Entry1b.TEntry', font=('Arial', 18, 'bold'),textvariable=self.message, state="readonly", width=18,justify="center").grid(row=len(rows)+2,column=0,columnspan=3,pady=2,padx="0 1",sticky='ew')
-        #
-        # master.bind("<Return>", self.enter)
-        #
-        # self.mainframe.configure(style='Normal.TFrame', height=200, width=200)
-        # self.mainframe.pack(fill="both", expand=True, padx=5, pady=5)
-        # self.configure(background="gray", height=200, width=200)
-
+    #
+    #   Tracks whether the keyboard is in shift mode. When clicked, it is on until unclicked
+    #
     def shift (self,event=None):
-        print("shift event")
+        indLeft = self.row4keys.index("left shift")
+        indRight = self.row4keys.index("right shift")
+
         if self.shift_status == True:
+            self.row4buttons[indLeft].config(style='Button1Raised.TButton')
+            self.row4buttons[indRight].config(style='Button1Raised.TButton')
+
             self.shift_status = False
         else:
-            self.shift_status = True
+            self.row4buttons[indLeft].config(style='Button1Sunken.TButton')
+            self.row4buttons[indRight].config(style='Button1Sunken.TButton')
 
+            self.shift_status = True
+    #
+    #   Backspace moves the cursor back one position by erasing the character to its immediate left
+    #
     def backspace(self):
         if self.currentPos != 0:
             first_half = self.localStrVar.get()[:self.currentPos-1].replace(self.cursor, '')
             second_half = self.localStrVar.get()[self.currentPos + 1:].replace(self.cursor, '')
             self.localStrVar.set(first_half + self.cursor + second_half)
             self.currentPos -= 1
-
+    #
+    #   Enter key writes the result back to the appropriate field in the parent widget
+    #   Calls a function in the parent to indicate if the value is now "dirty"
+    #
     def enter(self,event=None):
         label = self.localStrVar.get().replace(self.cursor, '')
         self.localStrVar.set(label.ljust(5))
         if self.localStrVar.get() !=self.fieldStrVar.get():
             self.fieldStrVar.set(self.localStrVar.get())
-            self.master.Channel_Freq_Changed_CB()
+            self.dirty_CB()
         self.destroy()
-
+    #
+    #   Moves the cursor to beginning of field
+    #
     def home(self):
-        print("home called")
         label = self.localStrVar.get().replace(self.cursor, "")
         self.localStrVar.set(self.cursor + label)
         self.currentPos = 0
-
+    #
+    #   Moves the cursor to the end of the field
+    #
     def end(self):
-        print("end called")
         label = self.localStrVar.get().replace(self.cursor, "")
         self.localStrVar.set(label+self.cursor)
         self.currentPos = len(self.localStrVar.get())-1
-
+    #
+    #   Moves the cursor left one character without deleting anything
+    #
     def moveLeft(self):
-        print("move left called")
         if self.currentPos == 0:
             return
         self.currentPos -= 1
         first_half = self.localStrVar.get()[:self.currentPos].replace(self.cursor, '')
         second_half = self.localStrVar.get()[self.currentPos:].replace(self.cursor, '')
         self.localStrVar.set(first_half + self.cursor + second_half)
-
+    #
+    #   Moves the cursor to the right one character without adding or deleting characts
+    #
     def moveRight(self):
-        print("move right called")
-        print(self.currentPos)
-        if self.currentPos == self.maxChars-1:
+        if self.currentPos == self.maxChars:
             return
         self.currentPos += 1
         label = self.localStrVar.get().replace(self.cursor, "")
         self.localStrVar.set(label)
         first_half = self.localStrVar.get()[:self.currentPos].replace(self.cursor, '')
-        print("*",first_half, "*",sep="+")
+
         second_half = self.localStrVar.get()[self.currentPos:].replace(self.cursor, '')
-        print(second_half)
+
         self.localStrVar.set(first_half + self.cursor + second_half)
 
-
-
-
-
+    #
+    #   Handles the pressing of a typical key. Maps lower to upper case based on setting of shift flag
+    #   Forbids the entry of backslash
 
     def vpresskey(self,t):
         if len(self.localStrVar.get().replace(self.cursor,"")) < self.maxChars:

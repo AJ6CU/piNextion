@@ -59,10 +59,10 @@ class frequencyChannel(baseui.frequencyChannelUI):
         self.Set_Freq("14032000")
 
     def alphanumeric_Keypad_CB(self, event=None):
-        keypad = VirtualKeyboard(self, self.channel_Label_VAR,5)
+        keypad = VirtualKeyboard(self, self.channel_Label_VAR, self.channel_Name_Changed_CB, 5)
 
     def numeric_Keypad_CB(self, event=None):
-        keypad = VirtualNumericKeyboard(self, self.channel_Freq_VAR,8)
+        keypad = VirtualNumericKeyboard(self, self.channel_Freq_VAR, self.Channel_Freq_Changed_CB,8)
 
     #
     #   Get/Set mode combo box

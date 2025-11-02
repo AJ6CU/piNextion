@@ -2,6 +2,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import StringVar
+from tkinter import messagebox
 
 
 class VirtualKeyboard(tk.Toplevel):
@@ -26,10 +27,6 @@ class VirtualKeyboard(tk.Toplevel):
 
 
         self.messageTooLong = "Too Many Chars, Max = " + str(self.maxChars)
-        self.messageEmpty = ""
-
-        self.message = StringVar()
-        self.message.set(self.messageEmpty)
 
         self.currentPos = len(self.fieldStrVar.get())
 
@@ -187,6 +184,7 @@ class VirtualKeyboard(tk.Toplevel):
         self.entryField = ttk.Entry(keyframe5, style='Entry2Raised.TEntry',textvariable=self.localStrVar)
         keyframe5.columnconfigure(0, weight=0)
 
+
         for key in self.row5keys:
             ind = self.row5keys.index(key)
             appendrow5(ttk.Button(keyframe5, style='Button2Raised.TButton', width=3))
@@ -300,6 +298,8 @@ class VirtualKeyboard(tk.Toplevel):
     def enter(self,event=None):
         label = self.localStrVar.get().replace(self.cursor, '')
         self.fieldStrVar.set(label.ljust(5))
+        if self.originalValue !=self.fieldStrVar.get():
+            self.master.Channel_Freq_Changed_CB()
         self.destroy()
 
     def home(self):
@@ -316,9 +316,26 @@ class VirtualKeyboard(tk.Toplevel):
 
     def moveLeft(self):
         print("move left called")
+        if self.currentPos == 0:
+            return
+        self.currentPos -= 1
+        first_half = self.localStrVar.get()[:self.currentPos].replace(self.cursor, '')
+        second_half = self.localStrVar.get()[self.currentPos:].replace(self.cursor, '')
+        self.localStrVar.set(first_half + self.cursor + second_half)
 
     def moveRight(self):
         print("move right called")
+        print(self.currentPos)
+        if self.currentPos == self.maxChars-1:
+            return
+        self.currentPos += 1
+        label = self.localStrVar.get().replace(self.cursor, "")
+        self.localStrVar.set(label)
+        first_half = self.localStrVar.get()[:self.currentPos].replace(self.cursor, '')
+        print("*",first_half, "*",sep="+")
+        second_half = self.localStrVar.get()[self.currentPos:].replace(self.cursor, '')
+        print(second_half)
+        self.localStrVar.set(first_half + self.cursor + second_half)
 
 
 
@@ -326,36 +343,10 @@ class VirtualKeyboard(tk.Toplevel):
 
 
     def vpresskey(self,t):
-        if self.currentPos < self.maxChars:
+        if len(self.localStrVar.get().replace(self.cursor,"")) < self.maxChars:
             first_half = self.localStrVar.get()[:self.currentPos].replace(self.cursor,'')
             second_half = self.localStrVar.get()[self.currentPos+1:].replace(self.cursor,'')
             self.localStrVar.set(first_half + t + self.cursor + second_half)
             self.currentPos += 1
         else:
-            self.message.set(self.messageTooLong)
-        # cursor = ' '
-        # if t == "Del":
-        #     self.currentPos -=  1
-        #     if self.currentPos < self.maxDigits:
-        #         self.message.set(self.messageEmpty)
-        #     first_half = (self.fieldStrVar.get()[:self.currentPos].replace(cursor,''))
-        #     second_half = self.fieldStrVar.get()[self.currentPos+1:].replace(cursor,'')
-        #     self.fieldStrVar.set(first_half  + cursor + second_half)
-        # elif t == "<":
-        #     self.currentPos -= 1
-        #     if self.currentPos < 0:
-        #         self.currentPos = len(self.fieldStrVar.get())-1
-        #         self.fieldStrVar.set(self.fieldStrVar.get().replace(cursor,'')+cursor)
-        #     else:
-        #         first_half = self.fieldStrVar.get()[:self.currentPos].replace(cursor,'')
-        #         second_half = self.fieldStrVar.get()[self.currentPos:].replace(cursor,'')
-        #         self.fieldStrVar.set(first_half + cursor + second_half)
-        # else:
-        #     if self.currentPos < self.maxDigits:
-        #         first_half = self.fieldStrVar.get()[:self.currentPos].replace(cursor,'')
-        #         second_half = self.fieldStrVar.get()[self.currentPos:].replace(cursor,'')
-        #         self.fieldStrVar.set(first_half + t + cursor + second_half)
-        #         self.currentPos += 1
-        #     else:
-        #         self.message.set(self.messageTooLong)
-
+            warning = messagebox.showinfo("Warning", self.messageTooLong, parent=self)

@@ -1,5 +1,6 @@
 # from imghdr import test_xbm
 import tkinter.ttk as ttk
+import tkinter as tk
 
 # from Cython.Compiler.Naming import self_cname
 
@@ -8,6 +9,8 @@ from settings import settings
 from cwSettings import cwSettings
 
 from channels import channels
+from Classic_uBITX_Control import Classic_uBITX_Control
+
 import mystyles  # Styles definition module
 from time import sleep
 
@@ -25,6 +28,8 @@ class piCECNextion(baseui.piCECNextionUI):
         self.settingsWindow = None      # Object pointer for the General Settings Window
         self.channelWindow = None      # object pointer for the Memory-> VFO Window
         self.vfoToMemWindow = None      # object pointer for the VFO->Memory Window
+        self.classic_uBITX_ControlWindow = None
+        self.classic_uBITX_ControlWindowObj = None
         self.DeepDebug = False
         self.CurrentDebug = True
 
@@ -106,7 +111,7 @@ class piCECNextion(baseui.piCECNextionUI):
             "sv": self.sv_UX_Set_SW_Version,
             "sc": self.sc_UX_Set_User_Callsign,
             "cm": self.cm_UX_Display_Callsign_Version_Flag,
-            "c0": self.c0_UX_In_Yellow_Box_Flag,
+            "c0": self.c0_UX_Toggle_Classic_uBITX_Control,
             "vc": self.vc_UX_Set_Primary_VFO_Frequency,
             "cc": self.cc_UX_Set_Primary_Mode,
             "va": self.va_UX_Set_VFO_A_Frequency,
@@ -119,7 +124,8 @@ class piCECNextion(baseui.piCECNextionUI):
             "vy": self.vy_UX_Set_CW_Delay_Returning_to_RX,
             "ve": self.ve_UX_Set_CW_Delay_Starting_TX,
             "cv": self.cv_UX_VFO_Toggle,            #sets active VFO, A=0, B=1
-            "s0": self.s0Get,
+            "s0": self.s0_UX_Greenbox_Line1,
+            "s1": self.s1_UX_Greenbox_Line2,
             "sh": self.sh_UX_Get_Memory,
             "vn": self.vn_UX_ACK_Memory_Write,
             "cl": self.cl_UX_Lock_Screen,
@@ -256,7 +262,10 @@ class piCECNextion(baseui.piCECNextionUI):
     ######################################################################################
 
     def delegate_command_processing(self,command, buffer):
-        self.MCU_Command_To_CB_Dict[command](buffer)
+        try:
+            self.MCU_Command_To_CB_Dict[command](buffer)
+        except:
+            print("Command not recognized=", buffer,"*")
 
     ################################################################################
     #   Format of command sent by radio:
@@ -336,6 +345,25 @@ class piCECNextion(baseui.piCECNextionUI):
             self.channelWindow.deiconify()
             self.channelWindow.current_Channel_VAR.set("Not Saved")
 
+    def displayClassic_uBITXControlWindow(self):
+        self.classic_uBITX_ControlWindow  = tk.Toplevel(self.master)
+        self.classic_uBITX_ControlWindowObj=Classic_uBITX_Control(self.classic_uBITX_ControlWindow)
+        self.classic_uBITX_ControlWindowObj.pack()
+
+        toplevel_offsetx, toplevel_offsety = self.master.winfo_x(), self.master.winfo_y()
+        padx = 350  # the padding you need.
+        pady = 250
+        self.classic_uBITX_ControlWindow.geometry(f"+{toplevel_offsetx + padx}+{toplevel_offsety + pady}")
+
+        self.classic_uBITX_ControlWindow.grab_set()
+        self.classic_uBITX_ControlWindow.transient(self.master)  # Makes the cw settings appear above the mainwindow
+
+    def displayLine1Classic_uBITX_Control(self, value):
+        self.classic_uBITX_ControlWindowObj.greenBoxSelection_VAR.set(value)
+
+    def displayLine2Classic_uBITX_Control(self, value):
+        self.classic_uBITX_ControlWindowObj.greenBoxInstructions_VAR.set(value)
+    #
     def refresh_CB(self):
         self.channelWindow.destroy()
         self.channelWindow = None
@@ -1222,12 +1250,25 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     #   The "c0" command determines whether we are in text (yellow box) or graphics mode
     #
-    def c0_UX_In_Yellow_Box_Flag(self, buffer):
+    def c0_UX_Toggle_Classic_uBITX_Control(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         print("c0 get called:", "buffer =", buffer)
-        print("c0 text (yellow box) or graphics mode")
         print("value=", value, sep='*', end='*')
+        print(type(value), sep='*', end='*')
         print("\n")
+        if value == "0":
+            print(" exiting Classic uBITX control")
+            if self.classic_uBITX_ControlWindowObj != None:
+                self.classic_uBITX_ControlWindowObj.pack_forget()
+                self.classic_uBITX_ControlWindowObj = None
+            if self.classic_uBITX_ControlWindow != None:
+                self.classic_uBITX_ControlWindow.destroy()
+                self.classic_uBITX_ControlWindow = None
+
+        else:
+            print(" entering classic uBITX control")
+            self.displayClassic_uBITXControlWindow()
+
 
     #
     # The purpose of this command is a little puzzling
@@ -1235,9 +1276,18 @@ class piCECNextion(baseui.piCECNextionUI):
     # Only sent on the first attempt to lock the screen
     # Also contains the text for the speaker button
     #
-    def s0Get(self, buffer):
-        print("unknown s0 called from lock screen")
+    def s0_UX_Greenbox_Line1(self, buffer):
+        print("s0 called")
         print("buffer=", buffer)
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.displayLine1Classic_uBITX_Control(value)
+
+
+    def s1_UX_Greenbox_Line2(self, buffer):
+        print("s1 called")
+        print("buffer=", buffer)
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.displayLine2Classic_uBITX_Control(value)
 
 
     def sh_UX_Get_Memory(self, buffer):
@@ -1426,6 +1476,8 @@ class piCECNextion(baseui.piCECNextionUI):
             self.rit_Button.configure(style='GreenButton2b.TButton', state="pressed")
 
     def vf_UX_ATT_Level(self, buffer):
+        print("vf called")
+        print(buffer)
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
 
         #
@@ -1448,10 +1500,16 @@ class piCECNextion(baseui.piCECNextionUI):
             # On balance the chance of a lost packet is pretty low, so best option is to not
             # repond to the ack-ed value from the MCU
             #
-            # self.ATT_Jogwheel.set(value)            # Set UX to value acked by MCU
+            # BUT...
+            # In Classic mode, still need to update the jogwheel...
+            #
+            if self.classic_uBITX_ControlWindow != None:
+                self.ATT_Jogwheel.set(value)            # Set UX to value acked by MCU
 
 
     def ci_UX_IFS_State_Set(self, buffer):
+        print("ci called")
+        print(buffer)
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
 
         if (value == 0):                            # Zero value indicates IFS being turned off
@@ -1465,6 +1523,9 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def vi_UX_IFS_Level(self, buffer):      #verification by MCU of new value
+        print("vi called")
+        print(buffer)
+
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
         #
         # mjh normally ux should be set to the value ack-ed by mcu. Problem with this
@@ -1474,8 +1535,13 @@ class piCECNextion(baseui.piCECNextionUI):
         # On balance the chance of a lost packet is pretty low, so best option is to not
         # repond to the ack-ed value from the MCU
         #
+        #BUT.....
+        # Need to respond when in Classic UX Mode. Can use a check for null to figure out whether we update or not
+        #
+        #
         # print("MCU Reporting vi_UX_IFS_Level", value)
-        # self.IFS_Jogwheel.set(value)
+        if self.classic_uBITX_ControlWindow != None:
+            self.IFS_Jogwheel.set(value)
         # print("MCU After setting vi_UX_IFS_Level get", self.IFS_Jogwheel.get())
 
 

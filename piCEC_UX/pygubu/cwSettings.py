@@ -17,12 +17,10 @@ class cwSettings(baseui.cwSettingsUI):
         self.dirty_CB = dirty_CB
 
     def apply_CB(self):
-        print("outside apply CB")
         self.mainWindow.dirty_DisplayCWSettings()
         self.destroy()
 
     def cancel_CB(self):
-        print("outside cancel CB")
         self.destroy()
 
 

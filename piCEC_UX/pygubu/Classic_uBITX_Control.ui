@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.5" author="PygubuDesigner 0.41.4">
+  <project>
+    <settings>
+      <setting id="name">Classic_uBITX_Control</setting>
+      <setting id="description">Implements the "infamous" yellow box for backwards compatibility</setting>
+      <setting id="module_name">Classic_uBITX_Control</setting>
+      <setting id="template">widget</setting>
+      <setting id="main_widget"></setting>
+      <setting id="main_classname">Classic_uBITX_Control</setting>
+      <setting id="main_menu" />
+      <setting id="output_dir" />
+      <setting id="output_dir2" />
+      <setting id="import_tkvariables">False</setting>
+      <setting id="use_ttk_styledefinition_file">True</setting>
+      <setting id="use_i18n">False</setting>
+      <setting id="all_ids_attributes">False</setting>
+      <setting id="generate_code_onsave">False</setting>
+      <setting id="use_window_centering_code">False</setting>
+      <setting id="ttk_style_definition_file">mystyles.py</setting>
+    </settings>
+    <customwidgets />
+    <resources />
+  </project>
+  <object class="tk.Toplevel" id="toplevel1">
+    <property name="geometry">300x150</property>
+    <property name="height">200</property>
+    <property name="width">200</property>
+    <child>
+      <object class="ttk.Labelframe" id="greenBox_Labelframe" named="True">
+        <property name="height">200</property>
+        <property name="style">GreenBox.TLabelframe</property>
+        <property name="text" translatable="yes">Classic uBITX Control</property>
+        <property name="width">200</property>
+        <layout manager="pack">
+          <property name="expand">true</property>
+          <property name="fill">both</property>
+          <property name="side">top</property>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="greenBoxSelection_Label" named="True">
+            <property name="style">GreenBox.TLabel</property>
+            <property name="textvariable">string:greenBoxSelection_VAR</property>
+            <property name="width">22</property>
+            <layout manager="pack">
+              <property name="expand">true</property>
+              <property name="fill">x</property>
+              <property name="padx">5</property>
+              <property name="pady">10 0</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="greenBoxInstructions_Label" named="True">
+            <property name="style">GreenBoxi.TLabel</property>
+            <property name="textvariable">string:greenBoxInstructions_VAR</property>
+            <property name="width">22</property>
+            <layout manager="pack">
+              <property name="expand">true</property>
+              <property name="fill">x</property>
+              <property name="padx">5</property>
+              <property name="pady">15 5</property>
+              <property name="side">bottom</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -33,6 +33,7 @@ def setup_ttk_styles(master=None):
             'Heading2b': ('Arial',14, 'bold' ),
             'Heading2bi': ('Arial', 14, 'bold', 'italic'),
             'Heading3': ('Arial',12, 'bold' ),
+            'Heading3i': ('Arial', 12, 'bold', 'italic'),
             'Heading4': ('Arial',10, 'bold' ),
             'Heading5': ('Fixed', 6),
             'Normal': ('Default', 10),
@@ -47,6 +48,7 @@ def setup_ttk_styles(master=None):
     style.configure('Heading2b.TLabel',font=fontList['Heading2b'], background='gray', foreground='white')
     style.configure('Heading2bi.TLabel', font=fontList['Heading2bi'], background='gray', foreground='white')
     style.configure('Heading3b.TLabel',font=fontList['Heading3'], background='gray', foreground='white')
+    style.configure('Heading3bi.TLabel', font=fontList['Heading3i'], background='gray', foreground='white')
     style.configure('Heading4b.TLabel',font=fontList['Heading4'], background='gray', foreground='white')
     style.configure('OffLED.TLabel', font=fontList['Heading5'], background='gray', foreground='gray')
     style.configure('OnLED.TLabel', font=fontList['Heading5'], background='green', foreground='green')
@@ -58,8 +60,13 @@ def setup_ttk_styles(master=None):
     style.configure('Normal.TLabel',font=fontList['Normal'])
     style.configure('Symbol1.TLabel',font=fontList['Symbol1'])
     style.configure('Button1.TButton',font=fontList['Heading1'])
+    style.configure('Button1Raised.TButton', font=fontList['Heading1'], relief='raised')
+    style.configure('Button1Sunken.TButton', font=fontList['Heading1'], relief='sunken')
     style.configure('Button2.TButton',font=fontList['Heading2'])
     style.configure('Button2b.TButton',font=fontList['Heading2b'], justify='center')
+    style.configure('Button2Raised.TButton', font=fontList['Heading2'], justify='center', relief='raised')
+    style.configure('Button2Sunken.TButton', font=fontList['Heading2'], justify='center', relief='sunken')
+    style.configure('Button2bipressed.TButton', relief='sunken', font=fontList['Heading2bi'], justify='center')
     # style.configure('Button2bcentered.TButton', font=fontList['Heading2b'],justify='center')
 
     style.configure('RedButton2b.TButton',font=fontList['Heading2b'], background='red', foreground='white')
@@ -89,12 +96,23 @@ def setup_ttk_styles(master=None):
     style.configure('ComboBox4.TCombobox',font=fontList['Heading4'])
     style.configure('ComboBox4White.TCombobox',font=fontList['Heading4'],foreground='white')
     style.configure('Normal.TEntry',font=fontList['Normal'])
+
+    style.configure('Entry1b.TEntry', font=fontList['Heading1'])
     style.configure('Entry2b.TEntry', font=fontList['Heading2'])
     style.configure('NoBorder.TEntry',font=fontList['Normal'], highlightthickness=0, borderwidth=0, bd=0)
+
     style.configure('Title.TFrame', background='blue', foreground='white')
     style.configure('Heading2.TLabelframe.Label', background='gray', bd=4, font=fontList['Heading2'])
     style.configure('Heading2.TLabelframe', background='gray', bd=4)
-    style.configure('Normal.TText', font=fontList['Heading3'])
+
+    style.configure('GreenBox.TLabelframe', background='green', bd=4)
+    style.configure('GreenBox.TLabelframe.Label', background='green', foreground='white', bd=4, font=fontList['Heading2'])
+    style.configure('GreenBox.TLabel', font=('Fixed', 24, 'bold'), background='green', bd=0)
+    style.configure('GreenBoxi.TLabel', font=('Fixed', 24, 'italic'), background='green', bd=0)
+
+
+
+    style.configure('Normal.TText', background='gray', foreground='white', font=fontList['Heading3'])
 
     style.configure('Highlight.TFrame', background='blue', bd=4 )
  #   style.configure('Dark.TFrame', background='black', bd=4, bordercolor='white')

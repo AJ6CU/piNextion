@@ -3,9 +3,14 @@ import pathlib
 import tkinter as tk
 import tkinter.ttk as ttk
 import pygubu
+from time import sleep
 # import piCEC_UXui as baseui
 from piCECNextion import piCECNextion
 from piRadio import piRadio
+from configuration import configuration
+from comportManager import comportManager
+
+
 
 # import mystyles  # Styles definition module
 
@@ -18,9 +23,39 @@ from piRadio import piRadio
 # W// perhaps a new compiler issue. Have to cast everything first and then you can add them
 # W//#define conv4BytesToLong(lsb,lsb1,lsb2,msb) (unsigned long)(((int)(msb<<24)) + ((int)(lsb2<<16)) + ((int)(lsb1<<8))+lsb);
 # define conv4BytesToLong(lsb,lsb1,lsb2,msb) (unsigned long)(((long)msb<<24) + ((long)lsb2<<16) + ((long)lsb1<<8)+ (long)lsb);
+# globals(config_Data)
+config=None
+root = None
+mainWindow = None
+comPort = None
+myRadio = None
 
 
 
+def gotValidPort ():
+    if comPort.openSelectedComPort():
+        comPort.comportMessage_Frame.pack_forget()
+        startMainWindow()
+#
+#   once a valid port is found, then we can start the main window.
+#
+
+def startMainWindow():
+    mainWindow.place(x=0, y=0)                          # place the mainWindow on the screen
+    config.updateComPort(comPort.getSelectedComPort())  # update the config file if necessary because of comport selection
+    myRadio = piRadio(comPort.getComPortDesc(), mainWindow, config) # Initialize the Radio object with selected port
+
+    mainWindow.attachConfig(config)         # Need to make config available to mainWindow (load channels and perhaps more later)
+    mainWindow.attachRadio(myRadio)         # tell the mainWindow how to talk to the radio
+
+    myRadio.rebootRadio()                   # We reboot the radio because it sends a bunch of initialization values on startup
+                                            # to the Nextion screen. We need to capture them
+
+    myRadio.readALLValues()                 # Now after reboot, read in the initialization values
+
+    mainWindow.initUX()                     # With the initialization values read in, we can perform some initialization functions
+                                            # like setting up tuning rate
+    myRadio.updateData()                    # This process looks for new Radio data. It is scheduled to be run again after completion
 
 
 #
@@ -28,21 +63,22 @@ from piRadio import piRadio
 #
 
 
-
-
 root = tk.Tk()
+root.geometry("1086x660")
+
+config = configuration(root)                    # Read in config data, if missing preload with defaults
+                                                # Root is passed to allow popup error messages
+
+
 mainWindow = piCECNextion(root)
-mainWindow.pack(expand=True, fill="both")
+comPort = comportManager(root, gotValidPort)
+comPort.place(relx=0.8, rely=1.0, anchor="s")
+#
+#   First try to use the port in config. If valid, just open it
+#
 
-# myRadio = piRadio("/dev/ttyS0", mainWindow)  # linux
-# myRadio = piRadio("com6", mainWindow, True) # windows
-# myRadio = piRadio("/dev/cu.usbmodem141301", mainWindow) # macos
-myRadio = piRadio("/dev/cu.usbserial-00000000", mainWindow) # macos
+if comPort.validateComPort(config.getComPort()):                #test if config port exists in list of ports
+    if (comPort.forceUseOfThisPort(config.getComPort())):                          #force it and try to open, if good, then we can start main
+        gotValidPort()
 
-mainWindow.attachRadio(myRadio)
-myRadio.openRadio()
-myRadio.readALLValues()
-mainWindow.initUX()
-
-root.after(500,myRadio.updateData)
 root.mainloop()

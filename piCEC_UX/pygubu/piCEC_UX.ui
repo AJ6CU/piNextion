@@ -26,9 +26,9 @@
   </project>
   <object class="ttk.Frame" id="main_window" named="True">
     <property name="borderwidth">5</property>
-    <property name="height">665</property>
+    <property name="height">700</property>
     <property name="style">Normal.TFrame</property>
-    <property name="width">850</property>
+    <property name="width">1280</property>
     <layout manager="pack">
       <property name="anchor">nw</property>
       <property name="expand">True</property>
@@ -608,25 +608,11 @@ RIT
                       </object>
                     </child>
                     <child>
-                      <object class="ttk.Button" id="store_Button" named="True">
-                        <property name="command" type="command" cbtype="simple">store_CB</property>
+                      <object class="ttk.Button" id="channels_Button" named="True">
+                        <property name="command" type="command" cbtype="simple">channels_CB</property>
                         <property name="style">Button2b.TButton</property>
                         <property name="text" translatable="yes">
-STORE
-</property>
-                        <layout manager="pack">
-                          <property name="anchor">nw</property>
-                          <property name="padx">0 20</property>
-                          <property name="side">left</property>
-                        </layout>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="ttk.Button" id="recall_Button" named="True">
-                        <property name="command" type="command" cbtype="simple">recall_CB</property>
-                        <property name="style">Button2b.TButton</property>
-                        <property name="text" translatable="yes">
-RECALL
+CHANNELS
 </property>
                         <layout manager="pack">
                           <property name="anchor">nw</property>

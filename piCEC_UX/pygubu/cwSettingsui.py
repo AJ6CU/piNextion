@@ -66,8 +66,8 @@ class cwSettingsUI(tk.Toplevel):
             self.General_CW_Settings_Frame,
             name="cw_key_type_label")
         self.CW_KEY_TYPE_LABEL.configure(
-            style="Heading4.TLabel", text='Key Type')
-        self.CW_KEY_TYPE_LABEL.grid(column=0, pady="0 10", row=0)
+            style="Heading2b.TLabel", text='Key Type')
+        self.CW_KEY_TYPE_LABEL.grid(column=0, pady="5 0", row=0, sticky="e")
         self.key_type_value_VAR = tk.StringVar(value='STRAIGHT')
         __values = ['STRAIGHT', 'IAMBICA', 'IAMBICB']
         self.CW_KEY_TYPE_WIDGET = tk.OptionMenu(
@@ -75,27 +75,28 @@ class cwSettingsUI(tk.Toplevel):
             self.key_type_value_VAR,
             *__values,
             command=None)
-        self.CW_KEY_TYPE_WIDGET.grid(column=1, row=0, sticky="w")
+        self.CW_KEY_TYPE_WIDGET.grid(column=1, padx="10 0", row=0, sticky="w")
         self.CW_SIDETONE_LABEL = ttk.Label(
             self.General_CW_Settings_Frame,
             name="cw_sidetone_label")
         self.CW_SIDETONE_LABEL.configure(
-            style="Heading4.TLabel", text='Sidetone (HZ)')
-        self.CW_SIDETONE_LABEL.grid(column=0, row=2, sticky="w")
+            style="Heading2b.TLabel", text='Sidetone (HZ)')
+        self.CW_SIDETONE_LABEL.grid(column=0, pady="5 0", row=2, sticky="e")
         self.CW_SIDETONE_WIDGET = ttk.Entry(
             self.General_CW_Settings_Frame,
             name="cw_sidetone_widget")
         self.tone_value_VAR = tk.StringVar(value='599')
         self.CW_SIDETONE_WIDGET.configure(
             justify="right",
-            style="Normal.TEntry",
+            style="Entry2b.TEntry",
             textvariable=self.tone_value_VAR,
             validate="focus",
-            width=10)
+            width=12)
         _text_ = '599'
         self.CW_SIDETONE_WIDGET.delete("0", "end")
         self.CW_SIDETONE_WIDGET.insert("0", _text_)
-        self.CW_SIDETONE_WIDGET.grid(column=1, row=2)
+        self.CW_SIDETONE_WIDGET.grid(
+            column=1, padx="10 0", pady="5 0", row=2, sticky="w")
         _validatecmd = (
             self.CW_SIDETONE_WIDGET.register(
                 self.validate_CW_SIDETONE), "%P", "%V")
@@ -104,19 +105,20 @@ class cwSettingsUI(tk.Toplevel):
             self.General_CW_Settings_Frame,
             name="cw_speed_wpm_label")
         self.CW_SPEED_WPM_LABEL.configure(
-            style="Heading4.TLabel", text='Speed (WPM)')
-        self.CW_SPEED_WPM_LABEL.grid(column=0, row=6, sticky="w")
+            style="Heading2b.TLabel", text='Speed (WPM)')
+        self.CW_SPEED_WPM_LABEL.grid(column=0, pady="5 0", row=6, sticky="e")
         self.CW_SPEED_WPM_WIDGET = ttk.Entry(
             self.General_CW_Settings_Frame,
             name="cw_speed_wpm_widget")
         self.key_speed_value_VAR = tk.StringVar()
         self.CW_SPEED_WPM_WIDGET.configure(
             justify="right",
-            style="Normal.TEntry",
+            style="Entry2b.TEntry",
             textvariable=self.key_speed_value_VAR,
             validate="focus",
-            width=10)
-        self.CW_SPEED_WPM_WIDGET.grid(column=1, row=6)
+            width=12)
+        self.CW_SPEED_WPM_WIDGET.grid(
+            column=1, padx="10 0", pady="5 0", row=6, sticky="w")
         _validatecmd = (
             self.CW_SPEED_WPM_WIDGET.register(
                 self.validate_CW_SPEED_WPM), "%P", "%V")
@@ -125,20 +127,21 @@ class cwSettingsUI(tk.Toplevel):
             self.General_CW_Settings_Frame,
             name="cw_start_ms_label")
         self.CW_START_MS_LABEL.configure(
-            style="Heading4.TLabel",
+            style="Heading2b.TLabel",
             text='Delay Starting TX (ms)')
-        self.CW_START_MS_LABEL.grid(column=0, row=10, sticky="w")
+        self.CW_START_MS_LABEL.grid(column=0, pady="5 0", row=10, sticky="e")
         self.CW_START_MS_WIDGET = ttk.Entry(
             self.General_CW_Settings_Frame,
             name="cw_start_ms_widget")
         self.delay_starting_tx_value_VAR = tk.StringVar()
         self.CW_START_MS_WIDGET.configure(
             justify="right",
-            style="Normal.TEntry",
+            style="Entry2b.TEntry",
             textvariable=self.delay_starting_tx_value_VAR,
             validate="focus",
-            width=10)
-        self.CW_START_MS_WIDGET.grid(column=1, row=10)
+            width=12)
+        self.CW_START_MS_WIDGET.grid(
+            column=1, padx="10 0", pady="5 0", row=10, sticky="w")
         _validatecmd = (
             self.CW_START_MS_WIDGET.register(
                 self.validate_CW_START_MS), "%P", "%V")
@@ -147,20 +150,21 @@ class cwSettingsUI(tk.Toplevel):
             self.General_CW_Settings_Frame,
             name="cw_delay_ms_label")
         self.CW_DELAY_MS_LABEL.configure(
-            style="Heading4.TLabel",
+            style="Heading2b.TLabel",
             text='Delay Returning to RX (ms)')
-        self.CW_DELAY_MS_LABEL.grid(column=0, row=14, sticky="w")
+        self.CW_DELAY_MS_LABEL.grid(column=0, pady="5 0", row=14, sticky="e")
         self.CW_DELAY_MS_WIDGET = ttk.Entry(
             self.General_CW_Settings_Frame,
             name="cw_delay_ms_widget")
         self.delay_returning_to_rx_value_VAR = tk.StringVar()
         self.CW_DELAY_MS_WIDGET.configure(
             justify="right",
-            style="Normal.TEntry",
+            style="Entry2b.TEntry",
             textvariable=self.delay_returning_to_rx_value_VAR,
             validate="focus",
-            width=10)
-        self.CW_DELAY_MS_WIDGET.grid(column=1, row=14)
+            width=12)
+        self.CW_DELAY_MS_WIDGET.grid(
+            column=1, padx="10 0", pady="5 0", row=14, sticky="w")
         _validatecmd = (
             self.CW_DELAY_MS_WIDGET.register(
                 self.validate_CW_DELAY_MS), "%P", "%V")
@@ -169,9 +173,9 @@ class cwSettingsUI(tk.Toplevel):
             self.General_CW_Settings_Frame,
             name="label209")
         self.label209.configure(
-            style="Heading4.TLabel",
+            style="Heading2b.TLabel",
             text='VFO Freq displays')
-        self.label209.grid(column=0, pady="0 10", row=15)
+        self.label209.grid(column=0, pady="5 10", row=15, sticky="e")
         self.CW_DISPLAY_FREQ = tk.StringVar(value='TX')
         __values = ['TX', 'RX']
         self.CW_DISPLAY_FREQ_WIDGET = tk.OptionMenu(

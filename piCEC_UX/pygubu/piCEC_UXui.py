@@ -345,17 +345,12 @@ class piCECNextionUI(ttk.Frame):
         self.rit_Button.configure(style="Button2b.TButton", text='\nRIT\n')
         self.rit_Button.pack(anchor="nw", padx="0 20", side="left")
         self.rit_Button.configure(command=self.rit_CB)
-        self.store_Button = ttk.Button(
-            self.signal_Control_Frame, name="store_button")
-        self.store_Button.configure(style="Button2b.TButton", text='\nSTORE\n')
-        self.store_Button.pack(anchor="nw", padx="0 20", side="left")
-        self.store_Button.configure(command=self.store_CB)
-        self.recall_Button = ttk.Button(
-            self.signal_Control_Frame, name="recall_button")
-        self.recall_Button.configure(
-            style="Button2b.TButton", text='\nRECALL\n')
-        self.recall_Button.pack(anchor="nw", side="left")
-        self.recall_Button.configure(command=self.recall_CB)
+        self.channels_Button = ttk.Button(
+            self.signal_Control_Frame, name="channels_button")
+        self.channels_Button.configure(
+            style="Button2b.TButton", text='\nCHANNELS\n')
+        self.channels_Button.pack(anchor="nw", side="left")
+        self.channels_Button.configure(command=self.channels_CB)
         self.signal_Control_Frame.grid(column=0, pady=10, row=0, sticky="n")
         self.secondary_menu_Frame.grid(column=0, row=0)
         self.tuning_Preset_Selection_Frame = ttk.Frame(
@@ -687,9 +682,9 @@ class piCECNextionUI(ttk.Frame):
             side="top")
         self.configure(
             borderwidth=5,
-            height=665,
+            height=700,
             style="Normal.TFrame",
-            width=850)
+            width=1280)
         # Layout for 'main_window' skipped in custom widget template.
 
     def settings_CB(self):
@@ -734,10 +729,7 @@ class piCECNextionUI(ttk.Frame):
     def rit_CB(self):
         pass
 
-    def store_CB(self):
-        pass
-
-    def recall_CB(self):
+    def channels_CB(self):
         pass
 
     def tuning_Preset_5_CB(self):

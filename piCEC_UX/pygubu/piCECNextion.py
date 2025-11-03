@@ -1,14 +1,15 @@
 # from imghdr import test_xbm
 import tkinter.ttk as ttk
+import tkinter as tk
 
 # from Cython.Compiler.Naming import self_cname
 
 import piCEC_UXui as baseui
-# from piCEC_UX import myRadio
 from settings import settings
 from cwSettings import cwSettings
-from memToVFO import memToVFO
-from vfoToMem import vfoToMem
+
+from channels import channels
+from Classic_uBITX_Control import Classic_uBITX_Control
 
 import mystyles  # Styles definition module
 from time import sleep
@@ -21,11 +22,14 @@ class piCECNextion(baseui.piCECNextionUI):
             translator=None,
             on_first_object_cb=mystyles.setup_ttk_styles,
         )
+        self.configData = None    # Saves the configuration data object address
         self.theRadio = None            # Object pointer for the Radio
         self.cwSettingsWindow = None    # Object pointer for the CW Settinge Window
         self.settingsWindow = None      # Object pointer for the General Settings Window
-        self.memToVFOWindow = None      # object pointer for the Memory-> VFO Window
+        self.channelWindow = None      # object pointer for the Memory-> VFO Window
         self.vfoToMemWindow = None      # object pointer for the VFO->Memory Window
+        self.classic_uBITX_ControlWindow = None
+        self.classic_uBITX_ControlWindowObj = None
         self.DeepDebug = False
         self.CurrentDebug = True
 
@@ -82,6 +86,8 @@ class piCECNextion(baseui.piCECNextionUI):
         self.saved_tuning_Preset_VAR = None
         self.update_Tuning_Preset_Button_Label = True
 
+        # self.channelSelection = None                    # assigned to channel number when selected in channels
+
 #   Constants
         #######################################################################################
         #   Dictionaries that follow are used to lookup textual values based on internal
@@ -105,7 +111,7 @@ class piCECNextion(baseui.piCECNextionUI):
             "sv": self.sv_UX_Set_SW_Version,
             "sc": self.sc_UX_Set_User_Callsign,
             "cm": self.cm_UX_Display_Callsign_Version_Flag,
-            "c0": self.c0_UX_In_Yellow_Box_Flag,
+            "c0": self.c0_UX_Toggle_Classic_uBITX_Control,
             "vc": self.vc_UX_Set_Primary_VFO_Frequency,
             "cc": self.cc_UX_Set_Primary_Mode,
             "va": self.va_UX_Set_VFO_A_Frequency,
@@ -118,7 +124,8 @@ class piCECNextion(baseui.piCECNextionUI):
             "vy": self.vy_UX_Set_CW_Delay_Returning_to_RX,
             "ve": self.ve_UX_Set_CW_Delay_Starting_TX,
             "cv": self.cv_UX_VFO_Toggle,            #sets active VFO, A=0, B=1
-            "s0": self.s0Get,
+            "s0": self.s0_UX_Greenbox_Line1,
+            "s1": self.s1_UX_Greenbox_Line2,
             "sh": self.sh_UX_Get_Memory,
             "vn": self.vn_UX_ACK_Memory_Write,
             "cl": self.cl_UX_Lock_Screen,
@@ -128,7 +135,7 @@ class piCECNextion(baseui.piCECNextionUI):
             "cr": self.cr_UX_RIT_Toggle,
             "vf": self.vf_UX_ATT_Level,
             "vi": self.vi_UX_IFS_Level,
-            "ci": self.ci_UX_IFA_State_Set,
+            "ci": self.ci_UX_IFS_State_Set,
             "cx": self.cx_UX_TX_Stop_Toggle
         }
 
@@ -174,7 +181,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
         self.Text_To_ModeNum = {
             "DFT":0,
-            "LSB": 2,
+            "LSB":2,
             "USB":3,
             "CWL":4,
             "CWU":5
@@ -203,13 +210,34 @@ class piCECNextion(baseui.piCECNextionUI):
         self.lsb = 0                    # index of least significant eeprom mem address in list below
         self.msb = 1                    # index of most significant eeprom emem address in list below
         self.memLength = 2
+        self.charFlag = 3
+        self.memOffset = 4
+        self.totalSlots = 5
         self.EEPROM_Mem_Address = {
-            "cw_key_type": [ 0x66, 0x01, 0x01],
-            "cw_wpm": [ 0x1c, 0x0,0x04],
-            "cw_sidetone": [ 0x18, 0x0, 0x04],
-            "cw_Delay_Returning_to_RX": [0x02, 0x1, 0x01],  # eeprom value divided by 10
-            "cw_Delay_Starting_TX": [0x03, 0x1, 0x1]  # eeprom saved valued divided by 2
+            "cw_key_type": [ 0x66, 0x01, 0x01, 0x0, 0x0, 0x1],
+            "cw_wpm": [ 0x1c, 0x0, 0x04, 0x0, 0x0, 0x1],
+            "cw_sidetone": [ 0x18, 0x0, 0x04, 0x0, 0x0, 0x1],
+            "cw_Delay_Returning_to_RX": [0x02, 0x1, 0x01, 0x0, 0x0, 0x1],  # eeprom value divided by 10
+            "cw_Delay_Starting_TX": [0x03, 0x1, 0x1, 0x0, 0x0,  0x1],  # eeprom saved valued divided by 2
+            "channel_freq_Mode": [0x76, 0x2, 0x4, 0x48, 0x4, 0x14], # 0x48 indicates a integer number
+            "channel_Label": [0xc7, 0x2, 0x5, 0x57, 0x6, 0x9],  # should be 0xa for total, but bug with v2 cec
+                                                                # 0x57 indicates it is a character
+            "channel_ShowLabel": [0xc6, 0x2, 0x1, 0x57, 0x6,  0x9] # should be 0xa for total, but bug with v2 cec
+                                                                # 0x57 indicates it is a character
         }
+
+        self.memReadingState = "Freq"
+
+        #
+        #   These three variables are used to track which memory location (or "slot")
+        #   that the retreived memory is from. This is needed because the MCU does not
+        #   send any info on which memory location is associated with the value sent back
+        #   to the Nextion. It assumes (hopefully corrcctly) that they appear in order.
+        #
+        self.EEPROM_Current_Slot_Freq = 0
+        self.EEPROM_Current_Slot_Label = 0
+        self.EEPROM_Current_Slot_ShowLabel = 0
+
 
         self.ATT_Status_Off = 0         #indicates that ATT has been turned off
 
@@ -219,6 +247,9 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def attachRadio(self, radio):
         self.theRadio = radio
+
+    def attachConfig(self, config):
+        self.configData = config
 
     def initUX(self):
         self.updateRateMultiplier()
@@ -231,7 +262,10 @@ class piCECNextion(baseui.piCECNextionUI):
     ######################################################################################
 
     def delegate_command_processing(self,command, buffer):
-        self.MCU_Command_To_CB_Dict[command](buffer)
+        try:
+            self.MCU_Command_To_CB_Dict[command](buffer)
+        except:
+            print("Command not recognized=", buffer,"*")
 
     ################################################################################
     #   Format of command sent by radio:
@@ -257,8 +291,7 @@ class piCECNextion(baseui.piCECNextionUI):
 #####################################################################################
 
     def settings_CB(self):
-        print("settings_CB")
-        self.settingsWindow = settingsUI (self.master)
+        self.settingsWindow = settings (self.master)
         self.settingsWindow.geometry("300x200")
 
     def getCurrentCWSettings(self):
@@ -269,149 +302,145 @@ class piCECNextion(baseui.piCECNextionUI):
         self.cwSettingsWindow.delay_returning_to_rx_value_VAR.set(self.delay_returning_to_rx_value_VAR.get())
 
     def displayCWSettingsWindow(self):
-        print("Displaty CW settings Window")
         self.cwSettingsWindow = cwSettings (self.master, self)
-        print("calling current settings")
         self.getCurrentCWSettings()
         self.cwSettingsWindow.grab_set()  # This line makes the cw settings window modal
         self.cwSettingsWindow.transient(self.master)  # Makes the cw settings appear above the mainwindow
         self.master.wait_window(self.cwSettingsWindow)  # This pauses the main window until the cwsetting is closed
 
     def dirty_DisplayCWSettings (self):
-        print("dirty display settings window")
         if( self.cwSettingsWindow.tone_value_VAR.get() != self.tone_value_VAR.get()):
             self.Radio_Set_CW_Tone(self.cwSettingsWindow.tone_value_VAR.get())
-            print("dirty tone")
+
         if (self.cwSettingsWindow.key_type_value_VAR.get() != self.key_type_value_VAR.get()):
             self.Radio_Set_CW_Key_Type(self.cwSettingsWindow.key_type_value_VAR.get())
-            print("dirty key")
+
         if (self.cwSettingsWindow.key_speed_value_VAR.get() != self.key_speed_value_VAR.get()):
             # self.key_speed_value_VAR.set(self.cwSettingsWindow.key_speed_value_VAR.get())
             self.Radio_Set_CW_Key_Speed(self.cwSettingsWindow.key_speed_value_VAR.get())
-            print("dirty speed")
+
         if (self.cwSettingsWindow.delay_starting_tx_value_VAR.get() != self.delay_starting_tx_value_VAR.get()):
             # self.delay_starting_tx_value_VAR.set(self.cwSettingsWindow.delay_starting_tx_value_VAR.get())
             self.Radio_Set_CW_Delay_Starting_TX(self.cwSettingsWindow.delay_starting_tx_value_VAR.get())
-            print("dirty RX->TX delay")
+
         if (self.cwSettingsWindow.delay_returning_to_rx_value_VAR.get() != self.delay_returning_to_rx_value_VAR.get()):
             # self.delay_returning_to_rx_value_VAR.set(self.cwSettingsWindow.delay_returning_to_rx_value_VAR.get())
             self.Radio_Set_CW_Delay_Returning_To_RX(self.cwSettingsWindow.delay_returning_to_rx_value_VAR.get())
-            print("dirty TX->RX delay")
+
     #
     #   This routine makes requests from the MCU for all the Channel Frequencies, Mode, and Labels
     #   The actual setting of the corresponding values awaits the response of the eeprom
     #   packages sent by the MCU via the "sh_UX_Get_Memory" function
     #
-    def displaymemToVFOWindow(self):
-
-        print("Memory->VFO Settings Windows Called")
-        self.memToVFOWindow = memToVFO(self.master, self, self.changeChannel)
-        self.memToVFOWindow.transient(self.master)
-        self.Radio_Req_Channel_Freqs()
-        self.Radio_Req_Channel_Labels()
-        self.Radio_Req_Channel_Show_Labels()
-
-    def changeChannel(self, label, freq, mode, showLabel):
-        print("changeChannel Callback")
-        print("channel label", label,
-              "Freq=", freq,
-              "mode=", mode,
-              "show label", showLabel)
-
-        print("type=", type(showLabel))
-
-        self.Radio_Set_New_Frequency(freq)
-        self.Radio_Set_Mode(self.Text_To_ModeNum[mode])
-
-        if (int(showLabel)):
-            print("setting show label")
-            self.channel_Name_VAR.set(label)
+    def displayChannelWindow(self):
+        if self.channelWindow == None:
+            self.channelWindow = channels(self.master, self, self.refresh_CB, self.configData)
+            self.channelWindow.transient(self.master)
+            self.channelWindow.update_Current_Frequency (self.primary_VFO_VAR.get())
+            self.channelWindow.update_Current_Mode (self.primary_Mode_VAR.get())
+            self.Radio_Req_Channel_Freqs()
+            self.Radio_Req_Channel_Labels()
+            self.Radio_Req_Channel_Show_Labels()
         else:
-            print("turning off show label")
-            self.channel_Name_VAR.set("N/A  ")
+            self.channelWindow.deiconify()
+            self.channelWindow.current_Channel_VAR.set("Not Saved")
 
+    def displayClassic_uBITXControlWindow(self):
+        self.classic_uBITX_ControlWindow  = tk.Toplevel(self.master)
+        self.classic_uBITX_ControlWindowObj=Classic_uBITX_Control(self.classic_uBITX_ControlWindow)
+        self.classic_uBITX_ControlWindowObj.pack()
+
+        toplevel_offsetx, toplevel_offsety = self.master.winfo_x(), self.master.winfo_y()
+        padx = 350  # the padding you need.
+        pady = 250
+        self.classic_uBITX_ControlWindow.geometry(f"+{toplevel_offsetx + padx}+{toplevel_offsety + pady}")
+
+        self.classic_uBITX_ControlWindow.grab_set()
+        self.classic_uBITX_ControlWindow.transient(self.master)  # Makes the cw settings appear above the mainwindow
+
+    def displayLine1Classic_uBITX_Control(self, value):
+        self.classic_uBITX_ControlWindowObj.greenBoxSelection_VAR.set(value)
+
+    def displayLine2Classic_uBITX_Control(self, value):
+        self.classic_uBITX_ControlWindowObj.greenBoxInstructions_VAR.set(value)
+    #
+    def refresh_CB(self):
+        self.channelWindow.destroy()
+        self.channelWindow = None
+        self.displayChannelWindow()
 
     def Radio_Req_Channel_Freqs(self):
 
-        base = 0x76
-        for i in range(len(memToVFO.channelList)):
-            command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x4, 0x48]
-            print("command=", command)
+        base = self.EEPROM_Mem_Address["channel_freq_Mode"][self.lsb]
+        for i in range(self.EEPROM_Mem_Address["channel_freq_Mode"][self.totalSlots]):
+            command = [self.toRadioCommandDict["TS_CMD_READMEM"],
+                       base,
+                       self.EEPROM_Mem_Address["channel_freq_Mode"][self.msb],
+                       self.EEPROM_Mem_Address["channel_freq_Mode"][self.memLength],
+                       self.EEPROM_Mem_Address["channel_freq_Mode"][self.charFlag]
+                       ]
+            # print("command=", command)
             self.theRadio.sendCommandToMCU(bytes(command))
-            base += 0x4
-        base = 0x76
+            base += self.EEPROM_Mem_Address["channel_freq_Mode"][self.memOffset]
+
+        base = self.EEPROM_Mem_Address["channel_freq_Mode"][self.lsb]
 
     def Radio_Req_Channel_Labels(self):
-        base = 0xc7
-        for i in range(9):
-            command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x5, 0x57]
+        base = self.EEPROM_Mem_Address["channel_Label"][self.lsb]
+        for i in range(self.EEPROM_Mem_Address["channel_Label"][self.totalSlots]):
+            command = [self.toRadioCommandDict["TS_CMD_READMEM"],
+                       base,
+                       self.EEPROM_Mem_Address["channel_Label"][self.msb],
+                       self.EEPROM_Mem_Address["channel_Label"][self.memLength],
+                       self.EEPROM_Mem_Address["channel_Label"][self.charFlag]
+                       ]
             self.theRadio.sendCommandToMCU(bytes(command))
-            base += 0x6
-        base = 0xc7
+            base += self.EEPROM_Mem_Address["channel_Label"][self.memOffset]
+
+        base = self.EEPROM_Mem_Address["channel_Label"][self.lsb]
 
     def Radio_Req_Channel_Show_Labels(self):
-        base = 0xc6
-        for i in range(9):
-            command = [self.toRadioCommandDict["TS_CMD_READMEM"], base, 0x2, 0x1, 0x57]
+        base = self.EEPROM_Mem_Address["channel_ShowLabel"][self.lsb]
+        for i in range(self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]):
+            command = [self.toRadioCommandDict["TS_CMD_READMEM"],
+                       base,
+                       self.EEPROM_Mem_Address["channel_ShowLabel"][self.msb],
+                       self.EEPROM_Mem_Address["channel_ShowLabel"][self.memLength],
+                       self.EEPROM_Mem_Address["channel_ShowLabel"][self.charFlag]
+                       ]
             self.theRadio.sendCommandToMCU(bytes(command))
-            base += 0x6
-        base = 0xc6
+            base += self.EEPROM_Mem_Address["channel_ShowLabel"][self.memOffset]
 
-    def displayvfoToMemWindow(self):
-        print("VFO->Memory Settings Windows Called")
-        self.vfoToMemWindow = vfoToMem(self.master, self)
+        base = self.EEPROM_Mem_Address["channel_ShowLabel"][self.lsb]
+
+
 
     def vfo_CB(self):
         self.Radio_Toggle_VFO()
 
     def mode_lsb_CB(self):
-        if self.DeepDebug:
-            print("lsb change cb called")
-
         self.Radio_Set_Mode(self.Text_To_ModeNum["LSB"])
 
     def mode_usb_CB(self):
-        if self.DeepDebug:
-            print("usb change cb called")
-
         self.Radio_Set_Mode(self.Text_To_ModeNum["USB"])
 
 
     def mode_cwl_CB(self):
-        if self.DeepDebug:
-            print("cwl change cb called")
-
         self.Radio_Set_Mode(self.Text_To_ModeNum["CWL"])
 
 
     def mode_cwu_CB(self):
-        if self.DeepDebug:
-            print("cwu change cb called")
-
         self.Radio_Set_Mode(self.Text_To_ModeNum["CWU"])
 
     def band_up_CB(self):
-         if self.DeepDebug:
-             print("band up")
-
          self.Radio_Change_Band(self.Text_To_BandChange["UP"])
 
     def band_down_CB(self):
-         if self.DeepDebug:
-             print("band down")
-
          self.Radio_Change_Band(self.Text_To_BandChange["DOWN"])
 
     def cwSettings_CB(self, event=None):
-       if (self.lock_Button_On):
-           if self.CurrentDebug:
-               print("lock button on, ignore callback")
-
-       else:
-           if self.CurrentDebug:
-               print("cw_info cb called allowed because lock button off")
+       if (not self.lock_Button_On):
            self.displayCWSettingsWindow()
-
 
     def tuning_Preset_5_CB(self):
         self.Radio_Set_Tuning_Preset(5)
@@ -445,19 +474,19 @@ class piCECNextion(baseui.piCECNextionUI):
             self.tuning_Preset_Selection_Frame.grid()
 
     def tuning_Jogwheel_CB(self):
-        if self.DeepDebug:
-            print("tuning_Jogwheel_CB called")
-            print("self.currentVFO_Tuning_Rate=", self.currentVFO_Tuning_Rate)
-            print("self.tuning_Jogwheel.get()=",self.tuning_Jogwheel.get())
-            print("self.baselineJogValue=", self.baselineJogValue)
-            print("self.primary_VFO_VAR.get()", self.primary_VFO_VAR.get())
+        # if self.DeepDebug:
+        #     print("tuning_Jogwheel_CB called")
+        #     print("self.currentVFO_Tuning_Rate=", self.currentVFO_Tuning_Rate)
+        #     print("self.tuning_Jogwheel.get()=",self.tuning_Jogwheel.get())
+        #     print("self.baselineJogValue=", self.baselineJogValue)
+        #     print("self.primary_VFO_VAR.get()", self.primary_VFO_VAR.get())
         #
         #   Get current Frequency and adjust back to baseline
         #
         newFreq =  int(self.primary_VFO_VAR.get()) - (self.currentVFO_Tuning_Rate * self.baselineJogValue)
         newFreq += self.currentVFO_Tuning_Rate * self.tuning_Jogwheel.get()
-        if self.DeepDebug:
-            print("new freq from jog = ", newFreq)
+        # if self.DeepDebug:
+        #     print("new freq from jog = ", newFreq)
         self.Radio_Set_New_Frequency(newFreq)
 
 
@@ -486,29 +515,20 @@ class piCECNextion(baseui.piCECNextionUI):
         #   get the VFO currently displayed
         #
         currentVFO = self.primary_VFO_VAR.get()
-        if self.DeepDebug:
-            print("currentVFO=", currentVFO," ",sep="*")
+
         #
         #   reverse it so that least significant is in position 0
         #
         reversedVFO = currentVFO[::-1].strip()      # neat trick to reverse a string
-        if self.DeepDebug:
-            print("reversedVFO=", reversedVFO," ",sep="*")
+
         #
         #   pad it on right with zeros so we have 8 characters
         #
         reversedVFO = reversedVFO.ljust(8,"0")
-        if self.DeepDebug:
-            print(" 0 filled to 8 characters reversedVFO=", reversedVFO, " ",sep="*")
-            print("currentDigitPos=", self.currentDigitPos)
-            print("integer version=", int(reversedVFO[self.currentDigitPos]))
-            print("self.DigitPos_to_Powers_of_Ten[0]=", self.DigitPos_to_Powers_of_Ten[0])
+
         if (self.currentDigitPos == 0):
             if (self.currentVFO_Tuning_Rate != 0):
                 pos=self.find_msd_position(str(self.currentVFO_Tuning_Rate))
-                if self.DeepDebug:
-                    print("self.currentVFO_Tuning_Rate=", self.currentVFO_Tuning_Rate)
-                    print("pos", pos)
                 return int(reversedVFO[pos])
             else:
                 return int(reversedVFO[2])
@@ -630,19 +650,18 @@ class piCECNextion(baseui.piCECNextionUI):
         #   Special case 0, which is the current value of the preset
         #
         if (self.currentVFO_Tuning_Rate == 0):
-            self.currentVFO_Tuning_Rate = int(self.tuning_Preset_Label_VAR.get())
-            if self.DeepDebug:
-                print("new because zero current_rate_multiplier=", self.currentVFO_Tuning_Rate)
+           if self.tuning_Preset_Label_VAR.get() == "Direct Tune":
+               self.Radio_Set_Tuning_Preset(1)
+           else:
+               self.currentVFO_Tuning_Rate = int(self.tuning_Preset_Label_VAR.get())
 
     def updateJogTracking(self,newBaseline=True):
-        if self.DeepDebug:
-            print("updating jogwheel, digit=", self.getVFOdigit())
-            print("current jogwheel position =", self.tuning_Jogwheel.get())
+        # if self.DeepDebug:
+        #     print("updating jogwheel, digit=", self.getVFOdigit())
+        #     print("current jogwheel position =", self.tuning_Jogwheel.get())
 
         self.tuning_Jogwheel.setSpecial(self.getVFOdigit())
         if(newBaseline):
-            if self.DeepDebug:
-                print("new baseline")
             self.baselineJogValue = self.tuning_Jogwheel.get()
 
     def updateLabelTuning_Multiplier(self):
@@ -680,15 +699,10 @@ class piCECNextion(baseui.piCECNextionUI):
     def rit_CB(self):
         self.Radio_Toggle_RIT()
 
-    def store_CB(self):
-        if self.CurrentDebug:
-            print("store_CB")
-        self.displayvfoToMemWindow()
 
-    def recall_CB(self):
-        if self.CurrentDebug:
-            print("recall_CB")
-        self.displaymemToVFOWindow()
+
+    def channels_CB(self):
+        self.displayChannelWindow()
     #
     #   The following routines handles the ATT jogwheel.
     #   Basically any click with no movement will toggle
@@ -733,9 +747,6 @@ class piCECNextion(baseui.piCECNextionUI):
     #   on the speed of the MCU
     #
     def updateATTValue_CB(self):
-        if self.DeepDebug:
-            print("updateATTValue_CB called")
-            print(self.ATT_Jogwheel.get())
 
         self.Radio_Set_ATT(self.ATT_Jogwheel.get())
 
@@ -758,17 +769,13 @@ class piCECNextion(baseui.piCECNextionUI):
             else:
                 self.Radio_Set_IFS_Level(currentValue)
 
+
     def toggleIFS_State(self):
         self.Radio_Toggle_IFS()
 
     def updateIFSValue_CB(self):
-        # conv2BytesToInt32(swr_buffer[commandStartIndex + 4], swr_buffer[commandStartIndex + 5]);
-        # conv2BytesToInt32(lsb,msb) (int)((int16_t)((msb<<8) + lsb));
-        if self.DeepDebug:
-            print("processing value change")
-            print(self.IFS_Jogwheel.get())
-
         self.Radio_Set_IFS_Level(self.IFS_Jogwheel.get())
+
 
 
 
@@ -794,22 +801,20 @@ class piCECNextion(baseui.piCECNextionUI):
 
         intFreq = (intFreq >> 8)
         encodedBytes.append(intFreq & 0xff)
-        if self.DeepDebug:
-            print("ecoded bytes =", encodedBytes)
 
         return encodedBytes
     #
     #   This convert a 16 bit number (either string or int) to an array of 2 bytes
     #
-    def convert16BitToBytes(self, int16):
-        encodedBytes = bytearray()
-        number16 = int(int16)    # convert any strings to integer
-        encodedBytes.append(number16 & 0xff)
-
-        number16 = (number16 >> 8)
-        encodedBytes.append(number16 & 0xff)
-
-        return encodedBytes
+    # def convert16BitToBytes(self, int16):
+    #     encodedBytes = bytearray()
+    #     number16 = int(int16)    # convert any strings to integer
+    #     encodedBytes.append(number16 & 0xff)
+    #
+    #     number16 = (number16 >> 8)
+    #     encodedBytes.append(number16 & 0xff)
+    #
+    #     return encodedBytes
 
     #
     #   This function tells the Radio that a new mode has been selected for
@@ -852,66 +857,39 @@ class piCECNextion(baseui.piCECNextionUI):
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_Lock(self):
-        if self.DeepDebug:
-            print("lock toggle")
         command = [self.toRadioCommandDict["TS_CMD_LOCK"], 0, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_Speaker(self):
-        if self.DeepDebug:
-            print("speaker toggle")
         command = [self.toRadioCommandDict["TS_CMD_SDR"], 0, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_Stop(self):
-        if self.DeepDebug:
-            print("stop toggle")
         command = [self.toRadioCommandDict["TS_CMD_TXSTOP"], 0, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_Split(self):
-        if self.DeepDebug:
-            print("split toggle")
         command = [self.toRadioCommandDict["TS_CMD_SPLIT"], 0, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_RIT(self):
-        if self.DeepDebug:
-            print("RIT toggle")
         command = [self.toRadioCommandDict["TS_CMD_RIT"], 0, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Set_ATT(self, value: bytes):
-        if self.DeepDebug:
-            print("ATT Set")
         command = [self.toRadioCommandDict["TS_CMD_ATT"], value, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Toggle_IFS(self):
-        if self.DeepDebug:
-            print("IFS toggle")
-            print("IFS value =", self.IFS_Jogwheel.get())
         command = [self.toRadioCommandDict["TS_CMD_IFS"], 0, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
 
 
     def Radio_Set_IFS_Level(self, level):
-        if self.DeepDebug:
-            print("IFS Set Level =", level)
-        intLevel = int(level)
-        if self.DeepDebug:
-            print("int level=", hex(intLevel))
-        firstByte = intLevel & 0xff
-        if self.DeepDebug:
-            print("firstByte=", firstByte)
-        secondByte = (intLevel >> 8) & 0xff
-        if self.DeepDebug:
-            print("secondByte=", secondByte)
-        thirdByte = (intLevel >> 16) & 0xff
-        if self.DeepDebug:
-            print("thirdByte=", thirdByte)
-        command = [self.toRadioCommandDict["TS_CMD_IFSVALUE"], firstByte, secondByte, thirdByte, 0]
+        encodedBytes = self.Radio_Freq_Encode(str(level))
+
+        command = [self.toRadioCommandDict["TS_CMD_IFSVALUE"], encodedBytes[0], encodedBytes[1], encodedBytes[2], 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
 
@@ -932,7 +910,6 @@ class piCECNextion(baseui.piCECNextionUI):
 
         checksum = (self.EEPROM_Mem_Address["cw_key_type"][self.lsb] + self.EEPROM_Mem_Address["cw_key_type"][self.msb]
                     + self.EEPROM_Mem_Address["cw_key_type"][self.memLength]) % 256
-        print("checksum=", hex(checksum))
 
         command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
                    self.EEPROM_Mem_Address["cw_key_type"][self.lsb],
@@ -941,13 +918,8 @@ class piCECNextion(baseui.piCECNextionUI):
                    checksum,
                    self.CW_KeyValue[keyType]
                    ]
-        print("command=",command)
         self.theRadio.sendCommandToMCU(bytes(command))
 
-
-    # "cw_sidetone": [0x18, 0x0],
-    # "cw_Delay_Returning_to_RX": [0x02, 0x1],
-    # "cw_Delay_Starting_TX": [0x03, 0x1]
 
 
 
@@ -963,18 +935,12 @@ class piCECNextion(baseui.piCECNextionUI):
         command = [self.toRadioCommandDict["TS_CMD_WPM"], dotLength_ms, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
 
-        print("in set_cw_key_speed, keySpeed=", keySpeed)
-        print("command=",command)
-
-        print("keySpeed=", int(keySpeed), "dotLength_ms=", dotLength_ms)
-
         #
         #   Now have to write it to EEPROM as this is not one of the values that are automatically saved to EEPROM
         #
 
         checksum = (self.EEPROM_Mem_Address["cw_wpm"][self.lsb] + self.EEPROM_Mem_Address["cw_wpm"][self.msb]
                     + self.EEPROM_Mem_Address["cw_wpm"][self.memLength]) % 256
-        print("checksum=", hex(checksum))
 
         command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
                    self.EEPROM_Mem_Address["cw_wpm"][self.lsb],
@@ -985,7 +951,7 @@ class piCECNextion(baseui.piCECNextionUI):
                                                     # but keychage without reboot only 1 byte
                    0,0,0
                    ]
-        print("command=", command)
+
         self.theRadio.sendCommandToMCU(bytes(command))
 
 
@@ -1004,7 +970,6 @@ class piCECNextion(baseui.piCECNextionUI):
 
         checksum = (self.EEPROM_Mem_Address["cw_Delay_Starting_TX"][self.lsb] + self.EEPROM_Mem_Address["cw_Delay_Starting_TX"][self.msb]
                     + self.EEPROM_Mem_Address["cw_Delay_Starting_TX"][self.memLength]) % 256
-        print("checksum=", hex(checksum))
 
         command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
                    self.EEPROM_Mem_Address["cw_Delay_Starting_TX"][self.lsb],
@@ -1013,7 +978,7 @@ class piCECNextion(baseui.piCECNextionUI):
                    checksum,
                    adjustedStartTXDelay
                    ]
-        print("command=", command)
+
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Set_CW_Delay_Returning_To_RX(self, returnRXDelay):
@@ -1033,7 +998,6 @@ class piCECNextion(baseui.piCECNextionUI):
         checksum = (self.EEPROM_Mem_Address["cw_Delay_Returning_to_RX"][self.lsb] +
                     self.EEPROM_Mem_Address["cw_Delay_Returning_to_RX"][self.msb]
                     + self.EEPROM_Mem_Address["cw_Delay_Returning_to_RX"][self.memLength]) % 256
-        print("checksum=", hex(checksum))
 
         command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
                    self.EEPROM_Mem_Address["cw_Delay_Returning_to_RX"][self.lsb],
@@ -1042,12 +1006,88 @@ class piCECNextion(baseui.piCECNextionUI):
                    checksum,
                    adjustedReturnToRXDelay
                    ]
-        print("command=", command)
+
         self.theRadio.sendCommandToMCU(bytes(command))
 
+    def Radio_Write_EEPROM_Channel_FreqMode (self, channelNum, freq, mode ):
+
+        encoded_data = (int(freq) & 0x1FFFFFFF) + ((int(self.Text_To_ModeNum[mode])& 0x7)<<29)
+
+        encodedBytes = self.Radio_Freq_Encode(str(encoded_data))
+
+        lsb = (channelNum*self.EEPROM_Mem_Address["channel_freq_Mode"][self.memOffset]) + self.EEPROM_Mem_Address["channel_freq_Mode"][self.lsb]
+        msb = self.EEPROM_Mem_Address["channel_freq_Mode"][self.msb]
+        totalBytes = self.EEPROM_Mem_Address["channel_freq_Mode"][self.memLength]
 
 
+        checksum = (lsb + msb + totalBytes) % 256
 
+        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
+                   lsb,
+                   msb,
+                   totalBytes,
+                   checksum,
+                   encodedBytes[0], encodedBytes[1], encodedBytes[2], encodedBytes[3]
+                   ]
+
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Write_EEPROM_Channel_Label (self, channelNum, label ):
+
+        if channelNum > self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]:
+            return
+
+        lsb = ((channelNum * self.EEPROM_Mem_Address["channel_Label"][self.memOffset]) +
+               self.EEPROM_Mem_Address["channel_Label"][self.lsb])
+        msb = self.EEPROM_Mem_Address["channel_Label"][self.msb]
+        totalBytes = self.EEPROM_Mem_Address["channel_Label"][self.memLength]
+
+        # strip blanks
+        noBlankLabel = label.strip()
+        labelBytes = bytes(noBlankLabel.ljust(totalBytes), 'utf-8')
+
+
+        checksum = (lsb + msb + totalBytes) % 256
+
+        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
+                   lsb,
+                   msb,
+                   totalBytes,
+                   checksum,
+                   labelBytes[0], labelBytes[1], labelBytes[2], labelBytes[3], labelBytes[4]
+                   ]
+
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Write_EEPROM_Channel_ShowLabel (self, channelNum, showLabel ):
+
+        #
+        #   Don't write to EEPROMs showLabels 10+
+        #
+        if channelNum > self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]:
+            return
+
+        lsb = (channelNum * self.EEPROM_Mem_Address["channel_ShowLabel"][self.memOffset]) + \
+              self.EEPROM_Mem_Address["channel_ShowLabel"][self.lsb]
+        msb = self.EEPROM_Mem_Address["channel_ShowLabel"][self.msb]
+        totalBytes = self.EEPROM_Mem_Address["channel_ShowLabel"][self.memLength]
+
+        checksum = (lsb + msb + totalBytes) % 256
+
+        if showLabel == 'Yes':
+            value = 0x3
+        else:
+            value = 0x0
+
+        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
+                   lsb,
+                   msb,
+                   totalBytes,
+                   checksum,
+                   value
+                   ]
+
+        self.theRadio.sendCommandToMCU(bytes(command))
 
 
 #   MCU Commands
@@ -1064,28 +1104,12 @@ class piCECNextion(baseui.piCECNextionUI):
         self.tuning_Preset_1_VAR.set(value)
 
 
-        if self.DeepDebug:
-            print("v1 get called:", "buffer =", buffer)
-            print("v1 tuning 1")
-            print("value=", value, sep='*', end='*')
-            print("\n")
-
     #
     #   The "v2" command is used for smallest tuning rate
     #
     def v2_UX_Set_Tuning_Preset_2(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.tuning_Preset_2_VAR.set(value)
-        #
-        # update multiple for individual tuning min to this one
-        #
-
-        if self.DeepDebug:
-            print("v2 get called:", "buffer =", buffer)
-            print("v2 tuning 2")
-            print("value=", value, sep='*', end='*')
-            print("\n")
-
 
     #
     #   The "v3" command 1s used for the third (middle) tuning rate
@@ -1094,26 +1118,12 @@ class piCECNextion(baseui.piCECNextionUI):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.tuning_Preset_3_VAR.set(value)
 
-        if self.DeepDebug:
-            print("v3 get called:", "buffer =", buffer)
-            print("v3 tuning 3")
-            print("value=", value, sep='*', end='*')
-            print("\n")
-
-
-
     #
     #   The "v4" command 1s used for the next largest tuning rate
     #
     def v4_UX_Set_Tuning_Preset_4(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.tuning_Preset_4_VAR.set(value)
-
-        if self.DeepDebug:
-            print("v4 get called:", "buffer =", buffer)
-            print("v4 tuning 4")
-            print("value=", value, sep='*', end='*')
-            print("\n")
 
 
     #
@@ -1122,12 +1132,6 @@ class piCECNextion(baseui.piCECNextionUI):
     def v5_UX_Set_Tuning_Preset_5(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.tuning_Preset_5_VAR.set(value)
-
-        if self.DeepDebug:
-            print("v5 get called:", "buffer =", buffer)
-            print("v5 tuning 5")
-            print("value=", value, sep='*', end='*')
-            print("\n")
 
     #
     #   The "cn" command indicates which tuning step is active (1(smallest) - 5(largest)
@@ -1170,68 +1174,43 @@ class piCECNextion(baseui.piCECNextionUI):
         self.updateLabelTuning_Multiplier()
 
 
-        if self.DeepDebug:
-            print("cn get called:", "buffer =", buffer)
-            print("cn which tuning step (1-5)")
-            print("value=", value, sep='*', end='*')
-            print("Value setting as", self.tuning_Preset_Label_VAR.get())
-            print("\n")
-
-
     #
     #   The "ch" command originates from the EEPROM and is added to the frequency to shift it
     #
     def chGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        if self.CurrentDebug:
-            print("ch get called:", "buffer =", buffer)
-            print("ch shift frequency for cw?")
-            print("value=", value, sep='*', end='*')
-            print("\n")
 
     #
     #   The "vh" command originates from the EEPROM and is added to the frequency to shift it
     #
     def vhGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        if self.CurrentDebug:
-            print("vh get called:", "buffer =", buffer)
-            print("vh add cw offset?")
-            print("value=", value, sep='*', end='*')
-            print("\n")
 
     #
     #   The "vo" command originates from the EEPROM and is added to the frequency to shift it
     #
     def voGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        if self.CurrentDebug:
-            print("vo get called:", "buffer =", buffer)
-            print("vo related to display shift")
-            print("value=", value, sep='*', end='*')
-            print("\n")
 
     #
     #   The "vp" command originates from the EEPROM and is added to the frequency to shift it
     #
     def vpGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        if self.CurrentDebug:
-            print("vp get called:", "buffer =", buffer)
-            print("vp related to display shift")
-            print("value=", value, sep='*', end='*')
-            print("\n")
+        print("vp get called:", "buffer =", buffer)
+        print("vp related to display shift")
+        print("value=", value, sep='*', end='*')
+        print("\n")
 
     #
     #   The "vq" command is referred to as display option 2 in EEPROM
     #
     def vqGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        if self.CurrentDebug:
-            print("vq get called:", "buffer =", buffer)
-            print("vq related to display shift")
-            print("value=", value, sep='*', end='*')
-            print("\n")
+        print("vq get called:", "buffer =", buffer)
+        print("vq related to display shift")
+        print("value=", value, sep='*', end='*')
+        print("\n")
 
 
     #
@@ -1239,11 +1218,10 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def sv_UX_Set_SW_Version(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        if self.DeepDebug:
-            print("sv get called:", "buffer =", buffer)
-            print("sv software version")
-            print("value=", value, sep='*', end='*')
-            print("\n")
+        print("sv get called:", "buffer =", buffer)
+        print("sv software version")
+        print("value=", value, sep='*', end='*')
+        print("\n")
 
 
     #
@@ -1251,11 +1229,10 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def sc_UX_Set_User_Callsign(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        if self.DeepDebug:
-            print("sc get called:", "buffer =", buffer)
-            print("sc call sign")
-            print("value=", value, sep='*', end='*')
-            print("\n")
+        print("sc get called:", "buffer =", buffer)
+        print("sc call sign")
+        print("value=", value, sep='*', end='*')
+        print("\n")
 
 
     #
@@ -1264,23 +1241,34 @@ class piCECNextion(baseui.piCECNextionUI):
     def cm_UX_Display_Callsign_Version_Flag(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         # MJH Not complete
-        if self.CurrentDebug:
-            print("cm get called:", "buffer =", buffer)
-            print("cm display version and callsign?")
-            print("value=", value, sep='*', end='*')
-            print("\n")
+        print("cm get called:", "buffer =", buffer)
+        print("cm display version and callsign?")
+        print("value=", value, sep='*', end='*')
+        print("\n")
 
 
     #
     #   The "c0" command determines whether we are in text (yellow box) or graphics mode
     #
-    def c0_UX_In_Yellow_Box_Flag(self, buffer):
+    def c0_UX_Toggle_Classic_uBITX_Control(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        if self.CurrentDebug:
-            print("c0 get called:", "buffer =", buffer)
-            print("c0 text (yellow box) or graphics mode")
-            print("value=", value, sep='*', end='*')
-            print("\n")
+        print("c0 get called:", "buffer =", buffer)
+        print("value=", value, sep='*', end='*')
+        print(type(value), sep='*', end='*')
+        print("\n")
+        if value == "0":
+            print(" exiting Classic uBITX control")
+            if self.classic_uBITX_ControlWindowObj != None:
+                self.classic_uBITX_ControlWindowObj.pack_forget()
+                self.classic_uBITX_ControlWindowObj = None
+            if self.classic_uBITX_ControlWindow != None:
+                self.classic_uBITX_ControlWindow.destroy()
+                self.classic_uBITX_ControlWindow = None
+
+        else:
+            print(" entering classic uBITX control")
+            self.displayClassic_uBITXControlWindow()
+
 
     #
     # The purpose of this command is a little puzzling
@@ -1288,48 +1276,69 @@ class piCECNextion(baseui.piCECNextionUI):
     # Only sent on the first attempt to lock the screen
     # Also contains the text for the speaker button
     #
-    def s0Get(self, buffer):
-        if self.CurrentDebug:
-            print("unknown s0 called from lock screen")
-            print("buffer=", buffer)
-        else:
-            pass
+    def s0_UX_Greenbox_Line1(self, buffer):
+        print("s0 called")
+        print("buffer=", buffer)
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.displayLine1Classic_uBITX_Control(value)
+
+
+    def s1_UX_Greenbox_Line2(self, buffer):
+        print("s1 called")
+        print("buffer=", buffer)
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.displayLine2Classic_uBITX_Control(value)
+
 
     def sh_UX_Get_Memory(self, buffer):
-        if self.CurrentDebug:
-            print("sh memory fetched called")
-            print("buffer=", buffer)
 
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        print("value=", value, sep='*', end='*')
-        print("length=", len(value))
 
-
-
-        try:
-            int(value,16)
-            is_number = True
-        except ValueError:
-            is_number = False
-
-        if(is_number):
-            print("thinks it is a number")
+        if (self.memReadingState == "Freq"):
             freq = int(value,16) & 0x1FFFFFFF
             mode = (int(value,16) >> 29) & 0x7
-            print("mode=", mode, type(mode))
-            self.memToVFOWindow.setChanneFreqMode(freq, mode)
-        else:
-            if(len(value) == 1):
-                if (ord(value) == 0):
-                    # print("show label is a 0")
-                    self.memToVFOWindow.setChannelShowLabel(False)
-                elif(ord(value) == 3):
-                    # print("show label is a 3")
-                    self.memToVFOWindow.setChannelShowLabel(True)
-            else:
-                # print("thinks it is a channel")
-                self.memToVFOWindow.setChannelLabel(value)
 
+            self.channelWindow.EEPROM_SetChanneFreqMode(
+                self.EEPROM_Current_Slot_Freq,
+                freq,
+                mode)
+            self.EEPROM_Current_Slot_Freq += 1
+            if (self.EEPROM_Current_Slot_Freq ==
+                    self.EEPROM_Mem_Address["channel_freq_Mode"][self.totalSlots]):
+                self.EEPROM_Current_Slot_Freq = 0
+                self.memReadingState = "Label"
+        elif (self.memReadingState == "Label"):
+
+            self.channelWindow.EEPROM_SetChannelLabel(
+                self.EEPROM_Current_Slot_Label,
+                value)
+            # if self.EEPROM_Current_Slot_Label == 9:
+            #         print("label slot=", self.EEPROM_Current_Slot_Label, "value=", value, sep='*', end='*')
+            self.EEPROM_Current_Slot_Label += 1
+            if (self.EEPROM_Current_Slot_Label ==
+                    self.EEPROM_Mem_Address["channel_Label"][self.totalSlots]):
+                self.EEPROM_Current_Slot_Label = 0
+                self.memReadingState = "ShowLabel"
+        elif (self.memReadingState == "ShowLabel"):
+            if (ord(value) == 0):
+                # print("show label is a 0")
+                self.channelWindow.EEPROM_SetChannelShowLabel(
+                    self.EEPROM_Current_Slot_ShowLabel,
+                    "No")
+
+            else:
+                # print("show label is a 3")
+                self.channelWindow.EEPROM_SetChannelShowLabel(
+                    self.EEPROM_Current_Slot_ShowLabel,
+                    "Yes")
+
+            self.EEPROM_Current_Slot_ShowLabel += 1
+            if (self.EEPROM_Current_Slot_ShowLabel ==
+                    self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]):
+                self.EEPROM_Current_Slot_ShowLabel = 0
+                self.memReadingState = "Freq"
+        else:
+            print("unknown memory fetch state")
 
 
 
@@ -1352,33 +1361,28 @@ class piCECNextion(baseui.piCECNextionUI):
             print("vn get called:", "buffer =", buffer)
             print("buffer=", buffer)
             if (int(value) == 358):
-                print("write complete for keychange")
+                print("write complete for keychange, mem=", int(value))
             elif (int(value) == 28):
-                print("write complete for new WPM")
+                print("write complete for new WPM, mem=", int(value))
             elif (int(value) == 259):
-                print("write complete for new RX->TX")
+                print("write complete for new RX->TX, mem=", int(value))
             elif (int(value) == 258):
-                print("write complete for new TX->RX")
+                print("write complete for new TX->RX, mem=", int(value))
             else:
-                print("unknown command from vn_")
+                print("memory location write complete, mem=", int(value))
 
 
 
 
 
     def cl_UX_Lock_Screen(self, buffer):
-        if self.DeepDebug:
-            print("cl_UX_Lock_Screen requested by Radio")
+
         if (self.lock_Button_On):
-            if self.DeepDebug:
-                print("turning normal")
             self.lock_Button_On = False
             self.lock_Button.configure(style='Button2b.TButton', state="normal")
             self.lock_VAR.set("\nLOCK\n")
             self.unlockUX()
         else:
-            if self.DeepDebug:
-                print("turning red")
             self.lock_Button_On = True
             self.lock_Button.configure(style='RedButton2b.TButton', state='pressed')
             self.lock_VAR.set("\nLOCKED\n")
@@ -1396,14 +1400,12 @@ class piCECNextion(baseui.piCECNextionUI):
         self.speaker_Button.configure(state="disabled")
         self.split_Button.configure(state="disabled")
         self.rit_Button.configure(state="disabled")
-        self.store_Button.configure(state="disabled")
-        self.recall_Button.configure(state="disabled")
+        # self.store_Button.configure(state="disabled")
+        # self.recall_Button.configure(state="disabled")
         self.tuning_Preset_Button.configure(state="disabled")
         self.ATT_Jogwheel.setStateDisabled()
         self.IFS_Jogwheel.setStateDisabled()
         self.tuning_Jogwheel.setStateDisabled()
-        self.tuning_Jogwheel.unbind("<Double-Button-1>")
-        self.center_Button.configure(state="disabled")
 
     #
     #   Reset all widgets to their "normal" state after the  unlock happens
@@ -1417,19 +1419,14 @@ class piCECNextion(baseui.piCECNextionUI):
         self.speaker_Button.configure(state="normal")
         self.split_Button.configure(state="normal")
         self.rit_Button.configure(state="normal")
-        self.store_Button.configure(state="normal")
-        self.recall_Button.configure(state="normal")
+        # self.store_Button.configure(state="normal")
+        # self.recall_Button.configure(state="normal")
         self.tuning_Preset_Button.configure(state="normal")
         if (self.ATT_Button_On == True):
             self.ATT_Jogwheel.setStateNormal()
         if (self.IFS_Button_On == True):
             self.IFS_Jogwheel.setStateNormal()
         self.tuning_Jogwheel.setStateNormal()
-        self.tuning_Jogwheel.bind(
-            "<Double-Button-1>",
-            self.tuning_Jogwheel_DoubleClick_CB,
-            add="+")
-        self.center_Button.configure(state="normal")
 
     # def labelScale_Set_State(self, labeledScale, newstate):
     #     #
@@ -1441,33 +1438,22 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def cj_UX_Speaker_Toggle(self, buffer):
-        if self.DeepDebug:
-            print("cj_UX_Speaker_Toggle requested by Radio")
+
         if (self.speaker_Button_On):
-            if self.DeepDebug:
-                print("unmuting audio")
             self.speaker_Button_On = False
             self.speaker_Button.configure(style='Button2b.TButton', state="normal")
             self.speaker_VAR.set("\nSPEAKER\n")
         else:
-            if self.DeepDebug:
-                print("muting audio")
             self.speaker_Button_On = True
             self.speaker_Button.configure(style='RedButton2b.TButton', state="pressed")
             self.speaker_VAR.set("\nSPK MUTED\n")
 
 
     def cs_UX_SPLIT_Toggle(self, buffer):
-        if self.DeepDebug:
-            print("cs_UX_SPLIT_Toggle called to confirm split mode")  # command is split
         if (self.split_Button_On):
-            if self.DeepDebug:
-                print("exiting split mode")
             self.split_Button_On = False
             self.split_Button.configure(style='Button2b.TButton', state="normal")
         else:
-            if self.DeepDebug:
-                print("going into split mode")
             self.split_Button_On = True
             self.split_Button.configure(style='GreenButton2b.TButton', state="pressed")
     #
@@ -1482,23 +1468,17 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def cr_UX_RIT_Toggle(self, buffer):
-        if self.DeepDebug:
-            print("cr_UX_RIT_Toggle called to confirm RIT mode")  # command is split
         if (self.rit_Button_On):
-            if self.DeepDebug:
-                print("exiting RIT mode")
             self.rit_Button_On = False
             self.rit_Button.configure(style='Button2b.TButton', state="normal")
         else:
-            if self.DeepDebug:
-                print("going into RIT mode")
             self.rit_Button_On = True
             self.rit_Button.configure(style='GreenButton2b.TButton', state="pressed")
 
     def vf_UX_ATT_Level(self, buffer):
+        print("vf called")
+        print(buffer)
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
-        if self.DeepDebug:
-            print("buffer=",buffer)
 
         #
         #   Zero Value indicated Radio turning off the ATT
@@ -1508,16 +1488,28 @@ class piCECNextion(baseui.piCECNextionUI):
             self.ATT_Status_VAR.set("ATT (OFF)")
             self.ATT_Button_On = False
         else:
-            self.ATT_Jogwheel.setStateNormal()
-            self.ATT_Status_VAR.set("ATT (ON)")
-            self.ATT_Button_On = True
-            self.ATT_Jogwheel.set(value)            # Set UX to value acked by MCU
+            if self.ATT_Jogwheel.state == 'disabled':
+                self.ATT_Jogwheel.setStateNormal()
+                self.ATT_Status_VAR.set("ATT (ON)")
+                self.ATT_Button_On = True
+            #
+            # mjh normally ux should be set to the value ack-ed by mcu. Problem with this
+            # with jog wheels is that they jerk around too much because of all the callbacks
+            # This can also cause oscillation where are reported and stored in jogwheel
+            # much after and so when correcting generate more old traffic.
+            # On balance the chance of a lost packet is pretty low, so best option is to not
+            # repond to the ack-ed value from the MCU
+            #
+            # BUT...
+            # In Classic mode, still need to update the jogwheel...
+            #
+            if self.classic_uBITX_ControlWindow != None:
+                self.ATT_Jogwheel.set(value)            # Set UX to value acked by MCU
 
 
-    def ci_UX_IFA_State_Set(self, buffer):
-        if self.DeepDebug:
-            print("ci called to confirm ifs mode")  # command is ifs
-            print("buffer=", buffer)
+    def ci_UX_IFS_State_Set(self, buffer):
+        print("ci called")
+        print(buffer)
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
 
         if (value == 0):                            # Zero value indicates IFS being turned off
@@ -1531,25 +1523,33 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def vi_UX_IFS_Level(self, buffer):      #verification by MCU of new value
-        value = int(self.extractValue(buffer, 10, len(buffer) - 3))
-        if self.DeepDebug:
-            print("vi command called")
-            print(buffer)
+        print("vi called")
+        print(buffer)
 
-        self.IFS_Jogwheel.set(value)
+        value = int(self.extractValue(buffer, 10, len(buffer) - 3))
+        #
+        # mjh normally ux should be set to the value ack-ed by mcu. Problem with this
+        # with jog wheels is that they jerk around too much because of all the callbacks
+        # This can also cause oscillation where are reported and stored in jogwheel
+        # much after and so when correcting generate more old traffic.
+        # On balance the chance of a lost packet is pretty low, so best option is to not
+        # repond to the ack-ed value from the MCU
+        #
+        #BUT.....
+        # Need to respond when in Classic UX Mode. Can use a check for null to figure out whether we update or not
+        #
+        #
+        # print("MCU Reporting vi_UX_IFS_Level", value)
+        if self.classic_uBITX_ControlWindow != None:
+            self.IFS_Jogwheel.set(value)
+        # print("MCU After setting vi_UX_IFS_Level get", self.IFS_Jogwheel.get())
 
 
     def cx_UX_TX_Stop_Toggle(self, buffer):
-        if self.DeepDebug:
-            print("cx_UX_TX_Stop_Toggle called to toggle stop mode")  # command is split
         if (self.stop_Button_On):
-            if self.DeepDebug:
-                print("exiting TX Stop mode")
             self.stop_Button_On = False
             self.stop_Button.configure(style='Button2b.TButton', state="normal")
         else:
-            if self.DeepDebug:
-                print("going into TX Stop mode")
             self.stop_Button_On = True
             self.stop_Button.configure(style='RedButton2b.TButton', state="pressed")
 
@@ -1559,53 +1559,56 @@ class piCECNextion(baseui.piCECNextionUI):
     def vc_UX_Set_Primary_VFO_Frequency(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.primary_VFO_VAR.set(value)
-        #
-        #   Update position of needle, but do not change the baseline
-        #
-        if self.DeepDebug:
-            print("vc_UX called now updating jogtracking")
+        if self.channelWindow != None:      #  Only update frequency if the channel window has been created once
+            self.channelWindow.update_Current_Frequency(self.primary_VFO_VAR.get())
+
         self.updateJogTracking()
 
-
-        if self.DeepDebug:
-            print("vc get called:", "buffer =", buffer)
-            print("vc new frequency change")
-            print("value=", value, sep='*', end='*')
-            print("\n")
     #
     #   The "cc" command indicates a change to a new mode for primary (e.g. USB, LSB, etc.)
     #
     def cc_UX_Set_Primary_Mode(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.primary_Mode_VAR.set(self.modeNum_To_TextDict[value])
-        if self.DeepDebug:
-            print("cc get called:", "buffer =", buffer)
-            print("cc new mode change")
-            print("value=", value, sep='*', end='*')
-            print("\n")
+        if self.channelWindow != None:
+            # Only update frequency if the channel window has been created once
+            self.channelWindow.update_Current_Mode(self.primary_Mode_VAR.get())
 
 
     #
     #   The "va" command indicates assignment of vfoA to new frequency
     #
     def va_UX_Set_VFO_A_Frequency(self, buffer):
+        if (self.channelWindow != None) and (self.channelWindow.scanRunning):
+            print("***Ignoring va command as we're scanning***")
+            return  # ignore the VFO A command during scanning as it can be out of order
+
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        if self.DeepDebug:
-            print("va get called:", "buffer =", buffer)
-            print("va assign vfo a frequency")
-            print("value=", value, sep='*', end='*')
-            print("\n")
+
+        print("***va get called:***", "buffer =", buffer)
+        print("va assign vfo a frequency")
+        print("value=", value, sep='*', end='*')
+        print("\n")
 
         if (self.vfo_VAR.get()== self.VFO_A):       #update displayed frequency
             self.primary_VFO_VAR.set(value)
+            print("Updating primary vfo", value, sep='*', end='*')
+            print("\n")
         else:
             self.secondary_VFO_VAR.set(value)
+            print("Updating secondary vfo", value, sep='*', end='*')
+            print("\n")
+
 
 
     #
     #   The "ca" command indicates assignment of a new mode to vfoA
     #
     def ca_UX_Set_VFO_A_Mode(self, buffer):
+        if (self.channelWindow != None) and (self.channelWindow.scanRunning):
+            print("***Ignoring ca command as we're scanning***")
+            return  # ignore the VFO A command during scanning  as it can be out of order
+
         value = self.extractValue(buffer, 10, len(buffer) - 3)
 
         if (self.vfo_VAR.get()== self.VFO_A):       #update displayed frequency
@@ -1614,33 +1617,39 @@ class piCECNextion(baseui.piCECNextionUI):
             self.secondary_Mode_VAR.set(self.modeNum_To_TextDict[value])
 
 
-        if self.DeepDebug:
-            print("ca get called:", "buffer =", buffer)
-            print("ca assign mode for vfoA frequency")
-            print("value=", value, sep='*', end='*')
-            print("\n")
+        print("***ca get called:***", "buffer =", buffer)
+        print("ca assign mode for vfoA frequency")
+        print("value=", value, sep='*', end='*')
+        print("\n")
 
     #
     #   The "vb" command indicates assignment of vfoB to new frequency
     #
     def vb_UX_Set_VFO_B_Frequency(self, buffer):
+
+        if (self.channelWindow != None) and (self.channelWindow.scanRunning):
+            return  # ignore the VFO B command during scanning as it can be out of order
+
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+
 
         if (self.vfo_VAR.get()== self.VFO_B):       #update displayed frequency
             self.primary_VFO_VAR.set(value)
         else:
             self.secondary_VFO_VAR.set(value)
 
-
-        if self.DeepDebug:
-            print("vb get called:", "buffer =", buffer)
-            print("vb assign vfo b frequency")
-            print("value=", value, sep='*', end='*')
-            print("\n")
+        print("***vb get called:***", "buffer =", buffer)
+        print("vb assign vfo b frequency")
+        print("value=", value, sep='*', end='*')
+        print("\n")
     #
     #   This sets VFO B to a new mode
     #
     def cb_UX_Set_VFO_B_Mode(self, buffer):
+
+        if (self.channelWindow != None) and (self.channelWindow.scanRunning):
+            return  # ignore the VFO B command during scanning as it can be out of order
+
         value = self.extractValue(buffer, 10, len(buffer) - 3)
 
         if (self.vfo_VAR.get()== self.VFO_B):       #update displayed frequency
@@ -1648,11 +1657,10 @@ class piCECNextion(baseui.piCECNextionUI):
         else:
             self.secondary_Mode_VAR.set(self.modeNum_To_TextDict[value])
 
-        if self.DeepDebug:
-            print("cb get called:", "buffer =", buffer)
-            print("cb assign mode for vfoB frequency")
-            print("value=", value, sep='*', end='*')
-            print("\n")
+        print("***cb get called:***", "buffer =", buffer)
+        print("cb assign mode for vfoB frequency")
+        print("value=", value, sep='*', end='*')
+        print("\n")
 
     #
     #   The "vt" command stores the CW tone
@@ -1660,11 +1668,6 @@ class piCECNextion(baseui.piCECNextionUI):
     def vt_UX_SET_CW_Tone(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.tone_value_VAR.set(value)
-        if self.CurrentDebug:
-            print("vt get called:", "buffer =", buffer)
-            print("vt tone for CW")
-            print("value=", value, sep='*', end='*')
-            print("\n")
 
 
     #
@@ -1673,15 +1676,6 @@ class piCECNextion(baseui.piCECNextionUI):
     def ck_UX_Set_CW_Key_Type(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.key_type_value_VAR.set(self.CW_KeyType[value])
-        if self.CurrentDebug:
-            print("ck get called:", "buffer =", buffer)
-            print("ck select key for cw")
-            print("value=", value, sep='*', end='*')
-            print("0: straight, 1 : iambica, 2: iambicb")
-            print(self.key_type_value_VAR.get())
-            print("\n")
-
-
 
     #
     #   The "vs" command stores words/minute
@@ -1689,12 +1683,6 @@ class piCECNextion(baseui.piCECNextionUI):
     def vs_UX_Set_CW_Speed(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.key_speed_value_VAR.set(str(int(1200/int(value))))
-        if self.CurrentDebug:
-            print("vs get called:", "buffer =", buffer)
-            print("vs word/minute for keyer")
-            print("raw value=", value, sep='*', end='*')
-            print("adjusted value=", self.key_speed_value_VAR.get(), sep='*', end='*')
-            print("\n")
 
 
     #
@@ -1703,12 +1691,6 @@ class piCECNextion(baseui.piCECNextionUI):
     def vy_UX_Set_CW_Delay_Returning_to_RX(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.delay_returning_to_rx_value_VAR.set(str(int(value)*10))
-        if self.CurrentDebug:
-            print("vy get called:", "buffer =", buffer)
-            print("vy delay returning after cw key")
-            print("raw value=", value, sep='*', end='*')
-            print("adjusted  value=", self.delay_returning_to_rx_value_VAR.get(), sep='*', end='*')
-            print("\n")
 
 
 
@@ -1718,24 +1700,12 @@ class piCECNextion(baseui.piCECNextionUI):
     def ve_UX_Set_CW_Delay_Starting_TX(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.delay_starting_tx_value_VAR.set(str(int(value)*2))
-        if self.CurrentDebug:
-            print("ve get called:", "buffer =", buffer)
-            print("ve start delay for first cw character")
-            print("raw value=", value, sep='*', end='*')
-            print("adjusted value=", self.delay_starting_tx_value_VAR.get(), sep='*', end='*')
-            print("\n")
 
     #
     #   Returns active VFO, VFO-A=0, VFO-B=1
     #
     def cv_UX_VFO_Toggle(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-
-        if self.CurrentDebug:
-            print("cv get called:", "buffer =", buffer)
-            print("cv toggle vfo")
-            print("value=", value, sep='*', end='*')
-            print("\n")
 
         self.vfo_VAR.set(self.Text_To_VFO[value])
         saveSecondary_VFO = self.secondary_VFO_VAR.get()

@@ -2,15 +2,16 @@ import serial
 from time import sleep
 from timeit import default_timer as timer
 
-#from piCEC_UX.pygubu.piCEC_UX import mainWindow
+from comportManager import *
 
 
 class piRadio:
-    def __init__(self, serialPort, window, debugFlag=True):
+    def __init__(self, serialPort, window, configObj, debugFlag=True):
         self.debugCommandDecoding = debugFlag
         self.tty = serialPort
         self.mainWindow = window
-        self.radioPort = None
+        self.radioPort = serialPort
+        self.configObj = configObj
 
 
 #   note on external device to MCU protocol
@@ -28,7 +29,7 @@ class piRadio:
 
         self.mcu_command_buffer =[]                     # buffer used to send bytes to MCU
         self.time_of_last_sent = timer()                # used to avoid overloading MCU
-        self.minimum_time = .075
+        self.minimum_time = .1
 
 
     def openRadio(self):
@@ -37,9 +38,44 @@ class piRadio:
             print("***opening port to radio***")
         try:
             self.radioPort = serial.Serial(self.tty, 9600, timeout=0)
-        except serial.SerialException as e:
-            print(f"Serial port error: {e}")
+        except:
+            return   #serial.SerialException as e:
+        #     print("bad serial port")
+        #     comport = comportManager(self.mainWindow)
+        #     comport.grab_set()  # This line makes the cw settings window modal
+        #     self.tty = comport.getSelectedComPort()
+        #     print ("tty =", self.tty)
+        #     self.radioPort = serial.Serial(self.tty, 9600, timeout=0)
+        #     self.configObj.setComPort(self.tty)
+        #     self.configObj.saveConfig()
         return
+
+#     f(self.openSelectedComPort()):  # Was able to open the com port or it was already openned
+#     port = self.getComPortDesc()
+#     try:
+#         port.write(theCommand)
+#     except:
+#         if (self.resetComPort()):  # Successful was able to reset serial port, try again
+#             port = self.getComPortDesc()
+#
+#             try:  # Try one more time...
+#                 port.write(theCommand)
+#             except:
+#                 tkinter.messagebox.showerror(title="ERROR",
+#                                              message="Communication failed to uBITX. Unplug the USB cable, power cycle your radio, reconnect and try again. \nEXITING")
+#                 sys.exit(-1)
+#         else:
+#             tkinter.messagebox.showerror(title="ERROR",
+#                                          message="Communication failed to uBITX. Unplug the USB cable, power cycle your radio, reconnect and try again. \nEXITING")
+#             sys.exit(-1)
+#     # port.flush()
+#     return port
+#
+# else:
+# tkinter.messagebox.showerror(title="ERROR",
+#                              message="Unexpected error trying to open serial communications to uBITX. Unplug the USB cable, power cycle your radio, reconnect and try again. \nEXITING")
+# sys.exit(-1)
+
 
 
 
@@ -60,10 +96,12 @@ class piRadio:
     #
     def processRadioCommand(self, buffer):
         command = buffer[3]  + buffer[4]
-        if self.debugCommandDecoding:
-            print("found command = ", command)
         self.mainWindow.delegate_command_processing (command, buffer)
 
+    def rebootRadio(self):
+        # self.openRadio()
+        command=[0x5f,0x6c,0x48,0x45,0x59]
+        self.sendCommandToMCU(bytes(command))
 
 #
 #   Read and process all the values sent at startup of radio
@@ -79,7 +117,6 @@ class piRadio:
             # Decode the bytes to a string (e.g., 'utf-8') and remove leading/trailing whitespace
 
             in_byte= self.radioPort.read(1)
-            #print("just tried read, in_byte=", in_byte)
 
             if in_byte:
                 #
@@ -89,9 +126,6 @@ class piRadio:
                 if ((len(buffer) == 0) and (in_byte.decode(errors='ignore') != 'p')):
                     pass
                 else:
-                    if self.debugCommandDecoding:
-                        if (len(buffer) == 0):
-                            print("line ", commandCount)
                     buffer.append (in_byte)
 
 
@@ -103,20 +137,20 @@ class piRadio:
                             #
                             decoded_buffer_char = [item.decode(errors='ignore') for item in buffer]
 
-                            if self.debugCommandDecoding:
-                                for item in decoded_buffer_char:
-                                    print(f"{item:<{4}}", end="")
-                                print("")
+                            # if self.debugCommandDecoding:
+                            #     for item in decoded_buffer_char:
+                            #         print(f"{item:<{4}}", end="")
+                            #     print("")
 
-                                decoded_buffer_hex = [item.hex() for item in buffer]
-                                for item in decoded_buffer_hex:
-                                    print(f"{item:<{4}}", end="")
-                                print("")
+                            # decoded_buffer_hex = [item.hex() for item in buffer]
+                                # for item in decoded_buffer_hex:
+                                #     print(f"{item:<{4}}", end="")
+                                # print("")
 
-                                decoded_buffer_ord = [ord(item) for item in buffer]
-                                for item in decoded_buffer_ord:
-                                    print(f"{item:<{4}}", end="")
-                                print("")
+                            # decoded_buffer_ord = [ord(item) for item in buffer]
+                                # for item in decoded_buffer_ord:
+                                #     print(f"{item:<{4}}", end="")
+                                # print("")
                             #
                             #   since we saw 3 0xff's in a row, we can call the getter to
                             #   set the value in the UX
@@ -187,67 +221,11 @@ class piRadio:
         # tx_mode_switch_USB2 = tx_mode_switch_USB2pre + tx_mode_switch_USB2com + tx_mode_switch_USB2post
         self.tx_to_mcu_preamble = b'\x59\x58\x68'  # all commands to MCU must start with these three bytes
         self.tx_to_mcu_postscript = b'\xff\xff\x73'  # all commands to MCU must end with these three numbers
-        if self.debugCommandDecoding:
-            print("commandList =", commandList)
+        # if self.debugCommandDecoding:
+        #     print("commandList =", commandList)
 
         temp = self.tx_to_mcu_preamble + commandList + self.tx_to_mcu_postscript
-        if self.debugCommandDecoding:
-            print(" function call =", bytes(temp))
+
         self.radioPort.write(self.tx_to_mcu_preamble + commandList + self.tx_to_mcu_postscript)
 
-        # self.radioPort.flush()
-        # for item in self.tx_to_mcu_preamble :
-        #     self.radioPort.write(item)
-        #     print(item)
-        #
-        # for item in commandList:
-        #     self.radioPort.write(item)
-        #     self.radioPort.write(item)
-        #     print(item)
-        #
-        # for item in self.tx_to_mcu_postscript:
-        #     self.radioPort.write(item)
-        #     print(item)
 
-        # self.mcu_command_buffer = []
-        # print("command")
-        # buffer = []
-        # buffer.extend (self.tx_to_mcu_preamble)
-        # print(bytes(buffer))
-        # buffer.extend(commandList)
-        # print(bytes(buffer))
-        # buffer.extend (self.tx_to_mcu_postscript)
-        # print(bytes(buffer))
-        #
-        # buffer_bytes = bytes(buffer)
-        #
-        # print(buffer)
-        # print (buffer_bytes.hex())
-        # # for item in buffer_bytes:
-        # #     self.radioPort.write(item)
-        # print("changing tuning")
-        # for item in self.tx_select_tuning:
-        #     self.radioPort.write(item)
-        #     print(item)
-        # print("changing band")
-        # for item in self.tx_bandup:
-        #     self.radioPort.write(item)
-        #     print(item)
-        #
-        # print("changing mode")
-        # for item in buffer_bytes:
-        #     self.radioPort.write(item)
-        #     print(item)
-        #
-        # for item in self.tx_to_mcu_preamble:
-        #
-        # for item in self.tx_to_mcu_preamble:
-        #     self.radioPort.write(item)
-        #
-        # for item in commandList:
-        #     self.radioPort.write(bytes(item))
-        #
-        # for item in self.tx_to_mcu_postscript:
-        #     self.radioPort.write(item)
-        #
-        # self.radioPort.flush()

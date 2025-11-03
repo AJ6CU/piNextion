@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.5" author="PygubuDesigner 0.41.4">
+  <project>
+    <settings>
+      <setting id="name">frequency channel line</setting>
+      <setting id="description">an individual frame to contain channel information for read/write/scan</setting>
+      <setting id="module_name">frequencyChannel</setting>
+      <setting id="template">widget</setting>
+      <setting id="main_widget">frequencyChannel</setting>
+      <setting id="main_classname">frequencyChannel</setting>
+      <setting id="main_menu" />
+      <setting id="output_dir" />
+      <setting id="output_dir2" />
+      <setting id="import_tkvariables">False</setting>
+      <setting id="use_ttk_styledefinition_file">True</setting>
+      <setting id="use_i18n">False</setting>
+      <setting id="all_ids_attributes">False</setting>
+      <setting id="generate_code_onsave">False</setting>
+      <setting id="use_window_centering_code">False</setting>
+      <setting id="ttk_style_definition_file">mystyles.py</setting>
+    </settings>
+    <customwidgets />
+    <resources />
+  </project>
+  <object class="ttk.Frame" id="frequencyChannel" named="True">
+    <property name="height">200</property>
+    <property name="style">Normal.TFrame</property>
+    <property name="width">200</property>
+    <layout manager="pack">
+      <property name="expand">true</property>
+      <property name="fill">y</property>
+      <property name="side">top</property>
+    </layout>
+    <child>
+      <object class="ttk.Label" id="channel_Number_Label" named="True">
+        <property name="style">Heading3bi.TLabel</property>
+        <property name="textvariable">string:channel_Number_VAR</property>
+        <property name="width">10</property>
+        <layout manager="grid">
+          <property name="column">0</property>
+          <property name="row">0</property>
+          <property name="sticky">w</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="channel_Select_Button" named="True">
+        <property name="command" type="command" cbtype="simple">channel_Select_CB</property>
+        <property name="style">Button2b.TButton</property>
+        <property name="text" translatable="yes">Select</property>
+        <property name="textvariable">string:channel_Select_VAR</property>
+        <property name="width">8</property>
+        <layout manager="grid">
+          <property name="column">1</property>
+          <property name="padx">5 0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Entry" id="channel_Name_Entry" named="True">
+        <property name="justify">left</property>
+        <property name="style">Entry2b.TEntry</property>
+        <property name="textvariable">string:channel_Label_VAR</property>
+        <property name="width">5</property>
+        <bind sequence="&lt;Button&gt;" handler="alphanumeric_Keypad_CB" add="True" />
+        <layout manager="grid">
+          <property name="column">2</property>
+          <property name="padx">5 0</property>
+          <property name="row">0</property>
+          <property name="sticky">w</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Entry" id="freq_Entry" named="True">
+        <property name="style">Entry2b.TEntry</property>
+        <property name="textvariable">string:channel_Freq_VAR</property>
+        <property name="width">8</property>
+        <bind sequence="&lt;Button&gt;" handler="numeric_Keypad_CB" add="True" />
+        <layout manager="grid">
+          <property name="column">3</property>
+          <property name="padx">5 0</property>
+          <property name="row">0</property>
+          <property name="sticky">w</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="pygubu.widgets.Combobox" id="mode_Combobox" named="True">
+        <property name="justify">center</property>
+        <property name="keyvariable">string:channel_Mode_VAR</property>
+        <property name="state">normal</property>
+        <property name="style">ComboBox2b.TCombobox</property>
+        <property name="values">DFT LSB USB CWL CWU</property>
+        <property name="width">8</property>
+        <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="Channel_Mode_Changed_CB" add="" />
+        <layout manager="grid">
+          <property name="column">4</property>
+          <property name="padx">5 0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="pygubu.widgets.Combobox" id="show_Label_Combobox" named="True">
+        <property name="justify">center</property>
+        <property name="keyvariable">string:channel_ShowLabel_VAR</property>
+        <property name="state">normal</property>
+        <property name="style">ComboBox2b.TCombobox</property>
+        <property name="values">Yes No</property>
+        <property name="width">5</property>
+        <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="Channel_ShowLabel_Changed_CB" add="True" />
+        <layout manager="grid">
+          <property name="column">5</property>
+          <property name="padx">5 0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="pygubu.widgets.Combobox" id="scan_Set_Combobox" named="True">
+        <property name="justify">center</property>
+        <property name="keyvariable">string:channel_ScanSet_VAR</property>
+        <property name="state">normal</property>
+        <property name="style">ComboBox2b.TCombobox</property>
+        <property name="values">None Scan1 Scan2 Scan3 Scan4</property>
+        <property name="width">5</property>
+        <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="Channel_ScanSet_Changed_CB" add="True" />
+        <layout manager="grid">
+          <property name="column">6</property>
+          <property name="padx">5 0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="dirtyChannel_Label" named="True">
+        <property name="style">GreenLED.TLabel</property>
+        <property name="width">2</property>
+        <layout manager="grid">
+          <property name="column">7</property>
+          <property name="padx">10 5</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+  </object>
+</interface>

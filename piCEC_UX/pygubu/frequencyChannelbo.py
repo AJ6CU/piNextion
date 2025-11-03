@@ -6,19 +6,19 @@ from pygubu.api.v1 import (
     BuilderObject,
     register_widget,
 )
-from channelWrite10PlusFrame import channelWrite10PlusFrame
+from frequencyChannel import frequencyChannel
 
 
 #
 # Builder definition section
 #
 
-class channelWrite10PlusFrameBO(BuilderObject):
-    class_ = channelWrite10PlusFrame
+class frequencyChannelBO(BuilderObject):
+    class_ = frequencyChannel
 
 
-_builder_id = "projectcustom.channelWrite10PlusFrame"
+_builder_id = "projectcustom.frequencyChannel"
 register_widget(
-    _builder_id, channelWrite10PlusFrameBO, "channelWrite10PlusFrame", (
+    _builder_id, frequencyChannelBO, "frequencyChannel", (
         "ttk", "Project Widgets")
 )

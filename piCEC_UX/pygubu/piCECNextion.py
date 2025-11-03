@@ -136,7 +136,8 @@ class piCECNextion(baseui.piCECNextionUI):
             "vf": self.vf_UX_ATT_Level,
             "vi": self.vi_UX_IFS_Level,
             "ci": self.ci_UX_IFS_State_Set,
-            "cx": self.cx_UX_TX_Stop_Toggle
+            "cx": self.cx_UX_TX_Stop_Toggle,
+            "cp": self.cpGet                        #Related to S meter. search CMD_SMETER
         }
 
         self.toRadioCommandDict = {
@@ -1179,18 +1180,25 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def chGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        print("chget called:", "buffer =", buffer)
 
     #
     #   The "vh" command originates from the EEPROM and is added to the frequency to shift it
     #
     def vhGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        print("vh get called:", "buffer =", buffer)
 
     #
     #   The "vo" command originates from the EEPROM and is added to the frequency to shift it
     #
     def voGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        print("vo get called:", "buffer =", buffer)
+
+    def cpGet(self, buffer):
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+        print("cp get called:", "buffer =", buffer)
 
     #
     #   The "vp" command originates from the EEPROM and is added to the frequency to shift it

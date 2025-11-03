@@ -239,6 +239,40 @@ class piCECNextionUI(ttk.Frame):
         self.frame1.pack(anchor="w", padx=0, side="bottom")
         self.vfo_display_Frame.grid(column=1, padx="48 0", row=0, sticky="e")
         self.vfoA_Frame.grid(column=0, row=0, sticky="w")
+        self.frame3 = ttk.Frame(self.frame2)
+        self.frame3.configure(height=200, style="Normal.TFrame", width=200)
+        self.tuning_Jogwheel = JogwheelCustom(
+            self.frame3,
+            start=0,
+            end=9,
+            divisions=10,
+            button_radius=25,
+            value=0,
+            progress=False,
+            scroll=True,
+            scroll_steps=1,
+            name="tuning_jogwheel")
+        self.tuning_Jogwheel.configure(state="normal")
+        self.tuning_Jogwheel.pack(side="top")
+        self.tuning_Jogwheel.configure(command=self.tuning_Jogwheel_CB)
+        self.tuning_Multiplier_Button = ttk.Button(
+            self.frame3, name="tuning_multiplier_button")
+        self.tuning_Multiplier_VAR = tk.StringVar(
+            value='Tuning Factor\nx 100mhz')
+        self.tuning_Multiplier_Button.configure(
+            style="Button2b.TButton",
+            text='Tuning Factor\nx 100mhz',
+            textvariable=self.tuning_Multiplier_VAR)
+        self.tuning_Multiplier_Button.pack(anchor="n", pady=5, side="top")
+        self.tuning_Multiplier_Button.configure(
+            command=self.tuning_Multiplier_Button_CB)
+        self.frame3.grid(
+            column=1,
+            padx="20 0",
+            pady=2,
+            row=0,
+            rowspan=3,
+            sticky="n")
         self.vfoB_Frame = ttk.Frame(self.frame2, name="vfob_frame")
         self.vfoB_Frame.configure(borderwidth=3, style="NormalOutline.TFrame")
         self.vfo_Frame = ttk.Frame(self.vfoB_Frame, name="vfo_frame")
@@ -264,41 +298,24 @@ class piCECNextionUI(ttk.Frame):
         self.callsign_Frame.configure(
             height=200, style="Normal.TFrame", width=200)
         self.label5 = ttk.Label(self.callsign_Frame)
+        self.callSign_VAR = tk.StringVar(value='AJ6CUxyz')
         self.label5.configure(
-            style="Heading4b.TLabel",
+            style="Heading2b.TLabel",
             text='AJ6CUxyz',
+            textvariable=self.callSign_VAR,
             width=10)
         self.label5.pack(anchor="nw", padx="0 10", side="left")
         self.label6 = ttk.Label(self.callsign_Frame)
-        self.label6.configure(style="Heading4b.TLabel", text='V2.0 RCLxyz')
-        self.label6.pack(anchor="nw", side="left")
+        self.firmwareVersion_VAR = tk.StringVar(value='V2.0 RCLxyz')
+        self.label6.configure(
+            style="Heading2b.TLabel",
+            text='V2.0 RCLxyz',
+            textvariable=self.firmwareVersion_VAR)
+        self.label6.pack(anchor="nw", padx="7 0", side="left")
         self.callsign_Frame.pack(
             expand=False,
             fill="y",
-            padx="70 0",
-            pady=10,
-            side="left")
-        self.channel_Name_Frame = ttk.Frame(
-            self.vfoB_Frame, name="channel_name_frame")
-        self.channel_Name_Frame.configure(
-            height=200, style="Normal.TFrame", width=200)
-        self.channel_Label = ttk.Label(
-            self.channel_Name_Frame, name="channel_label")
-        self.channel_Label.configure(
-            style="Heading4b.TLabel", text='Channel:', width=10)
-        self.channel_Label.pack(anchor="nw", padx="0 10", side="left")
-        self.channel_Name_Label = ttk.Label(
-            self.channel_Name_Frame, name="channel_name_label")
-        self.channel_Name_VAR = tk.StringVar(value='None')
-        self.channel_Name_Label.configure(
-            style="Heading4b.TLabel",
-            text='None',
-            textvariable=self.channel_Name_VAR)
-        self.channel_Name_Label.pack(anchor="nw", side="left")
-        self.channel_Name_Frame.pack(
-            expand=False,
-            fill="y",
-            padx="70 0",
+            padx="100 0",
             pady=10,
             side="left")
         self.tuning_Step_Frame = ttk.Frame(
@@ -320,8 +337,8 @@ class piCECNextionUI(ttk.Frame):
         self.tuning_Preset_Units_Label.configure(
             style="Heading1.TLabel", text='Hz')
         self.tuning_Preset_Units_Label.pack(padx=15, side="left")
-        self.tuning_Step_Frame.pack(padx="75 0", pady="5 0", side="right")
-        self.vfoB_Frame.grid(column=0, row=1, sticky="w")
+        self.tuning_Step_Frame.pack(padx="90 0", pady="5 0", side="right")
+        self.vfoB_Frame.grid(column=0, ipadx=25, row=1, sticky="w")
         self.control_Meter_Tuning_Frame = ttk.Frame(
             self.frame2, name="control_meter_tuning_frame")
         self.control_Meter_Tuning_Frame.configure(
@@ -425,7 +442,7 @@ class piCECNextionUI(ttk.Frame):
         self.tuning_Preset_1_Radiobutton.configure(
             command=self.tuning_Preset_1_CB)
         self.tuning_Preset_Selection_Frame.grid(
-            column=1, padx="24 0", pady=5, row=0, rowspan=3, sticky="nw")
+            column=1, padx="132 0", pady=5, row=0, rowspan=3, sticky="nw")
         self.sMeter_Frame = ttk.Frame(
             self.control_Meter_Tuning_Frame,
             name="smeter_frame")
@@ -456,40 +473,6 @@ class piCECNextionUI(ttk.Frame):
         self.label7.grid(column=1, row=0, sticky="ew")
         self.sMeter_Frame.grid(column=0, row=1)
         self.control_Meter_Tuning_Frame.grid(column=0, row=2, sticky="w")
-        self.frame3 = ttk.Frame(self.frame2)
-        self.frame3.configure(height=200, style="Normal.TFrame", width=200)
-        self.tuning_Jogwheel = JogwheelCustom(
-            self.frame3,
-            start=0,
-            end=9,
-            divisions=10,
-            button_radius=25,
-            value=0,
-            progress=False,
-            scroll=True,
-            scroll_steps=1,
-            name="tuning_jogwheel")
-        self.tuning_Jogwheel.configure(state="normal")
-        self.tuning_Jogwheel.pack(side="top")
-        self.tuning_Jogwheel.configure(command=self.tuning_Jogwheel_CB)
-        self.tuning_Multiplier_Button = ttk.Button(
-            self.frame3, name="tuning_multiplier_button")
-        self.tuning_Multiplier_VAR = tk.StringVar(
-            value='Tuning Factor\nx 100mhz')
-        self.tuning_Multiplier_Button.configure(
-            style="Button2b.TButton",
-            text='Tuning Factor\nx 100mhz',
-            textvariable=self.tuning_Multiplier_VAR)
-        self.tuning_Multiplier_Button.pack(anchor="n", pady=5, side="top")
-        self.tuning_Multiplier_Button.configure(
-            command=self.tuning_Multiplier_Button_CB)
-        self.frame3.grid(
-            column=1,
-            padx="20 0",
-            pady=2,
-            row=0,
-            rowspan=3,
-            sticky="n")
         self.frame2.pack(anchor="n", side="top")
         self.ATT_IFS_Adjust_Frame = ttk.Frame(
             self, name="att_ifs_adjust_frame")
@@ -720,6 +703,12 @@ class piCECNextionUI(ttk.Frame):
     def stop_CB(self):
         pass
 
+    def tuning_Jogwheel_CB(self):
+        pass
+
+    def tuning_Multiplier_Button_CB(self):
+        pass
+
     def tuning_Preset_Select_CB(self):
         pass
 
@@ -745,12 +734,6 @@ class piCECNextionUI(ttk.Frame):
         pass
 
     def tuning_Preset_1_CB(self):
-        pass
-
-    def tuning_Jogwheel_CB(self):
-        pass
-
-    def tuning_Multiplier_Button_CB(self):
         pass
 
     def updateATTValue_CB(self):

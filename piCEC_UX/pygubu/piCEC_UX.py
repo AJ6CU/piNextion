@@ -64,7 +64,7 @@ def startMainWindow():
 
 
 root = tk.Tk()
-root.geometry("1086x660")
+root.geometry("1015x660")
 
 config = configuration(root)                    # Read in config data, if missing preload with defaults
                                                 # Root is passed to allow popup error messages
@@ -72,7 +72,7 @@ config = configuration(root)                    # Read in config data, if missin
 
 mainWindow = piCECNextion(root)
 comPort = comportManager(root, gotValidPort)
-comPort.place(relx=0.8, rely=1.0, anchor="s")
+comPort.place(relx=0.835, rely=1.0, anchor="s")
 #
 #   First try to use the port in config. If valid, just open it
 #

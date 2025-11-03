@@ -1218,10 +1218,8 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def sv_UX_Set_SW_Version(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        print("sv get called:", "buffer =", buffer)
-        print("sv software version")
-        print("value=", value, sep='*', end='*')
-        print("\n")
+        self.firmwareVersion_VAR.set(value)
+
 
 
     #
@@ -1229,10 +1227,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def sc_UX_Set_User_Callsign(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        print("sc get called:", "buffer =", buffer)
-        print("sc call sign")
-        print("value=", value, sep='*', end='*')
-        print("\n")
+        self.callSign_VAR.set(value)
 
 
     #
@@ -1240,11 +1235,11 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def cm_UX_Display_Callsign_Version_Flag(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        # MJH Not complete
-        print("cm get called:", "buffer =", buffer)
-        print("cm display version and callsign?")
-        print("value=", value, sep='*', end='*')
-        print("\n")
+        if value == "0":
+            self.firmwareVersion_VAR.set("")
+            self.callSign_VAR.set("")
+
+
 
 
     #
@@ -1277,15 +1272,11 @@ class piCECNextion(baseui.piCECNextionUI):
     # Also contains the text for the speaker button
     #
     def s0_UX_Greenbox_Line1(self, buffer):
-        print("s0 called")
-        print("buffer=", buffer)
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.displayLine1Classic_uBITX_Control(value)
 
 
     def s1_UX_Greenbox_Line2(self, buffer):
-        print("s1 called")
-        print("buffer=", buffer)
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.displayLine2Classic_uBITX_Control(value)
 
@@ -1476,8 +1467,7 @@ class piCECNextion(baseui.piCECNextionUI):
             self.rit_Button.configure(style='GreenButton2b.TButton', state="pressed")
 
     def vf_UX_ATT_Level(self, buffer):
-        print("vf called")
-        print(buffer)
+
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
 
         #
@@ -1508,8 +1498,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def ci_UX_IFS_State_Set(self, buffer):
-        print("ci called")
-        print(buffer)
+
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
 
         if (value == 0):                            # Zero value indicates IFS being turned off
@@ -1523,8 +1512,6 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def vi_UX_IFS_Level(self, buffer):      #verification by MCU of new value
-        print("vi called")
-        print(buffer)
 
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
         #

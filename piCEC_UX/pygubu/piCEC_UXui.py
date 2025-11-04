@@ -154,10 +154,7 @@ class piCECNextionUI(ttk.Frame):
         self.frame2 = ttk.Frame(self)
         self.frame2.configure(height=200, style="Normal.TFrame", width=200)
         self.vfoA_Frame = ttk.Frame(self.frame2, name="vfoa_frame")
-        self.vfoA_Frame.configure(
-            borderwidth=3,
-            style="NormalOutline.TFrame",
-            width=480)
+        self.vfoA_Frame.configure(borderwidth=3, style="NormalOutline.TFrame")
         self.rxTX_Status_Frame = ttk.Frame(
             self.vfoA_Frame, name="rxtx_status_frame")
         self.rxTX_Status_Frame.configure(
@@ -198,47 +195,71 @@ class piCECNextionUI(ttk.Frame):
         self.vfo_display_Frame.configure(style="Normal.TFrame", width=200)
         self.primary_VFO_Label = ttk.Label(
             self.vfo_display_Frame, name="primary_vfo_label")
-        self.primary_VFO_VAR = tk.StringVar(value='99999999')
+        self.primary_VFO_Formatted_VAR = tk.StringVar(value='99.999.999')
         self.primary_VFO_Label.configure(
             anchor="e",
             style="VFO.TLabel",
-            text='99999999',
-            textvariable=self.primary_VFO_VAR,
-            width=8)
-        self.primary_VFO_Label.pack(anchor="e", side="top")
+            text='99.999.999',
+            textvariable=self.primary_VFO_Formatted_VAR,
+            width=10)
+        self.primary_VFO_Label.pack(
+            anchor="w",
+            expand=False,
+            padx="0 40",
+            pady="10 0",
+            side="top")
         self.frame1 = ttk.Frame(self.vfo_display_Frame)
         self.frame1.configure(height=10, style="Normal.TFrame", width=200)
         self.digit7_Highlight_Label = ttk.Label(
             self.frame1, name="digit7_highlight_label")
-        self.digit7_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit7_Highlight_Label.pack(padx="7 0", side="left")
+        self.digit7_Highlight_Label.configure(style="OffLED.TLabel", width=8)
+        self.digit7_Highlight_Label.pack(padx="65 0", side="left")
         self.digit6_Highlight_Label = ttk.Label(
             self.frame1, name="digit6_highlight_label")
-        self.digit6_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit6_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit6_Highlight_Label.configure(style="OffLED.TLabel", width=8)
+        self.digit6_Highlight_Label.pack(side="left")
+        self.digital_highlight_1M_Period = ttk.Label(
+            self.frame1, name="digital_highlight_1m_period")
+        self.digital_highlight_1M_Period.configure(
+            style="OffLED.TLabel", width=5)
+        self.digital_highlight_1M_Period.pack(padx=0, side="left")
         self.digit5_Highlight_Label = ttk.Label(
             self.frame1, name="digit5_highlight_label")
-        self.digit5_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit5_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit5_Highlight_Label.configure(style="OffLED.TLabel", width=8)
+        self.digit5_Highlight_Label.pack(padx=2, side="left")
         self.digit4_Highlight_Label = ttk.Label(
             self.frame1, name="digit4_highlight_label")
-        self.digit4_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit4_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit4_Highlight_Label.configure(style="OffLED.TLabel", width=8)
+        self.digit4_Highlight_Label.pack(padx=0, side="left")
         self.digit3_Highlight_Label = ttk.Label(
             self.frame1, name="digit3_highlight_label")
-        self.digit3_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit3_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit3_Highlight_Label.configure(style="OffLED.TLabel", width=8)
+        self.digit3_Highlight_Label.pack(padx="10 0", side="left")
+        self.digital_highlight1K_Period = ttk.Label(
+            self.frame1, name="digital_highlight1k_period")
+        self.digital_highlight1K_Period.configure(
+            style="OffLED.TLabel", width=5)
+        self.digital_highlight1K_Period.pack(padx=0, side="left")
         self.digit2_Highlight_Label = ttk.Label(
             self.frame1, name="digit2_highlight_label")
-        self.digit2_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit2_Highlight_Label.pack(padx="19 0", side="left")
+        self.digit2_Highlight_Label.configure(style="OffLED.TLabel", width=8)
+        self.digit2_Highlight_Label.pack(padx="1 0", side="left")
         self.digit1_Highlight_Label = ttk.Label(
             self.frame1, name="digit1_highlight_label")
-        self.digit1_Highlight_Label.configure(style="OffLED.TLabel", width=10)
-        self.digit1_Highlight_Label.pack(anchor="w", padx="19 0", side="left")
-        self.frame1.pack(anchor="w", padx=0, side="bottom")
-        self.vfo_display_Frame.grid(column=1, padx="48 0", row=0, sticky="e")
+        self.digit1_Highlight_Label.configure(style="OffLED.TLabel", width=8)
+        self.digit1_Highlight_Label.pack(anchor="w", padx="5 0", side="left")
+        self.frame1.pack(anchor="w", padx="40 0", side="bottom")
+        self.Tx_Freq_Alert_Label = ttk.Label(
+            self.vfo_display_Frame, name="tx_freq_alert_label")
+        self.Tx_Freq_Alert_VAR = tk.StringVar(value='       ')
+        self.Tx_Freq_Alert_Label.configure(
+            style="Heading2bi.TLabel",
+            text='       ',
+            textvariable=self.Tx_Freq_Alert_VAR)
+        self.Tx_Freq_Alert_Label.pack(side="left")
+        self.vfo_display_Frame.grid(column=1, padx="0 0", row=0, sticky="w")
         self.vfoA_Frame.grid(column=0, row=0, sticky="w")
+        self.vfoA_Frame.grid_anchor("w")
         self.frame3 = ttk.Frame(self.frame2)
         self.frame3.configure(height=200, style="Normal.TFrame", width=200)
         self.tuning_Jogwheel = JogwheelCustom(
@@ -267,7 +288,7 @@ class piCECNextionUI(ttk.Frame):
         self.tuning_Multiplier_Button.configure(
             command=self.tuning_Multiplier_Button_CB)
         self.frame3.grid(
-            column=1,
+            column=2,
             padx="20 0",
             pady=2,
             row=0,
@@ -279,11 +300,11 @@ class piCECNextionUI(ttk.Frame):
         self.vfo_Frame.configure(style="Normal.TFrame")
         self.secondary_VFO_Label = ttk.Label(
             self.vfo_Frame, name="secondary_vfo_label")
-        self.secondary_VFO_VAR = tk.StringVar(value='99999999')
+        self.secondary_VFO_Formatted_VAR = tk.StringVar(value='99999999')
         self.secondary_VFO_Label.configure(
             style="Heading1.TLabel",
             text='99999999',
-            textvariable=self.secondary_VFO_VAR)
+            textvariable=self.secondary_VFO_Formatted_VAR)
         self.secondary_VFO_Label.pack(anchor="nw", side="left")
         self.secondary_Mode_Label = ttk.Label(
             self.vfo_Frame, name="secondary_mode_label")
@@ -355,7 +376,7 @@ class piCECNextionUI(ttk.Frame):
         self.split_Button = ttk.Button(
             self.signal_Control_Frame, name="split_button")
         self.split_Button.configure(style="Button2b.TButton", text='\nSPLIT\n')
-        self.split_Button.pack(anchor="nw", padx=20, side="left")
+        self.split_Button.pack(anchor="nw", padx="20 20", side="left")
         self.split_Button.configure(command=self.split_CB)
         self.rit_Button = ttk.Button(
             self.signal_Control_Frame, name="rit_button")
@@ -369,7 +390,7 @@ class piCECNextionUI(ttk.Frame):
         self.channels_Button.pack(anchor="nw", side="left")
         self.channels_Button.configure(command=self.channels_CB)
         self.signal_Control_Frame.grid(column=0, pady=10, row=0, sticky="n")
-        self.secondary_menu_Frame.grid(column=0, row=0)
+        self.secondary_menu_Frame.grid(column=0, padx=65, row=0)
         self.tuning_Preset_Selection_Frame = ttk.Frame(
             self.control_Meter_Tuning_Frame,
             name="tuning_preset_selection_frame")
@@ -448,32 +469,32 @@ class piCECNextionUI(ttk.Frame):
             name="smeter_frame")
         self.sMeter_Frame.configure(
             height=200, style="Normal.TFrame", width=200)
-        self.s_meter_Label = ttk.Label(self.sMeter_Frame, name="s_meter_label")
-        self.s_meter_Label.configure(style="Heading2b.TLabel", text='S Meter')
-        self.s_meter_Label.grid(column=0, row=1, sticky="w")
-        self.s_meter_Progressbar = ttk.Progressbar(
-            self.sMeter_Frame, name="s_meter_progressbar")
-        self.s_meter_Progressbar.configure(
-            length=380, maximum=10, orient="horizontal")
-        self.s_meter_Progressbar.grid(column=1, row=1, sticky="w")
-        self.power_meter_Label = ttk.Label(
-            self.sMeter_Frame, name="power_meter_label")
-        self.power_meter_Label.configure(
-            style="Heading2b.TLabel", text='Power')
-        self.power_meter_Label.grid(column=0, row=2, sticky="w")
-        self.power_meter_Progressbar = ttk.Progressbar(
-            self.sMeter_Frame, name="power_meter_progressbar")
-        self.power_meter_Progressbar.configure(
-            length=380, maximum=10, orient="horizontal")
-        self.power_meter_Progressbar.grid(column=1, row=2)
         self.label7 = ttk.Label(self.sMeter_Frame)
         self.label7.configure(
+            font="{Arial} 14 {bold}",
             style="Heading2b.TLabel",
-            text='...................5................7..............8..........9........')
+            text=' ...................5................7..............8..........9........')
         self.label7.grid(column=1, row=0, sticky="ew")
-        self.sMeter_Frame.grid(column=0, row=1)
+        self.s_meter_Label = ttk.Label(self.sMeter_Frame, name="s_meter_label")
+        self.s_meter_Label.configure(style="Heading2b.TLabel", text='S Meter')
+        self.s_meter_Label.grid(column=0, padx="0 10", row=1, sticky="w")
+        self.s_meter_Progressbar = ttk.Progressbar(
+            self.sMeter_Frame, name="s_meter_progressbar")
+        self.s_meter_Progressbar_VAR = tk.StringVar(value='0')
+        self.s_meter_Progressbar.configure(
+            length=300,
+            maximum=10,
+            mode="determinate",
+            orient="horizontal",
+            style="Striped.Horizontal.TProgressbar",
+            value=0,
+            variable=self.s_meter_Progressbar_VAR)
+        self.s_meter_Progressbar.grid(column=1, row=1, sticky="w")
+        self.sMeter_Frame.grid(column=0, padx="20 0", row=1, sticky="w")
         self.control_Meter_Tuning_Frame.grid(column=0, row=2, sticky="w")
         self.frame2.pack(anchor="n", side="top")
+        self.frame2.columnconfigure(0, weight=1)
+        self.frame2.columnconfigure(1, weight=2)
         self.ATT_IFS_Adjust_Frame = ttk.Frame(
             self, name="att_ifs_adjust_frame")
         self.ATT_IFS_Adjust_Frame.configure(

@@ -13,7 +13,7 @@ from Classic_uBITX_Control import Classic_uBITX_Control
 
 import mystyles  # Styles definition module
 from time import sleep
-
+import re
 
 class piCECNextion(baseui.piCECNextionUI):
     def __init__(self, master=None, **kw):
@@ -72,7 +72,14 @@ class piCECNextion(baseui.piCECNextionUI):
         self.ATT_Button_On = False                  #On allows onscreen control of signal attn
         self.IFS_Button_On = False                  #On allows onscreen mod of the ifs
 
-        self.last_VFODial_Reading = None
+        self.primary_VFO_VAR = tk.StringVar()
+        self.secondary_VFO_VAR = tk.StringVar()
+        self.freqOffset = 0                         # used to save the offset on the main dial. Only non-zero for CWL/CWU
+        self.last_VFODial_Reading = None            # not used?
+
+        self.cwTX_OffsetFlag = False                # Controls whether the display shows the transmit freq when in CW
+        self.cwTX_Offset = 0
+        self.cwTX_Tweak = 0                         # Apparently an additional value that can be set in the original editor but not SE
 
         self.tuning_Preset_Selection_Frame.grid_remove()
         self.tuning_Jogwheel.configure(scroll=True)
@@ -96,49 +103,6 @@ class piCECNextion(baseui.piCECNextionUI):
         #   "codified" directly in the functions that use them.
         #######################################################################################
 
-        self.MCU_Command_To_CB_Dict = {
-            "v1": self.v1_UX_Set_Tuning_Preset_1,
-            "v2": self.v2_UX_Set_Tuning_Preset_2,
-            "v3": self.v3_UX_Set_Tuning_Preset_3,
-            "v4": self.v4_UX_Set_Tuning_Preset_4,
-            "v5": self.v5_UX_Set_Tuning_Preset_5,
-            "cn": self.cn_UX_Set_Active_Tuning_Preset,
-            "ch": self.chGet,
-            "vh": self.vhGet,
-            "vo": self.voGet,
-            "vp": self.vpGet,
-            "vq": self.vqGet,
-            "sv": self.sv_UX_Set_SW_Version,
-            "sc": self.sc_UX_Set_User_Callsign,
-            "cm": self.cm_UX_Display_Callsign_Version_Flag,
-            "c0": self.c0_UX_Toggle_Classic_uBITX_Control,
-            "vc": self.vc_UX_Set_Primary_VFO_Frequency,
-            "cc": self.cc_UX_Set_Primary_Mode,
-            "va": self.va_UX_Set_VFO_A_Frequency,
-            "ca": self.ca_UX_Set_VFO_A_Mode,
-            "vb": self.vb_UX_Set_VFO_B_Frequency,
-            "cb": self.cb_UX_Set_VFO_B_Mode,
-            "vt": self.vt_UX_SET_CW_Tone,
-            "ck": self.ck_UX_Set_CW_Key_Type,
-            "vs": self.vs_UX_Set_CW_Speed,
-            "vy": self.vy_UX_Set_CW_Delay_Returning_to_RX,
-            "ve": self.ve_UX_Set_CW_Delay_Starting_TX,
-            "cv": self.cv_UX_VFO_Toggle,            #sets active VFO, A=0, B=1
-            "s0": self.s0_UX_Greenbox_Line1,
-            "s1": self.s1_UX_Greenbox_Line2,
-            "sh": self.sh_UX_Get_Memory,
-            "vn": self.vn_UX_ACK_Memory_Write,
-            "cl": self.cl_UX_Lock_Screen,
-            "cj": self.cj_UX_Speaker_Toggle,
-            "cs": self.cs_UX_SPLIT_Toggle,
-            "vr": self.vr_UX_Update_RIT_Freq,
-            "cr": self.cr_UX_RIT_Toggle,
-            "vf": self.vf_UX_ATT_Level,
-            "vi": self.vi_UX_IFS_Level,
-            "ci": self.ci_UX_IFS_State_Set,
-            "cx": self.cx_UX_TX_Stop_Toggle,
-            "cp": self.cpGet                        #Related to S meter. search CMD_SMETER
-        }
 
         self.toRadioCommandDict = {
             "TS_CMD_MODE":1,
@@ -263,10 +227,58 @@ class piCECNextion(baseui.piCECNextionUI):
     ######################################################################################
 
     def delegate_command_processing(self,command, buffer):
-        try:
-            self.MCU_Command_To_CB_Dict[command](buffer)
-        except:
-            print("Command not recognized=", buffer,"*")
+        match command:
+            case "v1": self.v1_UX_Set_Tuning_Preset_1(buffer)
+            case "v2": self.v2_UX_Set_Tuning_Preset_2(buffer)
+            case "v3": self.v3_UX_Set_Tuning_Preset_3(buffer)
+            case "v4": self.v4_UX_Set_Tuning_Preset_4(buffer)
+            case "v5": self.v5_UX_Set_Tuning_Preset_5(buffer)
+            case "cn": self.cn_UX_Set_Active_Tuning_Preset(buffer)
+            case "ch": self.ch_UX_Set_CW_TX_OFFSET(buffer)
+            case "vh": self.vh_UX_Set_CW_Tweak(buffer)
+            case "vo": self.voGet(buffer)
+            case "vp": self.vpGet(buffer)
+            case "vq": self.vqGet(buffer)
+            case "sv": self.sv_UX_Set_SW_Version(buffer)
+            case "sc": self.sc_UX_Set_User_Callsign(buffer)
+            case "cm": self.cm_UX_Display_Callsign_Version_Flag(buffer)
+            case "c0": self.c0_UX_Toggle_Classic_uBITX_Control(buffer)
+            case "vc": self.vc_UX_Set_Primary_VFO_Frequency(buffer)
+            case "cc": self.cc_UX_Set_Primary_Mode(buffer)
+            case "va": self.va_UX_Set_VFO_A_Frequency(buffer)
+            case "ca": self.ca_UX_Set_VFO_A_Mode(buffer)
+            case "vb": self.vb_UX_Set_VFO_B_Frequency(buffer)
+            case "cb": self.cb_UX_Set_VFO_B_Mode(buffer)
+            case "vt": self.vt_UX_SET_CW_Tone(buffer)
+            case "ck": self.ck_UX_Set_CW_Key_Type(buffer)
+            case "vs": self.vs_UX_Set_CW_Speed(buffer)
+            case "vy": self.vy_UX_Set_CW_Delay_Returning_to_RX(buffer)
+            case "ve": self.ve_UX_Set_CW_Delay_Starting_TX(buffer)
+            case "cv": self.cv_UX_VFO_Toggle(buffer)  # sets active VFO, A=0, B=1
+            case "s0": self.s0_UX_Greenbox_Line1(buffer)
+            case "s1": self.s1_UX_Greenbox_Line2(buffer)
+            case "sh": self.sh_UX_Get_Memory(buffer)
+            case "vn": self.vn_UX_ACK_Memory_Write(buffer)
+            case "cl": self.cl_UX_Lock_Screen(buffer)
+            case "cj": self.cj_UX_Speaker_Toggle(buffer)
+            case "cs": self.cs_UX_SPLIT_Toggle(buffer)
+            case "vr": self.vr_UX_Update_RIT_Freq(buffer)
+            case "cr": self.cr_UX_RIT_Toggle(buffer)
+            case "vf": self.vf_UX_ATT_Level(buffer)
+            case "vi": self.vi_UX_IFS_Level(buffer)
+            case "ci": self.ci_UX_IFS_State_Set(buffer)
+            case "cx": self.cx_UX_TX_Stop_Toggle(buffer)
+            case "cp": self.cp_UX_S_Meter_Value(buffer)  # Related to S meter. search CMD_SMETER
+            case "ct": self.ct_UX_RX_TX_Mode(buffer)
+            case _:
+                print("Command not recognized=", buffer,"*")
+                print("command:", command,"*",sep="*")
+
+        # try:
+        #     self.MCU_Command_To_CB_Dict[command](buffer)
+        # except:
+        #     print("Command not recognized=", buffer,"*")
+        #     print("command:", command,"*",sep="*")
 
     ################################################################################
     #   Format of command sent by radio:
@@ -285,11 +297,62 @@ class piCECNextion(baseui.piCECNextionUI):
             returnBuffer = returnBuffer + buffer[i]
             i +=1
         return returnBuffer.replace('"','')
-#   Callbacks
+
+#   VFO Formatting Functions
 #####################################################################################
-### Start Callbacks
-#   These are the callbacks as defined in the GUI Builder pygubu-designer
+### Start VFO Formatting Functions
+#   These are methods are used to format the VFO with a delimiter (typically a period)
+#   And to offset the VFO if we are in CW mode and the user has selected to see the TX freq
 #####################################################################################
+
+    def offsetVFOforTX (self, flag):
+        if flag:            # indicates we need to offset VFO by the Tone and Tweak
+            self.Tx_Freq_Alert_VAR.set("TX Freq")
+            if self.primary_Mode_VAR.get() == 'CWL':
+                self.freqOffset  = int(self.tone_value_VAR.get()) + self.cwTX_Tweak
+
+            elif self.primary_Mode_VAR.get() == 'CWU':
+                self.freqOffset = - int(self.tone_value_VAR.get()) + self.cwTX_Tweak
+        else:
+            self.Tx_Freq_Alert_VAR.set("       ")
+            self.freqOffset = 0
+
+        self.formatPrimaryFreq(self.primary_VFO_VAR.get())
+
+
+    def formatVFO(self,VFO):
+        # Use regex to insert periods for the integer part
+        formatted_integer_part = re.sub(r'(?<!^)(?=(\d{3})+$)', r'.', VFO)
+        return formatted_integer_part
+
+    def formatPrimaryFreq(self, frequency):
+        temp= str(int(frequency) + self.freqOffset)
+        self.primary_VFO_Formatted_VAR.set(self.formatVFO(temp))
+
+
+    def unformatPrimaryFreq(self, includeOffset=False):
+        if includeOffset:
+            return (self.primary_VFO_Formatted_VAR.get().replace(".",""))
+        else:
+            return (str(int(self.primary_VFO_Formatted_VAR.get().replace(".",""))-self.freqOffset))
+
+
+    def formatSecondayFreq(self, frequency):
+        self.secondary_VFO_Formatted_VAR.set(frequency)
+        # self.secondary_VFO_Formatted_VAR.set(str(int(frequency) + self.freqOffset))
+
+    def unformatSecondaryFreq(self, includeOffset=False):
+        if includeOffset:
+            return (self.secondary_VFO_Formatted_VAR.get().replace(".",""))
+        else:
+            return (str(int(self.secondary_VFO_Formatted_VAR.get().replace(".",""))-self.freqOffset))
+
+    #   Callbacks
+    #####################################################################################
+    ### Start Callbacks
+    #   These are the callbacks as defined in the GUI Builder pygubu-designer
+    #####################################################################################
+
 
     def settings_CB(self):
         self.settingsWindow = settings (self.master)
@@ -475,15 +538,7 @@ class piCECNextion(baseui.piCECNextionUI):
             self.tuning_Preset_Selection_Frame.grid()
 
     def tuning_Jogwheel_CB(self):
-        # if self.DeepDebug:
-        #     print("tuning_Jogwheel_CB called")
-        #     print("self.currentVFO_Tuning_Rate=", self.currentVFO_Tuning_Rate)
-        #     print("self.tuning_Jogwheel.get()=",self.tuning_Jogwheel.get())
-        #     print("self.baselineJogValue=", self.baselineJogValue)
-        #     print("self.primary_VFO_VAR.get()", self.primary_VFO_VAR.get())
-        #
-        #   Get current Frequency and adjust back to baseline
-        #
+
         newFreq =  int(self.primary_VFO_VAR.get()) - (self.currentVFO_Tuning_Rate * self.baselineJogValue)
         newFreq += self.currentVFO_Tuning_Rate * self.tuning_Jogwheel.get()
         # if self.DeepDebug:
@@ -1178,15 +1233,21 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     #   The "ch" command originates from the EEPROM and is added to the frequency to shift it
     #
-    def chGet(self, buffer):
+    def ch_UX_Set_CW_TX_OFFSET(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        print("chget called:", "buffer =", buffer)
+        print("ch get called:", "buffer =", buffer)
+        if value == 0:              #turn off CW TX offset mode
+            self.cwTX_OffsetFlag = False
+        else:                       #turn on CW TX offset - only effects CWL and CWU modes
+            self.cwTX_OffsetFlag = True
+
 
     #
     #   The "vh" command originates from the EEPROM and is added to the frequency to shift it
     #
-    def vhGet(self, buffer):
+    def vh_UX_Set_CW_Tweak(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.cwTX_Tweak = int(value)
         print("vh get called:", "buffer =", buffer)
 
     #
@@ -1196,9 +1257,20 @@ class piCECNextion(baseui.piCECNextionUI):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         print("vo get called:", "buffer =", buffer)
 
-    def cpGet(self, buffer):
+    def cp_UX_S_Meter_Value(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        print("cp get called:", "buffer =", buffer)
+        self.s_meter_Progressbar_VAR.set(int(value))
+
+    def ct_UX_RX_TX_Mode(self, buffer):
+        value = self.extractValue(buffer, 10, len(buffer) - 3)
+        print("ct get called:", "buffer =", buffer)
+        if value == "1":  #going into transmit mode
+            self.tx_Status_Light_Label.configure(state="normal")
+            self.rx_Status_Light_Label.configure(state="disabled")
+        else:
+            self.tx_Status_Light_Label.configure(state="disabled")
+            self.rx_Status_Light_Label.configure(state="normal")
+
 
     #
     #   The "vp" command originates from the EEPROM and is added to the frequency to shift it
@@ -1206,9 +1278,6 @@ class piCECNextion(baseui.piCECNextionUI):
     def vpGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         print("vp get called:", "buffer =", buffer)
-        print("vp related to display shift")
-        print("value=", value, sep='*', end='*')
-        print("\n")
 
     #
     #   The "vq" command is referred to as display option 2 in EEPROM
@@ -1216,9 +1285,7 @@ class piCECNextion(baseui.piCECNextionUI):
     def vqGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         print("vq get called:", "buffer =", buffer)
-        print("vq related to display shift")
-        print("value=", value, sep='*', end='*')
-        print("\n")
+
 
 
     #
@@ -1255,12 +1322,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def c0_UX_Toggle_Classic_uBITX_Control(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        print("c0 get called:", "buffer =", buffer)
-        print("value=", value, sep='*', end='*')
-        print(type(value), sep='*', end='*')
-        print("\n")
         if value == "0":
-            print(" exiting Classic uBITX control")
             if self.classic_uBITX_ControlWindowObj != None:
                 self.classic_uBITX_ControlWindowObj.pack_forget()
                 self.classic_uBITX_ControlWindowObj = None
@@ -1269,7 +1331,6 @@ class piCECNextion(baseui.piCECNextionUI):
                 self.classic_uBITX_ControlWindow = None
 
         else:
-            print(" entering classic uBITX control")
             self.displayClassic_uBITXControlWindow()
 
 
@@ -1522,6 +1583,9 @@ class piCECNextion(baseui.piCECNextionUI):
     def vi_UX_IFS_Level(self, buffer):      #verification by MCU of new value
 
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
+        print("IFS Level read in", value)
+        if (value == 0):
+            self.IFS_Jogwheel.setStateDisabled()
         #
         # mjh normally ux should be set to the value ack-ed by mcu. Problem with this
         # with jog wheels is that they jerk around too much because of all the callbacks
@@ -1553,7 +1617,10 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def vc_UX_Set_Primary_VFO_Frequency(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+
         self.primary_VFO_VAR.set(value)
+        self.formatPrimaryFreq(value)       #required because of possible offset and special formatting of VFO display
+
         if self.channelWindow != None:      #  Only update frequency if the channel window has been created once
             self.channelWindow.update_Current_Frequency(self.primary_VFO_VAR.get())
 
@@ -1565,6 +1632,14 @@ class piCECNextion(baseui.piCECNextionUI):
     def cc_UX_Set_Primary_Mode(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.primary_Mode_VAR.set(self.modeNum_To_TextDict[value])
+        if self.cwTX_OffsetFlag and (self.modeNum_To_TextDict[value] == "CWL" or self.modeNum_To_TextDict[value] == "CWU"):
+            #
+            #   We are showing the TX frequency on the VFO so need to offset it
+            #
+            self.offsetVFOforTX(True)
+        else:
+            self.offsetVFOforTX(False)
+
         if self.channelWindow != None:
             # Only update frequency if the channel window has been created once
             self.channelWindow.update_Current_Mode(self.primary_Mode_VAR.get())
@@ -1575,24 +1650,27 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def va_UX_Set_VFO_A_Frequency(self, buffer):
         if (self.channelWindow != None) and (self.channelWindow.scanRunning):
-            print("***Ignoring va command as we're scanning***")
+            # print("***Ignoring va command as we're scanning***")
             return  # ignore the VFO A command during scanning as it can be out of order
 
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        print("VFO A Frequency read in", value)
 
-        print("***va get called:***", "buffer =", buffer)
-        print("va assign vfo a frequency")
-        print("value=", value, sep='*', end='*')
-        print("\n")
+        # print("***va get called:***", "buffer =", buffer)
+        # print("va assign vfo a frequency")
+        # print("value=", value, sep='*', end='*')
+        # print("\n")
 
         if (self.vfo_VAR.get()== self.VFO_A):       #update displayed frequency
-            self.primary_VFO_VAR.set(value)
-            print("Updating primary vfo", value, sep='*', end='*')
-            print("\n")
+            self.primary_VFO_VAR.set(value)         #MJH dont we need to update vfoa and vfob directly?
+            self.formatPrimaryFreq(value)
+            # print("Updating primary vfo", value, sep='*', end='*')
+            # print("\n")
         else:
             self.secondary_VFO_VAR.set(value)
-            print("Updating secondary vfo", value, sep='*', end='*')
-            print("\n")
+            self.formatSecondayFreq(value)
+            # print("Updating secondary vfo", value, sep='*', end='*')
+            # print("\n")
 
 
 
@@ -1601,7 +1679,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def ca_UX_Set_VFO_A_Mode(self, buffer):
         if (self.channelWindow != None) and (self.channelWindow.scanRunning):
-            print("***Ignoring ca command as we're scanning***")
+            # print("***Ignoring ca command as we're scanning***")
             return  # ignore the VFO A command during scanning  as it can be out of order
 
         value = self.extractValue(buffer, 10, len(buffer) - 3)
@@ -1612,10 +1690,10 @@ class piCECNextion(baseui.piCECNextionUI):
             self.secondary_Mode_VAR.set(self.modeNum_To_TextDict[value])
 
 
-        print("***ca get called:***", "buffer =", buffer)
-        print("ca assign mode for vfoA frequency")
-        print("value=", value, sep='*', end='*')
-        print("\n")
+        # print("***ca get called:***", "buffer =", buffer)
+        # print("ca assign mode for vfoA frequency")
+        # print("value=", value, sep='*', end='*')
+        # print("\n")
 
     #
     #   The "vb" command indicates assignment of vfoB to new frequency
@@ -1630,13 +1708,15 @@ class piCECNextion(baseui.piCECNextionUI):
 
         if (self.vfo_VAR.get()== self.VFO_B):       #update displayed frequency
             self.primary_VFO_VAR.set(value)
+            self.formatPrimaryFreq(value)
         else:
-            self.secondary_VFO_VAR.set(value)
+            self.secondary_VFO_VAR.set(value)       #need formatted here too
+            self.formatSecondayFreq(value)
 
-        print("***vb get called:***", "buffer =", buffer)
-        print("vb assign vfo b frequency")
-        print("value=", value, sep='*', end='*')
-        print("\n")
+        # print("***vb get called:***", "buffer =", buffer)
+        # print("vb assign vfo b frequency")
+        # print("value=", value, sep='*', end='*')
+        # print("\n")
     #
     #   This sets VFO B to a new mode
     #
@@ -1652,10 +1732,10 @@ class piCECNextion(baseui.piCECNextionUI):
         else:
             self.secondary_Mode_VAR.set(self.modeNum_To_TextDict[value])
 
-        print("***cb get called:***", "buffer =", buffer)
-        print("cb assign mode for vfoB frequency")
-        print("value=", value, sep='*', end='*')
-        print("\n")
+        # print("***cb get called:***", "buffer =", buffer)
+        # print("cb assign mode for vfoB frequency")
+        # print("value=", value, sep='*', end='*')
+        # print("\n")
 
     #
     #   The "vt" command stores the CW tone
@@ -1703,13 +1783,16 @@ class piCECNextion(baseui.piCECNextionUI):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
 
         self.vfo_VAR.set(self.Text_To_VFO[value])
+
         saveSecondary_VFO = self.secondary_VFO_VAR.get()
         saveSecondary_Mode = self.secondary_Mode_VAR.get()
 
-        self.secondary_VFO_VAR.set(self.primary_VFO_VAR.get())
+        self.secondary_VFO_VAR.set(self.unformatPrimaryFreq())
+        self.formatSecondayFreq(self.unformatPrimaryFreq())
         self.secondary_Mode_VAR.set(self.primary_Mode_VAR.get())
 
         self.primary_VFO_VAR.set(saveSecondary_VFO)
+        self.formatPrimaryFreq(saveSecondary_VFO)
         self.primary_Mode_VAR.set(saveSecondary_Mode)
 
 ########################################################################################

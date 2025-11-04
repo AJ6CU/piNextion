@@ -12,6 +12,7 @@ from comportManager import comportManager
 
 
 
+
 # import mystyles  # Styles definition module
 
 # PROJECT_PATH = pathlib.Path(__file__).parent
@@ -29,6 +30,7 @@ root = None
 mainWindow = None
 comPort = None
 myRadio = None
+
 
 
 
@@ -61,10 +63,10 @@ def startMainWindow():
 #
 #   Main program and loop
 #
-
+    myRadio.updateData()  # This process looks for new Radio data. It is scheduled to be run again after completion
 
 root = tk.Tk()
-root.geometry("1015x660")
+root.geometry("1070x660")
 
 config = configuration(root)                    # Read in config data, if missing preload with defaults
                                                 # Root is passed to allow popup error messages

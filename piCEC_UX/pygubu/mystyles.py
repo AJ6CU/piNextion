@@ -37,7 +37,7 @@ def setup_ttk_styles(master=None):
             'Heading4': ('Arial',10, 'bold' ),
             'Heading5': ('Fixed', 6),
             'Normal': ('Default', 10),
-            'HeadingVFO': ('Fixed',82, 'bold' ),
+            'HeadingVFO': ("TkFixedFont",82, 'bold' ),
             'Emphasis': ('Default',12, 'bold'),
             'Symbol1': ('Symbol',18, 'bold'),
             'Symbol3': ('Symbol',12, 'bold')}
@@ -122,6 +122,11 @@ def setup_ttk_styles(master=None):
     style.configure('Fixed.TNotebook')
     style.configure('Fixed.TNotebook.Tab',padding=[5,2])
     style.configure('Red.TSeparator', background='red', height=25)
+
+    style.configure("Striped.Horizontal.TProgressbar",
+                troughcolor='lightgray',  # Color of the empty part of the bar
+                background='red',  # Color of the progress indicator,
+                thickness=25)  # Height/width of the bar (depending on orientation)
 
 
 

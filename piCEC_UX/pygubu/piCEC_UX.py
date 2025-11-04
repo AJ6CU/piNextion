@@ -63,7 +63,6 @@ def startMainWindow():
 #
 #   Main program and loop
 #
-    myRadio.updateData()  # This process looks for new Radio data. It is scheduled to be run again after completion
 
 root = tk.Tk()
 root.geometry("1070x660")

@@ -71,6 +71,9 @@ class piCECNextion(baseui.piCECNextionUI):
         self.rit_Button_On = False                  #Controls RIT. On means in RIT mode
         self.ATT_Button_On = False                  #On allows onscreen control of signal attn
         self.IFS_Button_On = False                  #On allows onscreen mod of the ifs
+        self.IFS_On_Boot_Flag = False               # a default IFS value can be set in eeprom. If so, MCU sends a flag.
+                                                    # The handling routine will set this flag to true so that when the default value
+                                                    # is sent to the UX, the IFS setting and Jogwheel will be enabled.
 
         self.primary_VFO_VAR = tk.StringVar()
         self.secondary_VFO_VAR = tk.StringVar()
@@ -80,6 +83,8 @@ class piCECNextion(baseui.piCECNextionUI):
         self.cwTX_OffsetFlag = False                # Controls whether the display shows the transmit freq when in CW
         self.cwTX_Offset = 0
         self.cwTX_Tweak = 0                         # Apparently an additional value that can be set in the original editor but not SE
+
+
 
         self.tuning_Preset_Selection_Frame.grid_remove()
         self.tuning_Jogwheel.configure(scroll=True)
@@ -236,7 +241,7 @@ class piCECNextion(baseui.piCECNextionUI):
             case "cn": self.cn_UX_Set_Active_Tuning_Preset(buffer)
             case "ch": self.ch_UX_Set_CW_TX_OFFSET(buffer)
             case "vh": self.vh_UX_Set_CW_Tweak(buffer)
-            case "vo": self.voGet(buffer)
+            case "vo": self.vo_Set_IFS_Flag(buffer)
             case "vp": self.vpGet(buffer)
             case "vq": self.vqGet(buffer)
             case "sv": self.sv_UX_Set_SW_Version(buffer)
@@ -1235,7 +1240,6 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def ch_UX_Set_CW_TX_OFFSET(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        print("ch get called:", "buffer =", buffer)
         if value == 0:              #turn off CW TX offset mode
             self.cwTX_OffsetFlag = False
         else:                       #turn on CW TX offset - only effects CWL and CWU modes
@@ -1248,14 +1252,15 @@ class piCECNextion(baseui.piCECNextionUI):
     def vh_UX_Set_CW_Tweak(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
         self.cwTX_Tweak = int(value)
-        print("vh get called:", "buffer =", buffer)
 
     #
-    #   The "vo" command originates from the EEPROM and is added to the frequency to shift it
+    #   The "vo" if 1, then turn on IFS and use initial value
     #
-    def voGet(self, buffer):
-        value = self.extractValue(buffer, 10, len(buffer) - 3)
-        print("vo get called:", "buffer =", buffer)
+    def vo_Set_IFS_Flag(self, buffer):
+        self.IFS_On_Boot_Flag= True     # This is a hack a normally the ci_ux_IFS_State_Set ignored the IFS value sent by MCU
+                                        # this is done for efficiency reasons otherwise the jogwheel will move back and forth
+                                        # as the MCU catches up with the UX.
+        self.ci_UX_IFS_State_Set(buffer)
 
     def cp_UX_S_Meter_Value(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
@@ -1284,7 +1289,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def vqGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        print("vq get called:", "buffer =", buffer)
+        print("vq get called: buffer=", buffer)
 
 
 
@@ -1583,7 +1588,7 @@ class piCECNextion(baseui.piCECNextionUI):
     def vi_UX_IFS_Level(self, buffer):      #verification by MCU of new value
 
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
-        print("IFS Level read in", value)
+
         if (value == 0):
             self.IFS_Jogwheel.setStateDisabled()
         #
@@ -1601,7 +1606,12 @@ class piCECNextion(baseui.piCECNextionUI):
         # print("MCU Reporting vi_UX_IFS_Level", value)
         if self.classic_uBITX_ControlWindow != None:
             self.IFS_Jogwheel.set(value)
-        # print("MCU After setting vi_UX_IFS_Level get", self.IFS_Jogwheel.get())
+
+        if self.IFS_On_Boot_Flag:           # A little hack. Generally will not respond to MCU IFS requests for efficiency
+            self.IFS_Jogwheel.set(value)
+            self.IFS_On_Boot_Flag = False
+
+
 
 
     def cx_UX_TX_Stop_Toggle(self, buffer):

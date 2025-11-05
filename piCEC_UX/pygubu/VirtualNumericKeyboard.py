@@ -2,6 +2,8 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import StringVar
+import globalvars as gv
+
 
 
 class VirtualNumericKeyboard(tk.Toplevel):
@@ -10,8 +12,10 @@ class VirtualNumericKeyboard(tk.Toplevel):
         self.fieldStrVar = fieldStrVar
         self.dirty_CB = dirtyCallback
         self.maxDigits = maxDigits
+        self.originalValue = StringVar()
+        self.originalValue.set(self.fieldStrVar.get())
+        self.fieldStrVar.set(gv.unformatFrequency(self.originalValue))
 
-        self.originalValue=self.fieldStrVar.get()
 
         super().__init__(master, **kw)
 
@@ -62,12 +66,13 @@ class VirtualNumericKeyboard(tk.Toplevel):
         self.message.set(self.messageEmpty)
 
     def cancel(self,event=None):
-        self.fieldStrVar.set(self.originalValue)
+        self.fieldStrVar.set(self.originalValue.get())
         self.destroy()
 
     def enter(self,event=None):
-        self.fieldStrVar.set(self.fieldStrVar.get().replace(self.cursor,''))
-        if self.originalValue !=self.fieldStrVar.get():
+        self.fieldStrVar.set(self.fieldStrVar.get().replace(self.cursor, ''))
+        self.fieldStrVar.set(gv.formatVFO(self.fieldStrVar.get()))
+        if self.originalValue.get() !=self.fieldStrVar.get():
             self.dirty_CB()
         self.destroy()
 

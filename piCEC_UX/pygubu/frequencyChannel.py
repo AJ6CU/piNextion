@@ -5,6 +5,8 @@ import frequencyChannelui as baseui
 from VirtualNumericKeyboard import VirtualNumericKeyboard
 from VirtualKeyboard import VirtualKeyboard
 
+import globalvars as gv
+
 
 
 #
@@ -52,9 +54,9 @@ class frequencyChannel(baseui.frequencyChannelUI):
     #   Freq get/set
     #
     def Get_Freq(self):
-        return self.channel_Freq_VAR.get()
+        return gv.unformatFrequency(self.channel_Freq_VAR)
     def Set_Freq(self, freq):
-        self.channel_Freq_VAR.set(freq)
+        gv.formatFrequency(self.channel_Freq_VAR, freq)
     def Freq_Default(self):
         self.Set_Freq("14032000")
 

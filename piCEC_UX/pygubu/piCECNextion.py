@@ -78,8 +78,10 @@ class piCECNextion(baseui.piCECNextionUI):
         self.secondary_VFO_VAR = tk.StringVar()
         self.freqOffset = 0                         # used to save the offset on the main dial. Only non-zero for CWL/CWU
         self.last_VFODial_Reading = None            # not used?
+        self.number_delimiter = "."
 
         self.cwTX_OffsetFlag = False                # Controls whether the display shows the transmit freq when in CW
+        self.cwTX_OffsetFlagOverride = None
         self.cwTX_Offset = 0
         self.cwTX_Tweak = 0                         # Apparently an additional value that can be set in the original editor but not SE
 
@@ -331,7 +333,7 @@ class piCECNextion(baseui.piCECNextionUI):
             new_string_parts.append(char)
             # Insert the character after every 'n' characters, except at the very end
             if (i + 1) % 3 == 0 and (i + 1) != len(reversed_VFO):
-                new_string_parts.append(".")
+                new_string_parts.append(self.number_delimiter)
 
         return "".join(new_string_parts[::-1])  # Join parts and reverse back
 
@@ -1245,6 +1247,13 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def ch_UX_Set_CW_TX_OFFSET(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        #
+        #   The following provides the ability to override the EEPROM value as a setting config
+        #
+        if self.cwTX_OffsetFlagOverride != None:
+            self.cwTX_OffsetFlag = self.cwTX_OffsetFlagOverride
+            return
+
         if value == 0:              #turn off CW TX offset mode
             self.cwTX_OffsetFlag = False
         else:                       #turn on CW TX offset - only effects CWL and CWU modes

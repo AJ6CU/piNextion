@@ -44,7 +44,7 @@ def gotValidPort ():
 
 def startMainWindow():
     mainWindow.place(x=0, y=0)                          # place the mainWindow on the screen
-    config.updateComPort(comPort.getSelectedComPort())  # update the config file if necessary because of comport selection
+    config.setComPort(comPort.getSelectedComPort())  # update the config file if necessary because of comport selection
     myRadio = piRadio(comPort.getComPortDesc(), mainWindow, config) # Initialize the Radio object with selected port
 
     mainWindow.attachConfig(config)         # Need to make config available to mainWindow (load channels and perhaps more later)

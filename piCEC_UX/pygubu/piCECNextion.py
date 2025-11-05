@@ -323,7 +323,7 @@ class piCECNextion(baseui.piCECNextionUI):
             self.Tx_Freq_Alert_VAR.set("       ")
             self.freqOffset = 0
 
-        self.formatPrimaryFreq(self.primary_VFO_VAR.get())
+        self.formatFrequency(self.primary_VFO_Formatted_VAR, self.primary_VFO_VAR.get())
 
 
     def formatVFO(self,VFO):
@@ -337,27 +337,26 @@ class piCECNextion(baseui.piCECNextionUI):
 
         return "".join(new_string_parts[::-1])  # Join parts and reverse back
 
-    def formatPrimaryFreq(self, frequency):
+    def formatFrequency(self, vfoStrVar, frequency):
         temp= str(int(frequency) + self.freqOffset)
-        self.primary_VFO_Formatted_VAR.set(self.formatVFO(temp))
+        vfoStrVar.set(self.formatVFO(temp))
 
 
-    def unformatPrimaryFreq(self, includeOffset=False):
+    def unformatFrequency(self, vfoStrVar, includeOffset=False):
         if includeOffset:
-            return (self.primary_VFO_Formatted_VAR.get().replace(".",""))
+            return (vfoStrVar.get().replace(".",""))
         else:
-            return (str(int(self.primary_VFO_Formatted_VAR.get().replace(".",""))-self.freqOffset))
+            return (str(int(vfoStrVar.get().replace(".",""))-self.freqOffset))
 
-
-    def formatSecondayFreq(self, frequency):
-        self.secondary_VFO_Formatted_VAR.set(frequency)
-        # self.secondary_VFO_Formatted_VAR.set(str(int(frequency) + self.freqOffset))
-
-    def unformatSecondaryFreq(self, includeOffset=False):
-        if includeOffset:
-            return (self.secondary_VFO_Formatted_VAR.get().replace(".",""))
-        else:
-            return (str(int(self.secondary_VFO_Formatted_VAR.get().replace(".",""))-self.freqOffset))
+    #
+    # def formatSecondayFreq(self, vfoStrVar, frequency):
+    #     vfoStrVar.set(self.formatVFO(str(int(frequency) + self.freqOffset)))
+    #
+    # def unformatSecondaryFreq(self, vfoStrVar, includeOffset=False):
+    #     if includeOffset:
+    #         return (vfoStrVar.get().replace(".",""))
+    #     else:
+    #         return (str(int(vfoStrVar.get().replace(".",""))-self.freqOffset))
 
     #   Callbacks
     #####################################################################################
@@ -1643,7 +1642,7 @@ class piCECNextion(baseui.piCECNextionUI):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
 
         self.primary_VFO_VAR.set(value)
-        self.formatPrimaryFreq(value)       #required because of possible offset and special formatting of VFO display
+        self.formatFrequency(self.primary_VFO_Formatted_VAR, value)  #required because of possible offset and special formatting of VFO display
 
         if self.channelWindow != None:      #  Only update frequency if the channel window has been created once
             self.channelWindow.update_Current_Frequency(self.primary_VFO_VAR.get())
@@ -1687,12 +1686,12 @@ class piCECNextion(baseui.piCECNextionUI):
 
         if (self.vfo_VAR.get()== self.VFO_A):       #update displayed frequency
             self.primary_VFO_VAR.set(value)         #MJH dont we need to update vfoa and vfob directly?
-            self.formatPrimaryFreq(value)
+            self.formatFrequency(self.primary_VFO_Formatted_VAR, value)
             # print("Updating primary vfo", value, sep='*', end='*')
             # print("\n")
         else:
             self.secondary_VFO_VAR.set(value)
-            self.formatSecondayFreq(value)
+            self.formatFrequency(self.secondary_VFO_Formatted_VAR, value)
             # print("Updating secondary vfo", value, sep='*', end='*')
             # print("\n")
 
@@ -1707,6 +1706,7 @@ class piCECNextion(baseui.piCECNextionUI):
             return  # ignore the VFO A command during scanning  as it can be out of order
 
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        print("VFO A Mode read in", self.modeNum_To_TextDict[value])
 
         if (self.vfo_VAR.get()== self.VFO_A):       #update displayed frequency
             self.primary_Mode_VAR.set(self.modeNum_To_TextDict[value])
@@ -1732,10 +1732,10 @@ class piCECNextion(baseui.piCECNextionUI):
 
         if (self.vfo_VAR.get()== self.VFO_B):       #update displayed frequency
             self.primary_VFO_VAR.set(value)
-            self.formatPrimaryFreq(value)
+            self.formatFrequency(self.primary_VFO_Formatted_VAR, value)
         else:
             self.secondary_VFO_VAR.set(value)       #need formatted here too
-            self.formatSecondayFreq(value)
+            self.formatFrequency(self.secondary_VFO_Formatted_VAR, value)
 
         # print("***vb get called:***", "buffer =", buffer)
         # print("vb assign vfo b frequency")
@@ -1811,12 +1811,12 @@ class piCECNextion(baseui.piCECNextionUI):
         saveSecondary_VFO = self.secondary_VFO_VAR.get()
         saveSecondary_Mode = self.secondary_Mode_VAR.get()
 
-        self.secondary_VFO_VAR.set(self.unformatPrimaryFreq())
-        self.formatSecondayFreq(self.unformatPrimaryFreq())
+        self.secondary_VFO_VAR.set(self.unformatFrequency(self.primary_VFO_Formatted_VAR))
+        self.formatFrequency(self.secondary_VFO_Formatted_VAR, self.unformatFrequency(self.primary_VFO_Formatted_VAR))
         self.secondary_Mode_VAR.set(self.primary_Mode_VAR.get())
 
         self.primary_VFO_VAR.set(saveSecondary_VFO)
-        self.formatPrimaryFreq(saveSecondary_VFO)
+        self.formatFrequency(self.primary_VFO_Formatted_VAR, saveSecondary_VFO)
         self.primary_Mode_VAR.set(saveSecondary_Mode)
 
 ########################################################################################

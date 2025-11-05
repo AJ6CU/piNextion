@@ -13,7 +13,6 @@ from Classic_uBITX_Control import Classic_uBITX_Control
 
 import mystyles  # Styles definition module
 from time import sleep
-import re
 
 class piCECNextion(baseui.piCECNextionUI):
     def __init__(self, master=None, **kw):
@@ -326,9 +325,15 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def formatVFO(self,VFO):
-        # Use regex to insert periods for the integer part
-        formatted_integer_part = re.sub(r'(?<!^)(?=(\d{3})+$)', r'.', VFO)
-        return formatted_integer_part
+        reversed_VFO = VFO[::-1]  # Reverse the string
+        new_string_parts = []
+        for i, char in enumerate(reversed_VFO):
+            new_string_parts.append(char)
+            # Insert the character after every 'n' characters, except at the very end
+            if (i + 1) % 3 == 0 and (i + 1) != len(reversed_VFO):
+                new_string_parts.append(".")
+
+        return "".join(new_string_parts[::-1])  # Join parts and reverse back
 
     def formatPrimaryFreq(self, frequency):
         temp= str(int(frequency) + self.freqOffset)

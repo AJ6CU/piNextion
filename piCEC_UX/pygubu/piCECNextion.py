@@ -26,6 +26,7 @@ class piCECNextion(baseui.piCECNextionUI):
         self.theRadio = None            # Object pointer for the Radio
         self.cwSettingsWindow = None    # Object pointer for the CW Settinge Window
         self.settingsWindow = None      # Object pointer for the General Settings Window
+        self.settingsWindowOBJ = None
         self.channelWindow = None      # object pointer for the Memory-> VFO Window
         self.vfoToMemWindow = None      # object pointer for the VFO->Memory Window
         self.classic_uBITX_ControlWindow = None
@@ -277,6 +278,7 @@ class piCECNextion(baseui.piCECNextionUI):
             case "cx": self.cx_UX_TX_Stop_Toggle(buffer)
             case "cp": self.cp_UX_S_Meter_Value(buffer)  # Related to S meter. search CMD_SMETER
             case "ct": self.ct_UX_RX_TX_Mode(buffer)
+            case "al": self.al_UX_S_Meter_Value(buffer)
             case _:
                 print("Command not recognized=", buffer,"*")
                 print("command:", command,"*",sep="*")
@@ -327,8 +329,17 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def settings_CB(self):
-        self.settingsWindow = settings (self.master)
-        self.settingsWindow.geometry("300x200")
+        self.settingsWindow  = tk.Toplevel(self.master)
+        self.settingsWindow.title("PiCEC Software Settings")
+        self.settingsWindow.geometry("600x430")
+        self.settingsWindowOBJ = settings(self.settingsWindow)
+        self.settingsWindowOBJ.pack(expand=tk.YES, fill=tk.BOTH)
+
+        self.settingsWindow.grab_set()
+        self.settingsWindow.transient(self.master)  # Makes the Classic box appear above the mainwindow
+
+
+
 
     def getCurrentCWSettings(self):
         self.cwSettingsWindow.tone_value_VAR.set(self.tone_value_VAR.get())
@@ -339,6 +350,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def displayCWSettingsWindow(self):
         self.cwSettingsWindow = cwSettings (self.master, self)
+        self.cwSettingsWindow.title("CW Settings")
         self.getCurrentCWSettings()
         self.cwSettingsWindow.grab_set()  # This line makes the cw settings window modal
         self.cwSettingsWindow.transient(self.master)  # Makes the cw settings appear above the mainwindow
@@ -371,6 +383,7 @@ class piCECNextion(baseui.piCECNextionUI):
     def displayChannelWindow(self):
         if self.channelWindow == None:
             self.channelWindow = channels(self.master, self, self.refresh_CB, self.configData)
+            self.channelWindow.title("Memory Channel")
             self.channelWindow.transient(self.master)
             self.channelWindow.update_Current_Frequency (self.primary_VFO_VAR.get())
             self.channelWindow.update_Current_Mode (self.primary_Mode_VAR.get())
@@ -383,6 +396,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def displayClassic_uBITXControlWindow(self):
         self.classic_uBITX_ControlWindow  = tk.Toplevel(self.master)
+        self.classic_uBITX_ControlWindow.title("Classic uBITX Control")
         self.classic_uBITX_ControlWindowObj=Classic_uBITX_Control(self.classic_uBITX_ControlWindow)
         self.classic_uBITX_ControlWindowObj.pack()
 
@@ -392,7 +406,7 @@ class piCECNextion(baseui.piCECNextionUI):
         self.classic_uBITX_ControlWindow.geometry(f"+{toplevel_offsetx + padx}+{toplevel_offsety + pady}")
 
         self.classic_uBITX_ControlWindow.grab_set()
-        self.classic_uBITX_ControlWindow.transient(self.master)  # Makes the cw settings appear above the mainwindow
+        self.classic_uBITX_ControlWindow.transient(self.master)  # Makes the Classic box appear above the mainwindow
 
     def displayLine1Classic_uBITX_Control(self, value):
         self.classic_uBITX_ControlWindowObj.greenBoxSelection_VAR.set(value)
@@ -1238,6 +1252,16 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def cp_UX_S_Meter_Value(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        self.s_meter_Progressbar_VAR.set(int(value))
+
+    #
+    #   This is a hack fix for a bug in CEC (at least v2.0, perhaps in 1.x too)
+    #   Command for S-meter is ill formed and we  get "p.val=x" instead of "pm.cp.val=x'
+    #   Just got tired of seeing this error flagged...
+    #
+    def al_UX_S_Meter_Value(self, buffer):
+        value = self.extractValue(buffer, 6, len(buffer) - 3)
+        print("correcting for mal formed s-meter commend", buffer, "setting s-meter to", value)
         self.s_meter_Progressbar_VAR.set(int(value))
 
     def ct_UX_RX_TX_Mode(self, buffer):

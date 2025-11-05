@@ -5,7 +5,6 @@ import platform
 import tkinter as tk
 from tkinter import messagebox
 
-import serial
 
 configuration_file = ".piCEC.ini"
 
@@ -67,9 +66,14 @@ class configuration:
                             },
 
                             "Backup": {
-                                "masterCal": "",
-                                "ssbBFO": "",
-                                "cwBFO": ""
+                                "Master Cal": "",
+                                "SSB BFO": "",
+                                "CW BFO": "",
+                                "CW Tone": "",
+                                "CW Speed":"",
+                                "CW Key Type":"",
+                                "Callsign":"",
+                                "Memory Keyer Text":""
                             }
                             }
         self.saveConfig()
@@ -120,7 +124,7 @@ class configuration:
     def get_Backup_Settings(self, item):
         return self.config_data["Backup"][item]
 
-    def set_Misc_Settings(self, item, value):
+    def set_Backup_Settings(self, item, value):
         self.config_data["Backup"][item] = value
         self.saveConfig()
 

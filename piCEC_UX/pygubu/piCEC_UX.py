@@ -66,6 +66,7 @@ def startMainWindow():
 
 root = tk.Tk()
 root.geometry("1070x660")
+root.title("PiCEC - A Nextion Emulator for CEC Software")
 
 config = configuration(root)                    # Read in config data, if missing preload with defaults
                                                 # Root is passed to allow popup error messages

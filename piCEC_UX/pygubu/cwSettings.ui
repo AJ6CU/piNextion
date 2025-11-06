@@ -6,13 +6,13 @@
       <setting id="description">Used to save cw settings</setting>
       <setting id="module_name">cwSettings</setting>
       <setting id="template">widget</setting>
-      <setting id="main_widget">cw_settings_window</setting>
+      <setting id="main_widget">labelframe1</setting>
       <setting id="main_classname">cwSettings</setting>
       <setting id="main_menu" />
       <setting id="output_dir">.</setting>
       <setting id="output_dir2" />
       <setting id="import_tkvariables">False</setting>
-      <setting id="use_ttk_styledefinition_file">False</setting>
+      <setting id="use_ttk_styledefinition_file">True</setting>
       <setting id="use_i18n">False</setting>
       <setting id="all_ids_attributes">False</setting>
       <setting id="generate_code_onsave">False</setting>

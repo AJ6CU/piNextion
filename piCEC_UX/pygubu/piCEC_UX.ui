@@ -947,6 +947,7 @@ CHANNELS
               <object class="ttk.Label" id="cw_settings_title_Label" named="True">
                 <property name="style">Heading2b.TLabel</property>
                 <property name="text" translatable="yes">CW Settings</property>
+                <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="columnspan">3</property>
@@ -958,6 +959,7 @@ CHANNELS
               <object class="ttk.Label" id="tone_Label" named="True">
                 <property name="style">Heading3b.TLabel</property>
                 <property name="text" translatable="yes">Tone</property>
+                <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="row">1</property>
@@ -970,6 +972,7 @@ CHANNELS
                 <property name="style">Heading3b.TLabel</property>
                 <property name="text" translatable="yes">799</property>
                 <property name="textvariable">string:tone_value_VAR</property>
+                <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
                 <layout manager="grid">
                   <property name="column">1</property>
                   <property name="padx">0 2</property>
@@ -982,6 +985,7 @@ CHANNELS
               <object class="ttk.Label" id="tone_units_Label" named="True">
                 <property name="style">Heading3b.TLabel</property>
                 <property name="text" translatable="yes">Hz</property>
+                <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
                 <layout manager="grid">
                   <property name="column">2</property>
                   <property name="row">1</property>
@@ -993,6 +997,7 @@ CHANNELS
               <object class="ttk.Label" id="key_type_Label" named="True">
                 <property name="style">Heading3b.TLabel</property>
                 <property name="text" translatable="yes">Key</property>
+                <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="row">2</property>
@@ -1005,6 +1010,7 @@ CHANNELS
                 <property name="style">Heading3b.TLabel</property>
                 <property name="text" translatable="yes">Straight</property>
                 <property name="textvariable">string:key_type_value_VAR</property>
+                <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
                 <layout manager="grid">
                   <property name="column">1</property>
                   <property name="row">2</property>
@@ -1016,6 +1022,7 @@ CHANNELS
               <object class="ttk.Label" id="key_speed_label" named="True">
                 <property name="style">Heading3b.TLabel</property>
                 <property name="text" translatable="yes">Speed</property>
+                <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="row">3</property>
@@ -1028,6 +1035,7 @@ CHANNELS
                 <property name="style">Heading3b.TLabel</property>
                 <property name="text" translatable="yes">1</property>
                 <property name="textvariable">string:key_speed_value_VAR</property>
+                <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
                 <layout manager="grid">
                   <property name="column">1</property>
                   <property name="row">3</property>
@@ -1039,6 +1047,7 @@ CHANNELS
               <object class="ttk.Label" id="key_speed_units_Label" named="True">
                 <property name="style">Heading3b.TLabel</property>
                 <property name="text" translatable="yes">wpm</property>
+                <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
                 <layout manager="grid">
                   <property name="column">2</property>
                   <property name="row">3</property>
@@ -1050,6 +1059,7 @@ CHANNELS
               <object class="ttk.Label" id="delay_returning_to_rx_Label" named="True">
                 <property name="style">Heading3b.TLabel</property>
                 <property name="text" translatable="yes">Delay-&gt;RX</property>
+                <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="padx">0 3</property>
@@ -1063,6 +1073,7 @@ CHANNELS
                 <property name="style">Heading3b.TLabel</property>
                 <property name="text" translatable="yes">199</property>
                 <property name="textvariable">string:delay_returning_to_rx_value_VAR</property>
+                <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
                 <layout manager="grid">
                   <property name="column">1</property>
                   <property name="row">5</property>
@@ -1074,6 +1085,7 @@ CHANNELS
               <object class="ttk.Label" id="delay_returning_to_rx_units_Label" named="True">
                 <property name="style">Heading3b.TLabel</property>
                 <property name="text" translatable="yes">ms</property>
+                <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
                 <layout manager="grid">
                   <property name="column">2</property>
                   <property name="row">5</property>
@@ -1085,6 +1097,7 @@ CHANNELS
               <object class="ttk.Label" id="delay_starting_tx_Label" named="True">
                 <property name="style">Heading3b.TLabel</property>
                 <property name="text" translatable="yes">Delay-&gt;TX</property>
+                <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="row">4</property>
@@ -1097,6 +1110,7 @@ CHANNELS
                 <property name="style">Heading3b.TLabel</property>
                 <property name="text" translatable="yes">299</property>
                 <property name="textvariable">string:delay_starting_tx_value_VAR</property>
+                <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
                 <layout manager="grid">
                   <property name="column">1</property>
                   <property name="row">4</property>
@@ -1108,6 +1122,7 @@ CHANNELS
               <object class="ttk.Label" id="delay_starting_tx_units_Label" named="True">
                 <property name="style">Heading3b.TLabel</property>
                 <property name="text" translatable="yes">ms</property>
+                <bind sequence="&lt;1&gt;" handler="cwSettings_CB" add="" />
                 <layout manager="grid">
                   <property name="column">2</property>
                   <property name="row">4</property>

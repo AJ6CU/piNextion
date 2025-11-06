@@ -18,12 +18,90 @@ class settings(baseui.settingsUI):
         self.settingsMachineWindowObj = None
         self.settingsMachineWindow = None
 
+        self.settingsCWWindowObj = None
+        self.settingsCWWindow = None
+
+        self.settingsMiscWindowObj = None
+        self.settingsMiscWindow = None
+
+        self.settingsChannelsWindowObj = None
+        self.settingsChannelsWindow = None
+
+        self.settingsBackupWindowObj = None
+        self.settingsBackupWindow = None
+
+        self.settingsFactoryResetWindowObj = None
+        self.settingsFactoryResetWindow = None
+
+        self.settingsRebootWindowObj = None
+        self.settingsRebootWindow = None
+
 
 
     def settingsClose_CB(self):
         self.master.destroy()
 
     def SettingsMachine_CB(self):
+        self.settingsMachineWindow = tk.Toplevel(self.master)
+        self.settingsMachineWindow.title("Machine Settings")
+        self.settingsMachineWindow.geometry("400x320")
+
+        self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
+        self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
+        self.settingsMachineWindow.grab_set()
+        self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+
+    def settingsCW_CB(self):
+        self.settingsCWWindow = tk.Toplevel(self.master)
+        self.settingsCWWindow.title("Machine Settings")
+        self.settingsCWWindow.geometry("400x320")
+
+        self.settingsCWWindowObj = cw.settingsMachine(self.settingsMachineWindow)
+        self.settingsCWWindow.pack(expand=tk.YES, fill=tk.BOTH)
+        self.settingsCWWindow.grab_set()
+        self.settingsCWWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+
+    def settingsMisc_CB(self):
+        self.settingsMachineWindow = tk.Toplevel(self.master)
+        self.settingsMachineWindow.title("Machine Settings")
+        self.settingsMachineWindow.geometry("400x320")
+
+        self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
+        self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
+        self.settingsMachineWindow.grab_set()
+        self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+
+    def settingsChannels_CB(self):
+        self.settingsMachineWindow = tk.Toplevel(self.master)
+        self.settingsMachineWindow.title("Machine Settings")
+        self.settingsMachineWindow.geometry("400x320")
+
+        self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
+        self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
+        self.settingsMachineWindow.grab_set()
+        self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+
+    def settingsBackup_CB(self):
+        self.settingsMachineWindow = tk.Toplevel(self.master)
+        self.settingsMachineWindow.title("Machine Settings")
+        self.settingsMachineWindow.geometry("400x320")
+
+        self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
+        self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
+        self.settingsMachineWindow.grab_set()
+        self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+
+    def settingsFactoryReset_CB(self):
+        self.settingsMachineWindow = tk.Toplevel(self.master)
+        self.settingsMachineWindow.title("Machine Settings")
+        self.settingsMachineWindow.geometry("400x320")
+
+        self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
+        self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
+        self.settingsMachineWindow.grab_set()
+        self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+
+    def settingsReboot_CB(self):
         self.settingsMachineWindow = tk.Toplevel(self.master)
         self.settingsMachineWindow.title("Machine Settings")
         self.settingsMachineWindow.geometry("400x320")

@@ -66,6 +66,7 @@
             </child>
             <child>
               <object class="ttk.Button" id="settingsCW_Button" named="True">
+                <property name="command" type="command" cbtype="simple">settingsCW_CB</property>
                 <property name="style">Button1Raised.TButton</property>
                 <property name="text" translatable="yes">CW Settings</property>
                 <property name="width">14</property>
@@ -80,6 +81,7 @@
             </child>
             <child>
               <object class="ttk.Button" id="settingsMisc_Button" named="True">
+                <property name="command" type="command" cbtype="simple">settingsMisc_CB</property>
                 <property name="style">Button1Raised.TButton</property>
                 <property name="text" translatable="yes">Misc</property>
                 <property name="width">14</property>
@@ -94,6 +96,7 @@
             </child>
             <child>
               <object class="ttk.Button" id="settingsChannels" named="True">
+                <property name="command" type="command" cbtype="simple">settingsChannels_CB</property>
                 <property name="style">Button1Raised.TButton</property>
                 <property name="text" translatable="yes">Channels</property>
                 <property name="width">14</property>
@@ -108,6 +111,7 @@
             </child>
             <child>
               <object class="ttk.Button" id="settingsBackup_Button" named="True">
+                <property name="command" type="command" cbtype="simple">settingsBackup_CB</property>
                 <property name="style">Button1Raised.TButton</property>
                 <property name="text" translatable="yes">Backup</property>
                 <property name="width">14</property>
@@ -137,6 +141,7 @@
             </child>
             <child>
               <object class="ttk.Button" id="settingsFactoryReset_Button" named="True">
+                <property name="command" type="command" cbtype="simple">settingsFactoryReset_CB</property>
                 <property name="style">Button1Raised.TButton</property>
                 <property name="text" translatable="yes">Factory Reset</property>
                 <property name="width">14</property>
@@ -151,6 +156,7 @@
             </child>
             <child>
               <object class="ttk.Button" id="settingsReboot_Button" named="True">
+                <property name="command" type="command" cbtype="simple">settingsReboot_CB</property>
                 <property name="style">Button1Raised.TButton</property>
                 <property name="text" translatable="yes">Reboot uBITX</property>
                 <property name="width">14</property>

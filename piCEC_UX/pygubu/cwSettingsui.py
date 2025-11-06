@@ -26,7 +26,7 @@ def image_loader_default(master, image_name: str):
 #
 # Base class definition
 #
-class cwSettingsUI(tk.Toplevel):
+class cwSettingsUI(ttk.Labelframe):
     def __init__(
         self,
         master=None,
@@ -47,17 +47,11 @@ class cwSettingsUI(tk.Toplevel):
 
         super().__init__(master, **kw)
 
-        labelframe1 = ttk.Labelframe(self)
-        labelframe1.configure(
-            height=400,
-            style="Heading2.TLabelframe",
-            text='CW Settings',
-            width=600)
-        # First object created
-        on_first_object_cb(labelframe1)
-
-        frame1 = ttk.Frame(labelframe1)
+        frame1 = ttk.Frame(self)
         frame1.configure(height=200, style="Normal.TFrame", width=200)
+        # First object created
+        on_first_object_cb(frame1)
+
         self.General_CW_Settings_Frame = ttk.Frame(
             frame1, name="general_cw_settings_frame")
         self.General_CW_Settings_Frame.configure(
@@ -202,7 +196,7 @@ class cwSettingsUI(tk.Toplevel):
         self.text4.grid(column=2, padx="10 0", row=15)
         self.General_CW_Settings_Frame.pack(padx="50 0", side="top")
         frame1.pack(side="top")
-        self.closingFrame = ttk.Frame(labelframe1, name="closingframe")
+        self.closingFrame = ttk.Frame(self, name="closingframe")
         self.closingFrame.configure(
             height=50, style="Normal.TFrame", width=200)
         self.apply_Button = ttk.Button(self.closingFrame, name="apply_button")
@@ -219,9 +213,12 @@ class cwSettingsUI(tk.Toplevel):
             expand=False,
             pady=10,
             side="top")
-        labelframe1.pack(expand=True, fill="both", side="top")
-        self.configure(height=400, width=600)
-        # Layout for 'cw_settings_window' skipped in custom widget template.
+        self.configure(
+            height=400,
+            style="Heading2.TLabelframe",
+            text='CW Settings',
+            width=600)
+        # Layout for 'labelframe1' skipped in custom widget template.
 
     def validate_CW_SIDETONE(self, p_entry_value, v_condition):
         pass

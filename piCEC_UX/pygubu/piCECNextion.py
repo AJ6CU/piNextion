@@ -25,8 +25,9 @@ class piCECNextion(baseui.piCECNextionUI):
         self.configData = None    # Saves the configuration data object address
         self.theRadio = None            # Object pointer for the Radio
         self.cwSettingsWindow = None    # Object pointer for the CW Settinge Window
+        self.cwSettingsWindowObj = None
         self.settingsWindow = None      # Object pointer for the General Settings Window
-        self.settingsWindowOBJ = None
+        self.settingsWindowObj = None
         self.channelWindow = None      # object pointer for the Memory-> VFO Window
         self.vfoToMemWindow = None      # object pointer for the VFO->Memory Window
         self.classic_uBITX_ControlWindow = None
@@ -332,48 +333,40 @@ class piCECNextion(baseui.piCECNextionUI):
         self.settingsWindow  = tk.Toplevel(self.master)
         self.settingsWindow.title("PiCEC Software Settings")
         self.settingsWindow.geometry("600x430")
-        self.settingsWindowOBJ = settings(self.settingsWindow)
-        self.settingsWindowOBJ.pack(expand=tk.YES, fill=tk.BOTH)
+        self.settingsWindowObj = settings(self.settingsWindow)
+        self.settingsWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
 
         self.settingsWindow.grab_set()
         self.settingsWindow.transient(self.master)  # Makes the Classic box appear above the mainwindow
 
 
-
-
-    def getCurrentCWSettings(self):
-        self.cwSettingsWindow.tone_value_VAR.set(self.tone_value_VAR.get())
-        self.cwSettingsWindow.key_type_value_VAR.set(self.key_type_value_VAR.get())
-        self.cwSettingsWindow.key_speed_value_VAR.set(self.key_speed_value_VAR.get())
-        self.cwSettingsWindow.delay_starting_tx_value_VAR.set(self.delay_starting_tx_value_VAR.get())
-        self.cwSettingsWindow.delay_returning_to_rx_value_VAR.set(self.delay_returning_to_rx_value_VAR.get())
-
+    #
+    #
+    # def getCurrentCWSettings(self):
+    #     self.cwSettingsWindowObj.tone_value_VAR.set(self.tone_value_VAR.get())
+    #     self.cwSettingsWindowObj.key_type_value_VAR.set(self.key_type_value_VAR.get())
+    #     self.cwSettingsWindowObj.key_speed_value_VAR.set(self.key_speed_value_VAR.get())
+    #     self.cwSettingsWindowObj.delay_starting_tx_value_VAR.set(self.delay_starting_tx_value_VAR.get())
+    #     self.cwSettingsWindowObj.delay_returning_to_rx_value_VAR.set(self.delay_returning_to_rx_value_VAR.get())
+    #
     def displayCWSettingsWindow(self):
-        self.cwSettingsWindow = cwSettings (self.master, self)
+        self.cwSettingsWindow  = tk.Toplevel(self.master)
         self.cwSettingsWindow.title("CW Settings")
-        self.getCurrentCWSettings()
-        self.cwSettingsWindow.grab_set()  # This line makes the cw settings window modal
-        self.cwSettingsWindow.transient(self.master)  # Makes the cw settings appear above the mainwindow
-        self.master.wait_window(self.cwSettingsWindow)  # This pauses the main window until the cwsetting is closed
+        self.cwSettingsWindow.geometry("600x430")
+        self.cwSettingsWindow.grab_set()
+        self.cwSettingsWindow.transient(self.master)
 
-    def dirty_DisplayCWSettings (self):
-        if( self.cwSettingsWindow.tone_value_VAR.get() != self.tone_value_VAR.get()):
-            self.Radio_Set_CW_Tone(self.cwSettingsWindow.tone_value_VAR.get())
+        self.cwSettingsWindowObj = cwSettings(self.cwSettingsWindow, self)
+        self.cwSettingsWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
 
-        if (self.cwSettingsWindow.key_type_value_VAR.get() != self.key_type_value_VAR.get()):
-            self.Radio_Set_CW_Key_Type(self.cwSettingsWindow.key_type_value_VAR.get())
+        self.cwSettingsWindowObj.loadCurrentCWSettings(  self.tone_value_VAR.get(),
+                                                        self.key_type_value_VAR.get(),
+                                                        self.key_speed_value_VAR.get(),
+                                                        self.delay_starting_tx_value_VAR.get(),
+                                                        self.delay_returning_to_rx_value_VAR.get()
+                                                        )
 
-        if (self.cwSettingsWindow.key_speed_value_VAR.get() != self.key_speed_value_VAR.get()):
-            # self.key_speed_value_VAR.set(self.cwSettingsWindow.key_speed_value_VAR.get())
-            self.Radio_Set_CW_Key_Speed(self.cwSettingsWindow.key_speed_value_VAR.get())
 
-        if (self.cwSettingsWindow.delay_starting_tx_value_VAR.get() != self.delay_starting_tx_value_VAR.get()):
-            # self.delay_starting_tx_value_VAR.set(self.cwSettingsWindow.delay_starting_tx_value_VAR.get())
-            self.Radio_Set_CW_Delay_Starting_TX(self.cwSettingsWindow.delay_starting_tx_value_VAR.get())
-
-        if (self.cwSettingsWindow.delay_returning_to_rx_value_VAR.get() != self.delay_returning_to_rx_value_VAR.get()):
-            # self.delay_returning_to_rx_value_VAR.set(self.cwSettingsWindow.delay_returning_to_rx_value_VAR.get())
-            self.Radio_Set_CW_Delay_Returning_To_RX(self.cwSettingsWindow.delay_returning_to_rx_value_VAR.get())
 
     #
     #   This routine makes requests from the MCU for all the Channel Frequencies, Mode, and Labels
@@ -845,24 +838,7 @@ class piCECNextion(baseui.piCECNextionUI):
         encodedBytes.append(intFreq & 0xff)
 
         return encodedBytes
-    #
-    #   This convert a 16 bit number (either string or int) to an array of 2 bytes
-    #
-    # def convert16BitToBytes(self, int16):
-    #     encodedBytes = bytearray()
-    #     number16 = int(int16)    # convert any strings to integer
-    #     encodedBytes.append(number16 & 0xff)
-    #
-    #     number16 = (number16 >> 8)
-    #     encodedBytes.append(number16 & 0xff)
-    #
-    #     return encodedBytes
 
-    #
-    #   This function tells the Radio that a new mode has been selected for
-    #   the primary (displayed) VFO. After receiving the new mode, the
-    #   Radio will separately send back the mode to the UX
-    #
     def Radio_Set_Tuning_Preset(self, rate: bytes):
         command = [self.toRadioCommandDict["TS_CMD_TUNESTEP"], rate, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
@@ -936,9 +912,30 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def Radio_Set_CW_Tone(self, tone):
-        # command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"], 0, 0, 0, 0, 0, 0, 0, 0]
-        # self.theRadio.sendCommandToMCU(bytes(command))
-        pass
+
+        #
+        #   Now have to write it to EEPROM as this is not one of the values that are automatically saved to EEPROM
+        #   This requires reboot to take effect
+        #
+
+        checksum = (self.EEPROM_Mem_Address["cw_sidetone"][self.lsb] + self.EEPROM_Mem_Address["cw_sidetone"][self.msb]
+                    + self.EEPROM_Mem_Address["cw_sidetone"][self.memLength]) % 256
+
+
+        fourBytes = self.Radio_Freq_Encode(str(tone))
+
+        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
+                   self.EEPROM_Mem_Address["cw_sidetone"][self.lsb],
+                   self.EEPROM_Mem_Address["cw_sidetone"][self.msb],
+                   self.EEPROM_Mem_Address["cw_sidetone"][self.memLength],
+                   checksum,
+                   fourBytes[0],
+                   fourBytes[1],
+                   fourBytes[2],
+                   fourBytes[3]
+                   ]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
 
     def Radio_Set_CW_Key_Type(self, keyType):
         #

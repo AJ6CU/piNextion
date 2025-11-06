@@ -9,6 +9,7 @@ from piCECNextion import piCECNextion
 from piRadio import piRadio
 from configuration import configuration
 from comportManager import comportManager
+import globalvars as gv
 
 
 
@@ -25,7 +26,7 @@ from comportManager import comportManager
 # W//#define conv4BytesToLong(lsb,lsb1,lsb2,msb) (unsigned long)(((int)(msb<<24)) + ((int)(lsb2<<16)) + ((int)(lsb1<<8))+lsb);
 # define conv4BytesToLong(lsb,lsb1,lsb2,msb) (unsigned long)(((long)msb<<24) + ((long)lsb2<<16) + ((long)lsb1<<8)+ (long)lsb);
 # globals(config_Data)
-config=None
+
 root = None
 mainWindow = None
 comPort = None
@@ -44,10 +45,9 @@ def gotValidPort ():
 
 def startMainWindow():
     mainWindow.place(x=0, y=0)                          # place the mainWindow on the screen
-    config.setComPort(comPort.getSelectedComPort())  # update the config file if necessary because of comport selection
-    myRadio = piRadio(comPort.getComPortDesc(), mainWindow, config) # Initialize the Radio object with selected port
+    gv.config.setComPort(comPort.getSelectedComPort())  # update the config file if necessary because of comport selection
+    myRadio = piRadio(comPort.getComPortDesc(), mainWindow, gv.config) # Initialize the Radio object with selected port
 
-    mainWindow.attachConfig(config)         # Need to make config available to mainWindow (load channels and perhaps more later)
     mainWindow.attachRadio(myRadio)         # tell the mainWindow how to talk to the radio
 
     myRadio.rebootRadio()                   # We reboot the radio because it sends a bunch of initialization values on startup
@@ -68,7 +68,7 @@ root = tk.Tk()
 root.geometry("1070x660")
 root.title("PiCEC - A Nextion Emulator for CEC Software")
 
-config = configuration(root)                    # Read in config data, if missing preload with defaults
+gv.config = configuration(root)                    # Read in config data, if missing preload with defaults
                                                 # Root is passed to allow popup error messages
 
 
@@ -79,8 +79,8 @@ comPort.place(relx=0.835, rely=1.0, anchor="s")
 #   First try to use the port in config. If valid, just open it
 #
 
-if comPort.validateComPort(config.getComPort()):                #test if config port exists in list of ports
-    if (comPort.forceUseOfThisPort(config.getComPort())):                          #force it and try to open, if good, then we can start main
+if comPort.validateComPort(gv.config.getComPort()):                #test if config port exists in list of ports
+    if (comPort.forceUseOfThisPort(gv.config.getComPort())):                          #force it and try to open, if good, then we can start main
         gotValidPort()
 
 root.mainloop()

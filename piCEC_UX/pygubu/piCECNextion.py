@@ -5,8 +5,8 @@ import tkinter as tk
 # from Cython.Compiler.Naming import self_cname
 
 import piCEC_UXui as baseui
-from settings import settings
-from cwSettings import cwSettings
+from settings import settingsToplevel
+from cwSettings import cwSettings, cwSettingsToplevel
 
 from channels import channels
 from Classic_uBITX_Control import Classic_uBITX_Control
@@ -22,12 +22,9 @@ class piCECNextion(baseui.piCECNextionUI):
             translator=None,
             on_first_object_cb=mystyles.setup_ttk_styles,
         )
-        self.configData = None    # Saves the configuration data object address
         self.theRadio = None            # Object pointer for the Radio
         self.cwSettingsWindow = None    # Object pointer for the CW Settinge Window
-        self.cwSettingsWindowObj = None
         self.settingsWindow = None      # Object pointer for the General Settings Window
-        self.settingsWindowObj = None
         self.channelWindow = None      # object pointer for the Memory-> VFO Window
         self.vfoToMemWindow = None      # object pointer for the VFO->Memory Window
         self.classic_uBITX_ControlWindow = None
@@ -222,9 +219,6 @@ class piCECNextion(baseui.piCECNextionUI):
     def attachRadio(self, radio):
         self.theRadio = radio
 
-    def attachConfig(self, config):
-        self.configData = config
-
     def initUX(self):
         self.updateRateMultiplier()
         self.updateLabelTuning_Multiplier()
@@ -330,42 +324,11 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def settings_CB(self):
-        self.settingsWindow  = tk.Toplevel(self.master)
-        self.settingsWindow.title("PiCEC Software Settings")
-        self.settingsWindow.geometry("600x430")
-        self.settingsWindowObj = settings(self.settingsWindow)
-        self.settingsWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
-
-        self.settingsWindow.grab_set()
-        self.settingsWindow.transient(self.master)  # Makes the Classic box appear above the mainwindow
+        self.settingsWindow  = settingsToplevel(self)
 
 
-    #
-    #
-    # def getCurrentCWSettings(self):
-    #     self.cwSettingsWindowObj.tone_value_VAR.set(self.tone_value_VAR.get())
-    #     self.cwSettingsWindowObj.key_type_value_VAR.set(self.key_type_value_VAR.get())
-    #     self.cwSettingsWindowObj.key_speed_value_VAR.set(self.key_speed_value_VAR.get())
-    #     self.cwSettingsWindowObj.delay_starting_tx_value_VAR.set(self.delay_starting_tx_value_VAR.get())
-    #     self.cwSettingsWindowObj.delay_returning_to_rx_value_VAR.set(self.delay_returning_to_rx_value_VAR.get())
-    #
     def displayCWSettingsWindow(self):
-        self.cwSettingsWindow  = tk.Toplevel(self.master)
-        self.cwSettingsWindow.title("CW Settings")
-        self.cwSettingsWindow.geometry("600x430")
-        self.cwSettingsWindow.grab_set()
-        self.cwSettingsWindow.transient(self.master)
-
-        self.cwSettingsWindowObj = cwSettings(self.cwSettingsWindow, self)
-        self.cwSettingsWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
-
-        self.cwSettingsWindowObj.loadCurrentCWSettings(  self.tone_value_VAR.get(),
-                                                        self.key_type_value_VAR.get(),
-                                                        self.key_speed_value_VAR.get(),
-                                                        self.delay_starting_tx_value_VAR.get(),
-                                                        self.delay_returning_to_rx_value_VAR.get()
-                                                        )
-
+        self.cwSettingsWindow = cwSettingsToplevel(self)
 
 
     #
@@ -375,7 +338,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def displayChannelWindow(self):
         if self.channelWindow == None:
-            self.channelWindow = channels(self.master, self, self.refresh_CB, self.configData)
+            self.channelWindow = channels(self.master, self, self.refresh_CB)
             self.channelWindow.title("Memory Channel")
             self.channelWindow.transient(self.master)
             self.channelWindow.update_Current_Frequency (self.primary_VFO_VAR.get())
@@ -402,10 +365,12 @@ class piCECNextion(baseui.piCECNextionUI):
         self.classic_uBITX_ControlWindow.transient(self.master)  # Makes the Classic box appear above the mainwindow
 
     def displayLine1Classic_uBITX_Control(self, value):
-        self.classic_uBITX_ControlWindowObj.greenBoxSelection_VAR.set(value)
+        if self.classic_uBITX_ControlWindowObj != None:  # Need to protect against a s0/s1 sent when turning on lock mode
+            self.classic_uBITX_ControlWindowObj.greenBoxSelection_VAR.set(value)
 
     def displayLine2Classic_uBITX_Control(self, value):
-        self.classic_uBITX_ControlWindowObj.greenBoxInstructions_VAR.set(value)
+        if self.classic_uBITX_ControlWindowObj != None:
+            self.classic_uBITX_ControlWindowObj.greenBoxInstructions_VAR.set(value)
     #
     def refresh_CB(self):
         self.channelWindow.destroy()
@@ -1258,8 +1223,11 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def al_UX_S_Meter_Value(self, buffer):
         value = self.extractValue(buffer, 6, len(buffer) - 3)
-        print("correcting for mal formed s-meter commend", buffer, "setting s-meter to", value)
-        self.s_meter_Progressbar_VAR.set(int(value))
+        if value.isnumeric():
+            print("correcting for mal formed s-meter commend", buffer, "setting s-meter to", value)
+            self.s_meter_Progressbar_VAR.set(int(value))
+        else:
+            print("another weird malformed command, buffer =", buffer)
 
     def ct_UX_RX_TX_Mode(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
@@ -1460,12 +1428,13 @@ class piCECNextion(baseui.piCECNextionUI):
         self.speaker_Button.configure(state="disabled")
         self.split_Button.configure(state="disabled")
         self.rit_Button.configure(state="disabled")
-        # self.store_Button.configure(state="disabled")
-        # self.recall_Button.configure(state="disabled")
+        self.channels_Button.configure(state="disabled")
+        self.tuning_Multiplier_Button.configure(state="disabled")
         self.tuning_Preset_Button.configure(state="disabled")
         self.ATT_Jogwheel.setStateDisabled()
         self.IFS_Jogwheel.setStateDisabled()
         self.tuning_Jogwheel.setStateDisabled()
+
 
     #
     #   Reset all widgets to their "normal" state after the  unlock happens
@@ -1479,22 +1448,14 @@ class piCECNextion(baseui.piCECNextionUI):
         self.speaker_Button.configure(state="normal")
         self.split_Button.configure(state="normal")
         self.rit_Button.configure(state="normal")
-        # self.store_Button.configure(state="normal")
-        # self.recall_Button.configure(state="normal")
+        self.channels_Button.configure(state="normal")
+        self.tuning_Multiplier_Button.configure(state="normal")
         self.tuning_Preset_Button.configure(state="normal")
         if (self.ATT_Button_On == True):
             self.ATT_Jogwheel.setStateNormal()
         if (self.IFS_Button_On == True):
             self.IFS_Jogwheel.setStateNormal()
         self.tuning_Jogwheel.setStateNormal()
-
-    # def labelScale_Set_State(self, labeledScale, newstate):
-    #     #
-    #     #   disabling/enabling a label scale requires disabling its children
-    #     #
-    #     for child in labeledScale.winfo_children():
-    #         if hasattr(child,'state'):
-    #             child.configure(state=newstate)
 
 
     def cj_UX_Speaker_Toggle(self, buffer):

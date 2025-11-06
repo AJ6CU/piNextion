@@ -64,6 +64,8 @@ class comportManager(baseui.comportManagerUI):
             return False
         else:
             self.open_com_port = RS232
+            self.comPortsOptionMenu.configure(state="disabled")         # disable selection for life of run
+            self.comPortListRefresh.configure(state="disabled")
             # sleep (comportManager.waitTime)                # this does not seem to be required for at least the pico
             return True
 
@@ -84,6 +86,9 @@ class comportManager(baseui.comportManagerUI):
 
     def radioSerialPortSelected_CB(self, *args):                # callback specified by UX, connected to main
         self.actionButton_CB()
+
+
+
 
 
     def getSelectedComPort(self):

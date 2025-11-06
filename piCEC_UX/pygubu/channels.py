@@ -3,6 +3,8 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import channelsui as baseui
 from tkinter import messagebox
+from configuration import configuration
+import globalvars as gv
 
 
 #
@@ -13,13 +15,12 @@ class channels(baseui.channelsUI):
     channelList = []
     currentChannel = 0
 
-    def __init__(self, master=None, mainWindow=None, refreshCallback=None, configData=None, **kw):
+    def __init__(self, master=None, mainWindow=None, refreshCallback=None, **kw):
 
         channels.channelList = []
         channels.currentChannel = 0
         super().__init__(master, **kw)
         self.mainWindow = mainWindow
-        self.configData = configData
         self.protocol("WM_DELETE_WINDOW", self.close_Channel_CB)
         self.channelSlotCount = 0
         self.channelSlotSelection = None
@@ -47,7 +48,7 @@ class channels(baseui.channelsUI):
             child.Freq_Default()
             child.Mode_Default()
             child.Showlabel_Default()
-            child.ScanSet_Default(self.configData.get_ScanSet_Settings(self.channelSlotCount))
+            child.ScanSet_Default(gv.config.get_ScanSet_Settings(self.channelSlotCount))
 
             self.channelSlotCount += 1
         self.scan_Select_Channel_Default()
@@ -64,7 +65,7 @@ class channels(baseui.channelsUI):
         self.scan_Select_Channel_VAR.set("None")
 
     def scan_Station_Time_Default(self):
-        self.scan_Time_On_Station = self.configData.get_Scan_On_Station_Time()
+        self.scan_Time_On_Station = gv.config.get_Scan_On_Station_Time()
 
     def EEPROM_SetChanneFreqMode(self, channelNum,freq, mode):
 
@@ -206,7 +207,7 @@ class channels(baseui.channelsUI):
                 channelNum,
                 channels.channelList[channelNum].Get_ShowLabel())
 
-            self.configData.set_ScanSet_Settings(channelNum,
+            gv.config.set_ScanSet_Settings(channelNum,
                                                channels.channelList[channelNum].Get_ScanSet())
 
 

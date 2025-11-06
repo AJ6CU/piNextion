@@ -15,6 +15,8 @@ def resource_path(relative_path):
 # resource_path is in globalvars
 #
 
+config = None
+
 RELOADICON = resource_path("img_Reload-24x24.png")
 BAUD = 9600
 NUMBER_DELIMITER = "."

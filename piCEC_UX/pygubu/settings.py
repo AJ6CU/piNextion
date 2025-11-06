@@ -3,37 +3,55 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import settingsui as baseui
 import settingsMachine as sm
+from cwSettings import cwSettingsToplevel
+from settingsMachine import settingsMachineToplevel
 
 
 #
 # Manual user code
 #
 
-class settings(baseui.settingsUI):
-    def __init__(self, master=None, **kw):
-        super().__init__(master, **kw)
+
+class settingsToplevel(tk.Toplevel):
+    def __init__(self, master=None,  **kw):
         self.master = master
+
+        self.popup = tk.Toplevel(self.master)
+
+        self.popup.title("PiCEC Software Settings")
+        self.popup.geometry("600x430")
+        self.popup.grab_set()
+        self.popup.transient(self.master)
+
+        self.settingsWindowObj = settings(self.popup,  self.master, **kw)
+        self.settingsWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
+
+
+class settings(baseui.settingsUI):
+    def __init__(self, master=None, mainWindow = None,  **kw):
+        self.master = master
+        self.mainWindow = mainWindow
+
+        super().__init__(self.master, **kw)
         self.master.protocol("WM_DELETE_WINDOW", self.settingsClose_CB)
 
-        self.settingsMachineWindowObj = None
+
         self.settingsMachineWindow = None
 
-        self.settingsCWWindowObj = None
+
         self.settingsCWWindow = None
 
-        self.settingsMiscWindowObj = None
+
         self.settingsMiscWindow = None
 
-        self.settingsChannelsWindowObj = None
+
         self.settingsChannelsWindow = None
 
-        self.settingsBackupWindowObj = None
         self.settingsBackupWindow = None
 
-        self.settingsFactoryResetWindowObj = None
+
         self.settingsFactoryResetWindow = None
 
-        self.settingsRebootWindowObj = None
         self.settingsRebootWindow = None
 
 
@@ -42,74 +60,65 @@ class settings(baseui.settingsUI):
         self.master.destroy()
 
     def SettingsMachine_CB(self):
-        self.settingsMachineWindow = tk.Toplevel(self.master)
-        self.settingsMachineWindow.title("Machine Settings")
-        self.settingsMachineWindow.geometry("400x320")
-
-        self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
-        self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
-        self.settingsMachineWindow.grab_set()
-        self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+        self.settingsMachineWindow = settingsMachineToplevel(self.mainWindow)
 
     def settingsCW_CB(self):
-        self.settingsCWWindow = tk.Toplevel(self.master)
-        self.settingsCWWindow.title("Machine Settings")
-        self.settingsCWWindow.geometry("400x320")
+        self.settingsCWWindow = cwSettingsToplevel(self.mainWindow)
 
-        self.settingsCWWindowObj = cw.settingsMachine(self.settingsMachineWindow)
-        self.settingsCWWindow.pack(expand=tk.YES, fill=tk.BOTH)
-        self.settingsCWWindow.grab_set()
-        self.settingsCWWindow.transient(self)  # Makes the Classic box appear above the mainwindow
 
     def settingsMisc_CB(self):
-        self.settingsMachineWindow = tk.Toplevel(self.master)
-        self.settingsMachineWindow.title("Machine Settings")
-        self.settingsMachineWindow.geometry("400x320")
-
-        self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
-        self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
-        self.settingsMachineWindow.grab_set()
-        self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+        # self.settingsMachineWindow = tk.Toplevel(self.master)
+        # self.settingsMachineWindow.title("Machine Settings")
+        # self.settingsMachineWindow.geometry("400x320")
+        #
+        # self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
+        # self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
+        # self.settingsMachineWindow.grab_set()
+        # self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+        pass
 
     def settingsChannels_CB(self):
-        self.settingsMachineWindow = tk.Toplevel(self.master)
-        self.settingsMachineWindow.title("Machine Settings")
-        self.settingsMachineWindow.geometry("400x320")
-
-        self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
-        self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
-        self.settingsMachineWindow.grab_set()
-        self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+        # self.settingsMachineWindow = tk.Toplevel(self.master)
+        # self.settingsMachineWindow.title("Machine Settings")
+        # self.settingsMachineWindow.geometry("400x320")
+        #
+        # self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
+        # self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
+        # self.settingsMachineWindow.grab_set()
+        # self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+        pass
 
     def settingsBackup_CB(self):
-        self.settingsMachineWindow = tk.Toplevel(self.master)
-        self.settingsMachineWindow.title("Machine Settings")
-        self.settingsMachineWindow.geometry("400x320")
-
-        self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
-        self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
-        self.settingsMachineWindow.grab_set()
-        self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
-
+        # self.settingsMachineWindow = tk.Toplevel(self.master)
+        # self.settingsMachineWindow.title("Machine Settings")
+        # self.settingsMachineWindow.geometry("400x320")
+        #
+        # self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
+        # self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
+        # self.settingsMachineWindow.grab_set()
+        # self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+        pass
     def settingsFactoryReset_CB(self):
-        self.settingsMachineWindow = tk.Toplevel(self.master)
-        self.settingsMachineWindow.title("Machine Settings")
-        self.settingsMachineWindow.geometry("400x320")
-
-        self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
-        self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
-        self.settingsMachineWindow.grab_set()
-        self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+        # self.settingsMachineWindow = tk.Toplevel(self.master)
+        # self.settingsMachineWindow.title("Machine Settings")
+        # self.settingsMachineWindow.geometry("400x320")
+        #
+        # self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
+        # self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
+        # self.settingsMachineWindow.grab_set()
+        # self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+        pass
 
     def settingsReboot_CB(self):
-        self.settingsMachineWindow = tk.Toplevel(self.master)
-        self.settingsMachineWindow.title("Machine Settings")
-        self.settingsMachineWindow.geometry("400x320")
-
-        self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
-        self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
-        self.settingsMachineWindow.grab_set()
-        self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+        # self.settingsMachineWindow = tk.Toplevel(self.master)
+        # self.settingsMachineWindow.title("Machine Settings")
+        # self.settingsMachineWindow.geometry("400x320")
+        #
+        # self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
+        # self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
+        # self.settingsMachineWindow.grab_set()
+        # self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
+        pass
 
 
 

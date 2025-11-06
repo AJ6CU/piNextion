@@ -9,7 +9,26 @@ from tkinter import messagebox
 # Manual user code
 #
 
+class cwSettingsToplevel(tk.Toplevel):
+    def __init__(self, master=None, **kw):
+        self.master = master
 
+        self.popup = tk.Toplevel(self.master)
+
+        self.popup.title("CW Settings")
+        self.popup.geometry("600x430")
+        self.popup.grab_set()
+        self.popup.transient(self.master)
+
+        self.cwSettingsWindowObj = cwSettings(self.popup, self.master, **kw)
+        self.cwSettingsWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
+
+        self.cwSettingsWindowObj.loadCurrentCWSettings(self.master.tone_value_VAR.get(),
+                                                       self.master.key_type_value_VAR.get(),
+                                                       self.master.key_speed_value_VAR.get(),
+                                                       self.master.delay_starting_tx_value_VAR.get(),
+                                                       self.master.delay_returning_to_rx_value_VAR.get()
+                                                       )
 
 
 class cwSettings(baseui.cwSettingsUI):
@@ -73,6 +92,7 @@ class cwSettings(baseui.cwSettingsUI):
                 self.mainWindow.theRadio.rebootRadio()
             else:
                 print('told us to wait')
+
 
 
 

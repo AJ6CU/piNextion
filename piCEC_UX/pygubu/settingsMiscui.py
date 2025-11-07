@@ -26,7 +26,7 @@ def image_loader_default(master, image_name: str):
 #
 # Base class definition
 #
-class settingsMachineUI(ttk.Labelframe):
+class settingsMiscUI(ttk.Labelframe):
     def __init__(
         self,
         master=None,
@@ -52,38 +52,27 @@ class settingsMachineUI(ttk.Labelframe):
         # First object created
         on_first_object_cb(frame1)
 
-        self.MCU_Command_Headroom_Label = ttk.Label(
-            frame1, name="mcu_command_headroom_label")
-        self.MCU_Command_Headroom_Label.configure(
+        self.Number_Delimiter_Label = ttk.Label(
+            frame1, name="number_delimiter_label")
+        self.Number_Delimiter_Label.configure(
+            justify="right",
             style="Heading2.TLabel",
-            text='Minimum time between commands sent to Radio (ms):')
-        self.MCU_Command_Headroom_Label.grid(
+            text='Number Delimiter:\n(One unquoted character)')
+        self.Number_Delimiter_Label.grid(
             column=0, padx=10, pady=10, row=0, sticky="e")
-        self.MCU_Command_Headroom_Entry = ttk.Entry(
-            frame1, name="mcu_command_headroom_entry")
-        self.MCU_Command_Headroom_VAR = tk.StringVar()
-        self.MCU_Command_Headroom_Entry.configure(
-            justify="right",
+        self.Number_Delimiter_Entry = ttk.Entry(
+            frame1, name="number_delimiter_entry")
+        self.Number_Delimiter_VAR = tk.StringVar(value='.')
+        self.Number_Delimiter_Entry.configure(
+            font="{Arial} 36 {bold}",
+            justify="center",
             style="Entry1b.TEntry",
-            textvariable=self.MCU_Command_Headroom_VAR,
-            width=4)
-        self.MCU_Command_Headroom_Entry.grid(column=1, row=0)
-        self.MCU_Update_Period_Label = ttk.Label(
-            frame1, name="mcu_update_period_label")
-        self.MCU_Update_Period_Label.configure(
-            style="Heading2.TLabel",
-            text='Frequency checking for UX changes (ms):')
-        self.MCU_Update_Period_Label.grid(
-            column=0, padx=10, pady=10, row=1, sticky="e")
-        self.MCU_Update_Period_Entry = ttk.Entry(
-            frame1, name="mcu_update_period_entry")
-        self.MCU_Update_Period_VAR = tk.StringVar()
-        self.MCU_Update_Period_Entry.configure(
-            justify="right",
-            style="Entry1b.TEntry",
-            textvariable=self.MCU_Update_Period_VAR,
-            width=4)
-        self.MCU_Update_Period_Entry.grid(column=1, row=1)
+            textvariable=self.Number_Delimiter_VAR,
+            width=1)
+        _text_ = '.'
+        self.Number_Delimiter_Entry.delete("0", "end")
+        self.Number_Delimiter_Entry.insert("0", _text_)
+        self.Number_Delimiter_Entry.grid(column=1, row=0)
         frame1.pack(padx=10, pady=10, side="top")
         self.closingFrame = ttk.Frame(self, name="closingframe")
         self.closingFrame.configure(
@@ -105,7 +94,7 @@ class settingsMachineUI(ttk.Labelframe):
         self.configure(
             height=400,
             style="Heading2.TLabelframe",
-            text='Advanced Settings',
+            text='Miscellaneous Settings',
             width=600)
         # Layout for 'labelframe1' skipped in custom widget template.
 
@@ -118,6 +107,6 @@ class settingsMachineUI(ttk.Labelframe):
 
 if __name__ == "__main__":
     root = tk.Tk()
-    widget = settingsMachineUI(root)
+    widget = settingsMiscUI(root)
     widget.pack(expand=True, fill="both")
     root.mainloop()

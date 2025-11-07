@@ -18,7 +18,11 @@ class piRadio:
         self.MCU_Update_Period = gv.config.get_MCU_Update_Period()
         gv.config.register_observer("MCU Update Period", self.updateMCU_Update_Period)
 
+        self.MCU_Command_Headroom = gv.config.get_MCU_Command_Headroom()
+        gv.config.register_observer("MCU Command Headroom", self.updateMCU_Command_Headroom)
+
         print("update period is ", self.MCU_Update_Period)
+        print("command headroom = ", self.MCU_Command_Headroom)
 
 
 #   note on external device to MCU protocol
@@ -36,7 +40,7 @@ class piRadio:
 
         self.mcu_command_buffer =[]                     # buffer used to send bytes to MCU
         self.time_of_last_sent = timer()                # used to avoid overloading MCU
-        self.minimum_time = .1
+
 
 
     def openRadio(self):
@@ -218,8 +222,8 @@ class piRadio:
         currentTime = timer()
         timeDiff = currentTime - self.time_of_last_sent
 
-        if (timeDiff < self.minimum_time):
-            sleep(self.minimum_time - timeDiff)
+        if (timeDiff < self.MCU_Command_Headroom):
+            sleep(self.MCU_Command_Headroom - timeDiff)
         self.time_of_last_sent = timer()
 
         # tx_mode_switch_USB2pre = b'\x59\x58\x68\x03'
@@ -238,5 +242,9 @@ class piRadio:
     def updateMCU_Update_Period(self, value):
         self.MCU_Update_Period = value
         print("update period is changing, now = ", self.MCU_Update_Period)
+
+    def updateMCU_Command_Headroom(self, value):
+        self.MCU_Command_Headroom = value
+        print("update MCU Command Headroom is changing, now = ", self.MCU_Command_Headroom)
 
 

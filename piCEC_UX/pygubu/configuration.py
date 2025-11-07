@@ -119,11 +119,12 @@ class configuration:
         self.saveConfig()
 
 
-    def get_Misc_Settings(self, item):
-        return self.config_data["Misc Settings"][item]
+    def get_Number_Delimiter(self):
+        return self.config_data["Number Delimiter"]
 
-    def set_Misc_Settings(self, item, value):
-        self.config_data["Misc Settings"][item] = value
+    def set_Number_Delimiter(self, value):
+        self.config_data["Number Delimiter"] = value
+        self._notify_observers("Number Delimiter", value)
         self.saveConfig()
 
 
@@ -155,5 +156,6 @@ class configuration:
 
 
     def _notify_observers(self, configParameter,value):
-        for observerMethod in self.observers[configParameter]:
-            observerMethod(value)
+        if configParameter in self.observers:
+            for observerMethod in self.observers[configParameter]:
+                observerMethod(value)

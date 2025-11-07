@@ -5,6 +5,7 @@ import settingsui as baseui
 import settingsMachine as sm
 from cwSettings import cwSettingsToplevel
 from settingsMachine import settingsMachineToplevel
+from settingsMisc import settingsMiscToplevel
 
 
 #
@@ -67,15 +68,7 @@ class settings(baseui.settingsUI):
 
 
     def settingsMisc_CB(self):
-        # self.settingsMachineWindow = tk.Toplevel(self.master)
-        # self.settingsMachineWindow.title("Machine Settings")
-        # self.settingsMachineWindow.geometry("400x320")
-        #
-        # self.settingsMachineWindowObj = sm.settingsMachine(self.settingsMachineWindow)
-        # self.settingsMachineWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
-        # self.settingsMachineWindow.grab_set()
-        # self.settingsMachineWindow.transient(self)  # Makes the Classic box appear above the mainwindow
-        pass
+        self.settingsMiscWindow = settingsMiscToplevel(self.mainWindow)
 
     def settingsChannels_CB(self):
         # self.settingsMachineWindow = tk.Toplevel(self.master)

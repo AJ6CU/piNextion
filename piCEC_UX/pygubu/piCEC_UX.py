@@ -53,11 +53,12 @@ def startMainWindow():
     myRadio.rebootRadio()                   # We reboot the radio because it sends a bunch of initialization values on startup
                                             # to the Nextion screen. We need to capture them
 
-    myRadio.readALLValues()                 # Now after reboot, read in the initialization values
+    # myRadio.readALLValues()                 # Now after reboot, read in the initialization values
+    myRadio.updateData()  # This process looks for new Radio data. It is scheduled to be run again after completion
 
     mainWindow.initUX()                     # With the initialization values read in, we can perform some initialization functions
                                             # like setting up tuning rate
-    myRadio.updateData()                    # This process looks for new Radio data. It is scheduled to be run again after completion
+    # myRadio.updateData()                    # This process looks for new Radio data. It is scheduled to be run again after completion
 
 
 #

@@ -1,6 +1,8 @@
 import serial
 from time import sleep
 from timeit import default_timer as timer
+from configuration import configuration
+import globalvars as gv
 
 from comportManager import *
 
@@ -12,6 +14,11 @@ class piRadio:
         self.mainWindow = window
         self.radioPort = serialPort
         self.configObj = configObj
+
+        self.MCU_Update_Period = gv.config.get_MCU_Update_Period()
+        gv.config.register_observer("MCU Update Period", self.updateMCU_Update_Period)
+
+        print("update period is ", self.MCU_Update_Period)
 
 
 #   note on external device to MCU protocol
@@ -202,7 +209,7 @@ class piRadio:
                             #
                             ffCount = 0
                             buffer = buffer[:0]
-        self.mainWindow.after(500,self.updateData)
+        self.mainWindow.after(self.MCU_Update_Period,self.updateData)
 #
 #   Send command to MCU
 #
@@ -227,5 +234,9 @@ class piRadio:
         temp = self.tx_to_mcu_preamble + commandList + self.tx_to_mcu_postscript
 
         self.radioPort.write(self.tx_to_mcu_preamble + commandList + self.tx_to_mcu_postscript)
+
+    def updateMCU_Update_Period(self, value):
+        self.MCU_Update_Period = value
+        print("update period is changing, now = ", self.MCU_Update_Period)
 
 

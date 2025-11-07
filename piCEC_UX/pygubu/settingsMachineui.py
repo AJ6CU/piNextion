@@ -52,18 +52,39 @@ class settingsMachineUI(ttk.Labelframe):
         # First object created
         on_first_object_cb(frame1)
 
-        self.General_CW_Settings_Frame = ttk.Frame(
-            frame1, name="general_cw_settings_frame")
-        self.General_CW_Settings_Frame.configure(
-            height=200, style="Normal.TFrame", width=200)
-        self.CW_KEY_TYPE_LABEL = ttk.Label(
-            self.General_CW_Settings_Frame,
-            name="cw_key_type_label")
-        self.CW_KEY_TYPE_LABEL.configure(
-            style="Heading2b.TLabel", text='machine stuff')
-        self.CW_KEY_TYPE_LABEL.grid(column=0, pady="5 0", row=0, sticky="e")
-        self.General_CW_Settings_Frame.pack(padx="50 0", side="top")
-        frame1.pack(side="top")
+        self.MCU_Command_Headroom_Label = ttk.Label(
+            frame1, name="mcu_command_headroom_label")
+        self.MCU_Command_Headroom_Label.configure(
+            style="Heading2.TLabel",
+            text='Minimum time between commands sent to Radio (ms):')
+        self.MCU_Command_Headroom_Label.grid(
+            column=0, padx=10, pady=10, row=0, sticky="e")
+        self.MCU_Command_Headroom_Entry = ttk.Entry(
+            frame1, name="mcu_command_headroom_entry")
+        self.MCU_Command_Headroom_VAR = tk.StringVar()
+        self.MCU_Command_Headroom_Entry.configure(
+            justify="right",
+            style="Entry1b.TEntry",
+            textvariable=self.MCU_Command_Headroom_VAR,
+            width=4)
+        self.MCU_Command_Headroom_Entry.grid(column=1, row=0)
+        self.MCU_Update_Period_Label = ttk.Label(
+            frame1, name="mcu_update_period_label")
+        self.MCU_Update_Period_Label.configure(
+            style="Heading2.TLabel",
+            text='Frequency checking for UX changes (ms):')
+        self.MCU_Update_Period_Label.grid(
+            column=0, padx=10, pady=10, row=1, sticky="e")
+        self.MCU_Update_Period_Entry = ttk.Entry(
+            frame1, name="mcu_update_period_entry")
+        self.MCU_Update_Period_VAR = tk.StringVar()
+        self.MCU_Update_Period_Entry.configure(
+            justify="right",
+            style="Entry1b.TEntry",
+            textvariable=self.MCU_Update_Period_VAR,
+            width=4)
+        self.MCU_Update_Period_Entry.grid(column=1, row=1)
+        frame1.pack(padx=10, pady=10, side="top")
         self.closingFrame = ttk.Frame(self, name="closingframe")
         self.closingFrame.configure(
             height=50, style="Normal.TFrame", width=200)
@@ -79,7 +100,7 @@ class settingsMachineUI(ttk.Labelframe):
         self.closingFrame.pack(
             anchor="center",
             expand=False,
-            pady=10,
+            pady=20,
             side="top")
         self.configure(
             height=400,

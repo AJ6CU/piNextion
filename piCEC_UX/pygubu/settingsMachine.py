@@ -29,7 +29,12 @@ class settingsMachine(baseui.settingsMachineUI):
         self.mainWindow = mainWindow
 
         super().__init__(master, **kw)
-        print(gv.config.get_Advanced_Settings("MCU Command Headroom"))
+
+        self.saveMCU_Command_Headroom = int(gv.config.get_MCU_Command_Headroom()*1000))
+        self.saveMCU_Update_Period = gv.config.get_MCU_Update_Period())
+
+        self.MCU_Command_Headroom_VAR.set(str(self.saveMCU_Command_Headroom))
+        self.MCU_Update_Period_VAR.set(str(self.saveMCU_Update_Period))
 
     def apply_CB(self):
         print("Applying settings")

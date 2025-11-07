@@ -30,14 +30,22 @@ class settingsMachine(baseui.settingsMachineUI):
 
         super().__init__(master, **kw)
 
-        self.saveMCU_Command_Headroom = int(gv.config.get_MCU_Command_Headroom()*1000))
-        self.saveMCU_Update_Period = gv.config.get_MCU_Update_Period())
+        self.saveMCU_Command_Headroom = int(gv.config.get_MCU_Command_Headroom()*1000)
+        self.saveMCU_Update_Period = gv.config.get_MCU_Update_Period()
 
         self.MCU_Command_Headroom_VAR.set(str(self.saveMCU_Command_Headroom))
         self.MCU_Update_Period_VAR.set(str(self.saveMCU_Update_Period))
 
     def apply_CB(self):
         print("Applying settings")
+
+        if int(self.MCU_Command_Headroom_VAR.get()) != self.saveMCU_Command_Headroom:
+            gv.config.set_MCU_Command_Headroom(int(self.MCU_Command_Headroom_VAR.get())/1000)
+
+
+        if int(self.MCU_Update_Period_VAR.get()) != self.saveMCU_Update_Period:
+            gv.config.set_MCU_Update_Period(int(self.MCU_Update_Period_VAR.get()))
+
         self.master.destroy()
 
     def cancel_CB(self):

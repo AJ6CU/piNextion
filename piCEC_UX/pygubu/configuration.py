@@ -107,6 +107,7 @@ class configuration:
 
     def set_MCU_Command_Headroom(self, value):
         self.config_data["MCU Command Headroom"] = value
+        self._notify_observers("MCU Command Headroom", value)
         self.saveConfig()
 
     def get_MCU_Update_Period(self):
@@ -114,6 +115,7 @@ class configuration:
 
     def set_MCU_Update_Period(self, value):
         self.config_data["MCU Update Period"] = value
+        self._notify_observers("MCU Update Period", value)
         self.saveConfig()
 
 

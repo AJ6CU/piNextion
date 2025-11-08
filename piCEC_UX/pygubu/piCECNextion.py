@@ -77,8 +77,9 @@ class piCECNextion(baseui.piCECNextionUI):
         self.primary_VFO_VAR = tk.StringVar()
         self.secondary_VFO_VAR = tk.StringVar()
         self.freqOffset = 0                         # used to save the offset on the main dial. Only non-zero for CWL/CWU
-        self.last_VFODial_Reading = None            # not used?
-        self.number_delimiter = "."
+
+        gv.config.register_observer("NUMBER DELIMITER", self.reformatVFO)
+
 
         self.cwTX_OffsetFlag = False                # Controls whether the display shows the transmit freq when in CW
         self.cwTX_OffsetFlagOverride = None
@@ -380,6 +381,7 @@ class piCECNextion(baseui.piCECNextionUI):
     def Radio_Req_Channel_Freqs(self):
 
         base = self.EEPROM_Mem_Address["channel_freq_Mode"][self.lsb]
+
         for i in range(self.EEPROM_Mem_Address["channel_freq_Mode"][self.totalSlots]):
             command = [self.toRadioCommandDict["TS_CMD_READMEM"],
                        base,
@@ -387,9 +389,10 @@ class piCECNextion(baseui.piCECNextionUI):
                        self.EEPROM_Mem_Address["channel_freq_Mode"][self.memLength],
                        self.EEPROM_Mem_Address["channel_freq_Mode"][self.charFlag]
                        ]
-            # print("command=", command)
+
             self.theRadio.sendCommandToMCU(bytes(command))
             base += self.EEPROM_Mem_Address["channel_freq_Mode"][self.memOffset]
+
 
         base = self.EEPROM_Mem_Address["channel_freq_Mode"][self.lsb]
 
@@ -1349,13 +1352,11 @@ class piCECNextion(baseui.piCECNextionUI):
                 self.memReadingState = "ShowLabel"
         elif (self.memReadingState == "ShowLabel"):
             if (ord(value) == 0):
-                # print("show label is a 0")
                 self.channelWindow.EEPROM_SetChannelShowLabel(
                     self.EEPROM_Current_Slot_ShowLabel,
                     "No")
 
             else:
-                # print("show label is a 3")
                 self.channelWindow.EEPROM_SetChannelShowLabel(
                     self.EEPROM_Current_Slot_ShowLabel,
                     "Yes")
@@ -1591,6 +1592,10 @@ class piCECNextion(baseui.piCECNextionUI):
             self.channelWindow.update_Current_Frequency(self.primary_VFO_VAR.get())
 
         self.updateJogTracking()
+
+    def reformatVFO(self, value):
+        gv.formatFrequency(self.primary_VFO_Formatted_VAR, self.primary_VFO_VAR.get(), self.freqOffset)
+        gv.formatFrequency(self.secondary_VFO_Formatted_VAR, self.secondary_VFO_VAR.get(), self.freqOffset)
 
     #
     #   The "cc" command indicates a change to a new mode for primary (e.g. USB, LSB, etc.)

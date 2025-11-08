@@ -4,6 +4,7 @@ import os
 import platform
 import tkinter as tk
 from tkinter import messagebox
+import globalvars as gv
 
 
 configuration_file = ".piCEC.ini"
@@ -25,6 +26,7 @@ class configuration:
             else:
                 self.config_data = json.load(config_file)
                 config_file.close()
+                self.distributeConfigData()  # Once config is read in, its values needs to be propagated to objects create prior
         except FileNotFoundError:
             # top = tk.Toplevel(master)
             messagebox.showinfo("Information", "No configuration file was found\n" +
@@ -33,6 +35,11 @@ class configuration:
                                                 parent=master)
 
             self.writeDefaults()
+    def distributeConfigData(self):
+        gv.NUMBER_DELIMITER = self.get_NUMBER_DELIMITER()
+        print("delimiter number is ", gv.NUMBER_DELIMITER)
+        self.register_observer("NUMBER DELIMITER", gv.updateNUMBER_DELIMITER)
+
 
     def writeDefaults(self):
         if platform.system() == 'Windows':
@@ -58,10 +65,10 @@ class configuration:
 
                             "Scan On Station Time":10000,
 
-                            "MCU Command Headroom": .01,        # in seconds
+                            "MCU Command Headroom": .06,        # in seconds
                             "MCU Update Period": 500,            # in ms
 
-                            "Number Delimiter": ".",
+                            "NUMBER DELIMITER": ".",
                             "TXOffset": "EEPROM",
 
                             "Master Cal": "",
@@ -119,12 +126,12 @@ class configuration:
         self.saveConfig()
 
 
-    def get_Number_Delimiter(self):
-        return self.config_data["Number Delimiter"]
+    def get_NUMBER_DELIMITER(self):
+        return self.config_data["NUMBER DELIMITER"]
 
-    def set_Number_Delimiter(self, value):
-        self.config_data["Number Delimiter"] = value
-        self._notify_observers("Number Delimiter", value)
+    def set_NUMBER_DELIMITER(self, value):
+        self.config_data["NUMBER DELIMITER"] = value
+        self._notify_observers("NUMBER DELIMITER", value)
         self.saveConfig()
 
 

@@ -236,7 +236,7 @@ class piRadio:
         #     print("commandList =", commandList)
 
         temp = self.tx_to_mcu_preamble + commandList + self.tx_to_mcu_postscript
-
+        # print("writing to radio:", ' '.join(f'{byte:02x}' for byte in temp))
         self.radioPort.write(self.tx_to_mcu_preamble + commandList + self.tx_to_mcu_postscript)
 
     def updateMCU_Update_Period(self, value):

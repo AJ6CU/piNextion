@@ -27,7 +27,8 @@ def setup_ttk_styles(master=None):
     #sv_ttk.set_theme("dark"))
     style.theme_use('default')
 
-    fontList = {'Heading1': ('Times New Roman',24, 'bold' ),
+    fontList = {'Heading0': ('Arial',36, 'bold' ),
+            'Heading1': ('Times New Roman', 24, 'bold'),
             'Heading1b': ('Arial', 20, 'bold'),
             'Heading2': ('Arial',18, 'bold' ),
             'Heading2b': ('Arial',14, 'bold' ),
@@ -90,6 +91,10 @@ def setup_ttk_styles(master=None):
     style.configure('CheckboxNormal.TCheckbutton',font=fontList['Normal'])
     style.configure('CheckboxNormalNoBorder.TCheckbutton',font=fontList['Normal'],highlightthickness=0, borderwidth=0, bd=0)
     style.configure('CheckboxEmphasis.TCheckbutton',font=fontList['Emphasis'])
+
+    style.configure('TCombobox', font=fontList['Heading0'])
+    style.configure('ComboBox1.TCombobox.Listbox', font=fontList['Heading1b'])
+    style.configure('ComboBox1.TCombobox', font=fontList['Heading2b'])
     style.configure('ComboBox2.TCombobox',font=fontList['Heading2'])
     style.configure('ComboBox2b.TCombobox', font=fontList['Heading2b'])
     style.configure('ComboBox3.TCombobox', font=fontList['Heading3'])

@@ -47,33 +47,32 @@ class settingsMiscUI(ttk.Labelframe):
 
         super().__init__(master, **kw)
 
-        frame1 = ttk.Frame(self)
-        frame1.configure(height=200, style="Normal.TFrame", width=200)
+        self.misc_Settings_Frame = ttk.Frame(self, name="misc_settings_frame")
+        self.misc_Settings_Frame.configure(
+            height=200, style="Normal.TFrame", width=200)
         # First object created
-        on_first_object_cb(frame1)
+        on_first_object_cb(self.misc_Settings_Frame)
 
         self.Number_Delimiter_Label = ttk.Label(
-            frame1, name="number_delimiter_label")
+            self.misc_Settings_Frame, name="number_delimiter_label")
         self.Number_Delimiter_Label.configure(
             justify="right",
             style="Heading2.TLabel",
-            text='Number Delimiter:\n(One unquoted character)')
+            text='Number Delimiter')
         self.Number_Delimiter_Label.grid(
             column=0, padx=10, pady=10, row=0, sticky="e")
-        self.Number_Delimiter_Entry = ttk.Entry(
-            frame1, name="number_delimiter_entry")
-        self.Number_Delimiter_VAR = tk.StringVar(value='.')
-        self.Number_Delimiter_Entry.configure(
-            font="{Arial} 36 {bold}",
+        self.Number_Delimiter_Combobox = ttk.Combobox(
+            self.misc_Settings_Frame, name="number_delimiter_combobox")
+        self.NUMBER_DELIMITER_VAR = tk.StringVar()
+        self.Number_Delimiter_Combobox.configure(
             justify="center",
-            style="Entry1b.TEntry",
-            textvariable=self.Number_Delimiter_VAR,
-            width=1)
-        _text_ = '.'
-        self.Number_Delimiter_Entry.delete("0", "end")
-        self.Number_Delimiter_Entry.insert("0", _text_)
-        self.Number_Delimiter_Entry.grid(column=1, row=0)
-        frame1.pack(padx=10, pady=10, side="top")
+            state="readonly",
+            style="TCombobox",
+            textvariable=self.NUMBER_DELIMITER_VAR,
+            values=', .',
+            width=2)
+        self.Number_Delimiter_Combobox.grid(column=1, row=0)
+        self.misc_Settings_Frame.pack(padx=10, pady=10, side="top")
         self.closingFrame = ttk.Frame(self, name="closingframe")
         self.closingFrame.configure(
             height=50, style="Normal.TFrame", width=200)

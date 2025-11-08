@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 import tkinter as tk
 import tkinter.ttk as ttk
+
+import tkinter.font as font
+import tkinter.font as tkFont
+
 import settingsMiscui as baseui
 from configuration import configuration
 import globalvars as gv
@@ -21,6 +25,9 @@ class settingsMiscToplevel(tk.Toplevel):
         self.popup.grab_set()
         self.popup.transient(self.master)
 
+        # bigfont = tkFont.Font(family="Helvetica", size=48)
+        # self.popup.option_add("*TCombobox*Listbox*Font", bigfont)
+
         self.settingsMiscWindow = settingsMisc(self.popup, self.master, **kw)
         self.settingsMiscWindow.pack(expand=tk.YES, fill=tk.BOTH)
 
@@ -31,14 +38,21 @@ class settingsMisc(baseui.settingsMiscUI):
 
         super().__init__(master, **kw)
 
-        self.saveNumber_Delimiter = gv.config.get_Number_Delimiter()
-        self.Number_Delimiter_VAR.set(self.saveNumber_Delimiter)
+#
+        #
+        #   Magic code to get a handle on the current font of the default item and propagate it to the list...
+        #
+
+        gv.formatCombobox( self.Number_Delimiter_Combobox, "Arial", "36", "bold")
+
+        self.saveNUMBER_DELIMITER = gv.config.get_NUMBER_DELIMITER()
+        self.NUMBER_DELIMITER_VAR.set(self.saveNUMBER_DELIMITER)
 
     def apply_CB(self):
         print("Applying settings")
 
-        if self.Number_Delimiter_VAR.get() != self.saveNumber_Delimiter:
-            gv.config.set_Number_Delimiter(self.Number_Delimiter_VAR.get())
+        if self.NUMBER_DELIMITER_VAR.get() != self.saveNUMBER_DELIMITER:
+            gv.config.set_NUMBER_DELIMITER(self.NUMBER_DELIMITER_VAR.get())
 
         self.master.destroy()
 

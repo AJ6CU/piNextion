@@ -1,4 +1,5 @@
 import os
+import tkinter.font as font
 
 #application required files################################################
 def resource_path(relative_path):
@@ -19,7 +20,8 @@ config = None
 
 RELOADICON = resource_path("img_Reload-24x24.png")
 BAUD = 9600
-NUMBER_DELIMITER = "."
+NUMBER_DELIMITER = ""               # Loaded with value from configuration file
+
 
 #   VFO Formatting Functions
 #####################################################################################
@@ -27,7 +29,9 @@ NUMBER_DELIMITER = "."
 #   These are methods are used to format the VFO with a delimiter (typically a period)
 #   And to offset the VFO if we are in CW mode and the user has selected to see the TX freq
 #####################################################################################
+
 def formatVFO(VFO):
+    global NUMBER_DELIMITER
     reversed_VFO = VFO[::-1]  # Reverse the string
     new_string_parts = []
     for i, char in enumerate(reversed_VFO):
@@ -38,6 +42,11 @@ def formatVFO(VFO):
 
     return "".join(new_string_parts[::-1])  # Join parts and reverse back
 
+def updateNUMBER_DELIMITER(value):
+    global NUMBER_DELIMITER
+    NUMBER_DELIMITER = value
+    print("update Number Delimiter, now = ", NUMBER_DELIMITER)
+
 
 def formatFrequency(vfoStrVar, frequency, freqOffset=0):
     temp = str(int(frequency) + freqOffset)
@@ -46,6 +55,17 @@ def formatFrequency(vfoStrVar, frequency, freqOffset=0):
 
 def unformatFrequency(vfoStrVar, includeOffset=False, freqOffset=0):
     if includeOffset:
-        return (vfoStrVar.get().replace(".", ""))
+        return (vfoStrVar.get().replace(NUMBER_DELIMITER, ""))
     else:
-        return (str(int(vfoStrVar.get().replace(".", "")) - freqOffset))
+        return (str(int(vfoStrVar.get().replace(NUMBER_DELIMITER, "")) - freqOffset))
+
+def formatCombobox( combobox, family="Arial", size="36", weight="bold"):
+    combobox.configure(font=font.Font(family=family, size=size, weight=weight))
+    #
+    #   The following is pure magic....  Found after hours of search. Basically the first command
+    #   discovers the handle to the ListBox that is hidden below the combobox
+    #   with this handle you can then set the drop down to the fonts used by the combobox.
+    #   grab (create a new one or get existing) popdown
+    popdown = combobox.tk.eval('ttk::combobox::PopdownWindow %s' % combobox)
+    #   configure popdown font
+    combobox.tk.call('%s.f.l' % popdown, 'configure', '-font', combobox['font'])

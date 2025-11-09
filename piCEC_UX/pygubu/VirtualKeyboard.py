@@ -57,7 +57,7 @@ class VirtualKeyboard(tk.Toplevel):
         #
         self.messageTooLong = "Too Many Chars, Max = " + str(self.maxChars)
         self.messageNoBackslash = "Backslash (\\) not allowed in channel name"
-
+        self.wait_visibility()      # required on Linux
         self.grab_set()                 # This line makes the window modal
         self.transient(self.master)     # Puts the keyboard on top of the underlying window that called up the keyboard
 

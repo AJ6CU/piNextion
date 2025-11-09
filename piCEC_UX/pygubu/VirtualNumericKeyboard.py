@@ -29,7 +29,8 @@ class VirtualNumericKeyboard(tk.Toplevel):
 
         self.currentPos = len(self.fieldStrVar.get())
         self.cursor = "\u2581"
-
+        
+        self.wait_visibility()  # required on Linux
         self.grab_set()  # This line makes the cw settings window modal
         self.transient(self.master)  # Makes the cw settings appear above the mainwindow
         toplevel_offsetx, toplevel_offsety = self.master.winfo_x() , self.master.winfo_y()

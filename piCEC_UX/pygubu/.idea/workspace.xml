@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b30f41e5-a6a9-4697-a427-3f8e706d9bd4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/pygubu.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pygubu.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mystyles.py" beforeDir="false" afterPath="$PROJECT_DIR$/mystyles.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/piCECNextion.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/piCEC_UX.py" beforeDir="false" afterPath="$PROJECT_DIR$/piCEC_UX.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/piCEC_UX.ui" beforeDir="false" afterPath="$PROJECT_DIR$/piCEC_UX.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/piCEC_UXui.py" beforeDir="false" afterPath="$PROJECT_DIR$/piCEC_UXui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.piCEC.ini" beforeDir="false" afterPath="$PROJECT_DIR$/.piCEC.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VirtualKeyboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/VirtualKeyboard.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,8 +98,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-PY-252.27397.106" />
-        <option value="bundled-python-sdk-4e2b1448bda8-9a97661f3031-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.27397.106" />
+        <option value="bundled-python-sdk-8753aad8314d-d902c0275401-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-252.25557.178" />
       </set>
     </attachedChunks>
   </component>

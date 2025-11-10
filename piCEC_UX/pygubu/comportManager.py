@@ -5,7 +5,7 @@ import comportManagerui as baseui
 
 import serial.tools.list_ports              # Used to get a list of com ports
 
-import tkinter.messagebox
+from tkinter import messagebox
 
 from time import sleep
 import globalvars as gv
@@ -54,10 +54,16 @@ class comportManager(baseui.comportManagerUI):
 
     def retry(self):
         if self.selectionMade:
-            if self.openSelectedComPort():
-                print("found selection")
-                self.actionCallback(self.getSelectedComPort(), self.getComPortDesc())
-                return
+            if self.getSelectedComPort() in ["/dev/cu.Bluetooth-Incoming-Port",
+                                            "/dev/cu.debug-console"
+                                            ]:
+                    messagebox.showerror(title="ERROR Incorrect CompPort Selected.", parent=self,
+                                         detail=self.getSelectedComPort() + "\n\Is not a uBITX!")
+                    self.selectionMade = False
+            else:
+                if self.openSelectedComPort():
+                    self.actionCallback(self.getSelectedComPort(), self.getComPortDesc())
+                    return
         self.master.after(500,self.retry)
 
 
@@ -87,7 +93,7 @@ class comportManager(baseui.comportManagerUI):
         comPort = self.getSelectedComPort()                    # get the selected com port
 
         try:
-            RS232 = serial.Serial(comPort, gv.BAUD, timeout=5, stopbits=1, parity=serial.PARITY_NONE, xonxoff=0, rtscts=0)
+            RS232 = serial.Serial(comPort, gv.BAUD, timeout=5, stopbits=1, parity=serial.PARITY_NONE, xonxoff=0, rtscts=0, write_timeout=1)
         except: # FileNotFoundError:
             return False
         else:

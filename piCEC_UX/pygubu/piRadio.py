@@ -3,17 +3,18 @@ from time import sleep
 from timeit import default_timer as timer
 from configuration import configuration
 import globalvars as gv
+from tkinter import messagebox
 
 from comportManager import *
 
 
 class piRadio:
-    def __init__(self, serialPort, window, configObj, debugFlag=True):
+    def __init__(self, serialPortName, serialPort, window, debugFlag=True):
         self.debugCommandDecoding = debugFlag
-        self.tty = serialPort
+        self.tty = serialPortName
+        serial
         self.mainWindow = window
         self.radioPort = serialPort
-        self.configObj = configObj
 
         self.MCU_Update_Period = gv.config.get_MCU_Update_Period()
         gv.config.register_observer("MCU Update Period", self.updateMCU_Update_Period)
@@ -21,8 +22,8 @@ class piRadio:
         self.MCU_Command_Headroom = gv.config.get_MCU_Command_Headroom()
         gv.config.register_observer("MCU Command Headroom", self.updateMCU_Command_Headroom)
 
-        print("update period is ", self.MCU_Update_Period)
-        print("command headroom = ", self.MCU_Command_Headroom)
+        # print("update period is ", self.MCU_Update_Period)
+        # print("command headroom = ", self.MCU_Command_Headroom)
 
 
 #   note on external device to MCU protocol
@@ -43,52 +44,16 @@ class piRadio:
 
 
 
-    def openRadio(self):
-
-        if self.debugCommandDecoding:
-            print("***opening port to radio***")
-        try:
-            self.radioPort = serial.Serial(self.tty, 9600, timeout=0)
-        except:
-            return   #serial.SerialException as e:
-        #     print("bad serial port")
-        #     comport = comportManager(self.mainWindow)
-        #     comport.grab_set()  # This line makes the cw settings window modal
-        #     self.tty = comport.getSelectedComPort()
-        #     print ("tty =", self.tty)
-        #     self.radioPort = serial.Serial(self.tty, 9600, timeout=0)
-        #     self.configObj.setComPort(self.tty)
-        #     self.configObj.saveConfig()
-        return
-
-#     f(self.openSelectedComPort()):  # Was able to open the com port or it was already openned
-#     port = self.getComPortDesc()
-#     try:
-#         port.write(theCommand)
-#     except:
-#         if (self.resetComPort()):  # Successful was able to reset serial port, try again
-#             port = self.getComPortDesc()
-#
-#             try:  # Try one more time...
-#                 port.write(theCommand)
-#             except:
-#                 tkinter.messagebox.showerror(title="ERROR",
-#                                              message="Communication failed to uBITX. Unplug the USB cable, power cycle your radio, reconnect and try again. \nEXITING")
-#                 sys.exit(-1)
-#         else:
-#             tkinter.messagebox.showerror(title="ERROR",
-#                                          message="Communication failed to uBITX. Unplug the USB cable, power cycle your radio, reconnect and try again. \nEXITING")
-#             sys.exit(-1)
-#     # port.flush()
-#     return port
-#
-# else:
-# tkinter.messagebox.showerror(title="ERROR",
-#                              message="Unexpected error trying to open serial communications to uBITX. Unplug the USB cable, power cycle your radio, reconnect and try again. \nEXITING")
-# sys.exit(-1)
-
-
-
+    # def openRadio(self):
+    #
+    #     if self.debugCommandDecoding:
+    #         print("***opening port to radio***")
+    #     try:
+    #         self.radioPort = serial.Serial(self.tty, 9600, timeout=0)
+    #     except:
+    #         return   # serial.SerialException as e:
+    #
+    #     return
 
 #
 #   Decoding command buffers sent from MCU to Nextion screens
@@ -227,18 +192,18 @@ class piRadio:
             sleep(self.MCU_Command_Headroom - timeDiff)
         self.time_of_last_sent = timer()
 
-        # tx_mode_switch_USB2pre = b'\x59\x58\x68\x03'
-        # tx_mode_switch_USB2com = b'\x02\x00\x00\x00'
-        # tx_mode_switch_USB2post = b'\xff\xff\x73'
-        # tx_mode_switch_USB2 = tx_mode_switch_USB2pre + tx_mode_switch_USB2com + tx_mode_switch_USB2post
         self.tx_to_mcu_preamble = b'\x59\x58\x68'  # all commands to MCU must start with these three bytes
         self.tx_to_mcu_postscript = b'\xff\xff\x73'  # all commands to MCU must end with these three numbers
-        # if self.debugCommandDecoding:
-        #     print("commandList =", commandList)
 
-        temp = self.tx_to_mcu_preamble + commandList + self.tx_to_mcu_postscript
-        # print("writing to radio:", ' '.join(f'{byte:02x}' for byte in temp))
-        self.radioPort.write(self.tx_to_mcu_preamble + commandList + self.tx_to_mcu_postscript)
+        try:
+            self.radioPort.write(self.tx_to_mcu_preamble + commandList + self.tx_to_mcu_postscript)
+        except:
+            messagebox.showerror(title="ERROR Communicating with uBITX",
+                                                     message="Communication failed with uBITX.", parent=self,
+                                 DETAILS="Did you select the right com port?\n"+"You selected: "+ self.tty)
+            sys.exit(-1)
+
+
 
     def updateMCU_Update_Period(self, value):
         self.MCU_Update_Period = value

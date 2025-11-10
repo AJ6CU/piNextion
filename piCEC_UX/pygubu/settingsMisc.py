@@ -22,6 +22,7 @@ class settingsMiscToplevel(tk.Toplevel):
 
         self.popup.title("Misc Settings")
         self.popup.geometry("600x430")
+        self.popup.wait_visibility()  # required on Linux
         self.popup.grab_set()
         self.popup.transient(self.master)
 

@@ -18,6 +18,7 @@ class settingsBackupToplevel(tk.Toplevel):
 
         self.popup.title("Radio Backup/Restore")
         self.popup.geometry("600x430")
+        self.popup.wait_visibility()  # required on Linux
         self.popup.grab_set()
         self.popup.transient(self.master)
 

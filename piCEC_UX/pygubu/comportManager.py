@@ -8,7 +8,9 @@ import serial.tools.list_ports              # Used to get a list of com ports
 import tkinter.messagebox
 
 from time import sleep
-from globalvars import *
+import globalvars as gv
+from configuration import configuration
+
 
 
 
@@ -18,20 +20,46 @@ from globalvars import *
 
 class comportManager(baseui.comportManagerUI):
 
-    waitTime = 5
-
-
-    def __init__(self, master=None, actionButtonStateChange=None, **kw):
+    def __init__(self, master=None, actionCallback=None, **kw):
         super().__init__(master, **kw)
         self.master = master
-        self.img_img_Reload24x24 = tk.PhotoImage(file=RELOADICON)
+        self.actionCallback = actionCallback
+        self.img_img_Reload24x24 = tk.PhotoImage(file=gv.RELOADICON)
         self.comPortListRefresh.configure(image=self.img_img_Reload24x24)
         self.open_com_port = None
-
-        self.actionButton_CB = actionButtonStateChange         # Callback function invoked when state change
+        self.selectionMade = False
 
         self.updateComPorts()               #preload the available com ports
         self.comPortsOptionMenu.configure(width=15)
+
+    #
+    #   this is how we get things started. Main program asks for a comPort, make the callback if found, else report failure
+    #
+    def getComPort(self):
+
+        #
+        #   Lets try the easy way first. Hopefully the comport in the configuration file will just work!
+        #
+        #
+        if self.validateComPort(gv.config.getComPort()):                #test if config port exists in list of ports
+            if (self.forceUseOfThisPort(gv.config.getComPort())):       #force it and try to open, if good, then we can start main
+                self.actionCallback(self.getSelectedComPort(),self.getComPortDesc())
+                return True
+
+        return False
+    #
+    #   If we don't get the comport the easy way, this routing is called every 500ms. If a selection has been made, it is checked
+    #   and if valid, we kick off the main window. Else, just try again in 500ms
+    #
+
+    def retry(self):
+        if self.selectionMade:
+            if self.openSelectedComPort():
+                print("found selection")
+                self.actionCallback(self.getSelectedComPort(), self.getComPortDesc())
+                return
+        self.master.after(500,self.retry)
+
 
     def validateComPort(self, port):
         #
@@ -59,19 +87,25 @@ class comportManager(baseui.comportManagerUI):
         comPort = self.getSelectedComPort()                    # get the selected com port
 
         try:
-            RS232 = serial.Serial(comPort, BAUD, timeout=5, stopbits=1, parity=serial.PARITY_NONE, xonxoff=0, rtscts=0)
+            RS232 = serial.Serial(comPort, gv.BAUD, timeout=5, stopbits=1, parity=serial.PARITY_NONE, xonxoff=0, rtscts=0)
         except: # FileNotFoundError:
             return False
         else:
+            #
+            #   Needs to confirm that there is data on the port
+            #
+
             self.open_com_port = RS232
+
             self.comPortsOptionMenu.configure(state="disabled")         # disable selection for life of run
             self.comPortListRefresh.configure(state="disabled")
-            # sleep (comportManager.waitTime)                # this does not seem to be required for at least the pico
+            self.comportMessage_Frame.pack_forget()  # Close the top half of the select comport frame
+
+            if comPort != gv.config.getComPort:                     # This handles the case where the config file existed with the wrong comport
+                gv.config.setComPort(comPort)
             return True
 
 
-    def getComPortDesc (self):
-        return self.open_com_port
 
 
     def updateComPorts(self, *args):
@@ -85,12 +119,12 @@ class comportManager(baseui.comportManagerUI):
 
 
     def radioSerialPortSelected_CB(self, *args):                # callback specified by UX, connected to main
-        self.actionButton_CB()
-
-
-
-
+        self.selectionMade = True
 
     def getSelectedComPort(self):
         return self.availableComPorts_VAR.get()
+
+    def getComPortDesc (self):
+        return self.open_com_port
+
 

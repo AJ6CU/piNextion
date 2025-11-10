@@ -1625,7 +1625,7 @@ class piCECNextion(baseui.piCECNextionUI):
             return  # ignore the VFO A command during scanning as it can be out of order
 
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        print("VFO A Frequency read in", value)
+        # print("VFO A Frequency read in", value)
 
         # print("***va get called:***", "buffer =", buffer)
         # print("va assign vfo a frequency")
@@ -1654,7 +1654,6 @@ class piCECNextion(baseui.piCECNextionUI):
             return  # ignore the VFO A command during scanning  as it can be out of order
 
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        print("VFO A Mode read in", self.modeNum_To_TextDict[value])
 
         if (self.vfo_VAR.get()== self.VFO_A):       #update displayed frequency
             self.primary_Mode_VAR.set(self.modeNum_To_TextDict[value])

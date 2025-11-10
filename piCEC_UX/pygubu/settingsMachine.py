@@ -17,6 +17,7 @@ class settingsMachineToplevel(tk.Toplevel):
 
         self.popup.title("Machine Specific Settings")
         self.popup.geometry("600x430")
+        self.popup.wait_visibility()  # required on Linux
         self.popup.grab_set()
         self.popup.transient(self.master)
 

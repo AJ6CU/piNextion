@@ -176,7 +176,7 @@ class piRadio:
 
             # time.sleep(0.1)  # Small delay to prevent busy-waiting
 
-    def updateData(self):
+    def updateData(self, repeatFlag=True):
         ffCount = 0
         buffer = []
         while self.radioPort.in_waiting > 0:
@@ -213,7 +213,8 @@ class piRadio:
                             #
                             ffCount = 0
                             buffer = buffer[:0]
-        self.mainWindow.after(self.MCU_Update_Period,self.updateData)
+        if repeatFlag:
+            self.mainWindow.after(self.MCU_Update_Period,self.updateData)
 #
 #   Send command to MCU
 #

@@ -32,7 +32,7 @@
     <layout manager="pack">
       <property name="anchor">nw</property>
       <property name="expand">True</property>
-      <property name="fill">x</property>
+      <property name="fill">both</property>
       <property name="side">top</property>
     </layout>
     <child>

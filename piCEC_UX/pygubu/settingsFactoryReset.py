@@ -21,6 +21,7 @@ class settingsFatoryResetToplevel(tk.Toplevel):
 
         self.popup.title("Reset to Factory Settings")
         self.popup.geometry("600x430")
+        self.popup.wait_visibility()  # required on Linux
         self.popup.grab_set()
         self.popup.transient(self.master)
 

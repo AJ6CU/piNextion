@@ -38,27 +38,308 @@
           <property name="side">top</property>
         </layout>
         <child>
-          <object class="ttk.Frame" id="backup_settings_Frame" named="True">
+          <object class="ttk.Frame" id="backupSettings_Frame" named="True">
             <property name="height">200</property>
             <property name="style">Normal.TFrame</property>
             <property name="width">200</property>
-            <layout manager="pack">
-              <property name="padx">10</property>
-              <property name="pady">10</property>
-              <property name="side">top</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="pady">10 0</property>
+              <property name="row">1</property>
             </layout>
             <child>
-              <object class="ttk.Label" id="Number_Delimiter_Label" named="True">
+              <object class="ttk.Label" id="label14" named="True">
+                <property name="anchor">w</property>
                 <property name="justify">right</property>
-                <property name="style">Heading2.TLabel</property>
-                <property name="text" translatable="yes">Backup</property>
+                <property name="style">Heading2b.TLabel</property>
+                <property name="text" translatable="yes">Setting</property>
                 <layout manager="grid">
                   <property name="column">0</property>
-                  <property name="padx">10</property>
-                  <property name="pady">10</property>
+                  <property name="padx">5</property>
                   <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label15" named="True">
+                <property name="anchor">e</property>
+                <property name="justify">center</property>
+                <property name="style">Heading2b.TLabel</property>
+                <property name="text" translatable="yes">Factory
+Value</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                  <property name="sticky">ew</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label16" named="True">
+                <property name="anchor">e</property>
+                <property name="justify">center</property>
+                <property name="style">Heading2b.TLabel</property>
+                <property name="text" translatable="yes">Current
+Value</property>
+                <layout manager="grid">
+                  <property name="column">2</property>
+                  <property name="row">0</property>
+                  <property name="sticky">ew</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label17" named="True">
+                <property name="anchor">e</property>
+                <property name="justify">center</property>
+                <property name="style">Heading2b.TLabel</property>
+                <property name="text" translatable="yes">Config
+File</property>
+                <layout manager="grid">
+                  <property name="column">3</property>
+                  <property name="row">0</property>
+                  <property name="sticky">ew</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="frame2">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="columnspan">4</property>
+                  <property name="row">1</property>
+                  <property name="sticky">ew</property>
+                </layout>
+                <child>
+                  <object class="ttk.Separator" id="separator1">
+                    <property name="orient">horizontal</property>
+                    <layout manager="pack">
+                      <property name="expand">true</property>
+                      <property name="fill">x</property>
+                      <property name="side">top</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="Master_Cal_Heading_Label" named="True">
+                <property name="anchor">w</property>
+                <property name="style">Heading2b.TLabel</property>
+                <property name="text" translatable="yes">Master Cal:</property>
+                <property name="width">10</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="EEPROM_Factory_Master_Cal_Label" named="True">
+                <property name="anchor">e</property>
+                <property name="justify">right</property>
+                <property name="style">Heading3b.TLabel</property>
+                <property name="text" translatable="yes">label3</property>
+                <property name="textvariable">string:EEPROM_Factory_Master_Cal_VAR</property>
+                <property name="width">10</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="padx">0 5</property>
+                  <property name="pady">5</property>
+                  <property name="row">2</property>
                   <property name="sticky">e</property>
                 </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="EEPROM_Current_Master_Cal_Label" named="True">
+                <property name="anchor">e</property>
+                <property name="justify">right</property>
+                <property name="style">Heading3b.TLabel</property>
+                <property name="text" translatable="yes">label4</property>
+                <property name="textvariable">string:EEPROM_Current_Master_Cal_VAR</property>
+                <property name="width">10</property>
+                <layout manager="grid">
+                  <property name="column">2</property>
+                  <property name="padx">0 5</property>
+                  <property name="pady">5</property>
+                  <property name="row">2</property>
+                  <property name="sticky">e</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="ConfigFile_Master_Cal_Label" named="True">
+                <property name="anchor">e</property>
+                <property name="justify">right</property>
+                <property name="style">Heading3b.TLabel</property>
+                <property name="text" translatable="yes">label4</property>
+                <property name="textvariable">string:ConfigFile_Master_Cal_VAR</property>
+                <property name="width">10</property>
+                <layout manager="grid">
+                  <property name="column">3</property>
+                  <property name="padx">0 5</property>
+                  <property name="pady">5</property>
+                  <property name="row">2</property>
+                  <property name="sticky">e</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="SSB_BFO_Heading_Label" named="True">
+                <property name="anchor">w</property>
+                <property name="style">Heading2b.TLabel</property>
+                <property name="text" translatable="yes">SSB BFO:</property>
+                <property name="width">10</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">0 5</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="EEPROM_Factory_SSB_BFO_Label" named="True">
+                <property name="anchor">e</property>
+                <property name="justify">right</property>
+                <property name="style">Heading3b.TLabel</property>
+                <property name="text" translatable="yes">label3</property>
+                <property name="textvariable">string:EEPROM_Factory_SSB_BFO_VAR</property>
+                <property name="width">10</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="padx">0 5</property>
+                  <property name="pady">0 5</property>
+                  <property name="row">3</property>
+                  <property name="sticky">e</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="EEPROM_Current_SSB_BFO_Label" named="True">
+                <property name="anchor">e</property>
+                <property name="justify">right</property>
+                <property name="style">Heading3b.TLabel</property>
+                <property name="text" translatable="yes">label4</property>
+                <property name="textvariable">string:EEPROM_Current_SSB_BFO_VAR</property>
+                <property name="width">10</property>
+                <layout manager="grid">
+                  <property name="column">2</property>
+                  <property name="padx">0 5</property>
+                  <property name="pady">0 5</property>
+                  <property name="row">3</property>
+                  <property name="sticky">e</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="ConfigFile_SSB_BFO_Label" named="True">
+                <property name="anchor">e</property>
+                <property name="justify">right</property>
+                <property name="style">Heading3b.TLabel</property>
+                <property name="text" translatable="yes">label4</property>
+                <property name="textvariable">string:ConfigFile_SSB_BFO_VAR</property>
+                <property name="width">10</property>
+                <layout manager="grid">
+                  <property name="column">3</property>
+                  <property name="padx">0 5</property>
+                  <property name="pady">0 5</property>
+                  <property name="row">3</property>
+                  <property name="sticky">e</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="CW_BFO_Heading_Label" named="True">
+                <property name="anchor">w</property>
+                <property name="style">Heading2b.TLabel</property>
+                <property name="text" translatable="yes">CW BFO:</property>
+                <property name="width">10</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">0 5</property>
+                  <property name="row">4</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="EEPROM_Factory_CW_BFO_Label" named="True">
+                <property name="anchor">e</property>
+                <property name="justify">right</property>
+                <property name="style">Heading3b.TLabel</property>
+                <property name="text" translatable="yes">label3</property>
+                <property name="textvariable">string:EEPROM_Factory_CW_BFO_VAR</property>
+                <property name="width">10</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="padx">0 5</property>
+                  <property name="pady">0 5</property>
+                  <property name="row">4</property>
+                  <property name="sticky">e</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="EEPROM_Current_CW_BFO_Label" named="True">
+                <property name="anchor">e</property>
+                <property name="justify">right</property>
+                <property name="style">Heading3b.TLabel</property>
+                <property name="text" translatable="yes">label4</property>
+                <property name="textvariable">string:EEPROM_Current_CW_BFO_VAR</property>
+                <property name="width">10</property>
+                <layout manager="grid">
+                  <property name="column">2</property>
+                  <property name="padx">0 5</property>
+                  <property name="pady">0 5</property>
+                  <property name="row">4</property>
+                  <property name="sticky">e</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="ConfigFIle_CW_BFO_Label" named="True">
+                <property name="anchor">e</property>
+                <property name="justify">right</property>
+                <property name="style">Heading3b.TLabel</property>
+                <property name="text" translatable="yes">label4</property>
+                <property name="textvariable">string:ConfigFIle_CW_BFO_VAR</property>
+                <property name="width">10</property>
+                <layout manager="grid">
+                  <property name="column">3</property>
+                  <property name="padx">0 5</property>
+                  <property name="pady">0 5</property>
+                  <property name="row">4</property>
+                  <property name="sticky">e</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="frame3">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="columnspan">4</property>
+                  <property name="row">5</property>
+                  <property name="sticky">ew</property>
+                </layout>
+                <child>
+                  <object class="ttk.Separator" id="separator2">
+                    <property name="orient">horizontal</property>
+                    <layout manager="pack">
+                      <property name="expand">true</property>
+                      <property name="fill">x</property>
+                      <property name="side">top</property>
+                    </layout>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -68,11 +349,10 @@
             <property name="height">50</property>
             <property name="style">Normal.TFrame</property>
             <property name="width">200</property>
-            <layout manager="pack">
-              <property name="anchor">center</property>
-              <property name="expand">false</property>
-              <property name="pady">20</property>
-              <property name="side">top</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="pady">10</property>
+              <property name="row">3</property>
             </layout>
             <child>
               <object class="ttk.Button" id="apply_Button" named="True">

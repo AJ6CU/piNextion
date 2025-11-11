@@ -30,6 +30,10 @@ class settingsBackup(baseui.settingsBackupUI):
         super().__init__(master, **kw)
         self.mainWindow = mainWindow
 
+        self.ConfigFile_Master_Cal_VAR.set(gv.config.get_Master_Cal())
+        self.ConfigFile_SSB_BFO_VAR.set(gv.config.get_SSB_BFO())
+        self.ConfigFIle_CW_BFO_VAR.set(gv.config.get_CW_BFO())
+
     def apply_CB(self):
         print("Applying settings")
 

@@ -89,11 +89,6 @@ class configuration:
         self.config_data ["Serial Port"] = port
         self.saveConfig()
 
-    # def updateComPort(self, port):
-    #     if (self.config_data["Serial Port"] != port):
-    #         self.setComPort(port)
-    #         self.saveConfig()
-    #
 
     def get_ScanSet_Settings(self, channel):
         return self.config_data["Scan Set Settings"][channel][1]
@@ -136,11 +131,24 @@ class configuration:
         self.saveConfig()
 
 
-    def get_Backup_Settings(self, item):
-        return self.config_data["Backup"][item]
+    def get_Master_Cal(self):
+        return self.config_data["Master Cal"]
+    def set_Master_Cal(self,value):
+        self.config_data ["Master Cal"] = value
+        self.saveConfig()
 
-    def set_Backup_Settings(self, item, value):
-        self.config_data["Backup"][item] = value
+    def get_SSB_BFO(self):
+        return self.config_data["SSB BFO"]
+
+    def set_SSB_BFO(self, value):
+        self.config_data["SSB BFO"] = value
+        self.saveConfig()
+
+    def get_CW_BFO(self):
+        return self.config_data["CW BFO"]
+
+    def set_CW_BFO(self, value):
+        self.config_data["CW BFO"] = value
         self.saveConfig()
 
     def saveConfig(self):

@@ -26,9 +26,6 @@ class settingsMiscToplevel(tk.Toplevel):
         self.popup.grab_set()
         self.popup.transient(self.master)
 
-        # bigfont = tkFont.Font(family="Helvetica", size=48)
-        # self.popup.option_add("*TCombobox*Listbox*Font", bigfont)
-
         self.settingsMiscWindow = settingsMisc(self.popup, self.master, **kw)
         self.settingsMiscWindow.pack(expand=tk.YES, fill=tk.BOTH)
 

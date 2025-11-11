@@ -58,7 +58,7 @@ class comportManager(baseui.comportManagerUI):
                                             "/dev/cu.debug-console"
                                             ]:
                     messagebox.showerror(title="ERROR Incorrect CompPort Selected.", parent=self,
-                                         detail=self.getSelectedComPort() + "\n\Is not a uBITX!")
+                                         detail=self.getSelectedComPort() + "\nIs not a uBITX!")
                     self.selectionMade = False
             else:
                 if self.openSelectedComPort():

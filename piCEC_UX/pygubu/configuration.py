@@ -87,6 +87,7 @@ class configuration:
         return self.config_data["Serial Port"]
     def setComPort(self,port):
         self.config_data ["Serial Port"] = port
+        self.saveConfig()
 
     # def updateComPort(self, port):
     #     if (self.config_data["Serial Port"] != port):

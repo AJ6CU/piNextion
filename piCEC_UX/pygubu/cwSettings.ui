@@ -208,10 +208,13 @@
                   </object>
                 </child>
                 <child>
-                  <object class="tk.OptionMenu" id="CW_DISPLAY_FREQ_WIDGET" named="True">
-                    <property name="value">TX</property>
-                    <property name="values">TX,RX</property>
-                    <property name="variable">string:CW_DISPLAY_FREQ</property>
+                  <object class="ttk.Combobox" id="CW_Display_Freq_Combobox" named="True">
+                    <property name="justify">center</property>
+                    <property name="state">readonly</property>
+                    <property name="style">TCombobox</property>
+                    <property name="textvariable">string:CW_Display_TXFreq_VAR</property>
+                    <property name="values">TX RX</property>
+                    <property name="width">4</property>
                     <layout manager="grid">
                       <property name="column">1</property>
                       <property name="pady">10</property>
@@ -225,16 +228,16 @@
                     <property name="borderwidth">2</property>
                     <property name="font">TkMenuFont</property>
                     <property name="foreground">black</property>
-                    <property name="height">4</property>
+                    <property name="height">6</property>
                     <property name="padx">5</property>
                     <property name="pady">5</property>
                     <property name="relief">groove</property>
                     <property name="state">disabled</property>
                     <property name="takefocus">false</property>
-                    <property name="text" translatable="yes">When in CW mode, your VFO can display either your TX or RX frequency. TX seems to be generally the preferred choice. For more details, see:
-http://www.hamskey.com/2018/07/cw-frequency-in-ubitx.html
-</property>
-                    <property name="width">57</property>
+                    <property name="text" translatable="yes">Controls whether the VFO will display the TX or RX frequency while in CW.
+
+This setting will be reset to that stored in the EEPROM on reboot.  Use the Settings Editor to make a permanent change.</property>
+                    <property name="width">30</property>
                     <property name="wrap">word</property>
                     <layout manager="grid">
                       <property name="column">2</property>

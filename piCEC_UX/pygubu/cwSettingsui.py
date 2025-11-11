@@ -170,26 +170,32 @@ class cwSettingsUI(ttk.Labelframe):
             style="Heading2b.TLabel",
             text='VFO Freq displays')
         self.label209.grid(column=0, pady="5 10", row=15, sticky="e")
-        self.CW_DISPLAY_FREQ = tk.StringVar(value='TX')
-        __values = ['TX', 'RX']
-        self.CW_DISPLAY_FREQ_WIDGET = tk.OptionMenu(
-            self.General_CW_Settings_Frame, self.CW_DISPLAY_FREQ, *__values, command=None)
-        self.CW_DISPLAY_FREQ_WIDGET.grid(column=1, pady=10, row=15)
+        self.CW_Display_Freq_Combobox = ttk.Combobox(
+            self.General_CW_Settings_Frame, name="cw_display_freq_combobox")
+        self.CW_Display_TXFreq_VAR = tk.StringVar()
+        self.CW_Display_Freq_Combobox.configure(
+            justify="center",
+            state="readonly",
+            style="TCombobox",
+            textvariable=self.CW_Display_TXFreq_VAR,
+            values='TX RX',
+            width=4)
+        self.CW_Display_Freq_Combobox.grid(column=1, pady=10, row=15)
         self.text4 = tk.Text(self.General_CW_Settings_Frame, name="text4")
         self.text4.configure(
             background="#eeeeee",
             borderwidth=2,
             font="TkMenuFont",
             foreground="black",
-            height=4,
+            height=6,
             padx=5,
             pady=5,
             relief="groove",
             state="disabled",
             takefocus=False,
-            width=57,
+            width=30,
             wrap="word")
-        _text_ = 'When in CW mode, your VFO can display either your TX or RX frequency. TX seems to be generally the preferred choice. For more details, see:\nhttp://www.hamskey.com/2018/07/cw-frequency-in-ubitx.html\n'
+        _text_ = 'Controls whether the VFO will display the TX or RX frequency while in CW.\n\nThis setting will be reset to that stored in the EEPROM on reboot.  Use the Settings Editor to make a permanent change.'
         self.text4.configure(state="normal")
         self.text4.insert("0.0", _text_)
         self.text4.configure(state="disabled")

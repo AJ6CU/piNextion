@@ -194,8 +194,15 @@ class piCECNextion(baseui.piCECNextionUI):
             "channel_freq_Mode": [0x76, 0x2, 0x4, 0x48, 0x4, 0x14], # 0x48 indicates a integer number
             "channel_Label": [0xc7, 0x2, 0x5, 0x57, 0x6, 0x9],  # should be 0xa for total, but bug with v2 cec
                                                                 # 0x57 indicates it is a character
-            "channel_ShowLabel": [0xc6, 0x2, 0x1, 0x57, 0x6,  0x9] # should be 0xa for total, but bug with v2 cec
+            "channel_ShowLabel": [0xc6, 0x2, 0x1, 0x57, 0x6,  0x9], # should be 0xa for total, but bug with v2 cec
                                                                 # 0x57 indicates it is a character
+            "master_cal": [0x0, 0x0, 0x4, 0x48 ],
+            "ssb_bfo": [ 0x08, 0x0, 0x04, 0x48],
+            "cw_bfo":[ 0xfc, 0x0, 0x04, 0x48],
+
+            "factory_master_cal": [0x41, 0x0, 0x4, 0x48],
+            "factory_ssb_bfo": [0x49, 0x0, 0x04, 0x48]
+
         }
 
         self.memReadingState = "Freq"
@@ -425,6 +432,78 @@ class piCECNextion(baseui.piCECNextionUI):
         base = self.EEPROM_Mem_Address["channel_ShowLabel"][self.lsb]
 
 
+    def Radio_Req_Master_Cal(self, setter_CB):
+
+        self.Master_Cal_Setter = setter_CB
+        base = self.EEPROM_Mem_Address["master_cal"][self.lsb]
+        command = [self.toRadioCommandDict["TS_CMD_READMEM"],
+                   base,
+                   self.EEPROM_Mem_Address["master_cal"][self.msb],
+                   self.EEPROM_Mem_Address["master_cal"][self.memLength],
+                   self.EEPROM_Mem_Address["master_cal"][self.charFlag]
+                   ]
+
+
+        self.memReadingState = "MasterCal"         # tell the command that receives the data what is it for
+
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Req_SSB_BFO(self, setter_CB):
+
+        self.SSB_BFO_Setter = setter_CB
+        base = self.EEPROM_Mem_Address["ssb_bfo"][self.lsb]
+        command = [self.toRadioCommandDict["TS_CMD_READMEM"],
+                   base,
+                   self.EEPROM_Mem_Address["ssb_bfo"][self.msb],
+                   self.EEPROM_Mem_Address["ssb_bfo"][self.memLength],
+                   self.EEPROM_Mem_Address["ssb_bfo"][self.charFlag]
+                   ]
+
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+
+    def Radio_Req_CW_BFO(self,setter_CB):
+
+        self.CW_BFO_Setter = setter_CB
+        base = self.EEPROM_Mem_Address["cw_bfo"][self.lsb]
+        command = [self.toRadioCommandDict["TS_CMD_READMEM"],
+                   base,
+                   self.EEPROM_Mem_Address["cw_bfo"][self.msb],
+                   self.EEPROM_Mem_Address["cw_bfo"][self.memLength],
+                   self.EEPROM_Mem_Address["cw_bfo"][self.charFlag]
+                   ]
+
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+
+    def Radio_Req_Factory_Master_Cal(self, setter_CB):
+
+        self.Factory_Master_Cal_Setter = setter_CB
+        base = self.EEPROM_Mem_Address["factory_master_cal"][self.lsb]
+        command = [self.toRadioCommandDict["TS_CMD_READMEM"],
+                   base,
+                   self.EEPROM_Mem_Address["factory_master_cal"][self.msb],
+                   self.EEPROM_Mem_Address["factory_master_cal"][self.memLength],
+                   self.EEPROM_Mem_Address["factory_master_cal"][self.charFlag]
+                   ]
+
+
+        self.memReadingState = "MasterCal"         # tell the command that receives the data what is it for
+
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Req_Factory_SSB_BFO(self, setter_CB):
+
+        self.Factory_SSB_BFO_Setter = setter_CB
+        base = self.EEPROM_Mem_Address["factory_ssb_bfo"][self.lsb]
+        command = [self.toRadioCommandDict["TS_CMD_READMEM"],
+                   base,
+                   self.EEPROM_Mem_Address["factory_ssb_bfo"][self.msb],
+                   self.EEPROM_Mem_Address["factory_ssb_bfo"][self.memLength],
+                   self.EEPROM_Mem_Address["factory_ssb_bfo"][self.charFlag]
+                   ]
+
+        self.theRadio.sendCommandToMCU(bytes(command))
 
     def vfo_CB(self):
         self.Radio_Toggle_VFO()
@@ -1366,6 +1445,36 @@ class piCECNextion(baseui.piCECNextionUI):
                     self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]):
                 self.EEPROM_Current_Slot_ShowLabel = 0
                 self.memReadingState = "Freq"
+
+        elif (self.memReadingState == "MasterCal"):
+            print("Master Cal =", value, int(value, 16), str(int(value, 16)), sep='*')
+            print("buffer=", buffer)
+            self.Master_Cal_Setter(str(int(value, 16)))
+            self.memReadingState = "SSB_BFO"
+
+        elif (self.memReadingState == "SSB_BFO"):
+            print("SSB_BFO =", value, int(value, 16), str(int(value, 16)), sep='*')
+            print("buffer=", buffer)
+            self.SSB_BFO_Setter(str(int(value, 16)))
+            self.memReadingState = "CW_BFO"
+
+        elif (self.memReadingState == "CW_BFO"):
+            print("CW_BFO =", value, int(value, 16), str(int(value, 16)), sep='*')
+            print("buffer=", buffer)
+            self.CW_BFO_Setter(str(int(value, 16)))
+            self.memReadingState = "Factory_MasterCal"
+
+        elif (self.memReadingState == "Factory_MasterCal"):
+            print("Factory MasterCal=", value, int(value, 16), str(int(value, 16)), sep='*')
+            print("buffer=", buffer)
+            self.Factory_Master_Cal_Setter(str(int(value, 16)))
+            self.memReadingState = "Factory_SSB_BFO"
+
+        elif (self.memReadingState == "Factory_SSB_BFO"):
+            print("Factory SSB BFO =", value, int(value, 16), str(int(value, 16)), sep='*')
+            print("buffer=", buffer)
+            self.Factory_SSB_BFO_Setter(str(int(value, 16)))
+            self.memReadingState = "Freq"
         else:
             print("unknown memory fetch state")
 

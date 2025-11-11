@@ -4,6 +4,7 @@ import tkinter.ttk as ttk
 import settingsBackupui as baseui
 from configuration import configuration
 import globalvars as gv
+from time import sleep
 
 
 #
@@ -33,6 +34,30 @@ class settingsBackup(baseui.settingsBackupUI):
         self.ConfigFile_Master_Cal_VAR.set(gv.config.get_Master_Cal())
         self.ConfigFile_SSB_BFO_VAR.set(gv.config.get_SSB_BFO())
         self.ConfigFIle_CW_BFO_VAR.set(gv.config.get_CW_BFO())
+
+        mainWindow.Radio_Req_Master_Cal(self.set_Master_Cal)
+        mainWindow.Radio_Req_SSB_BFO(self.set_SSB_BFO)
+        mainWindow.Radio_Req_CW_BFO(self.set_CW_BFO)
+        mainWindow.Radio_Req_Factory_Master_Cal(self.set_Factory_Master_Cal)
+        mainWindow.Radio_Req_Factory_SSB_BFO(self.set_Factory_SSB_BFO)
+        sleep(.5)
+
+    def set_Master_Cal(self, value):
+        self.EEPROM_Current_Master_Cal_VAR.set(value)
+
+    def set_SSB_BFO(self, value):
+        self.EEPROM_Current_SSB_BFO_VAR.set(value)
+
+    def set_CW_BFO(self, value):
+        self.EEPROM_Current_CW_BFO_VAR.set(value)
+
+    def set_Factory_Master_Cal(self, value):
+        self.EEPROM_Factory_Master_Cal_VAR.set(value)
+
+    def set_Factory_SSB_BFO(self, value):
+        self.EEPROM_Factory_SSB_BFO_VAR.set(value)
+
+
 
     def apply_CB(self):
         print("Applying settings")

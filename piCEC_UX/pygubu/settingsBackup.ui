@@ -274,7 +274,7 @@ File</property>
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
                 <property name="style">Heading3b.TLabel</property>
-                <property name="text" translatable="yes">label3</property>
+                <property name="text" translatable="yes">N/A</property>
                 <property name="textvariable">string:EEPROM_Factory_CW_BFO_VAR</property>
                 <property name="width">10</property>
                 <layout manager="grid">

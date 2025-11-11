@@ -177,12 +177,12 @@ class settingsBackupUI(ttk.Labelframe):
         self.CW_BFO_Heading_Label.grid(column=0, padx=5, pady="0 5", row=4)
         self.EEPROM_Factory_CW_BFO_Label = ttk.Label(
             self.backupSettings_Frame, name="eeprom_factory_cw_bfo_label")
-        self.EEPROM_Factory_CW_BFO_VAR = tk.StringVar(value='label3')
+        self.EEPROM_Factory_CW_BFO_VAR = tk.StringVar(value='N/A')
         self.EEPROM_Factory_CW_BFO_Label.configure(
             anchor="e",
             justify="right",
             style="Heading3b.TLabel",
-            text='label3',
+            text='N/A',
             textvariable=self.EEPROM_Factory_CW_BFO_VAR,
             width=10)
         self.EEPROM_Factory_CW_BFO_Label.grid(

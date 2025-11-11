@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b30f41e5-a6a9-4697-a427-3f8e706d9bd4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/configuration.py" beforeDir="false" afterPath="$PROJECT_DIR$/configuration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/piCECNextion.py" beforeDir="false" afterPath="$PROJECT_DIR$/piCECNextion.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/settingsBackup.py" beforeDir="false" afterPath="$PROJECT_DIR$/settingsBackup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/settingsBackup.ui" beforeDir="false" afterPath="$PROJECT_DIR$/settingsBackup.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/settingsBackupui.py" beforeDir="false" afterPath="$PROJECT_DIR$/settingsBackupui.py" afterDir="false" />
@@ -122,7 +122,7 @@
       <workItem from="1762221861364" duration="428000" />
       <workItem from="1762222297830" duration="132099000" />
       <workItem from="1762798726970" duration="1920000" />
-      <workItem from="1762800662035" duration="21960000" />
+      <workItem from="1762800662035" duration="29480000" />
     </task>
     <servers />
   </component>
@@ -146,7 +146,7 @@
     <SUITE FILE_PATH="coverage/pygubu$VirtualKeyboard.coverage" NAME="VirtualKeyboard Coverage Results" MODIFIED="1762035572673" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pygubu$piCEC_UX.coverage" NAME="piCEC_UX Coverage Results" MODIFIED="1762800718257" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pygubu$globalvars.coverage" NAME="globalvars Coverage Results" MODIFIED="1762564066961" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/pygubu$piCEC.coverage" NAME="piCEC Coverage Results" MODIFIED="1762888136345" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/pygubu$piCEC.coverage" NAME="piCEC Coverage Results" MODIFIED="1762902080169" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/pygubu$piCECNextion.coverage" NAME="piCECNextion Coverage Results" MODIFIED="1762303146837" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pygubu$scratch.coverage" NAME="scratch Coverage Results" MODIFIED="1762475339478" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
     <SUITE FILE_PATH="coverage/pygubu$frequencyChannel.coverage" NAME="frequencyChannel Coverage Results" MODIFIED="1762035780527" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

@@ -30,7 +30,7 @@
       <object class="ttk.Labelframe" id="labelframe1">
         <property name="height">400</property>
         <property name="style">Heading2.TLabelframe</property>
-        <property name="text" translatable="yes">Radio Backup</property>
+        <property name="text" translatable="yes">Radio Backup/Restore</property>
         <property name="width">600</property>
         <layout manager="pack">
           <property name="expand">true</property>
@@ -48,13 +48,27 @@
               <property name="row">1</property>
             </layout>
             <child>
+              <object class="ttk.Label" id="label29" named="True">
+                <property name="anchor">w</property>
+                <property name="justify">right</property>
+                <property name="style">Heading2b.TLabel</property>
+                <property name="text" translatable="yes">Select</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
               <object class="ttk.Label" id="label14" named="True">
                 <property name="anchor">w</property>
                 <property name="justify">right</property>
                 <property name="style">Heading2b.TLabel</property>
                 <property name="text" translatable="yes">Setting</property>
                 <layout manager="grid">
-                  <property name="column">0</property>
+                  <property name="column">1</property>
                   <property name="padx">5</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -69,7 +83,7 @@
                 <property name="text" translatable="yes">Factory
 Value</property>
                 <layout manager="grid">
-                  <property name="column">1</property>
+                  <property name="column">2</property>
                   <property name="row">0</property>
                   <property name="sticky">ew</property>
                 </layout>
@@ -83,7 +97,7 @@ Value</property>
                 <property name="text" translatable="yes">Current
 Value</property>
                 <layout manager="grid">
-                  <property name="column">2</property>
+                  <property name="column">3</property>
                   <property name="row">0</property>
                   <property name="sticky">ew</property>
                 </layout>
@@ -97,7 +111,7 @@ Value</property>
                 <property name="text" translatable="yes">Config
 File</property>
                 <layout manager="grid">
-                  <property name="column">3</property>
+                  <property name="column">4</property>
                   <property name="row">0</property>
                   <property name="sticky">ew</property>
                 </layout>
@@ -109,7 +123,7 @@ File</property>
                 <property name="width">200</property>
                 <layout manager="grid">
                   <property name="column">0</property>
-                  <property name="columnspan">4</property>
+                  <property name="columnspan">5</property>
                   <property name="row">1</property>
                   <property name="sticky">ew</property>
                 </layout>
@@ -126,16 +140,29 @@ File</property>
               </object>
             </child>
             <child>
+              <object class="ttk.Checkbutton" id="checkbutton1">
+                <property name="offvalue">0</property>
+                <property name="onvalue">1</property>
+                <property name="style">Checkbox2b.TCheckbutton</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
               <object class="ttk.Label" id="Master_Cal_Heading_Label" named="True">
                 <property name="anchor">w</property>
                 <property name="style">Heading2b.TLabel</property>
                 <property name="text" translatable="yes">Master Cal:</property>
                 <property name="width">10</property>
                 <layout manager="grid">
-                  <property name="column">0</property>
+                  <property name="column">1</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
-                  <property name="row">2</property>
+                  <property name="row">3</property>
                 </layout>
               </object>
             </child>
@@ -148,10 +175,10 @@ File</property>
                 <property name="textvariable">string:EEPROM_Factory_Master_Cal_VAR</property>
                 <property name="width">10</property>
                 <layout manager="grid">
-                  <property name="column">1</property>
+                  <property name="column">2</property>
                   <property name="padx">0 5</property>
                   <property name="pady">5</property>
-                  <property name="row">2</property>
+                  <property name="row">3</property>
                   <property name="sticky">e</property>
                 </layout>
               </object>
@@ -165,10 +192,10 @@ File</property>
                 <property name="textvariable">string:EEPROM_Current_Master_Cal_VAR</property>
                 <property name="width">10</property>
                 <layout manager="grid">
-                  <property name="column">2</property>
+                  <property name="column">3</property>
                   <property name="padx">0 5</property>
                   <property name="pady">5</property>
-                  <property name="row">2</property>
+                  <property name="row">3</property>
                   <property name="sticky">e</property>
                 </layout>
               </object>
@@ -182,11 +209,24 @@ File</property>
                 <property name="textvariable">string:ConfigFile_Master_Cal_VAR</property>
                 <property name="width">10</property>
                 <layout manager="grid">
-                  <property name="column">3</property>
+                  <property name="column">4</property>
                   <property name="padx">0 5</property>
                   <property name="pady">5</property>
-                  <property name="row">2</property>
+                  <property name="row">3</property>
                   <property name="sticky">e</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton2">
+                <property name="offvalue">0</property>
+                <property name="onvalue">1</property>
+                <property name="style">Checkbox2b.TCheckbutton</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">0</property>
+                  <property name="pady">5</property>
+                  <property name="row">4</property>
                 </layout>
               </object>
             </child>
@@ -197,10 +237,10 @@ File</property>
                 <property name="text" translatable="yes">SSB BFO:</property>
                 <property name="width">10</property>
                 <layout manager="grid">
-                  <property name="column">0</property>
+                  <property name="column">1</property>
                   <property name="padx">5</property>
                   <property name="pady">0 5</property>
-                  <property name="row">3</property>
+                  <property name="row">4</property>
                 </layout>
               </object>
             </child>
@@ -213,10 +253,10 @@ File</property>
                 <property name="textvariable">string:EEPROM_Factory_SSB_BFO_VAR</property>
                 <property name="width">10</property>
                 <layout manager="grid">
-                  <property name="column">1</property>
+                  <property name="column">2</property>
                   <property name="padx">0 5</property>
                   <property name="pady">0 5</property>
-                  <property name="row">3</property>
+                  <property name="row">4</property>
                   <property name="sticky">e</property>
                 </layout>
               </object>
@@ -230,10 +270,10 @@ File</property>
                 <property name="textvariable">string:EEPROM_Current_SSB_BFO_VAR</property>
                 <property name="width">10</property>
                 <layout manager="grid">
-                  <property name="column">2</property>
+                  <property name="column">3</property>
                   <property name="padx">0 5</property>
                   <property name="pady">0 5</property>
-                  <property name="row">3</property>
+                  <property name="row">4</property>
                   <property name="sticky">e</property>
                 </layout>
               </object>
@@ -247,11 +287,24 @@ File</property>
                 <property name="textvariable">string:ConfigFile_SSB_BFO_VAR</property>
                 <property name="width">10</property>
                 <layout manager="grid">
-                  <property name="column">3</property>
+                  <property name="column">4</property>
                   <property name="padx">0 5</property>
                   <property name="pady">0 5</property>
-                  <property name="row">3</property>
+                  <property name="row">4</property>
                   <property name="sticky">e</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton3">
+                <property name="offvalue">0</property>
+                <property name="onvalue">1</property>
+                <property name="style">Checkbox2b.TCheckbutton</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">0</property>
+                  <property name="pady">5</property>
+                  <property name="row">5</property>
                 </layout>
               </object>
             </child>
@@ -262,10 +315,10 @@ File</property>
                 <property name="text" translatable="yes">CW BFO:</property>
                 <property name="width">10</property>
                 <layout manager="grid">
-                  <property name="column">0</property>
+                  <property name="column">1</property>
                   <property name="padx">5</property>
                   <property name="pady">0 5</property>
-                  <property name="row">4</property>
+                  <property name="row">5</property>
                 </layout>
               </object>
             </child>
@@ -278,10 +331,10 @@ File</property>
                 <property name="textvariable">string:EEPROM_Factory_CW_BFO_VAR</property>
                 <property name="width">10</property>
                 <layout manager="grid">
-                  <property name="column">1</property>
+                  <property name="column">2</property>
                   <property name="padx">0 5</property>
                   <property name="pady">0 5</property>
-                  <property name="row">4</property>
+                  <property name="row">5</property>
                   <property name="sticky">e</property>
                 </layout>
               </object>
@@ -295,10 +348,10 @@ File</property>
                 <property name="textvariable">string:EEPROM_Current_CW_BFO_VAR</property>
                 <property name="width">10</property>
                 <layout manager="grid">
-                  <property name="column">2</property>
+                  <property name="column">3</property>
                   <property name="padx">0 5</property>
                   <property name="pady">0 5</property>
-                  <property name="row">4</property>
+                  <property name="row">5</property>
                   <property name="sticky">e</property>
                 </layout>
               </object>
@@ -312,10 +365,10 @@ File</property>
                 <property name="textvariable">string:ConfigFIle_CW_BFO_VAR</property>
                 <property name="width">10</property>
                 <layout manager="grid">
-                  <property name="column">3</property>
+                  <property name="column">4</property>
                   <property name="padx">0 5</property>
                   <property name="pady">0 5</property>
-                  <property name="row">4</property>
+                  <property name="row">5</property>
                   <property name="sticky">e</property>
                 </layout>
               </object>
@@ -326,8 +379,8 @@ File</property>
                 <property name="width">200</property>
                 <layout manager="grid">
                   <property name="column">0</property>
-                  <property name="columnspan">4</property>
-                  <property name="row">5</property>
+                  <property name="columnspan">5</property>
+                  <property name="row">6</property>
                   <property name="sticky">ew</property>
                 </layout>
                 <child>
@@ -337,6 +390,31 @@ File</property>
                       <property name="expand">true</property>
                       <property name="fill">x</property>
                       <property name="side">top</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="frame5">
+                <property name="height">200</property>
+                <property name="style">Normal.TFrame</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="columnspan">2</property>
+                  <property name="padx">18 0</property>
+                  <property name="row">7</property>
+                  <property name="sticky">w</property>
+                </layout>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton4">
+                    <property name="style">Checkbox2b.TCheckbutton</property>
+                    <property name="text" translatable="yes">  Select All</property>
+                    <layout manager="pack">
+                      <property name="padx">0</property>
+                      <property name="pady">5</property>
+                      <property name="side">left</property>
                     </layout>
                   </object>
                 </child>
@@ -375,6 +453,91 @@ File</property>
                   <property name="anchor">center</property>
                   <property name="padx">10</property>
                   <property name="side">left</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="action_Frame" named="True">
+            <property name="height">200</property>
+            <property name="style">Normal.TFrame</property>
+            <property name="width">200</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">10</property>
+              <property name="pady">10</property>
+              <property name="row">2</property>
+              <property name="sticky">ew</property>
+            </layout>
+            <child>
+              <object class="ttk.Combobox" id="action_Combobox" named="True">
+                <property name="justify">center</property>
+                <property name="textvariable">string:action_Combobox_VAR</property>
+                <property name="values">Select Backup Restore</property>
+                <property name="width">7</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="padx">5 0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Combobox" id="from_Combobox" named="True">
+                <property name="justify">center</property>
+                <property name="textvariable">string:from_Combobox_VAR</property>
+                <property name="values">Select Current Config</property>
+                <property name="width">7</property>
+                <layout manager="grid">
+                  <property name="column">3</property>
+                  <property name="padx">5 0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Combobox" id="to_Combobox" named="True">
+                <property name="justify">right</property>
+                <property name="textvariable">string:to_Combobox_VAR</property>
+                <property name="values">Select Factory Current Config</property>
+                <property name="width">7</property>
+                <layout manager="grid">
+                  <property name="column">5</property>
+                  <property name="padx">5 0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="action_Label" named="True">
+                <property name="style">Heading2b.TLabel</property>
+                <property name="text" translatable="yes">Action:</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="from_Label" named="True">
+                <property name="style">Heading2b.TLabel</property>
+                <property name="text" translatable="yes">From:</property>
+                <layout manager="grid">
+                  <property name="column">2</property>
+                  <property name="padx">10 0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="to_Label" named="True">
+                <property name="style">Heading2b.TLabel</property>
+                <property name="text" translatable="yes">To:</property>
+                <layout manager="grid">
+                  <property name="column">4</property>
+                  <property name="padx">10 0</property>
+                  <property name="row">0</property>
                 </layout>
               </object>
             </child>

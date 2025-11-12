@@ -35,6 +35,16 @@ class settingsBackup(baseui.settingsBackupUI):
         self.ConfigFile_SSB_BFO_VAR.set(gv.config.get_SSB_BFO())
         self.ConfigFIle_CW_BFO_VAR.set(gv.config.get_CW_BFO())
 
+        gv.formatCombobox(self.action_Combobox, "Arial", "24", "bold")
+        gv.formatCombobox(self.from_Combobox, "Arial", "24", "bold")
+        gv.formatCombobox(self.to_Combobox, "Arial", "24", "bold")
+
+        self.action_Combobox_VAR.set("Select")
+        self.from_Combobox_VAR.set("Select")
+        self.to_Combobox_VAR.set("Select")
+
+
+
         mainWindow.Radio_Req_Master_Cal(self.set_Master_Cal)
         mainWindow.Radio_Req_SSB_BFO(self.set_SSB_BFO)
         mainWindow.Radio_Req_CW_BFO(self.set_CW_BFO)

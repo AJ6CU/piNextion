@@ -54,45 +54,58 @@ class settingsBackupUI(ttk.Labelframe):
         # First object created
         on_first_object_cb(self.backupSettings_Frame)
 
+        self.label29 = ttk.Label(self.backupSettings_Frame, name="label29")
+        self.label29.configure(
+            anchor="w",
+            justify="right",
+            style="Heading2b.TLabel",
+            text='Select')
+        self.label29.grid(column=0, padx=5, row=0, sticky="w")
         self.label14 = ttk.Label(self.backupSettings_Frame, name="label14")
         self.label14.configure(
             anchor="w",
             justify="right",
             style="Heading2b.TLabel",
             text='Setting')
-        self.label14.grid(column=0, padx=5, row=0, sticky="w")
+        self.label14.grid(column=1, padx=5, row=0, sticky="w")
         self.label15 = ttk.Label(self.backupSettings_Frame, name="label15")
         self.label15.configure(
             anchor="e",
             justify="center",
             style="Heading2b.TLabel",
             text='Factory\nValue')
-        self.label15.grid(column=1, row=0, sticky="ew")
+        self.label15.grid(column=2, row=0, sticky="ew")
         self.label16 = ttk.Label(self.backupSettings_Frame, name="label16")
         self.label16.configure(
             anchor="e",
             justify="center",
             style="Heading2b.TLabel",
             text='Current\nValue')
-        self.label16.grid(column=2, row=0, sticky="ew")
+        self.label16.grid(column=3, row=0, sticky="ew")
         self.label17 = ttk.Label(self.backupSettings_Frame, name="label17")
         self.label17.configure(
             anchor="e",
             justify="center",
             style="Heading2b.TLabel",
             text='Config\nFile')
-        self.label17.grid(column=3, row=0, sticky="ew")
+        self.label17.grid(column=4, row=0, sticky="ew")
         frame2 = ttk.Frame(self.backupSettings_Frame)
         frame2.configure(height=200, width=200)
         separator1 = ttk.Separator(frame2)
         separator1.configure(orient="horizontal")
         separator1.pack(expand=True, fill="x", side="top")
-        frame2.grid(column=0, columnspan=4, row=1, sticky="ew")
+        frame2.grid(column=0, columnspan=5, row=1, sticky="ew")
+        checkbutton1 = ttk.Checkbutton(self.backupSettings_Frame)
+        checkbutton1.configure(
+            offvalue=0,
+            onvalue=1,
+            style="Checkbox2b.TCheckbutton")
+        checkbutton1.grid(column=0, padx=5, pady=5, row=3)
         self.Master_Cal_Heading_Label = ttk.Label(
             self.backupSettings_Frame, name="master_cal_heading_label")
         self.Master_Cal_Heading_Label.configure(
             anchor="w", style="Heading2b.TLabel", text='Master Cal:', width=10)
-        self.Master_Cal_Heading_Label.grid(column=0, padx=5, pady=5, row=2)
+        self.Master_Cal_Heading_Label.grid(column=1, padx=5, pady=5, row=3)
         self.EEPROM_Factory_Master_Cal_Label = ttk.Label(
             self.backupSettings_Frame, name="eeprom_factory_master_cal_label")
         self.EEPROM_Factory_Master_Cal_VAR = tk.StringVar(value='label3')
@@ -104,7 +117,7 @@ class settingsBackupUI(ttk.Labelframe):
             textvariable=self.EEPROM_Factory_Master_Cal_VAR,
             width=10)
         self.EEPROM_Factory_Master_Cal_Label.grid(
-            column=1, padx="0 5", pady=5, row=2, sticky="e")
+            column=2, padx="0 5", pady=5, row=3, sticky="e")
         self.EEPROM_Current_Master_Cal_Label = ttk.Label(
             self.backupSettings_Frame, name="eeprom_current_master_cal_label")
         self.EEPROM_Current_Master_Cal_VAR = tk.StringVar(value='label4')
@@ -116,7 +129,7 @@ class settingsBackupUI(ttk.Labelframe):
             textvariable=self.EEPROM_Current_Master_Cal_VAR,
             width=10)
         self.EEPROM_Current_Master_Cal_Label.grid(
-            column=2, padx="0 5", pady=5, row=2, sticky="e")
+            column=3, padx="0 5", pady=5, row=3, sticky="e")
         self.ConfigFile_Master_Cal_Label = ttk.Label(
             self.backupSettings_Frame, name="configfile_master_cal_label")
         self.ConfigFile_Master_Cal_VAR = tk.StringVar(value='label4')
@@ -128,12 +141,18 @@ class settingsBackupUI(ttk.Labelframe):
             textvariable=self.ConfigFile_Master_Cal_VAR,
             width=10)
         self.ConfigFile_Master_Cal_Label.grid(
-            column=3, padx="0 5", pady=5, row=2, sticky="e")
+            column=4, padx="0 5", pady=5, row=3, sticky="e")
+        checkbutton2 = ttk.Checkbutton(self.backupSettings_Frame)
+        checkbutton2.configure(
+            offvalue=0,
+            onvalue=1,
+            style="Checkbox2b.TCheckbutton")
+        checkbutton2.grid(column=0, padx=0, pady=5, row=4)
         self.SSB_BFO_Heading_Label = ttk.Label(
             self.backupSettings_Frame, name="ssb_bfo_heading_label")
         self.SSB_BFO_Heading_Label.configure(
             anchor="w", style="Heading2b.TLabel", text='SSB BFO:', width=10)
-        self.SSB_BFO_Heading_Label.grid(column=0, padx=5, pady="0 5", row=3)
+        self.SSB_BFO_Heading_Label.grid(column=1, padx=5, pady="0 5", row=4)
         self.EEPROM_Factory_SSB_BFO_Label = ttk.Label(
             self.backupSettings_Frame, name="eeprom_factory_ssb_bfo_label")
         self.EEPROM_Factory_SSB_BFO_VAR = tk.StringVar(value='label3')
@@ -145,7 +164,7 @@ class settingsBackupUI(ttk.Labelframe):
             textvariable=self.EEPROM_Factory_SSB_BFO_VAR,
             width=10)
         self.EEPROM_Factory_SSB_BFO_Label.grid(
-            column=1, padx="0 5", pady="0 5", row=3, sticky="e")
+            column=2, padx="0 5", pady="0 5", row=4, sticky="e")
         self.EEPROM_Current_SSB_BFO_Label = ttk.Label(
             self.backupSettings_Frame, name="eeprom_current_ssb_bfo_label")
         self.EEPROM_Current_SSB_BFO_VAR = tk.StringVar(value='label4')
@@ -157,7 +176,7 @@ class settingsBackupUI(ttk.Labelframe):
             textvariable=self.EEPROM_Current_SSB_BFO_VAR,
             width=10)
         self.EEPROM_Current_SSB_BFO_Label.grid(
-            column=2, padx="0 5", pady="0 5", row=3, sticky="e")
+            column=3, padx="0 5", pady="0 5", row=4, sticky="e")
         self.ConfigFile_SSB_BFO_Label = ttk.Label(
             self.backupSettings_Frame, name="configfile_ssb_bfo_label")
         self.ConfigFile_SSB_BFO_VAR = tk.StringVar(value='label4')
@@ -169,12 +188,18 @@ class settingsBackupUI(ttk.Labelframe):
             textvariable=self.ConfigFile_SSB_BFO_VAR,
             width=10)
         self.ConfigFile_SSB_BFO_Label.grid(
-            column=3, padx="0 5", pady="0 5", row=3, sticky="e")
+            column=4, padx="0 5", pady="0 5", row=4, sticky="e")
+        checkbutton3 = ttk.Checkbutton(self.backupSettings_Frame)
+        checkbutton3.configure(
+            offvalue=0,
+            onvalue=1,
+            style="Checkbox2b.TCheckbutton")
+        checkbutton3.grid(column=0, padx=0, pady=5, row=5)
         self.CW_BFO_Heading_Label = ttk.Label(
             self.backupSettings_Frame, name="cw_bfo_heading_label")
         self.CW_BFO_Heading_Label.configure(
             anchor="w", style="Heading2b.TLabel", text='CW BFO:', width=10)
-        self.CW_BFO_Heading_Label.grid(column=0, padx=5, pady="0 5", row=4)
+        self.CW_BFO_Heading_Label.grid(column=1, padx=5, pady="0 5", row=5)
         self.EEPROM_Factory_CW_BFO_Label = ttk.Label(
             self.backupSettings_Frame, name="eeprom_factory_cw_bfo_label")
         self.EEPROM_Factory_CW_BFO_VAR = tk.StringVar(value='N/A')
@@ -186,7 +211,7 @@ class settingsBackupUI(ttk.Labelframe):
             textvariable=self.EEPROM_Factory_CW_BFO_VAR,
             width=10)
         self.EEPROM_Factory_CW_BFO_Label.grid(
-            column=1, padx="0 5", pady="0 5", row=4, sticky="e")
+            column=2, padx="0 5", pady="0 5", row=5, sticky="e")
         self.EEPROM_Current_CW_BFO_Label = ttk.Label(
             self.backupSettings_Frame, name="eeprom_current_cw_bfo_label")
         self.EEPROM_Current_CW_BFO_VAR = tk.StringVar(value='label4')
@@ -198,7 +223,7 @@ class settingsBackupUI(ttk.Labelframe):
             textvariable=self.EEPROM_Current_CW_BFO_VAR,
             width=10)
         self.EEPROM_Current_CW_BFO_Label.grid(
-            column=2, padx="0 5", pady="0 5", row=4, sticky="e")
+            column=3, padx="0 5", pady="0 5", row=5, sticky="e")
         self.ConfigFIle_CW_BFO_Label = ttk.Label(
             self.backupSettings_Frame, name="configfile_cw_bfo_label")
         self.ConfigFIle_CW_BFO_VAR = tk.StringVar(value='label4')
@@ -210,13 +235,21 @@ class settingsBackupUI(ttk.Labelframe):
             textvariable=self.ConfigFIle_CW_BFO_VAR,
             width=10)
         self.ConfigFIle_CW_BFO_Label.grid(
-            column=3, padx="0 5", pady="0 5", row=4, sticky="e")
+            column=4, padx="0 5", pady="0 5", row=5, sticky="e")
         frame3 = ttk.Frame(self.backupSettings_Frame)
         frame3.configure(height=200, width=200)
         separator2 = ttk.Separator(frame3)
         separator2.configure(orient="horizontal")
         separator2.pack(expand=True, fill="x", side="top")
-        frame3.grid(column=0, columnspan=4, row=5, sticky="ew")
+        frame3.grid(column=0, columnspan=5, row=6, sticky="ew")
+        frame5 = ttk.Frame(self.backupSettings_Frame)
+        frame5.configure(height=200, style="Normal.TFrame", width=200)
+        checkbutton4 = ttk.Checkbutton(frame5)
+        checkbutton4.configure(
+            style="Checkbox2b.TCheckbutton",
+            text='  Select All')
+        checkbutton4.pack(padx=0, pady=5, side="left")
+        frame5.grid(column=0, columnspan=2, padx="18 0", row=7, sticky="w")
         self.backupSettings_Frame.grid(column=0, pady="10 0", row=1)
         self.closingFrame = ttk.Frame(self, name="closingframe")
         self.closingFrame.configure(
@@ -231,10 +264,52 @@ class settingsBackupUI(ttk.Labelframe):
         self.cancel_Buttom.pack(anchor="center", padx=10, side="left")
         self.cancel_Buttom.configure(command=self.cancel_CB)
         self.closingFrame.grid(column=0, pady=10, row=3)
+        self.action_Frame = ttk.Frame(self, name="action_frame")
+        self.action_Frame.configure(
+            height=200, style="Normal.TFrame", width=200)
+        self.action_Combobox = ttk.Combobox(
+            self.action_Frame, name="action_combobox")
+        self.action_Combobox_VAR = tk.StringVar()
+        self.action_Combobox.configure(
+            justify="center",
+            state="readonly",
+            textvariable=self.action_Combobox_VAR,
+            values='Select Backup Restore',
+            width=7)
+        self.action_Combobox.grid(column=1, padx="5 0", row=0)
+        self.from_Combobox = ttk.Combobox(
+            self.action_Frame, name="from_combobox")
+        self.from_Combobox_VAR = tk.StringVar()
+        self.from_Combobox.configure(
+            justify="center",
+            state="readonly",
+            textvariable=self.from_Combobox_VAR,
+            values='Select Current Config',
+            width=7)
+        self.from_Combobox.grid(column=3, padx="5 0", row=0)
+        self.to_Combobox = ttk.Combobox(self.action_Frame, name="to_combobox")
+        self.to_Combobox_VAR = tk.StringVar()
+        self.to_Combobox.configure(
+            justify="center",
+            state="readonly",
+            textvariable=self.to_Combobox_VAR,
+            values='Select Factory Current Config',
+            width=7)
+        self.to_Combobox.grid(column=5, padx="5 0", row=0)
+        self.action_Label = ttk.Label(self.action_Frame, name="action_label")
+        self.action_Label.configure(style="Heading2b.TLabel", text='Action:')
+        self.action_Label.grid(column=0, row=0)
+        self.from_Label = ttk.Label(self.action_Frame, name="from_label")
+        self.from_Label.configure(style="Heading2b.TLabel", text='From:')
+        self.from_Label.grid(column=2, padx="10 0", row=0)
+        self.to_Label = ttk.Label(self.action_Frame, name="to_label")
+        self.to_Label.configure(style="Heading2b.TLabel", text='To:')
+        self.to_Label.grid(column=4, padx="10 0", row=0)
+        self.action_Frame.grid(column=0, padx=10, pady=10, row=2, sticky="ew")
         self.configure(
             height=400,
             style="Heading2.TLabelframe",
-            text='Radio Backup',
+            text='Radio Backup/Restore',
             width=600)
         # Layout for 'labelframe1' skipped in custom widget template.
 

@@ -86,6 +86,7 @@ def setup_ttk_styles(master=None):
     style.configure('RadioButtonEmphasis.TRadiobutton',font=fontList['Emphasis'])
     style.configure('Heading2b.TMenubutton',font=fontList['Heading2b'])
     style.configure('Submenu.TMenuitem.Command',font=fontList['Heading2b'])
+    style.configure('Checkbox2b.TCheckbutton', font=fontList['Heading2b'], background='gray', foreground='white')
     style.configure('Checkbox3.TCheckbutton',font=fontList['Heading3'])
     style.configure('Checkbox4.TCheckbutton',font=fontList['Heading4'])
     style.configure('CheckboxNormal.TCheckbutton',font=fontList['Normal'])

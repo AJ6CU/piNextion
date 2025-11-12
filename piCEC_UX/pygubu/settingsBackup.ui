@@ -473,6 +473,7 @@ File</property>
             <child>
               <object class="ttk.Combobox" id="action_Combobox" named="True">
                 <property name="justify">center</property>
+                <property name="state">readonly</property>
                 <property name="textvariable">string:action_Combobox_VAR</property>
                 <property name="values">Select Backup Restore</property>
                 <property name="width">7</property>
@@ -486,6 +487,7 @@ File</property>
             <child>
               <object class="ttk.Combobox" id="from_Combobox" named="True">
                 <property name="justify">center</property>
+                <property name="state">readonly</property>
                 <property name="textvariable">string:from_Combobox_VAR</property>
                 <property name="values">Select Current Config</property>
                 <property name="width">7</property>
@@ -498,7 +500,8 @@ File</property>
             </child>
             <child>
               <object class="ttk.Combobox" id="to_Combobox" named="True">
-                <property name="justify">right</property>
+                <property name="justify">center</property>
+                <property name="state">readonly</property>
                 <property name="textvariable">string:to_Combobox_VAR</property>
                 <property name="values">Select Factory Current Config</property>
                 <property name="width">7</property>

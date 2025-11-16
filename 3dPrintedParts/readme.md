@@ -1,1 +1,1 @@
-This folder contains several stl's that you mifht find useful to print.
+This folder contains several stl's that you might find useful to print.

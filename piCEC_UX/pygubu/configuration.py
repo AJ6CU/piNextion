@@ -49,7 +49,8 @@ class configuration:
             serialPort = "/dev/cu.usbserial-00000000"
 
         else:
-            serialPort = "/dev/ttyS0"
+            serialPort = "/dev/serial0"                     # for trixie+
+            # serialPort = "/dev/ttyS0"                     # for bookbinder and below
 
         #
         #   The default for scanSet Settings is all "None"
@@ -74,11 +75,12 @@ class configuration:
                             "Master Cal": "",
                             "SSB BFO": "",
                             "CW BFO": "",
-                            "CW Tone": "",
-                            "CW Speed":"",
-                            "CW Key Type":"",
-                            "Callsign":"",
-                            "Memory Keyer Text":""
+                            "CW Tone": "600",
+                            "CW Speed":"10",
+                            "CW Key Type":"STRAIGHT",
+                            "CW Delay Before TX":"500",
+                            "CW Delay Returning to RX":"2000",
+                            "Callsign":""
 
                             }
         self.saveConfig()
@@ -150,6 +152,48 @@ class configuration:
     def set_CW_BFO(self, value):
         self.config_data["CW BFO"] = value
         self.saveConfig()
+
+
+    def get_CW_Tone(self):
+        return self.config_data["CW Tone"]
+
+    def set_CW_Tone(self, value):
+        self.config_data["CW Tone"] = value
+        self.saveConfig()
+
+
+    def get_CW_Speed(self):
+        return self.config_data["CW Speed"]
+
+    def set_CW_Speed(self, value):
+        self.config_data["CW Speed"] = value
+        self.saveConfig()
+
+
+    def get_Key_Type(self):
+        return self.config_data["CW Key Type"]
+
+    def set_Key_Type(self, value):
+        self.config_data["CW Key Type"] = value
+        self.saveConfig()
+
+
+    def get_CW_Delay_Before_TX(self):
+        return self.config_data["CW Delay Before TX"]
+
+    def set_CW_Delay_Before_TX(self, value):
+        self.config_data["CW Delay Before TX"] = value
+        self.saveConfig()
+
+
+    def get_CW_Delay_Returning_to_RX(self):
+        return self.config_data["CW Delay Returning to RX"]
+
+    def set_CW_Delay_Returning_to_RX(self, value):
+        self.config_data["CCW Delay Returning to RX"] = value
+        self.saveConfig()
+
+
 
     def saveConfig(self):
         config_file = open(configuration_file, 'w')

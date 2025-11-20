@@ -201,7 +201,9 @@ class piCECNextion(baseui.piCECNextionUI):
             "cw_bfo":[ 0xfc, 0x0, 0x04, 0x48],
 
             "factory_master_cal": [0x41, 0x0, 0x4, 0x48],
-            "factory_ssb_bfo": [0x49, 0x0, 0x04, 0x48]
+            "factory_ssb_bfo": [0x49, 0x0, 0x04, 0x48],
+            "factory_cw_wpm":[0x5d, 0x0, 0x01, 0x0, 0x0, 0x1],
+            "factory_cw_sidetone":[0x59, 0x0, 0x04, 0x0, 0x0, 0x1]
 
         }
 
@@ -435,9 +437,9 @@ class piCECNextion(baseui.piCECNextionUI):
     def Radio_Req_Master_Cal(self, setter_CB):
 
         self.Master_Cal_Setter = setter_CB
-        base = self.EEPROM_Mem_Address["master_cal"][self.lsb]
+
         command = [self.toRadioCommandDict["TS_CMD_READMEM"],
-                   base,
+                   self.EEPROM_Mem_Address["master_cal"][self.lsb],
                    self.EEPROM_Mem_Address["master_cal"][self.msb],
                    self.EEPROM_Mem_Address["master_cal"][self.memLength],
                    self.EEPROM_Mem_Address["master_cal"][self.charFlag]
@@ -451,9 +453,9 @@ class piCECNextion(baseui.piCECNextionUI):
     def Radio_Req_SSB_BFO(self, setter_CB):
 
         self.SSB_BFO_Setter = setter_CB
-        base = self.EEPROM_Mem_Address["ssb_bfo"][self.lsb]
+
         command = [self.toRadioCommandDict["TS_CMD_READMEM"],
-                   base,
+                   self.EEPROM_Mem_Address["ssb_bfo"][self.lsb],
                    self.EEPROM_Mem_Address["ssb_bfo"][self.msb],
                    self.EEPROM_Mem_Address["ssb_bfo"][self.memLength],
                    self.EEPROM_Mem_Address["ssb_bfo"][self.charFlag]
@@ -465,9 +467,9 @@ class piCECNextion(baseui.piCECNextionUI):
     def Radio_Req_CW_BFO(self,setter_CB):
 
         self.CW_BFO_Setter = setter_CB
-        base = self.EEPROM_Mem_Address["cw_bfo"][self.lsb]
+
         command = [self.toRadioCommandDict["TS_CMD_READMEM"],
-                   base,
+                   self.EEPROM_Mem_Address["cw_bfo"][self.lsb],
                    self.EEPROM_Mem_Address["cw_bfo"][self.msb],
                    self.EEPROM_Mem_Address["cw_bfo"][self.memLength],
                    self.EEPROM_Mem_Address["cw_bfo"][self.charFlag]
@@ -479,9 +481,9 @@ class piCECNextion(baseui.piCECNextionUI):
     def Radio_Req_Factory_Master_Cal(self, setter_CB):
 
         self.Factory_Master_Cal_Setter = setter_CB
-        base = self.EEPROM_Mem_Address["factory_master_cal"][self.lsb]
+
         command = [self.toRadioCommandDict["TS_CMD_READMEM"],
-                   base,
+                   self.EEPROM_Mem_Address["factory_master_cal"][self.lsb],
                    self.EEPROM_Mem_Address["factory_master_cal"][self.msb],
                    self.EEPROM_Mem_Address["factory_master_cal"][self.memLength],
                    self.EEPROM_Mem_Address["factory_master_cal"][self.charFlag]
@@ -495,12 +497,39 @@ class piCECNextion(baseui.piCECNextionUI):
     def Radio_Req_Factory_SSB_BFO(self, setter_CB):
 
         self.Factory_SSB_BFO_Setter = setter_CB
-        base = self.EEPROM_Mem_Address["factory_ssb_bfo"][self.lsb]
+
         command = [self.toRadioCommandDict["TS_CMD_READMEM"],
-                   base,
+                   self.EEPROM_Mem_Address["factory_ssb_bfo"][self.lsb],
                    self.EEPROM_Mem_Address["factory_ssb_bfo"][self.msb],
                    self.EEPROM_Mem_Address["factory_ssb_bfo"][self.memLength],
                    self.EEPROM_Mem_Address["factory_ssb_bfo"][self.charFlag]
+                   ]
+
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+    def Radio_Req_Factory_CW_Speed(self, setter_CB):
+
+        self.Factory_CW_Speed_Setter = setter_CB
+
+        command = [self.toRadioCommandDict["TS_CMD_READMEM"],
+                   self.EEPROM_Mem_Address["factory_cw_wpm"][self.lsb],
+                   self.EEPROM_Mem_Address["factory_cw_wpm"][self.msb],
+                   self.EEPROM_Mem_Address["factory_cw_wpm"][self.memLength],
+                   self.EEPROM_Mem_Address["factory_cw_wpm"][self.charFlag]
+                   ]
+
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+
+    def Radio_Req_Factory_CW_Sidetone(self, setter_CB):
+
+        self.Factory_CW_Sidetone_Setter = setter_CB
+
+        command = [self.toRadioCommandDict["TS_CMD_READMEM"],
+                   self.EEPROM_Mem_Address["factory_cw_sidetone"][self.lsb],
+                   self.EEPROM_Mem_Address["factory_cw_sidetone"][self.msb],
+                   self.EEPROM_Mem_Address["factory_cw_sidetone"][self.memLength],
+                   self.EEPROM_Mem_Address["factory_cw_sidetone"][self.charFlag]
                    ]
 
         self.theRadio.sendCommandToMCU(bytes(command))
@@ -1447,33 +1476,36 @@ class piCECNextion(baseui.piCECNextionUI):
                 self.memReadingState = "Freq"
 
         elif (self.memReadingState == "MasterCal"):
-            print("Master Cal =", value, int(value, 16), str(int(value, 16)), sep='*')
-            print("buffer=", buffer)
             self.Master_Cal_Setter(str(int(value, 16)))
             self.memReadingState = "SSB_BFO"
 
         elif (self.memReadingState == "SSB_BFO"):
-            print("SSB_BFO =", value, int(value, 16), str(int(value, 16)), sep='*')
-            print("buffer=", buffer)
             self.SSB_BFO_Setter(str(int(value, 16)))
             self.memReadingState = "CW_BFO"
 
         elif (self.memReadingState == "CW_BFO"):
-            print("CW_BFO =", value, int(value, 16), str(int(value, 16)), sep='*')
-            print("buffer=", buffer)
             self.CW_BFO_Setter(str(int(value, 16)))
             self.memReadingState = "Factory_MasterCal"
 
         elif (self.memReadingState == "Factory_MasterCal"):
-            print("Factory MasterCal=", value, int(value, 16), str(int(value, 16)), sep='*')
-            print("buffer=", buffer)
             self.Factory_Master_Cal_Setter(str(int(value, 16)))
             self.memReadingState = "Factory_SSB_BFO"
 
         elif (self.memReadingState == "Factory_SSB_BFO"):
-            print("Factory SSB BFO =", value, int(value, 16), str(int(value, 16)), sep='*')
-            print("buffer=", buffer)
             self.Factory_SSB_BFO_Setter(str(int(value, 16)))
+            self.memReadingState = "Factory_CW_Speed"
+
+        elif (self.memReadingState == "Factory_CW_Speed"):
+            if int(value,16) != 0:
+                cw_speed = str(round(1200/int(value,16)))
+            else:
+                cw_speed = "0"
+
+            self.Factory_CW_Speed_Setter(cw_speed)
+            self.memReadingState = "Factory_CW_Sidetone"
+
+        elif (self.memReadingState == "Factory_CW_Sidetone"):
+            self.Factory_CW_Sidetone_Setter(str(int(value, 16)))
             self.memReadingState = "Freq"
         else:
             print("unknown memory fetch state")

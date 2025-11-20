@@ -30,7 +30,7 @@
       <object class="ttk.Labelframe" id="labelframe1">
         <property name="height">400</property>
         <property name="style">Heading2.TLabelframe</property>
-        <property name="text" translatable="yes">Radio Backup/Restore</property>
+        <property name="text" translatable="yes">Radio Backup</property>
         <property name="width">600</property>
         <layout manager="pack">
           <property name="expand">true</property>
@@ -831,6 +831,69 @@ File</property>
           </object>
         </child>
         <child>
+          <object class="ttk.Frame" id="action_Frame" named="True">
+            <property name="height">200</property>
+            <property name="style">Normal.TFrame</property>
+            <property name="width">200</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">10</property>
+              <property name="pady">10</property>
+              <property name="row">2</property>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="from_Label" named="True">
+                <property name="style">Heading1b.TLabel</property>
+                <property name="text" translatable="yes">Source:</property>
+                <layout manager="grid">
+                  <property name="column">2</property>
+                  <property name="padx">10 0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Combobox" id="from_Combobox" named="True">
+                <property name="justify">center</property>
+                <property name="state">readonly</property>
+                <property name="textvariable">string:from_Combobox_VAR</property>
+                <property name="values">Select Factory Current ConfigFile</property>
+                <property name="width">9</property>
+                <layout manager="grid">
+                  <property name="column">3</property>
+                  <property name="padx">5 0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="to_Label" named="True">
+                <property name="style">Heading1b.TLabel</property>
+                <property name="text" translatable="yes">Destination:</property>
+                <layout manager="grid">
+                  <property name="column">4</property>
+                  <property name="padx">10 0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Combobox" id="to_Combobox" named="True">
+                <property name="justify">center</property>
+                <property name="state">readonly</property>
+                <property name="textvariable">string:to_Combobox_VAR</property>
+                <property name="values">Select Current ConfigFile</property>
+                <property name="width">9</property>
+                <layout manager="grid">
+                  <property name="column">5</property>
+                  <property name="padx">5 0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
           <object class="ttk.Frame" id="closingFrame" named="True">
             <property name="height">50</property>
             <property name="style">Normal.TFrame</property>
@@ -842,9 +905,9 @@ File</property>
             </layout>
             <child>
               <object class="ttk.Button" id="apply_Button" named="True">
-                <property name="command" type="command" cbtype="simple">apply_CB</property>
+                <property name="command" type="command" cbtype="simple">copy_CB</property>
                 <property name="style">Button2b.TButton</property>
-                <property name="text" translatable="yes">Apply</property>
+                <property name="text" translatable="yes">Copy</property>
                 <layout manager="pack">
                   <property name="anchor">center</property>
                   <property name="padx">10</property>
@@ -861,94 +924,6 @@ File</property>
                   <property name="anchor">center</property>
                   <property name="padx">10</property>
                   <property name="side">left</property>
-                </layout>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="ttk.Frame" id="action_Frame" named="True">
-            <property name="height">200</property>
-            <property name="style">Normal.TFrame</property>
-            <property name="width">200</property>
-            <layout manager="grid">
-              <property name="column">0</property>
-              <property name="padx">10</property>
-              <property name="pady">10</property>
-              <property name="row">2</property>
-              <property name="sticky">ew</property>
-            </layout>
-            <child>
-              <object class="ttk.Combobox" id="action_Combobox" named="True">
-                <property name="justify">center</property>
-                <property name="state">readonly</property>
-                <property name="textvariable">string:action_Combobox_VAR</property>
-                <property name="values">Select Backup Restore</property>
-                <property name="width">7</property>
-                <layout manager="grid">
-                  <property name="column">1</property>
-                  <property name="padx">5 0</property>
-                  <property name="row">0</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="ttk.Combobox" id="from_Combobox" named="True">
-                <property name="justify">center</property>
-                <property name="state">readonly</property>
-                <property name="textvariable">string:from_Combobox_VAR</property>
-                <property name="values">Select Current Config</property>
-                <property name="width">7</property>
-                <layout manager="grid">
-                  <property name="column">3</property>
-                  <property name="padx">5 0</property>
-                  <property name="row">0</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="ttk.Combobox" id="to_Combobox" named="True">
-                <property name="justify">center</property>
-                <property name="state">readonly</property>
-                <property name="textvariable">string:to_Combobox_VAR</property>
-                <property name="values">Select Factory Current Config</property>
-                <property name="width">7</property>
-                <layout manager="grid">
-                  <property name="column">5</property>
-                  <property name="padx">5 0</property>
-                  <property name="row">0</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="ttk.Label" id="action_Label" named="True">
-                <property name="style">Heading2b.TLabel</property>
-                <property name="text" translatable="yes">Action:</property>
-                <layout manager="grid">
-                  <property name="column">0</property>
-                  <property name="row">0</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="ttk.Label" id="from_Label" named="True">
-                <property name="style">Heading2b.TLabel</property>
-                <property name="text" translatable="yes">From:</property>
-                <layout manager="grid">
-                  <property name="column">2</property>
-                  <property name="padx">10 0</property>
-                  <property name="row">0</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="ttk.Label" id="to_Label" named="True">
-                <property name="style">Heading2b.TLabel</property>
-                <property name="text" translatable="yes">To:</property>
-                <layout manager="grid">
-                  <property name="column">4</property>
-                  <property name="padx">10 0</property>
-                  <property name="row">0</property>
                 </layout>
               </object>
             </child>

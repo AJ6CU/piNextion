@@ -513,32 +513,12 @@ class settingsBackupUI(ttk.Labelframe):
         self.select_All_Label.pack(padx=15, pady="5 0", side="right")
         frame5.grid(column=0, columnspan=4, row=12, sticky="w")
         self.backupSettings_Frame.grid(column=0, pady="10 0", row=1)
-        self.closingFrame = ttk.Frame(self, name="closingframe")
-        self.closingFrame.configure(
-            height=50, style="Normal.TFrame", width=200)
-        self.apply_Button = ttk.Button(self.closingFrame, name="apply_button")
-        self.apply_Button.configure(style="Button2b.TButton", text='Apply')
-        self.apply_Button.pack(anchor="center", padx=10, side="left")
-        self.apply_Button.configure(command=self.apply_CB)
-        self.cancel_Buttom = ttk.Button(
-            self.closingFrame, name="cancel_buttom")
-        self.cancel_Buttom.configure(style="Button2b.TButton", text='Cancel')
-        self.cancel_Buttom.pack(anchor="center", padx=10, side="left")
-        self.cancel_Buttom.configure(command=self.cancel_CB)
-        self.closingFrame.grid(column=0, pady=10, row=3)
         self.action_Frame = ttk.Frame(self, name="action_frame")
         self.action_Frame.configure(
             height=200, style="Normal.TFrame", width=200)
-        self.action_Combobox = ttk.Combobox(
-            self.action_Frame, name="action_combobox")
-        self.action_Combobox_VAR = tk.StringVar()
-        self.action_Combobox.configure(
-            justify="center",
-            state="readonly",
-            textvariable=self.action_Combobox_VAR,
-            values='Select Backup Restore',
-            width=7)
-        self.action_Combobox.grid(column=1, padx="5 0", row=0)
+        self.from_Label = ttk.Label(self.action_Frame, name="from_label")
+        self.from_Label.configure(style="Heading1b.TLabel", text='Source:')
+        self.from_Label.grid(column=2, padx="10 0", row=0)
         self.from_Combobox = ttk.Combobox(
             self.action_Frame, name="from_combobox")
         self.from_Combobox_VAR = tk.StringVar()
@@ -546,39 +526,46 @@ class settingsBackupUI(ttk.Labelframe):
             justify="center",
             state="readonly",
             textvariable=self.from_Combobox_VAR,
-            values='Select Current Config',
-            width=7)
+            values='Select Factory Current ConfigFile',
+            width=9)
         self.from_Combobox.grid(column=3, padx="5 0", row=0)
+        self.to_Label = ttk.Label(self.action_Frame, name="to_label")
+        self.to_Label.configure(style="Heading1b.TLabel", text='Destination:')
+        self.to_Label.grid(column=4, padx="10 0", row=0)
         self.to_Combobox = ttk.Combobox(self.action_Frame, name="to_combobox")
         self.to_Combobox_VAR = tk.StringVar()
         self.to_Combobox.configure(
             justify="center",
             state="readonly",
             textvariable=self.to_Combobox_VAR,
-            values='Select Factory Current Config',
-            width=7)
+            values='Select Current ConfigFile',
+            width=9)
         self.to_Combobox.grid(column=5, padx="5 0", row=0)
-        self.action_Label = ttk.Label(self.action_Frame, name="action_label")
-        self.action_Label.configure(style="Heading2b.TLabel", text='Action:')
-        self.action_Label.grid(column=0, row=0)
-        self.from_Label = ttk.Label(self.action_Frame, name="from_label")
-        self.from_Label.configure(style="Heading2b.TLabel", text='From:')
-        self.from_Label.grid(column=2, padx="10 0", row=0)
-        self.to_Label = ttk.Label(self.action_Frame, name="to_label")
-        self.to_Label.configure(style="Heading2b.TLabel", text='To:')
-        self.to_Label.grid(column=4, padx="10 0", row=0)
-        self.action_Frame.grid(column=0, padx=10, pady=10, row=2, sticky="ew")
+        self.action_Frame.grid(column=0, padx=10, pady=10, row=2)
+        self.closingFrame = ttk.Frame(self, name="closingframe")
+        self.closingFrame.configure(
+            height=50, style="Normal.TFrame", width=200)
+        self.apply_Button = ttk.Button(self.closingFrame, name="apply_button")
+        self.apply_Button.configure(style="Button2b.TButton", text='Copy')
+        self.apply_Button.pack(anchor="center", padx=10, side="left")
+        self.apply_Button.configure(command=self.copy_CB)
+        self.cancel_Buttom = ttk.Button(
+            self.closingFrame, name="cancel_buttom")
+        self.cancel_Buttom.configure(style="Button2b.TButton", text='Cancel')
+        self.cancel_Buttom.pack(anchor="center", padx=10, side="left")
+        self.cancel_Buttom.configure(command=self.cancel_CB)
+        self.closingFrame.grid(column=0, pady=10, row=3)
         self.configure(
             height=400,
             style="Heading2.TLabelframe",
-            text='Radio Backup/Restore',
+            text='Radio Backup',
             width=600)
         # Layout for 'labelframe1' skipped in custom widget template.
 
     def select_All_Checkbutton_CB(self):
         pass
 
-    def apply_CB(self):
+    def copy_CB(self):
         pass
 
     def cancel_CB(self):

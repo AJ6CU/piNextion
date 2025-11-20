@@ -71,6 +71,7 @@ class configuration:
 
                             "NUMBER DELIMITER": ".",
                             "TXOffset": "EEPROM",
+                            "VIRTUAL KEYBOARD": "True",
 
                             "Master Cal": "",
                             "SSB BFO": "",

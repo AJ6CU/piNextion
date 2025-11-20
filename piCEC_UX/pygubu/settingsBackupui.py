@@ -495,19 +495,23 @@ class settingsBackupUI(ttk.Labelframe):
         frame5.configure(height=200, style="Normal.TFrame", width=200)
         self.select_All_Checkbutton = ttk.Checkbutton(
             frame5, name="select_all_checkbutton")
-        self.select_All_Checked_Text_VAR = tk.StringVar(value='  Select All')
         self.select_All_Checked_VAR = tk.StringVar()
         self.select_All_Checkbutton.configure(
             offvalue=0,
             onvalue=1,
             style="Checkbox2b.TCheckbutton",
-            text='  Select All',
-            textvariable=self.select_All_Checked_Text_VAR,
             variable=self.select_All_Checked_VAR)
-        self.select_All_Checkbutton.pack(padx=0, pady=5, side="left")
+        self.select_All_Checkbutton.pack(padx="18 0", pady="5 0", side="left")
         self.select_All_Checkbutton.configure(
             command=self.select_All_Checkbutton_CB)
-        frame5.grid(column=0, columnspan=2, padx="18 0", row=12, sticky="w")
+        self.select_All_Label = ttk.Label(frame5, name="select_all_label")
+        self.select_All_Checked_Text_VAR = tk.StringVar(value='Select All')
+        self.select_All_Label.configure(
+            style="Heading2bi.TLabel",
+            text='Select All',
+            textvariable=self.select_All_Checked_Text_VAR)
+        self.select_All_Label.pack(padx=15, pady="5 0", side="right")
+        frame5.grid(column=0, columnspan=4, row=12, sticky="w")
         self.backupSettings_Frame.grid(column=0, pady="10 0", row=1)
         self.closingFrame = ttk.Frame(self, name="closingframe")
         self.closingFrame.configure(

@@ -96,7 +96,6 @@ class settingsBackup(baseui.settingsBackupUI):
 
 
     def select_All_Checkbutton_CB(self):
-        print("select_All_Checkbutton_CB")
         if self.select_All_Checked_VAR.get() == "1":
             self.Master_Cal_Checked_VAR.set("1")
             self.SSB_BFO_Checked_VAR.set("1")
@@ -106,6 +105,10 @@ class settingsBackup(baseui.settingsBackupUI):
             self.CW_Sidetone_Checked_VAR.set("1")
             self.CW_Delay_Before_TX_Checked_VAR.set("1")
             self.CW_Delay_Returning_To_RX_Checked_VAR.set("1")
+
+            self.select_All_Checked_Text_VAR.set("Uncheck to Deselect All")
+
+
         else:
             self.Master_Cal_Checked_VAR.set("0")
             self.SSB_BFO_Checked_VAR.set("0")
@@ -115,6 +118,9 @@ class settingsBackup(baseui.settingsBackupUI):
             self.CW_Sidetone_Checked_VAR.set("0")
             self.CW_Delay_Before_TX_Checked_VAR.set("0")
             self.CW_Delay_Returning_To_RX_Checked_VAR.set("0")
+
+            self.select_All_Checked_Text_VAR.set("Select All")
+
 
 
 

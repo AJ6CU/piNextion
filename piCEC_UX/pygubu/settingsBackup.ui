@@ -796,8 +796,7 @@ File</property>
                 <property name="width">200</property>
                 <layout manager="grid">
                   <property name="column">0</property>
-                  <property name="columnspan">2</property>
-                  <property name="padx">18 0</property>
+                  <property name="columnspan">4</property>
                   <property name="row">12</property>
                   <property name="sticky">w</property>
                 </layout>
@@ -807,13 +806,23 @@ File</property>
                     <property name="offvalue">0</property>
                     <property name="onvalue">1</property>
                     <property name="style">Checkbox2b.TCheckbutton</property>
-                    <property name="text" translatable="yes">  Select All</property>
-                    <property name="textvariable">string:select_All_Checked_Text_VAR</property>
                     <property name="variable">string:select_All_Checked_VAR</property>
                     <layout manager="pack">
-                      <property name="padx">0</property>
-                      <property name="pady">5</property>
+                      <property name="padx">18 0</property>
+                      <property name="pady">5 0</property>
                       <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="select_All_Label" named="True">
+                    <property name="style">Heading2bi.TLabel</property>
+                    <property name="text" translatable="yes">Select All</property>
+                    <property name="textvariable">string:select_All_Checked_Text_VAR</property>
+                    <layout manager="pack">
+                      <property name="padx">15</property>
+                      <property name="pady">5 0</property>
+                      <property name="side">right</property>
                     </layout>
                   </object>
                 </child>

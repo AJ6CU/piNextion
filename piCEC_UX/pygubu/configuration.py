@@ -171,10 +171,10 @@ class configuration:
         self.saveConfig()
 
 
-    def get_Key_Type(self):
+    def get_Keytype(self):
         return self.config_data["CW Key Type"]
 
-    def set_Key_Type(self, value):
+    def set_Keytype(self, value):
         self.config_data["CW Key Type"] = value
         self.saveConfig()
 
@@ -191,7 +191,7 @@ class configuration:
         return self.config_data["CW Delay Returning to RX"]
 
     def set_CW_Delay_Returning_to_RX(self, value):
-        self.config_data["CCW Delay Returning to RX"] = value
+        self.config_data["CW Delay Returning to RX"] = value
         self.saveConfig()
 
 

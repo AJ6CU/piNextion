@@ -55,7 +55,7 @@ class settingsMachineUI(ttk.Labelframe):
         self.MCU_Command_Headroom_Label = ttk.Label(
             frame1, name="mcu_command_headroom_label")
         self.MCU_Command_Headroom_Label.configure(
-            style="Heading2.TLabel",
+            style="Heading2b.TLabel",
             text='Minimum time between commands sent to Radio (ms):')
         self.MCU_Command_Headroom_Label.grid(
             column=0, padx=10, pady=10, row=0, sticky="e")
@@ -71,7 +71,7 @@ class settingsMachineUI(ttk.Labelframe):
         self.MCU_Update_Period_Label = ttk.Label(
             frame1, name="mcu_update_period_label")
         self.MCU_Update_Period_Label.configure(
-            style="Heading2.TLabel",
+            style="Heading2b.TLabel",
             text='Frequency checking for UX changes (ms):')
         self.MCU_Update_Period_Label.grid(
             column=0, padx=10, pady=10, row=1, sticky="e")

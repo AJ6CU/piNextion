@@ -168,17 +168,17 @@ class piCECNextion(baseui.piCECNextionUI):
             "1": "VFO-B"
         }
 
-        self.CW_KeyType = {         # 0: straight, 1 : iambica, 2: iambicb
-            "0":"STRAIGHT",
-            "1":"IAMBICA",
-            "2":"IAMBICB"
-        }
-
-        self.CW_KeyValue = {
-            "STRAIGHT": 0x0,
-            "IAMBICA": 0x01,
-            "IAMBICB": 0x02
-        }
+        # self.CW_KeyType = {         # 0: straight, 1 : iambica, 2: iambicb
+        #     "0":"STRAIGHT",
+        #     "1":"IAMBICA",
+        #     "2":"IAMBICB"
+        # }
+        #
+        # self.CW_KeyValue = {
+        #     "STRAIGHT": 0x0,
+        #     "IAMBICA": 0x01,
+        #     "IAMBICB": 0x02
+        # }
         self.lsb = 0                    # index of least significant eeprom mem address in list below
         self.msb = 1                    # index of most significant eeprom emem address in list below
         self.memLength = 2
@@ -915,6 +915,82 @@ class piCECNextion(baseui.piCECNextionUI):
 
         return encodedBytes
 
+    def Radio_Set_Master_Cal(self, cal):
+
+        #
+        #   Now have to write it to EEPROM as this is not one of the values that are automatically saved to EEPROM
+        #   This requires reboot to take effect
+        #
+
+        checksum = (self.EEPROM_Mem_Address["master_cal"][self.lsb] + self.EEPROM_Mem_Address["master_cal"][self.msb]
+                    + self.EEPROM_Mem_Address["master_cal"][self.memLength]) % 256
+
+        fourBytes = self.Radio_Freq_Encode(str(cal))
+
+        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
+                   self.EEPROM_Mem_Address["master_cal"][self.lsb],
+                   self.EEPROM_Mem_Address["master_cal"][self.msb],
+                   self.EEPROM_Mem_Address["master_cal"][self.memLength],
+                   checksum,
+                   fourBytes[0],
+                   fourBytes[1],
+                   fourBytes[2],
+                   fourBytes[3]
+                   ]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+
+    def Radio_Set_SSB_BFO(self, cal):
+
+        #
+        #   Now have to write it to EEPROM as this is not one of the values that are automatically saved to EEPROM
+        #   This requires reboot to take effect
+        #
+
+        checksum = (self.EEPROM_Mem_Address["ssb_bfo"][self.lsb] + self.EEPROM_Mem_Address["ssb_bfo"][self.msb]
+                    + self.EEPROM_Mem_Address["ssb_bfo"][self.memLength]) % 256
+
+        fourBytes = self.Radio_Freq_Encode(str(cal))
+
+        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
+                   self.EEPROM_Mem_Address["ssb_bfo"][self.lsb],
+                   self.EEPROM_Mem_Address["ssb_bfo"][self.msb],
+                   self.EEPROM_Mem_Address["ssb_bfo"][self.memLength],
+                   checksum,
+                   fourBytes[0],
+                   fourBytes[1],
+                   fourBytes[2],
+                   fourBytes[3]
+                   ]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+
+
+    def Radio_Set_CW_BFO(self, cal):
+
+        #
+        #   Now have to write it to EEPROM as this is not one of the values that are automatically saved to EEPROM
+        #   This requires reboot to take effect
+        #
+
+        checksum = (self.EEPROM_Mem_Address["cw_bfo"][self.lsb] + self.EEPROM_Mem_Address["cw_bfo"][self.msb]
+                    + self.EEPROM_Mem_Address["cw_bfo"][self.memLength]) % 256
+
+        fourBytes = self.Radio_Freq_Encode(str(cal))
+
+        command = [self.toRadioCommandDict["TS_CMD_WRITEMEM"],
+                   self.EEPROM_Mem_Address["cw_bfo"][self.lsb],
+                   self.EEPROM_Mem_Address["cw_bfo"][self.msb],
+                   self.EEPROM_Mem_Address["cw_bfo"][self.memLength],
+                   checksum,
+                   fourBytes[0],
+                   fourBytes[1],
+                   fourBytes[2],
+                   fourBytes[3]
+                   ]
+        self.theRadio.sendCommandToMCU(bytes(command))
+
+
     def Radio_Set_Tuning_Preset(self, rate: bytes):
         command = [self.toRadioCommandDict["TS_CMD_TUNESTEP"], rate, 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
@@ -1013,11 +1089,11 @@ class piCECNextion(baseui.piCECNextionUI):
         self.theRadio.sendCommandToMCU(bytes(command))
 
 
-    def Radio_Set_CW_Key_Type(self, keyType):
+    def Radio_Set_CW_Keytype(self, keyType):
         #
         #   first send command to officially change the keytype
         #
-        command = [self.toRadioCommandDict["TS_CMD_KEYTYPE"], self.CW_KeyValue[keyType], 0, 0, 0]
+        command = [self.toRadioCommandDict["TS_CMD_KEYTYPE"], gv.CW_KeyValue[keyType], 0, 0, 0]
         self.theRadio.sendCommandToMCU(bytes(command))
         #
         #   Now have to write it to EEPROM as this is not one of the values that are automatically saved to EEPROM
@@ -1031,14 +1107,14 @@ class piCECNextion(baseui.piCECNextionUI):
                    self.EEPROM_Mem_Address["cw_key_type"][self.msb],
                    self.EEPROM_Mem_Address["cw_key_type"][self.memLength],
                    checksum,
-                   self.CW_KeyValue[keyType]
+                   gv.CW_KeyValue[keyType]
                    ]
         self.theRadio.sendCommandToMCU(bytes(command))
 
 
 
 
-    def Radio_Set_CW_Key_Speed(self, keySpeed):
+    def Radio_Set_CW_Speed(self, keySpeed):
 
         #
         #
@@ -1862,7 +1938,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def ck_UX_Set_CW_Key_Type(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        self.key_type_value_VAR.set(self.CW_KeyType[value])
+        self.key_type_value_VAR.set(gv.CW_KeyType[value])
 
     #
     #   The "vs" command stores words/minute

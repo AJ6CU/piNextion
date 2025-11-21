@@ -50,10 +50,10 @@
               <property name="side">top</property>
             </layout>
             <child>
-              <object class="ttk.Button" id="settingsMachine_Button" named="True">
-                <property name="command" type="command" cbtype="simple">SettingsMachine_CB</property>
+              <object class="ttk.Button" id="settingsMisc_Button" named="True">
+                <property name="command" type="command" cbtype="simple">settingsMisc_CB</property>
                 <property name="style">Button1Raised.TButton</property>
-                <property name="text" translatable="yes">Machine</property>
+                <property name="text" translatable="yes">General</property>
                 <property name="width">14</property>
                 <layout manager="grid">
                   <property name="column">0</property>
@@ -80,10 +80,10 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="settingsMisc_Button" named="True">
-                <property name="command" type="command" cbtype="simple">settingsMisc_CB</property>
+              <object class="ttk.Button" id="settingsBackup_Button" named="True">
+                <property name="command" type="command" cbtype="simple">settingsBackup_CB</property>
                 <property name="style">Button1Raised.TButton</property>
-                <property name="text" translatable="yes">Misc</property>
+                <property name="text" translatable="yes">Backup</property>
                 <property name="width">14</property>
                 <layout manager="grid">
                   <property name="column">2</property>
@@ -91,36 +91,6 @@
                   <property name="padx">10</property>
                   <property name="pady">10</property>
                   <property name="row">0</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="ttk.Button" id="settingsChannels" named="True">
-                <property name="command" type="command" cbtype="simple">settingsChannels_CB</property>
-                <property name="style">Button1Raised.TButton</property>
-                <property name="text" translatable="yes">Channels</property>
-                <property name="width">14</property>
-                <layout manager="grid">
-                  <property name="column">0</property>
-                  <property name="ipady">25</property>
-                  <property name="padx">10</property>
-                  <property name="pady">10</property>
-                  <property name="row">2</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="ttk.Button" id="settingsBackup_Button" named="True">
-                <property name="command" type="command" cbtype="simple">settingsBackup_CB</property>
-                <property name="style">Button1Raised.TButton</property>
-                <property name="text" translatable="yes">Backup</property>
-                <property name="width">14</property>
-                <layout manager="grid">
-                  <property name="column">1</property>
-                  <property name="ipady">25</property>
-                  <property name="padx">10</property>
-                  <property name="pady">10</property>
-                  <property name="row">2</property>
                 </layout>
               </object>
             </child>
@@ -135,18 +105,18 @@
                   <property name="ipady">25</property>
                   <property name="padx">10</property>
                   <property name="pady">10</property>
-                  <property name="row">2</property>
+                  <property name="row">3</property>
                 </layout>
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="settingsFactoryReset_Button" named="True">
-                <property name="command" type="command" cbtype="simple">settingsFactoryReset_CB</property>
+              <object class="ttk.Button" id="settingsMachine_Button" named="True">
+                <property name="command" type="command" cbtype="simple">SettingsMachine_CB</property>
                 <property name="style">Button1Raised.TButton</property>
-                <property name="text" translatable="yes">Factory Reset</property>
+                <property name="text" translatable="yes">Machine</property>
                 <property name="width">14</property>
                 <layout manager="grid">
-                  <property name="column">1</property>
+                  <property name="column">0</property>
                   <property name="ipady">25</property>
                   <property name="padx">10</property>
                   <property name="pady">10</property>
@@ -161,22 +131,7 @@
                 <property name="text" translatable="yes">Reboot uBITX</property>
                 <property name="width">14</property>
                 <layout manager="grid">
-                  <property name="column">0</property>
-                  <property name="ipady">25</property>
-                  <property name="padx">10</property>
-                  <property name="pady">10</property>
-                  <property name="row">3</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="ttk.Button" id="settingsReserved3_Button" named="True">
-                <property name="state">disabled</property>
-                <property name="style">Button1Raised.TButton</property>
-                <property name="text" translatable="yes">tbd</property>
-                <property name="width">14</property>
-                <layout manager="grid">
-                  <property name="column">2</property>
+                  <property name="column">1</property>
                   <property name="ipady">25</property>
                   <property name="padx">10</property>
                   <property name="pady">10</property>

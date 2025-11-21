@@ -54,13 +54,13 @@ class settingsUI(ttk.Labelframe):
         # First object created
         on_first_object_cb(self.settingsButtons_Frame)
 
-        self.settingsMachine_Button = ttk.Button(
-            self.settingsButtons_Frame, name="settingsmachine_button")
-        self.settingsMachine_Button.configure(
-            style="Button1Raised.TButton", text='Machine', width=14)
-        self.settingsMachine_Button.grid(
+        self.settingsMisc_Button = ttk.Button(
+            self.settingsButtons_Frame, name="settingsmisc_button")
+        self.settingsMisc_Button.configure(
+            style="Button1Raised.TButton", text='General', width=14)
+        self.settingsMisc_Button.grid(
             column=0, ipady=25, padx=10, pady=10, row=0)
-        self.settingsMachine_Button.configure(command=self.SettingsMachine_CB)
+        self.settingsMisc_Button.configure(command=self.settingsMisc_CB)
         self.settingsCW_Button = ttk.Button(
             self.settingsButtons_Frame, name="settingscw_button")
         self.settingsCW_Button.configure(
@@ -70,53 +70,33 @@ class settingsUI(ttk.Labelframe):
         self.settingsCW_Button.grid(
             column=1, ipady=25, padx=10, pady=10, row=0)
         self.settingsCW_Button.configure(command=self.settingsCW_CB)
-        self.settingsMisc_Button = ttk.Button(
-            self.settingsButtons_Frame, name="settingsmisc_button")
-        self.settingsMisc_Button.configure(
-            style="Button1Raised.TButton", text='Misc', width=14)
-        self.settingsMisc_Button.grid(
-            column=2, ipady=25, padx=10, pady=10, row=0)
-        self.settingsMisc_Button.configure(command=self.settingsMisc_CB)
-        self.settingsChannels = ttk.Button(
-            self.settingsButtons_Frame, name="settingschannels")
-        self.settingsChannels.configure(
-            style="Button1Raised.TButton", text='Channels', width=14)
-        self.settingsChannels.grid(column=0, ipady=25, padx=10, pady=10, row=2)
-        self.settingsChannels.configure(command=self.settingsChannels_CB)
         self.settingsBackup_Button = ttk.Button(
             self.settingsButtons_Frame, name="settingsbackup_button")
         self.settingsBackup_Button.configure(
             style="Button1Raised.TButton", text='Backup', width=14)
         self.settingsBackup_Button.grid(
-            column=1, ipady=25, padx=10, pady=10, row=2)
+            column=2, ipady=25, padx=10, pady=10, row=0)
         self.settingsBackup_Button.configure(command=self.settingsBackup_CB)
         self.settingsReserved2_Button = ttk.Button(
             self.settingsButtons_Frame, name="settingsreserved2_button")
         self.settingsReserved2_Button.configure(
             state="disabled", style="Button1Raised.TButton", text='tbd', width=14)
         self.settingsReserved2_Button.grid(
-            column=2, ipady=25, padx=10, pady=10, row=2)
-        self.settingsFactoryReset_Button = ttk.Button(
-            self.settingsButtons_Frame, name="settingsfactoryreset_button")
-        self.settingsFactoryReset_Button.configure(
-            style="Button1Raised.TButton", text='Factory Reset', width=14)
-        self.settingsFactoryReset_Button.grid(
-            column=1, ipady=25, padx=10, pady=10, row=3)
-        self.settingsFactoryReset_Button.configure(
-            command=self.settingsFactoryReset_CB)
+            column=2, ipady=25, padx=10, pady=10, row=3)
+        self.settingsMachine_Button = ttk.Button(
+            self.settingsButtons_Frame, name="settingsmachine_button")
+        self.settingsMachine_Button.configure(
+            style="Button1Raised.TButton", text='Machine', width=14)
+        self.settingsMachine_Button.grid(
+            column=0, ipady=25, padx=10, pady=10, row=3)
+        self.settingsMachine_Button.configure(command=self.SettingsMachine_CB)
         self.settingsReboot_Button = ttk.Button(
             self.settingsButtons_Frame, name="settingsreboot_button")
         self.settingsReboot_Button.configure(
             style="Button1Raised.TButton", text='Reboot uBITX', width=14)
         self.settingsReboot_Button.grid(
-            column=0, ipady=25, padx=10, pady=10, row=3)
+            column=1, ipady=25, padx=10, pady=10, row=3)
         self.settingsReboot_Button.configure(command=self.settingsReboot_CB)
-        self.settingsReserved3_Button = ttk.Button(
-            self.settingsButtons_Frame, name="settingsreserved3_button")
-        self.settingsReserved3_Button.configure(
-            state="disabled", style="Button1Raised.TButton", text='tbd', width=14)
-        self.settingsReserved3_Button.grid(
-            column=2, ipady=25, padx=10, pady=10, row=3)
         self.settingsButtons_Frame.pack(
             anchor="center", expand=True, fill="both", side="top")
         self.settingsClose_Frame = ttk.Frame(self, name="settingsclose_frame")
@@ -137,22 +117,16 @@ class settingsUI(ttk.Labelframe):
             width=200)
         # Layout for 'settings_Labelframe' skipped in custom widget template.
 
-    def SettingsMachine_CB(self):
+    def settingsMisc_CB(self):
         pass
 
     def settingsCW_CB(self):
         pass
 
-    def settingsMisc_CB(self):
-        pass
-
-    def settingsChannels_CB(self):
-        pass
-
     def settingsBackup_CB(self):
         pass
 
-    def settingsFactoryReset_CB(self):
+    def SettingsMachine_CB(self):
         pass
 
     def settingsReboot_CB(self):

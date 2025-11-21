@@ -57,7 +57,7 @@ class settingsMiscUI(ttk.Labelframe):
             self.misc_Settings_Frame, name="number_delimiter_label")
         self.Number_Delimiter_Label.configure(
             justify="right",
-            style="Heading2.TLabel",
+            style="Heading2b.TLabel",
             text='Number Delimiter')
         self.Number_Delimiter_Label.grid(
             column=0, padx=10, pady=10, row=0, sticky="e")

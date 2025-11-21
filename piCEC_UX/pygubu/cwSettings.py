@@ -85,10 +85,10 @@ class cwSettings(baseui.cwSettingsUI):
             reboot_required = True
 
         if (self.key_type_value_VAR.get() != self.orig_key_type):
-            self.mainWindow.Radio_Set_CW_Key_Type(self.key_type_value_VAR.get())
+            self.mainWindow.Radio_Set_CW_Keytype(self.key_type_value_VAR.get())
 
         if (self.key_speed_value_VAR.get() != self.orig_keySpeed):
-            self.mainWindow.Radio_Set_CW_Key_Speed(self.key_speed_value_VAR.get())
+            self.mainWindow.Radio_Set_CW_Speed(self.key_speed_value_VAR.get())
 
         if (self.delay_starting_tx_value_VAR.get() != self.delay_starting_tx):
             self.mainWindow.Radio_Set_CW_Delay_Starting_TX(self.delay_starting_tx_value_VAR.get())
@@ -112,7 +112,7 @@ class cwSettings(baseui.cwSettingsUI):
 
 
         if(reboot_required):
-            response = messagebox.askyesno("Information", "One or more changes require a reboot to take effect.\n\n"+
+            response = messagebox.askyesno("Reboot Required", "One or more changes require a reboot to take effect.\n\n"+
                                            "Do you want to reboot now?",
                                             parent=self, icon="warning")
             if response:

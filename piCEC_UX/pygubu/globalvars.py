@@ -1,5 +1,6 @@
 import os
 import tkinter.font as font
+from tkinter import messagebox
 
 #application required files################################################
 def resource_path(relative_path):
@@ -21,6 +22,26 @@ config = None
 RELOADICON = resource_path("img_Reload-24x24.png")
 BAUD = 9600
 NUMBER_DELIMITER = ""               # Loaded with value from configuration file
+
+MASTER_CAL_BOUNDS = {'LOW': -500000, 'HIGH': 500000}
+BFO_CAL_BOUNDS = {'LOW': 11048000, 'HIGH': 12010000}
+CW_CAL_BOUNDS = {'LOW': 11048000, 'HIGH': 12010000}
+CW_TONE_BOUNDS = {'LOW':100, 'HIGH': 2000}
+CW_SPEED_WPM_BOUNDS = {'LOW':1, 'HIGH': 250}
+CW_START_TX_BOUNDS = {'LOW': 0, 'HIGH': 5000}
+CW_DELAY_Return_RX_BOUNDS = {'LOW': 0, 'HIGH': 10000}
+
+CW_KeyType = {  # 0: straight, 1 : iambica, 2: iambicb
+    "0": "STRAIGHT",
+    "1": "IAMBICA",
+    "2": "IAMBICB"
+}
+
+CW_KeyValue = {
+    "STRAIGHT": 0x0,
+    "IAMBICA": 0x01,
+    "IAMBICB": 0x02
+}
 
 
 #   VFO Formatting Functions
@@ -69,3 +90,21 @@ def formatCombobox( combobox, family="Arial", size="36", weight="bold"):
     popdown = combobox.tk.eval('ttk::combobox::PopdownWindow %s' % combobox)
     #   configure popdown font
     combobox.tk.call('%s.f.l' % popdown, 'configure', '-font', combobox['font'])
+
+def validateNumber(value, lowbound, highbound, name, parent):
+    if str(value) == "":
+        messagebox.showinfo("Illegal Value for "+ name, "Source value for "+ name+ " is empty\n\nRequested change ignored", parent=parent)
+        return False
+    elif ((lowbound <= int(value)) & (highbound >= int(value))):
+        return True
+    else:
+        messagebox.showinfo("Value for " + name+ " is out of range", "Source value (" + str(value) +") for "+ name+ " is not within "
+                            + str(lowbound) +" to "+ str(highbound) +" \n\nRequested change ignored", parent=parent)
+        return False
+
+def validateKeyInDict(dict, key, name, parent):
+    if key not in dict:
+        messagebox.showinfo("Illegal Value for "+ key, "Source value (" + str(key) +") for "+ name+ " is not a valid option\n\nRequested change ignored", parent=parent)
+        return False
+    else:
+        return True

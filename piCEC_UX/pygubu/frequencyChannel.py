@@ -6,6 +6,7 @@ from VirtualNumericKeyboard import VirtualNumericKeyboard
 from VirtualKeyboard import VirtualKeyboard
 
 import globalvars as gv
+from tkinter import messagebox
 
 
 
@@ -60,7 +61,18 @@ class frequencyChannel(baseui.frequencyChannelUI):
         gv.formatFrequency(self.channel_Freq_VAR, freq)
     def Freq_Default(self):
         self.Set_Freq("14032000")
-
+    #
+    #   Following 2 callbacks handle both virtual and real keyboards. When a label field is clicked, the "channel_Label_Entered_CB"
+    #   is called. It saves the current value, removes any blank padding on right, and then decides whether the virtual
+    #   or real keyboard is to be used depending on the users' setting.
+    #   If it is a virtual keyboard, then the
+    #   alphanumeric_Keyboard is invoked. It takes care of error checking and padding, so there is no more work for these
+    #   two routines.
+    #   IF however, a real keyboard is used, then when the focus out event happens, a validation check of
+    #   string length being less than 5. If greater, an error warning is generated and the string is truncated to 5.
+    #   After blank padding to 5 (if needed), the entered valued is compared to the original value. If it is different,
+    #   the label string is updated and it is declared "dirty"
+    #
 
     def channel_Label_Entered_CB(self, event=None):
         self.channel_label_save = self.channel_Label_VAR.get()
@@ -70,18 +82,17 @@ class frequencyChannel(baseui.frequencyChannelUI):
 
     def channel_Lavel_Validation_CB(self, p_entry_value, v_condition):
         if (v_condition == "focusout") and (gv.config.get_Virtual_Keyboard_Switch() == "Off"):
-            if (self.channel_label_save != p_entry_value) :
-                self.channel_Label_VAR.set(p_entry_value.ljust(5))
-                self.channel_Dirty()
-        return True  # need to add validation of 5 digits or less here
+            if len(p_entry_value) > 5:
+                messagebox.showinfo("Error Too Long", "Maximum of 5 characters in a channel label.\n"
+                                    + "Your label has been truncated to left most 5 characters", parent=self)
+                p_entry_value = p_entry_value[:5]
 
-        # if (self.validateNumber(p_entry_value, SettingsNotebook.MASTER_CAL_BOUNDS['LOW'],
-        #                         SettingsNotebook.MASTER_CAL_BOUNDS['HIGH'])):
-        #     return True
-        # else:
-        #     self.log.printerror("timestamp", "Master Calibration " + SettingsNotebook.validationErrorMsg)
-        #     self.MASTER_CAL.set(self.priorValues["MASTER_CAL"])
-        #     return False
+            p_entry_value = p_entry_value.ljust(5)          # blank pad if needed
+
+            if (self.channel_label_save != p_entry_value):
+                self.channel_Label_VAR.set(p_entry_value)
+                self.channel_Dirty()
+        return True
 
     def alphanumeric_Keyboard(self, channel_Label_strvar, change_CB, maxChars):
         keypad = VirtualKeyboard(self, channel_Label_strvar, change_CB, maxChars)

@@ -19,6 +19,7 @@ class frequencyChannel(baseui.frequencyChannelUI):
         self.myChannelNum = 0
         self.selectCallback = None
         self.dirty = False
+        self.channel_label_save = None
 
     def assignChannelNum(self, channelNum):
         self.myChannelNum = channelNum
@@ -60,11 +61,34 @@ class frequencyChannel(baseui.frequencyChannelUI):
     def Freq_Default(self):
         self.Set_Freq("14032000")
 
-    def alphanumeric_Keypad_CB(self, event=None):
-        keypad = VirtualKeyboard(self, self.channel_Label_VAR, self.channel_Name_Changed_CB, 5)
+
+    def channel_Label_Entered_CB(self, event=None):
+        self.channel_label_save = self.channel_Label_VAR.get()
+        self.channel_Label_VAR.set(self.channel_label_save.replace(" ",""))
+        if gv.config.get_Virtual_Keyboard_Switch() == "On":
+            self.alphanumeric_Keyboard(self.channel_Label_VAR, self.channel_Name_Changed_CB, 5)
+
+    def channel_Lavel_Validation_CB(self, p_entry_value, v_condition):
+        if (v_condition == "focusout") and (gv.config.get_Virtual_Keyboard_Switch() == "Off"):
+            if (self.channel_label_save != p_entry_value) :
+                self.channel_Label_VAR.set(p_entry_value.ljust(5))
+                self.channel_Dirty()
+        return True  # need to add validation of 5 digits or less here
+
+        # if (self.validateNumber(p_entry_value, SettingsNotebook.MASTER_CAL_BOUNDS['LOW'],
+        #                         SettingsNotebook.MASTER_CAL_BOUNDS['HIGH'])):
+        #     return True
+        # else:
+        #     self.log.printerror("timestamp", "Master Calibration " + SettingsNotebook.validationErrorMsg)
+        #     self.MASTER_CAL.set(self.priorValues["MASTER_CAL"])
+        #     return False
+
+    def alphanumeric_Keyboard(self, channel_Label_strvar, change_CB, maxChars):
+        keypad = VirtualKeyboard(self, channel_Label_strvar, change_CB, maxChars)
 
     def numeric_Keypad_CB(self, event=None):
-        keypad = VirtualNumericKeyboard(self, self.channel_Freq_VAR, self.Channel_Freq_Changed_CB,8)
+        if gv.config.get_Virtual_Keyboard_Switch() == "On":
+            keypad = VirtualNumericKeyboard(self, self.channel_Freq_VAR, self.Channel_Freq_Changed_CB,8)
 
     #
     #   Get/Set mode combo box

@@ -1535,6 +1535,7 @@ class piCECNextion(baseui.piCECNextionUI):
                 self.EEPROM_Current_Slot_Label = 0
                 self.memReadingState = "ShowLabel"
         elif (self.memReadingState == "ShowLabel"):
+            # TypeError: ord() expected a character, but string of length 8 found
             if (ord(value) == 0):
                 self.channelWindow.EEPROM_SetChannelShowLabel(
                     self.EEPROM_Current_Slot_ShowLabel,

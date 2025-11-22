@@ -165,7 +165,8 @@ class channels(baseui.channelsUI):
         for channelNum in range(len(self.channelList)):
             if (channels.channelList[channelNum].dirty):
                 response = messagebox.askyesno("Confirmation",
-                                               "Not all channels have been saved to EEPROM\nDo you want to save these channels?")
+                                               "Not all channels have been saved to EEPROM\nDo you want to save these channels?",
+                                               parent=self)
 
                 # Process the user's response
                 if response:  # True if "Yes" is clicked

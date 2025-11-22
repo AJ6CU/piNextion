@@ -20,8 +20,8 @@ class settingsMiscToplevel(tk.Toplevel):
 
         self.popup = tk.Toplevel(self.master)
 
-        self.popup.title("Misc Settings")
-        self.popup.geometry("600x430")
+        self.popup.title("General Settings")
+        self.popup.geometry("400x250")
         self.popup.wait_visibility()  # required on Linux
         self.popup.grab_set()
         self.popup.transient(self.master)
@@ -42,15 +42,22 @@ class settingsMisc(baseui.settingsMiscUI):
         #
 
         gv.formatCombobox( self.Number_Delimiter_Combobox, "Arial", "36", "bold")
+        gv.formatCombobox( self.Virtual_Keyboard_Combobox, "Arial", "36", "bold")
 
         self.saveNUMBER_DELIMITER = gv.config.get_NUMBER_DELIMITER()
         self.NUMBER_DELIMITER_VAR.set(self.saveNUMBER_DELIMITER)
+
+        self.saveVirtual_Keyboard = gv.config.get_Virtual_Keyboard_Switch()
+        self.Virtual_Keyboard_VAR.set(self.saveVirtual_Keyboard)
 
     def apply_CB(self):
         print("Applying settings")
 
         if self.NUMBER_DELIMITER_VAR.get() != self.saveNUMBER_DELIMITER:
             gv.config.set_NUMBER_DELIMITER(self.NUMBER_DELIMITER_VAR.get())
+
+        if self.Virtual_Keyboard_VAR.get() != self.saveVirtual_Keyboard:
+            gv.config.set_Virtual_Keyboard_Switch(self.Virtual_Keyboard_VAR.get())
 
         self.master.destroy()
 

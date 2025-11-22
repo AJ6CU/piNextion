@@ -81,7 +81,8 @@ class configuration:
                             "CW Key Type":"STRAIGHT",
                             "CW Delay Before TX":"500",
                             "CW Delay Returning to RX":"2000",
-                            "Callsign":""
+                            "Callsign":"",
+                            "Virtual Keyboard Switch":"On"
 
                             }
         self.saveConfig()
@@ -192,6 +193,13 @@ class configuration:
 
     def set_CW_Delay_Returning_to_RX(self, value):
         self.config_data["CW Delay Returning to RX"] = value
+        self.saveConfig()
+
+    def get_Virtual_Keyboard_Switch(self):
+        return self.config_data["Virtual Keyboard Switch"]
+
+    def set_Virtual_Keyboard_Switch(self, value):
+        self.config_data["Virtual Keyboard Switch"] = value
         self.saveConfig()
 
 

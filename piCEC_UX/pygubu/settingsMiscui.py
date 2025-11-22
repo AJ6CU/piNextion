@@ -71,7 +71,27 @@ class settingsMiscUI(ttk.Labelframe):
             textvariable=self.NUMBER_DELIMITER_VAR,
             values=', .',
             width=2)
-        self.Number_Delimiter_Combobox.grid(column=1, row=0)
+        self.Number_Delimiter_Combobox.grid(column=1, padx="20 0", row=0)
+        self.Virtual_Keyboard_Label = ttk.Label(
+            self.misc_Settings_Frame, name="virtual_keyboard_label")
+        self.Virtual_Keyboard_Label.configure(
+            justify="right",
+            style="Heading2b.TLabel",
+            text='Virtual Keyboard')
+        self.Virtual_Keyboard_Label.grid(
+            column=0, padx=10, pady="40 0", row=1, sticky="e")
+        self.Virtual_Keyboard_Combobox = ttk.Combobox(
+            self.misc_Settings_Frame, name="virtual_keyboard_combobox")
+        self.Virtual_Keyboard_VAR = tk.StringVar()
+        self.Virtual_Keyboard_Combobox.configure(
+            justify="center",
+            state="readonly",
+            style="TCombobox",
+            textvariable=self.Virtual_Keyboard_VAR,
+            values='On Off',
+            width=4)
+        self.Virtual_Keyboard_Combobox.grid(
+            column=1, padx="20 0", pady="40 0", row=1)
         self.misc_Settings_Frame.pack(padx=10, pady=10, side="top")
         self.closingFrame = ttk.Frame(self, name="closingframe")
         self.closingFrame.configure(
@@ -91,10 +111,10 @@ class settingsMiscUI(ttk.Labelframe):
             pady=20,
             side="top")
         self.configure(
-            height=400,
+            height=300,
             style="Heading2.TLabelframe",
-            text='Miscellaneous Settings',
-            width=600)
+            text='General Settings',
+            width=400)
         # Layout for 'labelframe1' skipped in custom widget template.
 
     def apply_CB(self):

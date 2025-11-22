@@ -62,8 +62,10 @@
         <property name="justify">left</property>
         <property name="style">Entry2b.TEntry</property>
         <property name="textvariable">string:channel_Label_VAR</property>
+        <property name="validate">focusout</property>
+        <property name="validatecommand" type="command" cbtype="entry_validate" args="%P %V">channel_Lavel_Validation_CB</property>
         <property name="width">5</property>
-        <bind sequence="&lt;Button&gt;" handler="alphanumeric_Keypad_CB" add="True" />
+        <bind sequence="&lt;Button&gt;" handler="channel_Label_Entered_CB" add="True" />
         <layout manager="grid">
           <property name="column">2</property>
           <property name="padx">5 0</property>

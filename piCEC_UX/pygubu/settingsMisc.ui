@@ -30,7 +30,7 @@
       <object class="ttk.Labelframe" id="labelframe1">
         <property name="height">400</property>
         <property name="style">Heading2.TLabelframe</property>
-        <property name="text" translatable="yes">Miscellaneous Settings</property>
+        <property name="text" translatable="yes">General Settings</property>
         <property name="width">600</property>
         <layout manager="pack">
           <property name="expand">true</property>
@@ -71,7 +71,38 @@
                 <property name="width">2</property>
                 <layout manager="grid">
                   <property name="column">1</property>
+                  <property name="padx">20 0</property>
                   <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="Virtual_Keyboard_Label" named="True">
+                <property name="justify">right</property>
+                <property name="style">Heading2b.TLabel</property>
+                <property name="text" translatable="yes">Virtual Keyboard</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">10</property>
+                  <property name="pady">40 0</property>
+                  <property name="row">1</property>
+                  <property name="sticky">e</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Combobox" id="Virtual_Keyboard_Combobox" named="True">
+                <property name="justify">center</property>
+                <property name="state">readonly</property>
+                <property name="style">TCombobox</property>
+                <property name="textvariable">string:Virtual_Keyboard_VAR</property>
+                <property name="values">On Off</property>
+                <property name="width">4</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="padx">20 0</property>
+                  <property name="pady">40 0</property>
+                  <property name="row">1</property>
                 </layout>
               </object>
             </child>

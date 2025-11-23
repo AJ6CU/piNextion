@@ -88,8 +88,15 @@ class frequencyChannelUI(ttk.Frame):
         self.freq_Entry.configure(
             style="Entry2b.TEntry",
             textvariable=self.channel_Freq_VAR,
+            validate="focusout",
             width=8)
         self.freq_Entry.grid(column=3, padx="5 0", row=0, sticky="w")
+        _validatecmd = (
+            self.freq_Entry.register(
+                self.channel_Freq_Validation_CB),
+            "%P",
+            "%V")
+        self.freq_Entry.configure(validatecommand=_validatecmd)
         self.freq_Entry.bind("<Button>", self.numeric_Keypad_CB, add="+")
         self.mode_Combobox = Combobox(self, name="mode_combobox")
         self.channel_Mode_VAR = tk.StringVar()
@@ -146,6 +153,9 @@ class frequencyChannelUI(ttk.Frame):
         pass
 
     def channel_Label_Entered_CB(self, event=None):
+        pass
+
+    def channel_Freq_Validation_CB(self, p_entry_value, v_condition):
         pass
 
     def numeric_Keypad_CB(self, event=None):

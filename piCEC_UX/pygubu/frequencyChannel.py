@@ -20,7 +20,10 @@ class frequencyChannel(baseui.frequencyChannelUI):
         self.myChannelNum = 0
         self.selectCallback = None
         self.dirty = False
-        self.channel_label_save = None
+        self.channel_label_save = tk.StringVar()
+        self.channel_Freq_save = tk.StringVar()
+        self.vNumericPad = None
+        self.vKeyboard = None
 
     def assignChannelNum(self, channelNum):
         self.myChannelNum = channelNum
@@ -75,10 +78,10 @@ class frequencyChannel(baseui.frequencyChannelUI):
     #
 
     def channel_Label_Entered_CB(self, event=None):
-        self.channel_label_save = self.channel_Label_VAR.get()
-        self.channel_Label_VAR.set(self.channel_label_save.replace(" ",""))
+        self.channel_label_save.set(self.channel_Label_VAR.get())
+        self.channel_Label_VAR.set(self.channel_label_save.get().replace(" ",""))
         if gv.config.get_Virtual_Keyboard_Switch() == "On":
-            self.alphanumeric_Keyboard(self.channel_Label_VAR, self.channel_Name_Changed_CB, 5)
+            self.vKeyboard = VirtualKeyboard(self, self.channel_Label_VAR, self.channel_Name_Changed_CB, 5)
 
     def channel_Lavel_Validation_CB(self, p_entry_value, v_condition):
         if (v_condition == "focusout") and (gv.config.get_Virtual_Keyboard_Switch() == "Off"):
@@ -89,17 +92,43 @@ class frequencyChannel(baseui.frequencyChannelUI):
 
             p_entry_value = p_entry_value.ljust(5)          # blank pad if needed
 
-            if (self.channel_label_save != p_entry_value):
+            if (self.channel_label_save.get() != p_entry_value):
                 self.channel_Label_VAR.set(p_entry_value)
                 self.channel_Dirty()
         return True
+    #
+    # def alphanumeric_Keyboard(self, channel_Label_strvar, change_CB, maxChars):
+    #     keypad = VirtualKeyboard(self, channel_Label_strvar, change_CB, maxChars)
 
-    def alphanumeric_Keyboard(self, channel_Label_strvar, change_CB, maxChars):
-        keypad = VirtualKeyboard(self, channel_Label_strvar, change_CB, maxChars)
+
+    #
+    #   The Numeric Keypad is handled similarly to the Alphanumberic. See comment above for details
+    #
+
 
     def numeric_Keypad_CB(self, event=None):
+        self.channel_Freq_save.set(gv.unformatFrequency(self.channel_Freq_VAR))        # save unformated version
         if gv.config.get_Virtual_Keyboard_Switch() == "On":
-            keypad = VirtualNumericKeyboard(self, self.channel_Freq_VAR, self.Channel_Freq_Changed_CB,8)
+            self.vNumericPad = VirtualNumericKeyboard(self, self.channel_Freq_VAR, self.Channel_Freq_Changed_CB,8)
+
+    def channel_Freq_Validation_CB(self, p_entry_value, v_condition):
+        unformatted_p_entry_value = tk.StringVar()
+
+        if (v_condition == "focusout") and (gv.config.get_Virtual_Keyboard_Switch() == "Off"):
+
+            unformatted_p_entry_value.set(p_entry_value)
+            unformatted_p_entry_value.set(gv.unformatFrequency(unformatted_p_entry_value))
+
+            if(gv.validateNumber(unformatted_p_entry_value.get(), gv.FREQ_BOUNDS['LOW'], gv.FREQ_BOUNDS['HIGH'], "Frequency", self)):
+
+                if (unformatted_p_entry_value.get() != self.channel_Freq_save.get()):              #compare the unformatted string versions
+                    self.channel_Freq_VAR.set(gv.formatVFO(unformatted_p_entry_value.get()))
+                    self.channel_Dirty()
+                return True
+            else:                           # bad frequency entered, reset to original formatted value
+                self.channel_Freq_VAR.set(gv.formatVFO(self.channel_Freq_save))
+                return False
+        return True
 
     #
     #   Get/Set mode combo box

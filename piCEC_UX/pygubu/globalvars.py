@@ -31,6 +31,8 @@ CW_SPEED_WPM_BOUNDS = {'LOW':1, 'HIGH': 250}
 CW_START_TX_BOUNDS = {'LOW': 0, 'HIGH': 5000}
 CW_DELAY_Return_RX_BOUNDS = {'LOW': 0, 'HIGH': 10000}
 
+FREQ_BOUNDS ={'LOW':0, 'HIGH':60000000}            # Min/Max for valid frequencies.
+
 CW_KeyType = {  # 0: straight, 1 : iambica, 2: iambicb
     "0": "STRAIGHT",
     "1": "IAMBICA",

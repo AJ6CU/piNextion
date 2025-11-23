@@ -351,7 +351,7 @@ class piCECNextion(baseui.piCECNextionUI):
             self.channelWindow = channels(self.master, self, self.refresh_CB)
             self.channelWindow.title("Memory Channel")
             self.channelWindow.transient(self.master)
-            self.channelWindow.update_Current_Frequency (self.primary_VFO_VAR.get())
+            self.channelWindow.update_Current_Frequency (self.primary_VFO_Formatted_VAR.get())
             self.channelWindow.update_Current_Mode (self.primary_Mode_VAR.get())
             self.Radio_Req_Channel_Freqs()
             self.Radio_Req_Channel_Labels()
@@ -1807,7 +1807,8 @@ class piCECNextion(baseui.piCECNextionUI):
         gv.formatFrequency(self.primary_VFO_Formatted_VAR, value, self.freqOffset)  #required because of possible offset and special formatting of VFO display
 
         if self.channelWindow != None:      #  Only update frequency if the channel window has been created once
-            self.channelWindow.update_Current_Frequency(self.primary_VFO_VAR.get())
+            self.channelWindow.update_Current_Frequency(self.primary_VFO_Formatted_VAR.get())
+
 
         self.updateJogTracking()
 

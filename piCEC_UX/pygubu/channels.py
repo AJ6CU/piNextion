@@ -28,6 +28,8 @@ class channels(baseui.channelsUI):
         self.mainWindow.Radio_Set_Tuning_Preset(1)
         self.refreshCallback = refreshCallback
 
+        gv.config.register_observer("NUMBER DELIMITER", self.reformatChannelFreq)
+
         self.scanRunning = False
         self.scanTimer = None
         self.scanSetSelected = None
@@ -53,6 +55,14 @@ class channels(baseui.channelsUI):
             self.channelSlotCount += 1
         self.scan_Select_Channel_Default()
         self.scan_Station_Time_Default()
+
+    def reformatChannelFreq(self, value):
+        for child in channels.channelList:
+            gv.formatFrequency(child.channel_Freq_VAR, child.channel_Freq_VAR.get().replace(".","").replace(",",""))
+
+        gv.formatFrequency(self.current_VFO_VAR, self.current_VFO_VAR.get().replace(".","").replace(",",""))
+
+
 
     def update_Current_Frequency(self, freq):
         self.current_VFO_VAR.set(freq)

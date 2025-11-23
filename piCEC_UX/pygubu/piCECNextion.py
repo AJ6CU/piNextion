@@ -75,10 +75,13 @@ class piCECNextion(baseui.piCECNextionUI):
                                                     # is sent to the UX, the IFS setting and Jogwheel will be enabled.
 
         self.primary_VFO_VAR = tk.StringVar()
+        self.primary_VFO_Formatted_VAR = tk.StringVar()
         self.secondary_VFO_VAR = tk.StringVar()
         self.freqOffset = 0                         # used to save the offset on the main dial. Only non-zero for CWL/CWU
 
         gv.config.register_observer("NUMBER DELIMITER", self.reformatVFO)
+        self.digit_delimiter_primary_VFO_VAR.set(gv.config.get_NUMBER_DELIMITER())
+
 
 
         self.cwTX_OffsetFlag = False                # Controls whether the display shows the transmit freq when in CW
@@ -325,6 +328,26 @@ class piCECNextion(baseui.piCECNextionUI):
             self.freqOffset = 0
 
         gv.formatFrequency(self.primary_VFO_Formatted_VAR, self.primary_VFO_VAR.get(), self.freqOffset)
+        self.update_VFO_Display(self.primary_VFO_VAR.get(), self.freqOffset)
+
+    def update_VFO_Display (self, unformatted_VFO_String, offset=0 ):
+        freq = int(unformatted_VFO_String) + offset
+
+        paddedVFO = str(freq).rjust(8)
+
+        self.digit0_primary_VFO_VAR.set(paddedVFO[7])
+        self.digit1_primary_VFO_VAR.set(paddedVFO[6])
+        self.digit2_primary_VFO_VAR.set(paddedVFO[5])
+        self.digit3_primary_VFO_VAR.set(paddedVFO[4])
+        self.digit4_primary_VFO_VAR.set(paddedVFO[3])
+        self.digit5_primary_VFO_VAR.set(paddedVFO[2])
+        self.digit6_primary_VFO_VAR.set(paddedVFO[1])
+        self.digit7_primary_VFO_VAR.set(paddedVFO[0])
+
+
+
+
+
 
     #   Callbacks
     #####################################################################################
@@ -1805,6 +1828,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
         self.primary_VFO_VAR.set(value)
         gv.formatFrequency(self.primary_VFO_Formatted_VAR, value, self.freqOffset)  #required because of possible offset and special formatting of VFO display
+        self.update_VFO_Display(self.primary_VFO_VAR.get(),self.freqOffset)
 
         if self.channelWindow != None:      #  Only update frequency if the channel window has been created once
             self.channelWindow.update_Current_Frequency(self.primary_VFO_Formatted_VAR.get())
@@ -1814,6 +1838,8 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def reformatVFO(self, value):
         gv.formatFrequency(self.primary_VFO_Formatted_VAR, self.primary_VFO_VAR.get(), self.freqOffset)
+        self.digit_delimiter_primary_VFO_VAR.set(gv.config.get_NUMBER_DELIMITER())
+        self.update_VFO_Display(self.primary_VFO_VAR.get(), self.freqOffset)
         gv.formatFrequency(self.secondary_VFO_Formatted_VAR, self.secondary_VFO_VAR.get(), self.freqOffset)
 
     #
@@ -1854,6 +1880,7 @@ class piCECNextion(baseui.piCECNextionUI):
         if (self.vfo_VAR.get()== self.VFO_A):       #update displayed frequency
             self.primary_VFO_VAR.set(value)         #MJH dont we need to update vfoa and vfob directly?
             gv.formatFrequency(self.primary_VFO_Formatted_VAR, value, self.freqOffset)
+            self.update_VFO_Display(self.primary_VFO_VAR.get(),self.freqOffset)
             # print("Updating primary vfo", value, sep='*', end='*')
             # print("\n")
         else:
@@ -1899,6 +1926,7 @@ class piCECNextion(baseui.piCECNextionUI):
         if (self.vfo_VAR.get()== self.VFO_B):       #update displayed frequency
             self.primary_VFO_VAR.set(value)
             gv.formatFrequency(self.primary_VFO_Formatted_VAR, value, self.freqOffset)
+            self.update_VFO_Display(self.primary_VFO_VAR.get(),self.freqOffset)
         else:
             self.secondary_VFO_VAR.set(value)       #need formatted here too
             gv.formatFrequency(self.secondary_VFO_Formatted_VAR, value, self.freqOffset)
@@ -1977,12 +2005,13 @@ class piCECNextion(baseui.piCECNextionUI):
         saveSecondary_VFO = self.secondary_VFO_VAR.get()
         saveSecondary_Mode = self.secondary_Mode_VAR.get()
 
-        self.secondary_VFO_VAR.set(gv.unformatFrequency(self.primary_VFO_Formatted_VAR))
+        # self.secondary_VFO_VAR.set(gv.unformatFrequency(self.primary_VFO_Formatted_VAR))
         gv.formatFrequency(self.secondary_VFO_Formatted_VAR, gv.unformatFrequency(self.primary_VFO_Formatted_VAR), self.freqOffset)
         self.secondary_Mode_VAR.set(self.primary_Mode_VAR.get())
 
         self.primary_VFO_VAR.set(saveSecondary_VFO)
         gv.formatFrequency(self.primary_VFO_Formatted_VAR, saveSecondary_VFO, self.freqOffset)
+        self.update_VFO_Display(self.primary_VFO_VAR.get(), self.freqOffset)
         self.primary_Mode_VAR.set(saveSecondary_Mode)
 
 ########################################################################################

@@ -193,71 +193,164 @@ class piCECNextionUI(ttk.Frame):
         self.vfo_display_Frame = ttk.Frame(
             self.vfoA_Frame, name="vfo_display_frame")
         self.vfo_display_Frame.configure(style="Normal.TFrame", width=200)
-        self.primary_VFO_Label = ttk.Label(
-            self.vfo_display_Frame, name="primary_vfo_label")
-        self.primary_VFO_Formatted_VAR = tk.StringVar(value='99.999.999')
-        self.primary_VFO_Label.configure(
+        self.VFO_Frame = ttk.Frame(self.vfo_display_Frame, name="vfo_frame")
+        self.VFO_Frame.configure(height=200, style="Normal.TFrame", width=200)
+        self.digit7_primary_VFO_Label = ttk.Label(
+            self.VFO_Frame, name="digit7_primary_vfo_label")
+        self.digit7_primary_VFO_VAR = tk.StringVar(value='7')
+        self.digit7_primary_VFO_Label.configure(
             anchor="e",
             style="VFO.TLabel",
-            text='99.999.999',
-            textvariable=self.primary_VFO_Formatted_VAR,
-            width=10)
-        self.primary_VFO_Label.pack(
-            anchor="w",
-            expand=False,
-            padx="0 40",
-            pady="10 0",
-            side="top")
-        self.frame1 = ttk.Frame(self.vfo_display_Frame)
-        self.frame1.configure(height=10, style="Normal.TFrame", width=200)
+            text='7',
+            textvariable=self.digit7_primary_VFO_VAR,
+            width=1)
+        self.digit7_primary_VFO_Label.grid(column=0, row=0, sticky="e")
         self.digit7_Highlight_Label = ttk.Label(
-            self.frame1, name="digit7_highlight_label")
-        self.digit7_Highlight_Label.configure(style="OffLED.TLabel", width=8)
-        self.digit7_Highlight_Label.pack(padx="65 0", side="left")
+            self.VFO_Frame, name="digit7_highlight_label")
+        self.digit7_Highlight_Label.configure(style="OffLED.TLabel", width=7)
+        self.digit7_Highlight_Label.grid(column=0, row=1)
+        self.digit6_primary_VFO_Label = ttk.Label(
+            self.VFO_Frame, name="digit6_primary_vfo_label")
+        self.digit6_primary_VFO_VAR = tk.StringVar(value='6')
+        self.digit6_primary_VFO_Label.configure(
+            anchor="e",
+            style="VFO.TLabel",
+            text='6',
+            textvariable=self.digit6_primary_VFO_VAR,
+            width=1)
+        self.digit6_primary_VFO_Label.grid(column=1, row=0, sticky="e")
         self.digit6_Highlight_Label = ttk.Label(
-            self.frame1, name="digit6_highlight_label")
-        self.digit6_Highlight_Label.configure(style="OffLED.TLabel", width=8)
-        self.digit6_Highlight_Label.pack(side="left")
+            self.VFO_Frame, name="digit6_highlight_label")
+        self.digit6_Highlight_Label.configure(style="OffLED.TLabel", width=7)
+        self.digit6_Highlight_Label.grid(column=1, row=1)
+        self.digit_delimiter_primary_VFO_1M_Label = ttk.Label(
+            self.VFO_Frame, name="digit_delimiter_primary_vfo_1m_label")
+        self.digit_delimiter_primary_VFO_VAR = tk.StringVar(value='.')
+        self.digit_delimiter_primary_VFO_1M_Label.configure(
+            style="VFO.TLabel",
+            text='.',
+            textvariable=self.digit_delimiter_primary_VFO_VAR,
+            width=0)
+        self.digit_delimiter_primary_VFO_1M_Label.grid(
+            column=2, row=0, sticky="e")
         self.digital_highlight_1M_Period = ttk.Label(
-            self.frame1, name="digital_highlight_1m_period")
+            self.VFO_Frame, name="digital_highlight_1m_period")
         self.digital_highlight_1M_Period.configure(
-            style="OffLED.TLabel", width=5)
-        self.digital_highlight_1M_Period.pack(padx=0, side="left")
+            style="OffLED.TLabel", width=1)
+        self.digital_highlight_1M_Period.grid(column=2, row=1)
+        self.digit5_primary_VFO_Label = ttk.Label(
+            self.VFO_Frame, name="digit5_primary_vfo_label")
+        self.digit5_primary_VFO_VAR = tk.StringVar(value='5')
+        self.digit5_primary_VFO_Label.configure(
+            anchor="e",
+            style="VFO.TLabel",
+            text='5',
+            textvariable=self.digit5_primary_VFO_VAR,
+            width=1)
+        self.digit5_primary_VFO_Label.grid(column=3, row=0, sticky="e")
         self.digit5_Highlight_Label = ttk.Label(
-            self.frame1, name="digit5_highlight_label")
-        self.digit5_Highlight_Label.configure(style="OffLED.TLabel", width=8)
-        self.digit5_Highlight_Label.pack(padx=2, side="left")
+            self.VFO_Frame, name="digit5_highlight_label")
+        self.digit5_Highlight_Label.configure(style="OffLED.TLabel", width=7)
+        self.digit5_Highlight_Label.grid(column=3, row=1)
+        self.digit4_primary_VFO_Label = ttk.Label(
+            self.VFO_Frame, name="digit4_primary_vfo_label")
+        self.digit4_primary_VFO_VAR = tk.StringVar(value='4')
+        self.digit4_primary_VFO_Label.configure(
+            anchor="e",
+            style="VFO.TLabel",
+            text='4',
+            textvariable=self.digit4_primary_VFO_VAR,
+            width=1)
+        self.digit4_primary_VFO_Label.grid(column=4, row=0, sticky="e")
         self.digit4_Highlight_Label = ttk.Label(
-            self.frame1, name="digit4_highlight_label")
-        self.digit4_Highlight_Label.configure(style="OffLED.TLabel", width=8)
-        self.digit4_Highlight_Label.pack(padx=0, side="left")
+            self.VFO_Frame, name="digit4_highlight_label")
+        self.digit4_Highlight_Label.configure(style="OffLED.TLabel", width=7)
+        self.digit4_Highlight_Label.grid(column=4, row=1)
+        self.digit3_primary_VFO_Label = ttk.Label(
+            self.VFO_Frame, name="digit3_primary_vfo_label")
+        self.digit3_primary_VFO_VAR = tk.StringVar(value='3')
+        self.digit3_primary_VFO_Label.configure(
+            anchor="e",
+            style="VFO.TLabel",
+            text='3',
+            textvariable=self.digit3_primary_VFO_VAR,
+            width=1)
+        self.digit3_primary_VFO_Label.grid(column=5, row=0, sticky="e")
         self.digit3_Highlight_Label = ttk.Label(
-            self.frame1, name="digit3_highlight_label")
-        self.digit3_Highlight_Label.configure(style="OffLED.TLabel", width=8)
-        self.digit3_Highlight_Label.pack(padx="10 0", side="left")
+            self.VFO_Frame, name="digit3_highlight_label")
+        self.digit3_Highlight_Label.configure(style="OffLED.TLabel", width=7)
+        self.digit3_Highlight_Label.grid(column=5, row=1)
+        self.digit_delimiter_primary_VFO_1k_Label = ttk.Label(
+            self.VFO_Frame, name="digit_delimiter_primary_vfo_1k_label")
+        self.digit_delimiter_primary_VFO_1k_Label.configure(
+            style="VFO.TLabel",
+            text='.',
+            textvariable=self.digit_delimiter_primary_VFO_VAR,
+            width=0)
+        self.digit_delimiter_primary_VFO_1k_Label.grid(
+            column=6, row=0, sticky="e")
         self.digital_highlight1K_Period = ttk.Label(
-            self.frame1, name="digital_highlight1k_period")
+            self.VFO_Frame, name="digital_highlight1k_period")
         self.digital_highlight1K_Period.configure(
-            style="OffLED.TLabel", width=5)
-        self.digital_highlight1K_Period.pack(padx=0, side="left")
+            anchor="e", style="OffLED.TLabel", width=1)
+        self.digital_highlight1K_Period.grid(column=6, row=1)
+        self.digit2_primary_VFO_Label = ttk.Label(
+            self.VFO_Frame, name="digit2_primary_vfo_label")
+        self.digit2_primary_VFO_VAR = tk.StringVar(value='2')
+        self.digit2_primary_VFO_Label.configure(
+            anchor="e",
+            style="VFO.TLabel",
+            text='2',
+            textvariable=self.digit2_primary_VFO_VAR,
+            width=1)
+        self.digit2_primary_VFO_Label.grid(column=7, row=0, sticky="e")
         self.digit2_Highlight_Label = ttk.Label(
-            self.frame1, name="digit2_highlight_label")
-        self.digit2_Highlight_Label.configure(style="OffLED.TLabel", width=8)
-        self.digit2_Highlight_Label.pack(padx="1 0", side="left")
+            self.VFO_Frame, name="digit2_highlight_label")
+        self.digit2_Highlight_Label.configure(style="OffLED.TLabel", width=7)
+        self.digit2_Highlight_Label.grid(column=7, row=1)
+        self.digit1_primary_VFO_Label = ttk.Label(
+            self.VFO_Frame, name="digit1_primary_vfo_label")
+        self.digit1_primary_VFO_VAR = tk.StringVar(value='1')
+        self.digit1_primary_VFO_Label.configure(
+            anchor="e",
+            style="VFO.TLabel",
+            text='1',
+            textvariable=self.digit1_primary_VFO_VAR,
+            width=1)
+        self.digit1_primary_VFO_Label.grid(column=8, row=0, sticky="e")
         self.digit1_Highlight_Label = ttk.Label(
-            self.frame1, name="digit1_highlight_label")
-        self.digit1_Highlight_Label.configure(style="OffLED.TLabel", width=8)
-        self.digit1_Highlight_Label.pack(anchor="w", padx="5 0", side="left")
-        self.frame1.pack(anchor="w", padx="40 0", side="bottom")
+            self.VFO_Frame, name="digit1_highlight_label")
+        self.digit1_Highlight_Label.configure(style="OffLED.TLabel", width=7)
+        self.digit1_Highlight_Label.grid(column=8, row=1)
+        self.digit0_primary_VFO_Label = ttk.Label(
+            self.VFO_Frame, name="digit0_primary_vfo_label")
+        self.digit0_primary_VFO_VAR = tk.StringVar(value='0')
+        self.digit0_primary_VFO_Label.configure(
+            anchor="e",
+            style="VFO.TLabel",
+            text='0',
+            textvariable=self.digit0_primary_VFO_VAR,
+            width=1)
+        self.digit0_primary_VFO_Label.grid(column=9, row=0, sticky="e")
+        self.digit0_Highlight_Label = ttk.Label(
+            self.VFO_Frame, name="digit0_highlight_label")
+        self.digit0_Highlight_Label.configure(style="OffLED.TLabel", width=7)
+        self.digit0_Highlight_Label.grid(column=9, row=1)
+        self.VFO_Frame.grid(column=1, row=4)
+        self.VFO_TX_Offset_Frame = ttk.Frame(
+            self.vfo_display_Frame, name="vfo_tx_offset_frame")
+        self.VFO_TX_Offset_Frame.configure(height=200, width=200)
         self.Tx_Freq_Alert_Label = ttk.Label(
-            self.vfo_display_Frame, name="tx_freq_alert_label")
+            self.VFO_TX_Offset_Frame, name="tx_freq_alert_label")
         self.Tx_Freq_Alert_VAR = tk.StringVar(value='       ')
         self.Tx_Freq_Alert_Label.configure(
             style="Heading2bi.TLabel",
             text='       ',
             textvariable=self.Tx_Freq_Alert_VAR)
-        self.Tx_Freq_Alert_Label.pack(side="left")
-        self.vfo_display_Frame.grid(column=1, padx="0 0", row=0, sticky="w")
+        self.Tx_Freq_Alert_Label.pack(
+            anchor="w", expand=True, fill="x", side="left")
+        self.VFO_TX_Offset_Frame.grid(column=0, padx="0 10", row=4, sticky="w")
+        self.vfo_display_Frame.grid(column=1, padx="0 0", row=0, sticky="ew")
         self.vfoA_Frame.grid(column=0, row=0, sticky="w")
         self.vfoA_Frame.grid_anchor("w")
         self.frame3 = ttk.Frame(self.frame2)
@@ -287,13 +380,7 @@ class piCECNextionUI(ttk.Frame):
         self.tuning_Multiplier_Button.pack(anchor="n", pady=5, side="top")
         self.tuning_Multiplier_Button.configure(
             command=self.tuning_Multiplier_Button_CB)
-        self.frame3.grid(
-            column=2,
-            padx="20 0",
-            pady=2,
-            row=0,
-            rowspan=3,
-            sticky="n")
+        self.frame3.grid(column=2, pady=2, row=0, rowspan=3, sticky="n")
         self.vfoB_Frame = ttk.Frame(self.frame2, name="vfob_frame")
         self.vfoB_Frame.configure(borderwidth=3, style="NormalOutline.TFrame")
         self.vfo_Frame = ttk.Frame(self.vfoB_Frame, name="vfo_frame")
@@ -358,7 +445,7 @@ class piCECNextionUI(ttk.Frame):
         self.tuning_Preset_Units_Label.configure(
             style="Heading1.TLabel", text='Hz')
         self.tuning_Preset_Units_Label.pack(padx=15, side="left")
-        self.tuning_Step_Frame.pack(padx="90 0", pady="5 0", side="right")
+        self.tuning_Step_Frame.pack(padx="40 0", pady="5 0", side="right")
         self.vfoB_Frame.grid(column=0, ipadx=25, row=1, sticky="w")
         self.control_Meter_Tuning_Frame = ttk.Frame(
             self.frame2, name="control_meter_tuning_frame")
@@ -463,7 +550,7 @@ class piCECNextionUI(ttk.Frame):
         self.tuning_Preset_1_Radiobutton.configure(
             command=self.tuning_Preset_1_CB)
         self.tuning_Preset_Selection_Frame.grid(
-            column=1, padx="132 0", pady=5, row=0, rowspan=3, sticky="nw")
+            column=1, padx="120 0", pady=5, row=0, rowspan=3, sticky="nw")
         self.sMeter_Frame = ttk.Frame(
             self.control_Meter_Tuning_Frame,
             name="smeter_frame")
@@ -517,7 +604,7 @@ class piCECNextionUI(ttk.Frame):
             scroll_steps=10,
             name="att_jogwheel")
         self.ATT_Jogwheel.configure(state="disabled")
-        self.ATT_Jogwheel.pack(anchor="center", padx=30, side="top")
+        self.ATT_Jogwheel.pack(anchor="center", padx="20 0", side="top")
         self.ATT_Jogwheel.configure(command=self.updateATTValue_CB)
         self.ATT_Jogwheel.bind(
             "<ButtonPress>",
@@ -549,7 +636,7 @@ class piCECNextionUI(ttk.Frame):
             scroll_steps=150,
             name="ifs_jogwheel")
         self.IFS_Jogwheel.configure(state="disabled")
-        self.IFS_Jogwheel.pack(anchor="center", padx=30, side="top")
+        self.IFS_Jogwheel.pack(anchor="center", padx="20 0", side="top")
         self.IFS_Jogwheel.configure(command=self.updateIFSValue_CB)
         self.IFS_Jogwheel.bind(
             "<ButtonPress>",
@@ -567,7 +654,7 @@ class piCECNextionUI(ttk.Frame):
             text='IFS (OFF)',
             textvariable=self.IFS_Status_VAR)
         self.IFS_Status_Label.pack(anchor="center", side="bottom")
-        self.IFS_Frame.pack(padx=30, side="left")
+        self.IFS_Frame.pack(side="left")
         self.att_ifs_Frame.pack(
             anchor="nw",
             expand=False,
@@ -694,7 +781,7 @@ class piCECNextionUI(ttk.Frame):
             anchor="nw",
             expand=False,
             fill="x",
-            padx="100 0",
+            padx="25 0",
             pady=20,
             side="left")
         self.cw_Info_Frame.bind("<1>", self.cwSettings_CB, add="")
@@ -702,7 +789,7 @@ class piCECNextionUI(ttk.Frame):
             anchor="w",
             expand=True,
             fill="x",
-            pady="50 0",
+            pady="20 0",
             side="top")
         self.configure(
             borderwidth=5,

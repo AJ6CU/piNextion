@@ -8,6 +8,7 @@ from VirtualKeyboard import VirtualKeyboard
 import globalvars as gv
 from tkinter import messagebox
 
+from globalvars import unformatFrequency
 
 
 #
@@ -60,8 +61,12 @@ class frequencyChannel(baseui.frequencyChannelUI):
     #
     def Get_Freq(self):
         return gv.unformatFrequency(self.channel_Freq_VAR)
+
     def Set_Freq(self, freq):
-        gv.formatFrequency(self.channel_Freq_VAR, freq)
+        temp = tk.StringVar()
+        temp.set(freq)
+        gv.formatFrequency(self.channel_Freq_VAR, gv.unformatFrequency(temp))
+
     def Freq_Default(self):
         self.Set_Freq("14032000")
     #

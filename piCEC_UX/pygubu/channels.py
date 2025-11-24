@@ -58,9 +58,9 @@ class channels(baseui.channelsUI):
 
     def reformatChannelFreq(self, value):
         for child in channels.channelList:
-            gv.formatFrequency(child.channel_Freq_VAR, child.channel_Freq_VAR.get().replace(".","").replace(",",""))
+            child.channel_Freq_VAR.set(gv.formatFrequency(child.channel_Freq_VAR.get().replace(".","").replace(",","")))
 
-        gv.formatFrequency(self.current_VFO_VAR, self.current_VFO_VAR.get().replace(".","").replace(",",""))
+        self.current_VFO_VAR.set(gv.formatFrequency(self.current_VFO_VAR.get().replace(".","").replace(",","")))
 
 
 

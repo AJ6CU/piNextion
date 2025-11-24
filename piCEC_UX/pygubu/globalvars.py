@@ -71,16 +71,16 @@ def updateNUMBER_DELIMITER(value):
     print("update Number Delimiter, now = ", NUMBER_DELIMITER)
 
 
-def formatFrequency(vfoStrVar, frequency, freqOffset=0):
+def formatFrequency(frequency, freqOffset=0):
     temp = str(int(frequency) + freqOffset)
-    vfoStrVar.set(formatVFO(temp))
+    return formatVFO(temp)
 
 
-def unformatFrequency(vfoStrVar, includeOffset=False, freqOffset=0):
+def unformatFrequency(vfo, includeOffset=False, freqOffset=0):
     if includeOffset:
-        return (vfoStrVar.get().replace(NUMBER_DELIMITER, ""))
+        return (vfo.replace(",", "").replace(".", ""))
     else:
-        return (str(int(vfoStrVar.get().replace(NUMBER_DELIMITER, "")) - freqOffset))
+        return (str(int(vfo.replace(",","").replace(".","")) - freqOffset))
 
 def formatCombobox( combobox, family="Arial", size="36", weight="bold"):
     combobox.configure(font=font.Font(family=family, size=size, weight=weight))

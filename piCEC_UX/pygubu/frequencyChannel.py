@@ -8,7 +8,6 @@ from VirtualKeyboard import VirtualKeyboard
 import globalvars as gv
 from tkinter import messagebox
 
-from globalvars import unformatFrequency
 
 
 #
@@ -60,12 +59,10 @@ class frequencyChannel(baseui.frequencyChannelUI):
     #   Freq get/set
     #
     def Get_Freq(self):
-        return gv.unformatFrequency(self.channel_Freq_VAR)
+        return gv.unformatFrequency(self.channel_Freq_VAR.get())
 
     def Set_Freq(self, freq):
-        temp = tk.StringVar()
-        temp.set(freq)
-        gv.formatFrequency(self.channel_Freq_VAR, gv.unformatFrequency(temp))
+        self.channel_Freq_VAR.set(gv.formatFrequency(gv.unformatFrequency(freq)))
 
     def Freq_Default(self):
         self.Set_Freq("14032000")
@@ -112,22 +109,20 @@ class frequencyChannel(baseui.frequencyChannelUI):
 
 
     def numeric_Keypad_CB(self, event=None):
-        self.channel_Freq_save.set(gv.unformatFrequency(self.channel_Freq_VAR))        # save unformated version
+        self.channel_Freq_save = gv.unformatFrequency(self.channel_Freq_VAR.get())        # save unformated version
         if gv.config.get_Virtual_Keyboard_Switch() == "On":
             self.vNumericPad = VirtualNumericKeyboard(self, self.channel_Freq_VAR, self.Channel_Freq_Changed_CB,8)
 
     def channel_Freq_Validation_CB(self, p_entry_value, v_condition):
-        unformatted_p_entry_value = tk.StringVar()
 
         if (v_condition == "focusout") and (gv.config.get_Virtual_Keyboard_Switch() == "Off"):
 
-            unformatted_p_entry_value.set(p_entry_value)
-            unformatted_p_entry_value.set(gv.unformatFrequency(unformatted_p_entry_value))
+            unformatted_p_entry_value = gv.unformatFrequency(p_entry_value)
 
-            if(gv.validateNumber(unformatted_p_entry_value.get(), gv.FREQ_BOUNDS['LOW'], gv.FREQ_BOUNDS['HIGH'], "Frequency", self)):
+            if(gv.validateNumber(unformatted_p_entry_value, gv.FREQ_BOUNDS['LOW'], gv.FREQ_BOUNDS['HIGH'], "Frequency", self)):
 
-                if (unformatted_p_entry_value.get() != self.channel_Freq_save.get()):              #compare the unformatted string versions
-                    self.channel_Freq_VAR.set(gv.formatVFO(unformatted_p_entry_value.get()))
+                if (unformatted_p_entry_value != self.channel_Freq_save):              #compare the unformatted string versions
+                    self.channel_Freq_VAR.set(gv.formatVFO(unformatted_p_entry_value))
                     self.channel_Dirty()
                 return True
             else:                           # bad frequency entered, reset to original formatted value

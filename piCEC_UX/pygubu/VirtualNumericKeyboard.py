@@ -12,8 +12,7 @@ class VirtualNumericKeyboard(tk.Toplevel):
         self.fieldStrVar = fieldStrVar
         self.dirty_CB = dirtyCallback
         self.maxDigits = maxDigits
-        self.originalValue = StringVar()
-        self.originalValue.set(self.fieldStrVar.get())
+        self.originalValue = self.fieldStrVar.get()
         self.fieldStrVar.set(gv.unformatFrequency(self.originalValue))
 
 

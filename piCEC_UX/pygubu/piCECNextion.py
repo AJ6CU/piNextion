@@ -14,6 +14,8 @@ from Classic_uBITX_Control import Classic_uBITX_Control
 import mystyles  # Styles definition module
 from time import sleep
 import globalvars as gv
+from tkinter import messagebox
+import sys
 
 class piCECNextion(baseui.piCECNextionUI):
     def __init__(self, master=None, **kw):
@@ -31,6 +33,11 @@ class piCECNextion(baseui.piCECNextionUI):
         self.classic_uBITX_ControlWindowObj = None
         self.DeepDebug = False
         self.CurrentDebug = True
+
+        self.memoryQueue =[]            # when a memory slot is requested, it later comes in without any indication of which
+                                        # memory slot it belong to. Fortunately, all in order. So everytime a memory slot is
+                                        # requested, the type of memory requested is added to the queue so when we take it
+                                        # off the queue, we know where it goes.
 
         self.rate_selection = {
             0: self.tuning_Preset_Button,
@@ -70,7 +77,7 @@ class piCECNextion(baseui.piCECNextionUI):
         self.rit_Button_On = False                  #Controls RIT. On means in RIT mode
         self.ATT_Button_On = False                  #On allows onscreen control of signal attn
         self.IFS_Button_On = False                  #On allows onscreen mod of the ifs
-        self.IFS_On_Boot_Flag = False               # a default IFS value can be set in eeprom. If so, MCU sends a flag.
+        self.IFS_On_Boot_Flag = True              # a default IFS value can be set in eeprom. If so, MCU sends a flag.
                                                     # The handling routine will set this flag to true so that when the default value
                                                     # is sent to the UX, the IFS setting and Jogwheel will be enabled.
 
@@ -101,6 +108,8 @@ class piCECNextion(baseui.piCECNextionUI):
                                                         # set of radiobuttons for the presets
         self.saved_tuning_Preset_VAR = None
         self.update_Tuning_Preset_Button_Label = True
+
+
 
         # self.channelSelection = None                    # assigned to channel number when selected in channels
 
@@ -236,6 +245,7 @@ class piCECNextion(baseui.piCECNextionUI):
         self.updateLabelTuning_Multiplier()
         self.toggle_Digit_Highlight(self.rate_selection[self.currentDigitPos], True)
 
+
     ######################################################################################
     #   This looks up the command processing routing to be called via a dictionary
     #   based on the command type (characters 3,4 in the buffer after prelogue stripped
@@ -251,7 +261,7 @@ class piCECNextion(baseui.piCECNextionUI):
             case "cn": self.cn_UX_Set_Active_Tuning_Preset(buffer)
             case "ch": self.ch_UX_Set_CW_TX_OFFSET(buffer)
             case "vh": self.vh_UX_Set_CW_Tweak(buffer)
-            case "vo": self.vo_Set_IFS_Flag(buffer)
+            case "vo": self.voGet(buffer)
             case "vp": self.vpGet(buffer)
             case "vq": self.vqGet(buffer)
             case "sv": self.sv_UX_Set_SW_Version(buffer)
@@ -419,7 +429,7 @@ class piCECNextion(baseui.piCECNextionUI):
                        self.EEPROM_Mem_Address["channel_freq_Mode"][self.memLength],
                        self.EEPROM_Mem_Address["channel_freq_Mode"][self.charFlag]
                        ]
-
+            self.memoryQueue.append("Freq")         # Add  it to queue to be processed when MCU responds
             self.theRadio.sendCommandToMCU(bytes(command))
             base += self.EEPROM_Mem_Address["channel_freq_Mode"][self.memOffset]
 
@@ -435,6 +445,7 @@ class piCECNextion(baseui.piCECNextionUI):
                        self.EEPROM_Mem_Address["channel_Label"][self.memLength],
                        self.EEPROM_Mem_Address["channel_Label"][self.charFlag]
                        ]
+            self.memoryQueue.append("Label")
             self.theRadio.sendCommandToMCU(bytes(command))
             base += self.EEPROM_Mem_Address["channel_Label"][self.memOffset]
 
@@ -449,6 +460,7 @@ class piCECNextion(baseui.piCECNextionUI):
                        self.EEPROM_Mem_Address["channel_ShowLabel"][self.memLength],
                        self.EEPROM_Mem_Address["channel_ShowLabel"][self.charFlag]
                        ]
+            self.memoryQueue.append("ShowLabel")
             self.theRadio.sendCommandToMCU(bytes(command))
             base += self.EEPROM_Mem_Address["channel_ShowLabel"][self.memOffset]
 
@@ -467,7 +479,7 @@ class piCECNextion(baseui.piCECNextionUI):
                    ]
 
 
-        self.memReadingState = "MasterCal"         # tell the command that receives the data what is it for
+        self.memoryQueue.append("MasterCal")         # tell the command that receives the data what is it for
 
         self.theRadio.sendCommandToMCU(bytes(command))
 
@@ -481,7 +493,7 @@ class piCECNextion(baseui.piCECNextionUI):
                    self.EEPROM_Mem_Address["ssb_bfo"][self.memLength],
                    self.EEPROM_Mem_Address["ssb_bfo"][self.charFlag]
                    ]
-
+        self.memoryQueue.append("SSB_BFO")
         self.theRadio.sendCommandToMCU(bytes(command))
 
 
@@ -496,6 +508,7 @@ class piCECNextion(baseui.piCECNextionUI):
                    self.EEPROM_Mem_Address["cw_bfo"][self.charFlag]
                    ]
 
+        self.memoryQueue.append("CW_BFO")
         self.theRadio.sendCommandToMCU(bytes(command))
 
 
@@ -511,7 +524,7 @@ class piCECNextion(baseui.piCECNextionUI):
                    ]
 
 
-        self.memReadingState = "MasterCal"         # tell the command that receives the data what is it for
+        self.memoryQueue.append("Factory_MasterCal")         # tell the command that receives the data what is it for
 
         self.theRadio.sendCommandToMCU(bytes(command))
 
@@ -526,6 +539,7 @@ class piCECNextion(baseui.piCECNextionUI):
                    self.EEPROM_Mem_Address["factory_ssb_bfo"][self.charFlag]
                    ]
 
+        self.memoryQueue.append("Factory_SSB_BFO")
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def Radio_Req_Factory_CW_Speed(self, setter_CB):
@@ -539,6 +553,7 @@ class piCECNextion(baseui.piCECNextionUI):
                    self.EEPROM_Mem_Address["factory_cw_wpm"][self.charFlag]
                    ]
 
+        self.memoryQueue.append("Factory_CW_Speed")
         self.theRadio.sendCommandToMCU(bytes(command))
 
 
@@ -553,6 +568,7 @@ class piCECNextion(baseui.piCECNextionUI):
                    self.EEPROM_Mem_Address["factory_cw_sidetone"][self.charFlag]
                    ]
 
+        self.memoryQueue.append("Factory_CW_Sidetone")
         self.theRadio.sendCommandToMCU(bytes(command))
 
     def vfo_CB(self):
@@ -1414,11 +1430,9 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     #   The "vo" if 1, then turn on IFS and use initial value
     #
-    def vo_Set_IFS_Flag(self, buffer):
-        self.IFS_On_Boot_Flag= True     # This is a hack a normally the ci_ux_IFS_State_Set ignored the IFS value sent by MCU
-                                        # this is done for efficiency reasons otherwise the jogwheel will move back and forth
-                                        # as the MCU catches up with the UX.
-        self.ci_UX_IFS_State_Set(buffer)
+    def voGet(self, buffer):
+        print("voGet, buffer=",buffer)
+
 
     def cp_UX_S_Meter_Value(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
@@ -1529,84 +1543,82 @@ class piCECNextion(baseui.piCECNextionUI):
     def sh_UX_Get_Memory(self, buffer):
 
         value = self.extractValue(buffer, 10, len(buffer) - 3)
+        if not self.memoryQueue:    # make sure something in queue, otherwise fatal error
+            messagebox.showerror("Application Error", "Memory Queue is empty, yet memory value delivered by MCU")
+            sys.exit("A fatal internal error occurred")
 
-        if (self.memReadingState == "Freq"):
-            freq = int(value,16) & 0x1FFFFFFF
-            mode = (int(value,16) >> 29) & 0x7
+        match self.memoryQueue.pop(0):
 
-            self.channelWindow.EEPROM_SetChanneFreqMode(
-                self.EEPROM_Current_Slot_Freq,
-                freq,
-                mode)
-            self.EEPROM_Current_Slot_Freq += 1
-            if (self.EEPROM_Current_Slot_Freq ==
-                    self.EEPROM_Mem_Address["channel_freq_Mode"][self.totalSlots]):
-                self.EEPROM_Current_Slot_Freq = 0
-                self.memReadingState = "Label"
-        elif (self.memReadingState == "Label"):
+            case "Freq":                # Got a channel frequency request
+                freq = int(value,16) & 0x1FFFFFFF
+                mode = (int(value,16) >> 29) & 0x7
 
-            self.channelWindow.EEPROM_SetChannelLabel(
-                self.EEPROM_Current_Slot_Label,
-                value)
-            # if self.EEPROM_Current_Slot_Label == 9:
-            #         print("label slot=", self.EEPROM_Current_Slot_Label, "value=", value, sep='*', end='*')
-            self.EEPROM_Current_Slot_Label += 1
-            if (self.EEPROM_Current_Slot_Label ==
-                    self.EEPROM_Mem_Address["channel_Label"][self.totalSlots]):
-                self.EEPROM_Current_Slot_Label = 0
-                self.memReadingState = "ShowLabel"
-        elif (self.memReadingState == "ShowLabel"):
-            # TypeError: ord() expected a character, but string of length 8 found
-            if (ord(value) == 0):
-                self.channelWindow.EEPROM_SetChannelShowLabel(
-                    self.EEPROM_Current_Slot_ShowLabel,
-                    "No")
+                self.channelWindow.EEPROM_SetChanneFreqMode(
+                    self.EEPROM_Current_Slot_Freq,
+                    freq,
+                    mode)
+                self.EEPROM_Current_Slot_Freq += 1
+                if (self.EEPROM_Current_Slot_Freq ==
+                        self.EEPROM_Mem_Address["channel_freq_Mode"][self.totalSlots]):
+                    self.EEPROM_Current_Slot_Freq = 0
 
-            else:
-                self.channelWindow.EEPROM_SetChannelShowLabel(
-                    self.EEPROM_Current_Slot_ShowLabel,
-                    "Yes")
+            case "Label":               # have a label for a memory channel
+                self.channelWindow.EEPROM_SetChannelLabel(
+                    self.EEPROM_Current_Slot_Label,
+                    value)
+                # if self.EEPROM_Current_Slot_Label == 9:
+                #         print("label slot=", self.EEPROM_Current_Slot_Label, "value=", value, sep='*', end='*')
+                self.EEPROM_Current_Slot_Label += 1
+                if (self.EEPROM_Current_Slot_Label ==
+                        self.EEPROM_Mem_Address["channel_Label"][self.totalSlots]):
+                    self.EEPROM_Current_Slot_Label = 0
 
-            self.EEPROM_Current_Slot_ShowLabel += 1
-            if (self.EEPROM_Current_Slot_ShowLabel ==
-                    self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]):
-                self.EEPROM_Current_Slot_ShowLabel = 0
-                self.memReadingState = "Freq"
+            case "ShowLabel":           # Reading switch on whether to show or not show the label
+                if (ord(value) == 0):
+                    self.channelWindow.EEPROM_SetChannelShowLabel(
+                        self.EEPROM_Current_Slot_ShowLabel,
+                        "No")
 
-        elif (self.memReadingState == "MasterCal"):
-            self.Master_Cal_Setter(str(int(value, 16)))
-            self.memReadingState = "SSB_BFO"
+                else:
+                    self.channelWindow.EEPROM_SetChannelShowLabel(
+                        self.EEPROM_Current_Slot_ShowLabel,
+                        "Yes")
 
-        elif (self.memReadingState == "SSB_BFO"):
-            self.SSB_BFO_Setter(str(int(value, 16)))
-            self.memReadingState = "CW_BFO"
+                self.EEPROM_Current_Slot_ShowLabel += 1
+                if (self.EEPROM_Current_Slot_ShowLabel ==
+                        self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]):
+                    self.EEPROM_Current_Slot_ShowLabel = 0
 
-        elif (self.memReadingState == "CW_BFO"):
-            self.CW_BFO_Setter(str(int(value, 16)))
-            self.memReadingState = "Factory_MasterCal"
+            case "MasterCal":          # Got a master cal value
+                self.Master_Cal_Setter(str(int(value, 16)))
 
-        elif (self.memReadingState == "Factory_MasterCal"):
-            self.Factory_Master_Cal_Setter(str(int(value, 16)))
-            self.memReadingState = "Factory_SSB_BFO"
 
-        elif (self.memReadingState == "Factory_SSB_BFO"):
-            self.Factory_SSB_BFO_Setter(str(int(value, 16)))
-            self.memReadingState = "Factory_CW_Speed"
+            case "SSB_BFO":            # Got a SSB BFO value
+                self.SSB_BFO_Setter(str(int(value, 16)))
 
-        elif (self.memReadingState == "Factory_CW_Speed"):
-            if int(value,16) != 0:
-                cw_speed = str(round(1200/int(value,16)))
-            else:
-                cw_speed = "0"
+            case "CW_BFO":             # Got a CW BFO Value
+                self.CW_BFO_Setter(str(int(value, 16)))
 
-            self.Factory_CW_Speed_Setter(cw_speed)
-            self.memReadingState = "Factory_CW_Sidetone"
+            case "Factory_MasterCal":   #Got a Factory_MasterCal memory value
+                self.Factory_Master_Cal_Setter(str(int(value, 16)))
 
-        elif (self.memReadingState == "Factory_CW_Sidetone"):
-            self.Factory_CW_Sidetone_Setter(str(int(value, 16)))
-            self.memReadingState = "Freq"
-        else:
-            print("unknown memory fetch state")
+            case "Factory_SSB_BFO":     # Got a Factory SSB BFO memory value
+                self.Factory_SSB_BFO_Setter(str(int(value, 16)))
+
+            case "Factory_CW_Speed":    # Got a CW Speed memory value
+                if int(value,16) != 0:
+                    cw_speed = str(round(1200/int(value,16)))
+                else:
+                    cw_speed = "0"
+
+                self.Factory_CW_Speed_Setter(cw_speed)
+
+            case "Factory_CW_Sidetone":
+                self.Factory_CW_Sidetone_Setter(str(int(value, 16)))
+
+            case _:
+                messagebox.showerror("Application Error", "Unknown Memory Request")
+                sys.exit("A fatal internal error occurred")
 
 
 
@@ -1768,9 +1780,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def ci_UX_IFS_State_Set(self, buffer):
-
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
-
         if (value == 0):                            # Zero value indicates IFS being turned off
             self.IFS_Jogwheel.setStateDisabled()
             self.IFS_Status_VAR.set("IFS (OFF)")
@@ -1782,12 +1792,10 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def vi_UX_IFS_Level(self, buffer):      #verification by MCU of new value
-
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
-
         if (value == 0):
             self.IFS_Jogwheel.setStateDisabled()
-        #
+
         # mjh normally ux should be set to the value ack-ed by mcu. Problem with this
         # with jog wheels is that they jerk around too much because of all the callbacks
         # This can also cause oscillation where are reported and stored in jogwheel
@@ -1804,6 +1812,7 @@ class piCECNextion(baseui.piCECNextionUI):
             self.IFS_Jogwheel.set(value)
 
         if self.IFS_On_Boot_Flag:           # A little hack. Generally will not respond to MCU IFS requests for efficiency
+                                            # On boot, the default setting is passed to the UX.
             self.IFS_Jogwheel.set(value)
             self.IFS_On_Boot_Flag = False
 

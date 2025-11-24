@@ -66,13 +66,13 @@ class VirtualNumericKeyboard(tk.Toplevel):
         self.message.set(self.messageEmpty)
 
     def cancel(self,event=None):
-        self.fieldStrVar.set(self.originalValue.get())
+        self.fieldStrVar.set(self.originalValue)
         self.destroy()
 
     def enter(self,event=None):
         self.fieldStrVar.set(self.fieldStrVar.get().replace(self.cursor, ''))
         self.fieldStrVar.set(gv.formatVFO(self.fieldStrVar.get()))
-        if self.originalValue.get() !=self.fieldStrVar.get():
+        if self.originalValue !=self.fieldStrVar.get():
             self.dirty_CB()
         self.destroy()
 

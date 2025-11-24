@@ -29,6 +29,7 @@ def setup_ttk_styles(master=None):
 
     fontList = {'Heading0': ('Arial',36, 'bold' ),
             'Heading1': ('Times New Roman', 24, 'bold'),
+            'Heading1Fixed': ("TkFixedFont", 24, 'bold'),
             'Heading1b': ('Arial', 20, 'bold'),
             'Heading2': ('Arial',18, 'bold' ),
             'Heading2b': ('Arial',14, 'bold' ),
@@ -44,6 +45,7 @@ def setup_ttk_styles(master=None):
             'Symbol3': ('Symbol',12, 'bold')}
 
     style.configure('Heading1.TLabel',font=fontList['Heading1'], background='gray', foreground='white')
+    style.configure('Heading1Fixed.TLabel',font=fontList['Heading1'], background='gray', foreground='white')
     style.configure('Heading1b.TLabel', font=fontList['Heading1b'], background='gray', foreground='white')
     style.configure('Heading2.TLabel',font=fontList['Heading2'])
     style.configure('Heading2b.TLabel',font=fontList['Heading2b'], background='gray', foreground='white')

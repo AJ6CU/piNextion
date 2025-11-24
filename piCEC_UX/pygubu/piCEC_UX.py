@@ -66,7 +66,7 @@ gv.config = configuration(root)                    # Read in config data, if mis
 mainWindow = piCECNextion(root)
 comPort = comportManager(root,startMainWindow)
 
-comPort.place(relx=0.835, rely=1.0, anchor="s")
+comPort.place(relx=0.665, rely=.95, anchor="s")
 
 if not comPort.getComPort():
     root.after(500, comPort.retry() )           # If we failed to get a comport the easy way, try again

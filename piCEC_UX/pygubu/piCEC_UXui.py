@@ -346,7 +346,8 @@ class piCECNextionUI(ttk.Frame):
         self.Tx_Freq_Alert_Label.configure(
             style="Heading2bi.TLabel",
             text='       ',
-            textvariable=self.Tx_Freq_Alert_VAR)
+            textvariable=self.Tx_Freq_Alert_VAR,
+            width=7)
         self.Tx_Freq_Alert_Label.pack(
             anchor="w", expand=True, fill="x", side="left")
         self.VFO_TX_Offset_Frame.grid(column=0, padx="0 10", row=4, sticky="w")
@@ -389,9 +390,10 @@ class piCECNextionUI(ttk.Frame):
             self.vfo_Frame, name="secondary_vfo_label")
         self.secondary_VFO_Formatted_VAR = tk.StringVar(value='99999999')
         self.secondary_VFO_Label.configure(
-            style="Heading1.TLabel",
+            style="Heading1Fixed.TLabel",
             text='99999999',
-            textvariable=self.secondary_VFO_Formatted_VAR)
+            textvariable=self.secondary_VFO_Formatted_VAR,
+            width=10)
         self.secondary_VFO_Label.pack(anchor="nw", side="left")
         self.secondary_Mode_Label = ttk.Label(
             self.vfo_Frame, name="secondary_mode_label")

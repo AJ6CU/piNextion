@@ -56,11 +56,16 @@ class channels(baseui.channelsUI):
         self.scan_Select_Channel_Default()
         self.scan_Station_Time_Default()
 
-    def reformatChannelFreq(self, value):
-        for child in channels.channelList:
-            child.channel_Freq_VAR.set(gv.formatFrequency(child.channel_Freq_VAR.get().replace(".","").replace(",","")))
+    def reformatChannelFreq(self, new_delimiter):
+        if new_delimiter  == ",":
+            prior_delimiter = "."
+        else:
+            prior_delimiter = ","
 
-        self.current_VFO_VAR.set(gv.formatFrequency(self.current_VFO_VAR.get().replace(".","").replace(",","")))
+        for child in channels.channelList:
+            child.channel_Freq_VAR.set(child.channel_Freq_VAR.get().replace(prior_delimiter,new_delimiter))
+
+        self.current_VFO_VAR.set(self.current_VFO_VAR.get().replace(prior_delimiter,new_delimiter))
 
 
 

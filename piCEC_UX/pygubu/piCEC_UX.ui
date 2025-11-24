@@ -570,6 +570,7 @@ STOP!
                         <property name="style">Heading2bi.TLabel</property>
                         <property name="text" translatable="yes">       </property>
                         <property name="textvariable">string:Tx_Freq_Alert_VAR</property>
+                        <property name="width">7</property>
                         <layout manager="pack">
                           <property name="anchor">w</property>
                           <property name="expand">true</property>
@@ -648,9 +649,10 @@ x 100mhz</property>
                 </layout>
                 <child>
                   <object class="ttk.Label" id="secondary_VFO_Label" named="True">
-                    <property name="style">Heading1.TLabel</property>
+                    <property name="style">Heading1Fixed.TLabel</property>
                     <property name="text" translatable="yes">99999999</property>
                     <property name="textvariable">string:secondary_VFO_Formatted_VAR</property>
+                    <property name="width">10</property>
                     <layout manager="pack">
                       <property name="anchor">nw</property>
                       <property name="side">left</property>

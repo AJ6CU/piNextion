@@ -29,6 +29,7 @@ def startMainWindow(comPortName, comPort):
 
     mainWindow.place(x=0, y=0)                          # place the mainWindow on the screen
 
+
     gv.config.setComPort(comPortName)  # update the config file if necessary because of comport selection
     print(" radio:", comPortName)
     # comPort.setComPort(comPortName)

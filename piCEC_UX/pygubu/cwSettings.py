@@ -4,6 +4,7 @@ import tkinter.ttk as ttk
 import cwSettingsui as baseui
 from tkinter import messagebox
 import globalvars as gv
+from time import sleep
 
 
 #
@@ -116,6 +117,7 @@ class cwSettings(baseui.cwSettingsUI):
                                            "Do you want to reboot now?",
                                             parent=self, icon="warning")
             if response:
+                sleep (.5)              # sleep a little so that the change to settings are processed before reboot
                 self.mainWindow.theRadio.rebootRadio()
             else:
                 print('told us to wait')

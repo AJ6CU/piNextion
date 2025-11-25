@@ -381,6 +381,9 @@ class piCECNextion(baseui.piCECNextionUI):
         if self.channelWindow == None:
             self.channelWindow = channels(self.master, self, self.refresh_CB)
             self.channelWindow.title("Memory Channel")
+            root_x = self.master.winfo_rootx()
+            root_y = self.master.winfo_rooty()
+            self.channelWindow.geometry("+{}+{}".format(root_x+50, root_y+50))
             self.channelWindow.transient(self.master)
             self.channelWindow.update_Current_Frequency (gv.formatFrequency(self.primary_VFO_VAR.get()))
             self.channelWindow.update_Current_Mode (self.primary_Mode_VAR.get())
@@ -1793,6 +1796,8 @@ class piCECNextion(baseui.piCECNextionUI):
 
     def vi_UX_IFS_Level(self, buffer):      #verification by MCU of new value
         value = int(self.extractValue(buffer, 10, len(buffer) - 3))
+        # Note that if a "personalized" IF level is set in the EEPROM, then the radio comes
+        # Up with IFS enabled. If value here is 0, just disable the jogwheel
         if (value == 0):
             self.IFS_Jogwheel.setStateDisabled()
 
@@ -1806,8 +1811,7 @@ class piCECNextion(baseui.piCECNextionUI):
         #BUT.....
         # Need to respond when in Classic UX Mode. Can use a check for null to figure out whether we update or not
         #
-        #
-        # print("MCU Reporting vi_UX_IFS_Level", value)
+
         if self.classic_uBITX_ControlWindow != None:
             self.IFS_Jogwheel.set(value)
 

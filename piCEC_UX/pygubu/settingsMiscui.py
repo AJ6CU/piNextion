@@ -57,7 +57,7 @@ class settingsMiscUI(ttk.Labelframe):
             self.misc_Settings_Frame, name="number_delimiter_label")
         self.Number_Delimiter_Label.configure(
             justify="right",
-            style="Heading2b.TLabel",
+            style="Heading1b.TLabel",
             text='Number Delimiter')
         self.Number_Delimiter_Label.grid(
             column=0, padx=10, pady=10, row=0, sticky="e")
@@ -67,31 +67,32 @@ class settingsMiscUI(ttk.Labelframe):
         self.Number_Delimiter_Combobox.configure(
             justify="center",
             state="readonly",
-            style="TCombobox",
+            style="ComboBox1.TCombobox",
             textvariable=self.NUMBER_DELIMITER_VAR,
             values=', .',
-            width=2)
-        self.Number_Delimiter_Combobox.grid(column=1, padx="20 0", row=0)
+            width=4)
+        self.Number_Delimiter_Combobox.grid(
+            column=1, padx="20 0", row=0, sticky="w")
         self.Virtual_Keyboard_Label = ttk.Label(
             self.misc_Settings_Frame, name="virtual_keyboard_label")
         self.Virtual_Keyboard_Label.configure(
             justify="right",
-            style="Heading2b.TLabel",
+            style="Heading1b.TLabel",
             text='Virtual Keyboard')
         self.Virtual_Keyboard_Label.grid(
-            column=0, padx=10, pady="40 0", row=1, sticky="e")
+            column=0, padx=10, pady="40 20", row=1, sticky="e")
         self.Virtual_Keyboard_Combobox = ttk.Combobox(
             self.misc_Settings_Frame, name="virtual_keyboard_combobox")
         self.Virtual_Keyboard_VAR = tk.StringVar()
         self.Virtual_Keyboard_Combobox.configure(
             justify="center",
             state="readonly",
-            style="TCombobox",
+            style="ComboBox1.TCombobox",
             textvariable=self.Virtual_Keyboard_VAR,
             values='On Off',
             width=4)
         self.Virtual_Keyboard_Combobox.grid(
-            column=1, padx="20 0", pady="40 0", row=1)
+            column=1, padx="20 0", pady="40 20", row=1, sticky="w")
         self.misc_Settings_Frame.pack(padx=10, pady=10, side="top")
         self.closingFrame = ttk.Frame(self, name="closingframe")
         self.closingFrame.configure(
@@ -111,10 +112,10 @@ class settingsMiscUI(ttk.Labelframe):
             pady=20,
             side="top")
         self.configure(
-            height=300,
+            height=400,
             style="Heading2.TLabelframe",
             text='General Settings',
-            width=400)
+            width=600)
         # Layout for 'labelframe1' skipped in custom widget template.
 
     def apply_CB(self):

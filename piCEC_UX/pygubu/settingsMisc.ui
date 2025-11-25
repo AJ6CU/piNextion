@@ -62,11 +62,10 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Combobox" id="Number_Delimiter_Combobox" named="True">
+              <object class="pygubu.widgets.Combobox" id="Number_Delimiter_Combobox" named="True">
                 <property name="justify">center</property>
-                <property name="state">readonly</property>
+                <property name="keyvariable">string:NUMBER_DELIMITER_VAR</property>
                 <property name="style">ComboBox1.TCombobox</property>
-                <property name="textvariable">string:NUMBER_DELIMITER_VAR</property>
                 <property name="values">, .</property>
                 <property name="width">4</property>
                 <layout manager="grid">
@@ -92,11 +91,9 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Combobox" id="Virtual_Keyboard_Combobox" named="True">
-                <property name="justify">center</property>
-                <property name="state">readonly</property>
+              <object class="pygubu.widgets.Combobox" id="Virtual_Keyboard_Combobox" named="True">
+                <property name="keyvariable">string:Virtual_Keyboard_VAR</property>
                 <property name="style">ComboBox1.TCombobox</property>
-                <property name="textvariable">string:Virtual_Keyboard_VAR</property>
                 <property name="values">On Off</property>
                 <property name="width">4</property>
                 <layout manager="grid">

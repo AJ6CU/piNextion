@@ -21,7 +21,7 @@ class settingsMiscToplevel(tk.Toplevel):
         self.popup = tk.Toplevel(self.master)
 
         self.popup.title("General Settings")
-        self.popup.minsize(300,300)
+        self.popup.minsize(350,300)
         self.popup.wait_visibility()  # required on Linux
         self.popup.grab_set()
         self.popup.transient(self.master)

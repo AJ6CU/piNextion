@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import tkinter as tk
 import tkinter.ttk as ttk
+from pygubu.widgets.combobox import Combobox
 
 
 def i18n_translator_noop(value):
@@ -61,14 +62,13 @@ class settingsMiscUI(ttk.Labelframe):
             text='Number Delimiter')
         self.Number_Delimiter_Label.grid(
             column=0, padx=10, pady=10, row=0, sticky="e")
-        self.Number_Delimiter_Combobox = ttk.Combobox(
+        self.Number_Delimiter_Combobox = Combobox(
             self.misc_Settings_Frame, name="number_delimiter_combobox")
         self.NUMBER_DELIMITER_VAR = tk.StringVar()
         self.Number_Delimiter_Combobox.configure(
             justify="center",
-            state="readonly",
+            keyvariable=self.NUMBER_DELIMITER_VAR,
             style="ComboBox1.TCombobox",
-            textvariable=self.NUMBER_DELIMITER_VAR,
             values=', .',
             width=4)
         self.Number_Delimiter_Combobox.grid(
@@ -81,14 +81,12 @@ class settingsMiscUI(ttk.Labelframe):
             text='Virtual Keyboard')
         self.Virtual_Keyboard_Label.grid(
             column=0, padx=10, pady="40 20", row=1, sticky="e")
-        self.Virtual_Keyboard_Combobox = ttk.Combobox(
+        self.Virtual_Keyboard_Combobox = Combobox(
             self.misc_Settings_Frame, name="virtual_keyboard_combobox")
         self.Virtual_Keyboard_VAR = tk.StringVar()
         self.Virtual_Keyboard_Combobox.configure(
-            justify="center",
-            state="readonly",
+            keyvariable=self.Virtual_Keyboard_VAR,
             style="ComboBox1.TCombobox",
-            textvariable=self.Virtual_Keyboard_VAR,
             values='On Off',
             width=4)
         self.Virtual_Keyboard_Combobox.grid(

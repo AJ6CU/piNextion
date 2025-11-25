@@ -16,7 +16,7 @@ class settingsMachineToplevel(tk.Toplevel):
         self.popup = tk.Toplevel(self.master)
 
         self.popup.title("Machine Specific Settings")
-        self.popup.geometry("600x430")
+        self.popup.minsize(750,350)
         self.popup.wait_visibility()  # required on Linux
         self.popup.grab_set()
         self.popup.transient(self.master)
@@ -36,6 +36,12 @@ class settingsMachine(baseui.settingsMachineUI):
 
         self.MCU_Command_Headroom_VAR.set(str(self.saveMCU_Command_Headroom))
         self.MCU_Update_Period_VAR.set(str(self.saveMCU_Update_Period))
+
+        gv.formatCombobox(self.MCU_Command_Headroom_Combobox, "Arial", "24", "bold")
+        gv.formatCombobox(self.MCU_Update_Period_Combobox, "Arial", "24", "bold")
+
+        self.MCU_Command_Headroom_Combobox.configure(values=gv.MCU_Headroom_Values)
+        self.MCU_Update_Period_Combobox.configure(values=gv.Frequency_To_Run_UX_loop)
 
     def apply_CB(self):
         print("Applying settings")

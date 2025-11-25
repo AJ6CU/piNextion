@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import tkinter as tk
 import tkinter.ttk as ttk
+from pygubu.widgets.combobox import Combobox
 
 
 def i18n_translator_noop(value):
@@ -55,35 +56,36 @@ class settingsMachineUI(ttk.Labelframe):
         self.MCU_Command_Headroom_Label = ttk.Label(
             frame1, name="mcu_command_headroom_label")
         self.MCU_Command_Headroom_Label.configure(
-            style="Heading2b.TLabel",
+            style="Heading1b.TLabel",
             text='Minimum time between commands sent to Radio (ms):')
         self.MCU_Command_Headroom_Label.grid(
             column=0, padx=10, pady=10, row=0, sticky="e")
-        self.MCU_Command_Headroom_Entry = ttk.Entry(
-            frame1, name="mcu_command_headroom_entry")
+        self.MCU_Command_Headroom_Combobox = Combobox(
+            frame1, name="mcu_command_headroom_combobox")
         self.MCU_Command_Headroom_VAR = tk.StringVar()
-        self.MCU_Command_Headroom_Entry.configure(
-            justify="right",
-            style="Entry1b.TEntry",
-            textvariable=self.MCU_Command_Headroom_VAR,
+        self.MCU_Command_Headroom_Combobox.configure(
+            keyvariable=self.MCU_Command_Headroom_VAR,
+            style="ComboBox1.TCombobox",
+            values='90 100',
             width=4)
-        self.MCU_Command_Headroom_Entry.grid(column=1, row=0)
+        self.MCU_Command_Headroom_Combobox.grid(
+            column=1, padx=20, pady=10, row=0)
         self.MCU_Update_Period_Label = ttk.Label(
             frame1, name="mcu_update_period_label")
         self.MCU_Update_Period_Label.configure(
-            style="Heading2b.TLabel",
-            text='Frequency checking for UX changes (ms):')
+            style="Heading1b.TLabel",
+            text='Frequency to check for UX changes (ms):')
         self.MCU_Update_Period_Label.grid(
-            column=0, padx=10, pady=10, row=1, sticky="e")
-        self.MCU_Update_Period_Entry = ttk.Entry(
-            frame1, name="mcu_update_period_entry")
+            column=0, padx=10, pady=50, row=1, sticky="e")
+        self.MCU_Update_Period_Combobox = Combobox(
+            frame1, name="mcu_update_period_combobox")
         self.MCU_Update_Period_VAR = tk.StringVar()
-        self.MCU_Update_Period_Entry.configure(
-            justify="right",
-            style="Entry1b.TEntry",
-            textvariable=self.MCU_Update_Period_VAR,
+        self.MCU_Update_Period_Combobox.configure(
+            keyvariable=self.MCU_Update_Period_VAR,
+            style="ComboBox1.TCombobox",
+            values='500 600',
             width=4)
-        self.MCU_Update_Period_Entry.grid(column=1, row=1)
+        self.MCU_Update_Period_Combobox.grid(column=1, padx=20, pady=50, row=1)
         frame1.pack(padx=10, pady=10, side="top")
         self.closingFrame = ttk.Frame(self, name="closingframe")
         self.closingFrame.configure(

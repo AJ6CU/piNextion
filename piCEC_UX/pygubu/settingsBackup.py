@@ -22,7 +22,7 @@ class settingsBackupToplevel(tk.Toplevel):
         self.popup = tk.Toplevel(self.master)
 
         self.popup.title("Backup Key Radio Settings")
-        self.popup.minsize(500,450)
+        self.popup.minsize(550,500)
         self.popup.wait_visibility()  # required on Linux
         self.popup.grab_set()
         self.popup.transient(self.master)

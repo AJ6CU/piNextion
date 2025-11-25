@@ -525,6 +525,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.from_Combobox.configure(
             justify="center",
             state="readonly",
+            style="ComboBox1.TCombobox",
             textvariable=self.from_Combobox_VAR,
             values='Select Factory Current ConfigFile',
             width=9)
@@ -537,6 +538,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.to_Combobox.configure(
             justify="center",
             state="readonly",
+            style="ComboBox1.TCombobox",
             textvariable=self.to_Combobox_VAR,
             values='Select Current ConfigFile',
             width=9)
@@ -554,7 +556,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.cancel_Buttom.configure(style="Button2b.TButton", text='Cancel')
         self.cancel_Buttom.pack(anchor="center", padx=10, side="left")
         self.cancel_Buttom.configure(command=self.cancel_CB)
-        self.closingFrame.grid(column=0, pady=10, row=3)
+        self.closingFrame.grid(column=0, pady="40 20", row=3)
         self.configure(
             height=400,
             style="Heading2.TLabelframe",

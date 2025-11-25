@@ -856,6 +856,7 @@ File</property>
               <object class="ttk.Combobox" id="from_Combobox" named="True">
                 <property name="justify">center</property>
                 <property name="state">readonly</property>
+                <property name="style">ComboBox1.TCombobox</property>
                 <property name="textvariable">string:from_Combobox_VAR</property>
                 <property name="values">Select Factory Current ConfigFile</property>
                 <property name="width">9</property>
@@ -881,6 +882,7 @@ File</property>
               <object class="ttk.Combobox" id="to_Combobox" named="True">
                 <property name="justify">center</property>
                 <property name="state">readonly</property>
+                <property name="style">ComboBox1.TCombobox</property>
                 <property name="textvariable">string:to_Combobox_VAR</property>
                 <property name="values">Select Current ConfigFile</property>
                 <property name="width">9</property>
@@ -900,7 +902,7 @@ File</property>
             <property name="width">200</property>
             <layout manager="grid">
               <property name="column">0</property>
-              <property name="pady">10</property>
+              <property name="pady">40 20</property>
               <property name="row">3</property>
             </layout>
             <child>

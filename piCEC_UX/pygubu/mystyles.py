@@ -96,8 +96,11 @@ def setup_ttk_styles(master=None):
     style.configure('CheckboxEmphasis.TCheckbutton',font=fontList['Emphasis'])
 
     style.configure('TCombobox', font=fontList['Heading0'])
-    style.configure('ComboBox1.TCombobox.Listbox', font=fontList['Heading1b'])
-    style.configure('ComboBox1.TCombobox', font=fontList['Heading2b'])
+
+
+    style.configure('ComboBox1.TCombobox', font=fontList['Heading2b'], arrowsize=50, relief='raised')
+    # style.configure('ComboBox1.TCombobox.Listbox', font=fontList['Heading1b'])
+
     style.configure('ComboBox2.TCombobox',font=fontList['Heading2'])
     style.configure('ComboBox2b.TCombobox', font=fontList['Heading2b'])
     style.configure('ComboBox3.TCombobox', font=fontList['Heading3'])
@@ -135,6 +138,11 @@ def setup_ttk_styles(master=None):
                 troughcolor='lightgray',  # Color of the empty part of the bar
                 background='red',  # Color of the progress indicator,
                 thickness=25)  # Height/width of the bar (depending on orientation)
+
+    style.configure("Custom.TSpinbox",
+                    background="gray",
+                    foreground="black",
+                    arrowsize=50)
 
 
 

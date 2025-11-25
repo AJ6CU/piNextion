@@ -55,24 +55,27 @@
                 </layout>
                 <child>
                   <object class="ttk.Label" id="CW_KEY_TYPE_LABEL" named="True">
-                    <property name="style">Heading2b.TLabel</property>
+                    <property name="style">Heading1b.TLabel</property>
                     <property name="text" translatable="yes">Key Type</property>
                     <layout manager="grid">
                       <property name="column">0</property>
-                      <property name="pady">5 0</property>
+                      <property name="pady">40 0</property>
                       <property name="row">0</property>
                       <property name="sticky">e</property>
                     </layout>
                   </object>
                 </child>
                 <child>
-                  <object class="tk.OptionMenu" id="CW_KEY_TYPE_WIDGET" named="True">
-                    <property name="value">STRAIGHT</property>
-                    <property name="values">STRAIGHT,IAMBICA,IAMBICB</property>
-                    <property name="variable">string:key_type_value_VAR</property>
+                  <object class="pygubu.widgets.Combobox" id="CW_Keytype_Widget_Combobox" named="True">
+                    <property name="justify">center</property>
+                    <property name="keyvariable">string:key_type_value_VAR</property>
+                    <property name="style">ComboBox1.TCombobox</property>
+                    <property name="values">STRAIGHT IAMBICA IAMBICB</property>
+                    <property name="width">10</property>
                     <layout manager="grid">
                       <property name="column">1</property>
-                      <property name="padx">10 0</property>
+                      <property name="padx">20 0</property>
+                      <property name="pady">40 0</property>
                       <property name="row">0</property>
                       <property name="sticky">w</property>
                     </layout>
@@ -80,29 +83,26 @@
                 </child>
                 <child>
                   <object class="ttk.Label" id="CW_SIDETONE_LABEL" named="True">
-                    <property name="style">Heading2b.TLabel</property>
+                    <property name="style">Heading1b.TLabel</property>
                     <property name="text" translatable="yes">Sidetone (HZ)</property>
                     <layout manager="grid">
                       <property name="column">0</property>
-                      <property name="pady">5 0</property>
+                      <property name="pady">40 0</property>
                       <property name="row">2</property>
                       <property name="sticky">e</property>
                     </layout>
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.Entry" id="CW_SIDETONE_WIDGET" named="True">
-                    <property name="justify">right</property>
-                    <property name="style">Entry2b.TEntry</property>
-                    <property name="text" translatable="yes">599</property>
-                    <property name="textvariable">string:tone_value_VAR</property>
-                    <property name="validate">focus</property>
-                    <property name="validatecommand" type="command" cbtype="entry_validate" args="%P %V">validate_CW_SIDETONE</property>
-                    <property name="width">12</property>
+                  <object class="pygubu.widgets.Combobox" id="CW_Sidetone_Widget_Combobox" named="True">
+                    <property name="justify">center</property>
+                    <property name="keyvariable">string:tone_value_VAR</property>
+                    <property name="style">ComboBox1.TCombobox</property>
+                    <property name="width">4</property>
                     <layout manager="grid">
                       <property name="column">1</property>
-                      <property name="padx">10 0</property>
-                      <property name="pady">5 0</property>
+                      <property name="padx">20 0</property>
+                      <property name="pady">40 0</property>
                       <property name="row">2</property>
                       <property name="sticky">w</property>
                     </layout>
@@ -110,28 +110,26 @@
                 </child>
                 <child>
                   <object class="ttk.Label" id="CW_SPEED_WPM_LABEL" named="True">
-                    <property name="style">Heading2b.TLabel</property>
+                    <property name="style">Heading1b.TLabel</property>
                     <property name="text" translatable="yes">Speed (WPM)</property>
                     <layout manager="grid">
                       <property name="column">0</property>
-                      <property name="pady">5 0</property>
+                      <property name="pady">40 0</property>
                       <property name="row">6</property>
                       <property name="sticky">e</property>
                     </layout>
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.Entry" id="CW_SPEED_WPM_WIDGET" named="True">
-                    <property name="justify">right</property>
-                    <property name="style">Entry2b.TEntry</property>
-                    <property name="textvariable">string:key_speed_value_VAR</property>
-                    <property name="validate">focus</property>
-                    <property name="validatecommand" type="command" cbtype="entry_validate" args="%P %V">validate_CW_SPEED_WPM</property>
-                    <property name="width">12</property>
+                  <object class="pygubu.widgets.Combobox" id="CW_Speed_WPM_Widget_Combobox" named="True">
+                    <property name="justify">center</property>
+                    <property name="keyvariable">string:key_speed_value_VAR</property>
+                    <property name="style">ComboBox1.TCombobox</property>
+                    <property name="width">4</property>
                     <layout manager="grid">
                       <property name="column">1</property>
-                      <property name="padx">10 0</property>
-                      <property name="pady">5 0</property>
+                      <property name="padx">20 0</property>
+                      <property name="pady">40 0</property>
                       <property name="row">6</property>
                       <property name="sticky">w</property>
                     </layout>
@@ -139,86 +137,83 @@
                 </child>
                 <child>
                   <object class="ttk.Label" id="CW_START_MS_LABEL" named="True">
-                    <property name="style">Heading2b.TLabel</property>
+                    <property name="style">Heading1b.TLabel</property>
                     <property name="text" translatable="yes">Delay Starting TX (ms)</property>
                     <layout manager="grid">
-                      <property name="column">0</property>
-                      <property name="pady">5 0</property>
-                      <property name="row">10</property>
+                      <property name="column">3</property>
+                      <property name="pady">40 0</property>
+                      <property name="row">0</property>
                       <property name="sticky">e</property>
                     </layout>
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.Entry" id="CW_START_MS_WIDGET" named="True">
-                    <property name="justify">right</property>
-                    <property name="style">Entry2b.TEntry</property>
-                    <property name="textvariable">string:delay_starting_tx_value_VAR</property>
-                    <property name="validate">focus</property>
-                    <property name="validatecommand" type="command" cbtype="entry_validate" args="%P %V">validate_CW_START_MS</property>
-                    <property name="width">12</property>
+                  <object class="pygubu.widgets.Combobox" id="CW_Start_MS_Widget_Combobox" named="True">
+                    <property name="justify">center</property>
+                    <property name="keyvariable">string:delay_starting_tx_value_VAR</property>
+                    <property name="style">ComboBox1.TCombobox</property>
+                    <property name="width">4</property>
                     <layout manager="grid">
-                      <property name="column">1</property>
-                      <property name="padx">10 0</property>
-                      <property name="pady">5 0</property>
-                      <property name="row">10</property>
+                      <property name="column">4</property>
+                      <property name="padx">20</property>
+                      <property name="pady">40 0</property>
+                      <property name="row">0</property>
                       <property name="sticky">w</property>
                     </layout>
                   </object>
                 </child>
                 <child>
                   <object class="ttk.Label" id="CW_DELAY_MS_LABEL" named="True">
-                    <property name="style">Heading2b.TLabel</property>
+                    <property name="style">Heading1b.TLabel</property>
                     <property name="text" translatable="yes">Delay Returning to RX (ms)</property>
                     <layout manager="grid">
-                      <property name="column">0</property>
-                      <property name="pady">5 0</property>
-                      <property name="row">14</property>
+                      <property name="column">3</property>
+                      <property name="pady">40 0</property>
+                      <property name="row">2</property>
                       <property name="sticky">e</property>
                     </layout>
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.Entry" id="CW_DELAY_MS_WIDGET" named="True">
-                    <property name="justify">right</property>
-                    <property name="style">Entry2b.TEntry</property>
-                    <property name="textvariable">string:delay_returning_to_rx_value_VAR</property>
-                    <property name="validate">focus</property>
-                    <property name="validatecommand" type="command" cbtype="entry_validate" args="%P %V">validate_CW_DELAY_MS</property>
-                    <property name="width">12</property>
+                  <object class="pygubu.widgets.Combobox" id="CW_Delay_MS_Widget_Combobox" named="True">
+                    <property name="justify">center</property>
+                    <property name="keyvariable">string:delay_returning_to_rx_value_VAR</property>
+                    <property name="style">ComboBox1.TCombobox</property>
+                    <property name="width">4</property>
                     <layout manager="grid">
-                      <property name="column">1</property>
-                      <property name="padx">10 0</property>
-                      <property name="pady">5 0</property>
-                      <property name="row">14</property>
+                      <property name="column">4</property>
+                      <property name="padx">20</property>
+                      <property name="pady">40 0</property>
+                      <property name="row">2</property>
                       <property name="sticky">w</property>
                     </layout>
                   </object>
                 </child>
                 <child>
                   <object class="ttk.Label" id="label209" named="True">
-                    <property name="style">Heading2b.TLabel</property>
-                    <property name="text" translatable="yes">VFO Freq displays</property>
+                    <property name="style">Heading1b.TLabel</property>
+                    <property name="text" translatable="yes">VFO Freq Displays</property>
                     <layout manager="grid">
-                      <property name="column">0</property>
-                      <property name="pady">5 10</property>
-                      <property name="row">15</property>
+                      <property name="column">3</property>
+                      <property name="pady">40 0</property>
+                      <property name="row">6</property>
                       <property name="sticky">e</property>
                     </layout>
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.Combobox" id="CW_Display_Freq_Combobox" named="True">
+                  <object class="pygubu.widgets.Combobox" id="CW_Display_Freq_Combobox" named="True">
                     <property name="justify">center</property>
-                    <property name="state">readonly</property>
-                    <property name="style">TCombobox</property>
-                    <property name="textvariable">string:CW_Display_TXFreq_VAR</property>
+                    <property name="keyvariable">string:CW_Display_TXFreq_VAR</property>
+                    <property name="style">ComboBox1.TCombobox</property>
                     <property name="values">TX RX</property>
                     <property name="width">4</property>
                     <layout manager="grid">
-                      <property name="column">1</property>
-                      <property name="pady">10</property>
-                      <property name="row">15</property>
+                      <property name="column">4</property>
+                      <property name="padx">20 0</property>
+                      <property name="pady">40 0</property>
+                      <property name="row">6</property>
+                      <property name="sticky">w</property>
                     </layout>
                   </object>
                 </child>
@@ -241,7 +236,9 @@ This setting will be reset to that stored in the EEPROM on reboot.  Use the Sett
                     <property name="wrap">word</property>
                     <layout manager="grid">
                       <property name="column">2</property>
-                      <property name="padx">10 0</property>
+                      <property name="columnspan">5</property>
+                      <property name="padx">70 0</property>
+                      <property name="pady">20</property>
                       <property name="row">15</property>
                     </layout>
                   </object>

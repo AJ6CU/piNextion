@@ -50,10 +50,7 @@ class piCECNextionUI(ttk.Frame):
 
         self.menuBar_Frame = ttk.Frame(self, name="menubar_frame")
         self.menuBar_Frame.configure(
-            borderwidth=5,
-            height=50,
-            style="Normal.TFrame",
-            width=800)
+            borderwidth=5, height=50, style="Normal.TFrame")
         # First object created
         on_first_object_cb(self.menuBar_Frame)
 
@@ -64,8 +61,8 @@ class piCECNextionUI(ttk.Frame):
             style="Button2b.TButton",
             text='  \nSETTINGS\n  ',
             textvariable=self.settings_VAR,
-            width=12)
-        self.settings_Button.grid(column=0, padx="0 2", row=0, sticky="ns")
+            width=13)
+        self.settings_Button.grid(column=0, padx="0 1", row=0, sticky="ns")
         self.settings_Button.configure(command=self.settings_CB)
         self.vfo_Button = ttk.Button(self.menuBar_Frame, name="vfo_button")
         self.vfo_VAR = tk.StringVar(value='\nVFO\n')
@@ -74,8 +71,8 @@ class piCECNextionUI(ttk.Frame):
             style="Button2b.TButton",
             text='\nVFO\n',
             textvariable=self.vfo_VAR,
-            width=12)
-        self.vfo_Button.grid(column=1, padx="0 2", row=0, sticky="ns")
+            width=13)
+        self.vfo_Button.grid(column=1, padx="0 1", row=0, sticky="ns")
         self.vfo_Button.configure(command=self.vfo_CB)
         self.mode_select_Menubutton = ttk.Menubutton(
             self.menuBar_Frame, name="mode_select_menubutton")
@@ -84,7 +81,7 @@ class piCECNextionUI(ttk.Frame):
             style="Heading2b.TMenubutton",
             text=' \nMode\n',
             textvariable=self.primary_Mode_VAR,
-            width=9)
+            width=10)
         self.menu1 = tk.Menu(self.mode_select_Menubutton)
         self.menu1.configure(tearoff=False)
         self.menu1.add(
@@ -110,7 +107,7 @@ class piCECNextionUI(ttk.Frame):
             label='CWU')
         self.mode_select_Menubutton.configure(menu=self.menu1)
         self.mode_select_Menubutton.grid(
-            column=2, padx="0 2", row=0, sticky="ns")
+            column=2, padx="0 1", row=0, sticky="ns")
         self.band_up_Button = ttk.Button(
             self.menuBar_Frame, name="band_up_button")
         self.band_up_VAR = tk.StringVar(value='\nBAND UP\n')
@@ -118,8 +115,8 @@ class piCECNextionUI(ttk.Frame):
             style="Button2b.TButton",
             text='\nBAND UP\n',
             textvariable=self.band_up_VAR,
-            width=12)
-        self.band_up_Button.grid(column=3, padx="0 2", row=0, sticky="ns")
+            width=13)
+        self.band_up_Button.grid(column=3, padx="0 1", row=0, sticky="ns")
         self.band_up_Button.configure(command=self.band_up_CB)
         self.band_down_Button = ttk.Button(
             self.menuBar_Frame, name="band_down_button")
@@ -128,8 +125,8 @@ class piCECNextionUI(ttk.Frame):
             style="Button2b.TButton",
             text='\nBAND DN\n',
             textvariable=self.band_down_VAR,
-            width=12)
-        self.band_down_Button.grid(column=4, padx="0 2", row=0, sticky="ns")
+            width=13)
+        self.band_down_Button.grid(column=4, padx="0 1", row=0, sticky="ns")
         self.band_down_Button.configure(command=self.band_down_CB)
         self.lock_Button = ttk.Button(self.menuBar_Frame, name="lock_button")
         self.lock_VAR = tk.StringVar(value='\nLOCK\n')
@@ -137,8 +134,8 @@ class piCECNextionUI(ttk.Frame):
             style="Button2b.TButton",
             text='\nLOCK\n',
             textvariable=self.lock_VAR,
-            width=12)
-        self.lock_Button.grid(column=5, padx="0 2", row=0, sticky="ns")
+            width=13)
+        self.lock_Button.grid(column=5, padx="0 1", row=0, sticky="ns")
         self.lock_Button.configure(command=self.lock_CB)
         self.speaker_Button = ttk.Button(
             self.menuBar_Frame, name="speaker_button")
@@ -147,12 +144,12 @@ class piCECNextionUI(ttk.Frame):
             style="Button2b.TButton",
             text='\nSPEAKER\n',
             textvariable=self.speaker_VAR,
-            width=12)
+            width=13)
         self.speaker_Button.grid(column=6, row=0, sticky="ns")
         self.speaker_Button.configure(command=self.speaker_CB)
         self.menuBar_Frame.pack(anchor="n", expand=True, fill="x", side="top")
         self.frame2 = ttk.Frame(self)
-        self.frame2.configure(height=200, style="Normal.TFrame", width=200)
+        self.frame2.configure(height=200, style="Normal.TFrame")
         self.vfoA_Frame = ttk.Frame(self.frame2, name="vfoa_frame")
         self.vfoA_Frame.configure(borderwidth=3, style="NormalOutline.TFrame")
         self.rxTX_Status_Frame = ttk.Frame(
@@ -381,17 +378,22 @@ class piCECNextionUI(ttk.Frame):
         self.tuning_Multiplier_Button.pack(anchor="n", pady=5, side="top")
         self.tuning_Multiplier_Button.configure(
             command=self.tuning_Multiplier_Button_CB)
-        self.frame3.grid(column=2, pady=2, row=0, rowspan=3, sticky="n")
+        self.frame3.grid(
+            columnspan=3,
+            padx="30 0",
+            row=1,
+            rowspan=3,
+            sticky="se")
         self.vfoB_Frame = ttk.Frame(self.frame2, name="vfob_frame")
         self.vfoB_Frame.configure(borderwidth=3, style="NormalOutline.TFrame")
         self.vfo_Frame = ttk.Frame(self.vfoB_Frame, name="vfo_frame")
         self.vfo_Frame.configure(style="Normal.TFrame")
         self.secondary_VFO_Label = ttk.Label(
             self.vfo_Frame, name="secondary_vfo_label")
-        self.secondary_VFO_Formatted_VAR = tk.StringVar(value='99999999')
+        self.secondary_VFO_Formatted_VAR = tk.StringVar(value='99.999.999')
         self.secondary_VFO_Label.configure(
             style="Heading1Fixed.TLabel",
-            text='99999999',
+            text='99.999.999',
             textvariable=self.secondary_VFO_Formatted_VAR,
             width=10)
         self.secondary_VFO_Label.pack(anchor="nw", side="left")
@@ -403,7 +405,7 @@ class piCECNextionUI(ttk.Frame):
             text='CWL',
             textvariable=self.secondary_Mode_VAR)
         self.secondary_Mode_Label.pack(anchor="ne", padx="5 0", side="right")
-        self.vfo_Frame.pack(padx="20 0", side="left")
+        self.vfo_Frame.pack(padx="10 0", side="left")
         self.callsign_Frame = ttk.Frame(self.vfoB_Frame, name="callsign_frame")
         self.callsign_Frame.configure(
             height=200, style="Normal.TFrame", width=200)
@@ -421,11 +423,11 @@ class piCECNextionUI(ttk.Frame):
             style="Heading2b.TLabel",
             text='V2.0 RCLxyz',
             textvariable=self.firmwareVersion_VAR)
-        self.label6.pack(anchor="nw", padx="7 0", side="left")
+        self.label6.pack(anchor="nw", side="left")
         self.callsign_Frame.pack(
             expand=False,
             fill="y",
-            padx="100 0",
+            padx="40 0",
             pady=10,
             side="left")
         self.tuning_Step_Frame = ttk.Frame(
@@ -439,7 +441,7 @@ class piCECNextionUI(ttk.Frame):
             text='0',
             textvariable=self.tuning_Preset_Label_VAR,
             width=10)
-        self.tuning_Preset_Button.pack(padx="12 0", side="left")
+        self.tuning_Preset_Button.pack(side="left")
         self.tuning_Preset_Button.configure(
             command=self.tuning_Preset_Select_CB)
         self.tuning_Preset_Units_Label = ttk.Label(
@@ -447,7 +449,7 @@ class piCECNextionUI(ttk.Frame):
         self.tuning_Preset_Units_Label.configure(
             style="Heading1.TLabel", text='Hz')
         self.tuning_Preset_Units_Label.pack(padx=15, side="left")
-        self.tuning_Step_Frame.pack(padx="40 0", pady="5 0", side="right")
+        self.tuning_Step_Frame.pack(padx="5 0", pady="5 0", side="right")
         self.vfoB_Frame.grid(column=0, ipadx=25, row=1, sticky="w")
         self.control_Meter_Tuning_Frame = ttk.Frame(
             self.frame2, name="control_meter_tuning_frame")
@@ -552,7 +554,7 @@ class piCECNextionUI(ttk.Frame):
         self.tuning_Preset_1_Radiobutton.configure(
             command=self.tuning_Preset_1_CB)
         self.tuning_Preset_Selection_Frame.grid(
-            column=1, padx="120 0", pady=5, row=0, rowspan=3, sticky="nw")
+            column=1, padx="20 0", row=0, rowspan=3, sticky="nw")
         self.sMeter_Frame = ttk.Frame(
             self.control_Meter_Tuning_Frame,
             name="smeter_frame")
@@ -580,14 +582,13 @@ class piCECNextionUI(ttk.Frame):
             variable=self.s_meter_Progressbar_VAR)
         self.s_meter_Progressbar.grid(column=1, row=1, sticky="w")
         self.sMeter_Frame.grid(column=0, padx="20 0", row=1, sticky="w")
-        self.control_Meter_Tuning_Frame.grid(column=0, row=2, sticky="w")
-        self.frame2.pack(anchor="n", side="top")
+        self.control_Meter_Tuning_Frame.grid(column=0, row=2, sticky="nw")
+        self.frame2.pack(anchor="n", expand=True, fill="x", side="top")
         self.frame2.columnconfigure(0, weight=1)
         self.frame2.columnconfigure(1, weight=2)
         self.ATT_IFS_Adjust_Frame = ttk.Frame(
             self, name="att_ifs_adjust_frame")
-        self.ATT_IFS_Adjust_Frame.configure(
-            height=50, style="Normal.TFrame", width=800)
+        self.ATT_IFS_Adjust_Frame.configure(style="Normal.TFrame")
         self.att_ifs_Frame = ttk.Frame(
             self.ATT_IFS_Adjust_Frame,
             name="att_ifs_frame")
@@ -783,21 +784,22 @@ class piCECNextionUI(ttk.Frame):
             anchor="nw",
             expand=False,
             fill="x",
-            padx="25 0",
+            padx="140 0",
             pady=20,
             side="left")
         self.cw_Info_Frame.bind("<1>", self.cwSettings_CB, add="")
         self.ATT_IFS_Adjust_Frame.pack(
             anchor="w",
             expand=True,
-            fill="x",
-            pady="20 0",
+            fill="both",
+            ipady=10,
+            pady="10 0",
             side="top")
         self.configure(
             borderwidth=5,
-            height=700,
+            height=800,
             style="Normal.TFrame",
-            width=1280)
+            width=1020)
         # Layout for 'main_window' skipped in custom widget template.
 
     def settings_CB(self):

@@ -54,7 +54,7 @@ def startMainWindow(comPortName, comPort):
 #   Main program and loop
 #
 root = tk.Tk()
-root.minsize(1070, 660)
+root.minsize(1020, 800)
 # root.geometry("1070x660")
 root.title("PiCEC - A Nextion Emulator for CEC Software")
 
@@ -67,7 +67,7 @@ gv.config = configuration(root)                    # Read in config data, if mis
 mainWindow = piCECNextion(root)
 comPort = comportManager(root,startMainWindow)
 
-comPort.place(relx=0.665, rely=.95, anchor="s")
+comPort.place(relx=0.81, rely=1, anchor="s")
 
 if not comPort.getComPort():
     root.after(500, comPort.retry() )           # If we failed to get a comport the easy way, try again

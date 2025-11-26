@@ -28,7 +28,7 @@
     <property name="borderwidth">5</property>
     <property name="height">700</property>
     <property name="style">Normal.TFrame</property>
-    <property name="width">1280</property>
+    <property name="width">1250</property>
     <layout manager="pack">
       <property name="anchor">nw</property>
       <property name="expand">True</property>
@@ -40,7 +40,7 @@
         <property name="borderwidth">5</property>
         <property name="height">50</property>
         <property name="style">Normal.TFrame</property>
-        <property name="width">800</property>
+        <property name="width">1250</property>
         <layout manager="pack">
           <property name="anchor">n</property>
           <property name="expand">true</property>
@@ -205,9 +205,11 @@ SPEAKER
       <object class="ttk.Frame" id="frame2">
         <property name="height">200</property>
         <property name="style">Normal.TFrame</property>
-        <property name="width">200</property>
+        <property name="width">1250</property>
         <layout manager="pack">
           <property name="anchor">n</property>
+          <property name="expand">true</property>
+          <property name="fill">x</property>
           <property name="side">top</property>
         </layout>
         <containerlayout manager="grid">
@@ -591,11 +593,11 @@ STOP!
             <property name="style">Normal.TFrame</property>
             <property name="width">200</property>
             <layout manager="grid">
-              <property name="column">2</property>
-              <property name="pady">2</property>
-              <property name="row">0</property>
+              <property name="columnspan">3</property>
+              <property name="padx">30 0</property>
+              <property name="row">1</property>
               <property name="rowspan">3</property>
-              <property name="sticky">n</property>
+              <property name="sticky">se</property>
             </layout>
             <child>
               <object class="projectcustom.Jogwheel" id="tuning_Jogwheel" named="True">
@@ -644,13 +646,13 @@ x 100mhz</property>
               <object class="ttk.Frame" id="vfo_Frame" named="True">
                 <property name="style">Normal.TFrame</property>
                 <layout manager="pack">
-                  <property name="padx">20 0</property>
+                  <property name="padx">10 0</property>
                   <property name="side">left</property>
                 </layout>
                 <child>
                   <object class="ttk.Label" id="secondary_VFO_Label" named="True">
                     <property name="style">Heading1Fixed.TLabel</property>
-                    <property name="text" translatable="yes">99999999</property>
+                    <property name="text" translatable="yes">99.999.999</property>
                     <property name="textvariable">string:secondary_VFO_Formatted_VAR</property>
                     <property name="width">10</property>
                     <layout manager="pack">
@@ -681,7 +683,7 @@ x 100mhz</property>
                 <layout manager="pack">
                   <property name="expand">false</property>
                   <property name="fill">y</property>
-                  <property name="padx">100 0</property>
+                  <property name="padx">40 0</property>
                   <property name="pady">10</property>
                   <property name="side">left</property>
                 </layout>
@@ -705,7 +707,6 @@ x 100mhz</property>
                     <property name="textvariable">string:firmwareVersion_VAR</property>
                     <layout manager="pack">
                       <property name="anchor">nw</property>
-                      <property name="padx">7 0</property>
                       <property name="side">left</property>
                     </layout>
                   </object>
@@ -717,7 +718,7 @@ x 100mhz</property>
                 <property name="style">Normal.TFrame</property>
                 <property name="width">200</property>
                 <layout manager="pack">
-                  <property name="padx">40 0</property>
+                  <property name="padx">5 0</property>
                   <property name="pady">5 0</property>
                   <property name="side">right</property>
                 </layout>
@@ -729,7 +730,6 @@ x 100mhz</property>
                     <property name="textvariable">string:tuning_Preset_Label_VAR</property>
                     <property name="width">10</property>
                     <layout manager="pack">
-                      <property name="padx">12 0</property>
                       <property name="side">left</property>
                     </layout>
                   </object>
@@ -756,7 +756,7 @@ x 100mhz</property>
             <layout manager="grid">
               <property name="column">0</property>
               <property name="row">2</property>
-              <property name="sticky">w</property>
+              <property name="sticky">nw</property>
             </layout>
             <child>
               <object class="ttk.Frame" id="secondary_menu_Frame" named="True">
@@ -831,8 +831,7 @@ CHANNELS
                 <property name="width">50</property>
                 <layout manager="grid">
                   <property name="column">1</property>
-                  <property name="padx">120 0</property>
-                  <property name="pady">5</property>
+                  <property name="padx">20 0</property>
                   <property name="row">0</property>
                   <property name="rowspan">3</property>
                   <property name="sticky">nw</property>
@@ -968,14 +967,13 @@ CHANNELS
     </child>
     <child>
       <object class="ttk.Frame" id="ATT_IFS_Adjust_Frame" named="True">
-        <property name="height">50</property>
         <property name="style">Normal.TFrame</property>
-        <property name="width">800</property>
+        <property name="width">1250</property>
         <layout manager="pack">
           <property name="anchor">w</property>
           <property name="expand">true</property>
-          <property name="fill">x</property>
-          <property name="pady">20 0</property>
+          <property name="fill">both</property>
+          <property name="pady">10 0</property>
           <property name="side">top</property>
         </layout>
         <child>

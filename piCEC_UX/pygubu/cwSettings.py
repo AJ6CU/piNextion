@@ -19,6 +19,7 @@ class cwSettingsToplevel(tk.Toplevel):
 
         self.popup.title("CW Settings")
         self.popup.minsize(800,500)
+        self.popup.wait_visibility()  # required on Linux
         self.popup.grab_set()
         self.popup.transient(self.master)
 

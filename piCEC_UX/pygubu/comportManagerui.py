@@ -68,7 +68,7 @@ class comportManagerUI(ttk.Frame):
             width=300)
         label3.pack(pady=20, side="top")
         self.comportMessage_Frame.pack(
-            expand=True, fill="x", padx=10, pady=10, side="top")
+            expand=True, fill="both", padx=10, pady=10, side="top")
         self.comportMessage_Frame.pack_propagate(0)
         frame1 = ttk.Frame(self)
         frame1.configure(

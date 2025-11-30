@@ -72,7 +72,7 @@ root = tk.Tk()
 # root.minsize(1020, 800)
 # root.minsize(775, 800)
 # root.geometry("1020x800")
-root.geometry("300x225")
+root.geometry("400x230")
 root.title("PiCEC - A Nextion Emulator for CEC Software")
 
 

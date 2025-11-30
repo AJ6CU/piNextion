@@ -39,7 +39,7 @@
         <property name="width">200</property>
         <layout manager="pack">
           <property name="expand">true</property>
-          <property name="fill">x</property>
+          <property name="fill">both</property>
           <property name="padx">10</property>
           <property name="pady">10</property>
           <property name="side">top</property>

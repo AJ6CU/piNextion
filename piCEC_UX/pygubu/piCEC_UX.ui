@@ -26,15 +26,16 @@
   </project>
   <object class="ttk.Frame" id="main_window" named="True">
     <property name="borderwidth">5</property>
-    <property name="height">700</property>
     <property name="style">Normal.TFrame</property>
-    <property name="width">1250</property>
     <layout manager="pack">
       <property name="anchor">nw</property>
       <property name="expand">True</property>
       <property name="fill">both</property>
       <property name="side">top</property>
     </layout>
+    <containerlayout manager="pack">
+      <property name="propagate">false</property>
+    </containerlayout>
     <child>
       <object class="ttk.Frame" id="menuBar_Frame" named="True">
         <property name="borderwidth">5</property>

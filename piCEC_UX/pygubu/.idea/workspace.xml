@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b30f41e5-a6a9-4697-a427-3f8e706d9bd4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/pygubu.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pygubu.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.piCEC.ini" beforeDir="false" afterPath="$PROJECT_DIR$/.piCEC.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/comportManagerui.py" beforeDir="false" afterPath="$PROJECT_DIR$/comportManagerui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/piCEC_UX.py" beforeDir="false" afterPath="$PROJECT_DIR$/piCEC_UX.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -83,6 +80,7 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.14" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />

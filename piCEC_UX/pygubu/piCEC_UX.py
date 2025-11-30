@@ -91,8 +91,23 @@ print(mainWindow_y_pos)
 
 
 mainWindow = piCECNextion(root)
-mainWindow.update()
+# mainWindow.update()
 comPort = comportManager(root,startMainWindow)
+# comPort.update()
+#
+#
+#
+# comPortWindow_width = comPort.winfo_width()
+# print("comPortWindow_width:",comPort.winfo_width())
+# comPortWindow_height = comPort.winfo_height()
+# print("comPortWindow_height:",comPort.winfo_height())
+#
+# geo = str(comPortWindow_width) +"x"+ str(comPortWindow_height)
+#
+# root.geometry(geo)
+
+
+
 #
 # root.update()
 #
@@ -121,6 +136,19 @@ comPort = comportManager(root,startMainWindow)
 # print(x_pos,y_pos)
 
 comPort.place(x=0,y=0)
+
+comPort.update()
+
+
+
+comPortWindow_width = comPort.winfo_width()
+print("comPortWindow_width:",comPort.winfo_width())
+comPortWindow_height = comPort.winfo_height()
+print("comPortWindow_height:",comPort.winfo_height())
+
+geo = str(comPortWindow_width) +"x"+ str(comPortWindow_height)
+
+root.geometry(geo)
 
 if not comPort.getComPort():
     root.after(500, comPort.retry() )           # If we failed to get a comport the easy way, try again

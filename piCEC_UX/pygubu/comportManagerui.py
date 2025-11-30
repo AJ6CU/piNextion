@@ -50,7 +50,7 @@ class comportManagerUI(ttk.Frame):
         self.comportMessage_Frame = ttk.Frame(
             self, name="comportmessage_frame")
         self.comportMessage_Frame.configure(
-            height=250, style="Normal.TFrame", width=400)
+            height=150, style="Normal.TFrame", width=200)
         # First object created
         on_first_object_cb(self.comportMessage_Frame)
 
@@ -65,10 +65,11 @@ class comportManagerUI(ttk.Frame):
             justify="left",
             style="Heading2b.TLabel",
             text='The serial port connecting your uBITX to\nthis software is either unspecified or not\nworking. You must specify the correct \nport below before proceeding.',
-            width=40)
-        label3.pack(expand=True, fill="x", pady=20, side="top")
+            width=300)
+        label3.pack(pady=20, side="top")
         self.comportMessage_Frame.pack(
             expand=True, fill="both", padx=10, pady=10, side="top")
+        self.comportMessage_Frame.pack_propagate(0)
         frame1 = ttk.Frame(self)
         frame1.configure(
             height=200,
@@ -106,8 +107,8 @@ class comportManagerUI(ttk.Frame):
         self.comPortListRefresh.configure(command=self.updateComPorts)
         self.comportSelection_Frame.pack(
             expand=True, fill="x", padx=10, pady=5, side="top")
-        frame1.pack(expand=True, fill="both", padx=10, pady=10, side="bottom")
-        self.configure(height=250, style="Normal.TFrame", width=400)
+        frame1.pack(expand=True, fill="x", padx=10, pady="0 20", side="bottom")
+        self.configure(height=100, style="Normal.TFrame", width=278)
         # Layout for 'selectComPortFrame' skipped in custom widget template.
 
     def radioSerialPortSelected_CB(self, option):

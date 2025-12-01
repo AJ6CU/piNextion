@@ -8,7 +8,7 @@ import piCEC_UXui as baseui
 from settings import settingsToplevel
 from cwSettings import cwSettings, cwSettingsToplevel
 
-from channels import channels
+from channels import channelsToplevel
 from Classic_uBITX_Control import Classic_uBITX_Control
 
 import mystyles  # Styles definition module
@@ -411,12 +411,12 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def displayChannelWindow(self):
         if self.channelWindow == None:
-            self.channelWindow = channels(self.master, self, self.refresh_CB)
-            self.channelWindow.title("Memory Channel")
+            self.channelWindow = channelsToplevel(self.master, self, self.refresh_CB).channelsWindowObj
+            # self.channelWindow.title("Memory Channel")
             root_x = self.master.winfo_rootx()
             root_y = self.master.winfo_rooty()
-            self.channelWindow.geometry("+{}+{}".format(root_x+50, root_y+50))
-            self.channelWindow.transient(self.master)
+            # self.channelWindow.geometry("+{}+{}".format(root_x+50, root_y+50))
+            # self.channelWindow.transient(self.master)
             self.channelWindow.update_Current_Frequency (gv.formatFrequency(self.primary_VFO_VAR.get()))
             self.channelWindow.update_Current_Mode (self.primary_Mode_VAR.get())
             self.Radio_Req_Channel_Freqs()

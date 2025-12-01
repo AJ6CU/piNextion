@@ -11,6 +11,23 @@ import globalvars as gv
 # Manual user code
 #
 
+class channelsToplevel(tk.Toplevel):
+    def __init__(self, master=None, mainWindow=None, refreshCallback=None,  **kw):
+        self.master = master
+        self.mainWindow = mainWindow
+        self.refreshCallback = refreshCallback
+
+        self.popup = tk.Toplevel(self.master)
+
+        self.popup.title("Memory Channels")
+        # self.popup.geometry("600x430")
+        self.popup.wait_visibility()  # required on Linux
+        self.popup.grab_set()
+        self.popup.transient(self.master)
+
+        self.channelsWindowObj = channels(self.popup,  self.mainWindow, self.refreshCallback, **kw)
+        self.channelsWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
+
 class channels(baseui.channelsUI):
     channelList = []
     currentChannel = 0
@@ -20,8 +37,10 @@ class channels(baseui.channelsUI):
         channels.channelList = []
         channels.currentChannel = 0
         super().__init__(master, **kw)
+        self.master = master
         self.mainWindow = mainWindow
-        self.protocol("WM_DELETE_WINDOW", self.close_Channel_CB)
+
+        self.master.protocol("WM_DELETE_WINDOW", self.close_Channel_CB)
         self.channelSlotCount = 0
         self.channelSlotSelection = None
         self.savePreset =  int(self.mainWindow.tuning_Preset_Selection_VAR.get())
@@ -174,7 +193,7 @@ class channels(baseui.channelsUI):
     def close_Channel_CB(self):             # method called when window closed
         self.confirmExitorWriteDirty()
         self.mainWindow.Radio_Set_Tuning_Preset(self.savePreset)
-        self.withdraw()
+        self.master.withdraw()
 
     def confirmExitorWriteDirty(self):
         for channelNum in range(len(self.channelList)):

@@ -29,7 +29,7 @@ def image_loader_default(master, image_name: str):
 #
 # Base class definition
 #
-class channelsUI(tk.Toplevel):
+class channelsUI(ttk.Labelframe):
     def __init__(
         self,
         master=None,
@@ -50,16 +50,11 @@ class channelsUI(tk.Toplevel):
 
         super().__init__(master, **kw)
 
-        labelframe1 = ttk.Labelframe(self)
-        labelframe1.configure(
-            style="Heading2.TLabelframe",
-            text='Frequency Channels',
-            width=760)
-        # First object created
-        on_first_object_cb(labelframe1)
-
-        frame1 = ttk.Frame(labelframe1)
+        frame1 = ttk.Frame(self)
         frame1.configure(style="Normal.TFrame", width=750)
+        # First object created
+        on_first_object_cb(frame1)
+
         self.display_Current_VFO_Frame = ttk.Frame(
             frame1, name="display_current_vfo_frame")
         self.display_Current_VFO_Frame.configure(
@@ -113,7 +108,7 @@ class channelsUI(tk.Toplevel):
             self.header_Line_Frame, name="channel_header_label")
         self.channel_header_Label.configure(
             style="Heading2b.TLabel", text='Channel')
-        self.channel_header_Label.grid(column=0, padx="85 0", row=0)
+        self.channel_header_Label.grid(column=0, padx="95 0", row=0)
         self.name_Header_Label = ttk.Label(
             self.header_Line_Frame, name="name_header_label")
         self.name_Header_Label.configure(style="Heading2b.TLabel", text='Name')
@@ -121,7 +116,7 @@ class channelsUI(tk.Toplevel):
         self.frequency_Header_Label = ttk.Label(
             self.header_Line_Frame, name="frequency_header_label")
         self.frequency_Header_Label.configure(
-            style="Heading2b.TLabel", text='Frequency')
+            style="Heading2b.TLabel", text='Freq')
         self.frequency_Header_Label.grid(column=2, padx="15 0", row=0)
         self.mode_Header_Label = ttk.Label(
             self.header_Line_Frame, name="mode_header_label")
@@ -131,22 +126,22 @@ class channelsUI(tk.Toplevel):
             self.header_Line_Frame, name="showlabel_header_label")
         self.showLabel_Header_Label.configure(
             style="Heading2b.TLabel", text='Visible')
-        self.showLabel_Header_Label.grid(column=5, padx="40 0", row=0)
+        self.showLabel_Header_Label.grid(column=5, padx="25 0", row=0)
         self.scan_Set_Label = ttk.Label(
             self.header_Line_Frame, name="scan_set_label")
         self.scan_Set_Label.configure(
-            style="Heading2b.TLabel", text='Scan Set')
-        self.scan_Set_Label.grid(column=6, padx="11 7", row=0)
+            style="Heading2b.TLabel", text='Scan\nSet')
+        self.scan_Set_Label.grid(column=6, padx="9 7", row=0)
         self.dirtyIndicator_Label = ttk.Label(
             self.header_Line_Frame, name="dirtyindicator_label")
         self.dirtyIndicator_Label.configure(
             style="Heading2b.TLabel", text='Saved')
         self.dirtyIndicator_Label.grid(column=7, row=0)
-        self.header_Line_Frame.grid(column=0, pady="25 0", row=1, sticky="n")
+        self.header_Line_Frame.grid(column=0, pady="25 0", row=1, sticky="new")
         self.scrolledChannelFrame = ScrolledFrame(
             frame1, scrolltype="both", name="scrolledchannelframe")
         self.scrolledChannelFrame.innerframe.configure(
-            relief="flat", style="Normal.TFrame")
+            height=400, relief="flat", style="Normal.TFrame")
         self.scrolledChannelFrame.configure(usemousewheel=True)
         self.frequencyChannel1 = frequencyChannel(
             self.scrolledChannelFrame.innerframe, name="frequencychannel1")
@@ -210,7 +205,6 @@ class channelsUI(tk.Toplevel):
         self.frequencyChannel20.pack(anchor="w", pady="10 0", side="top")
         self.scrolledChannelFrame.grid(
             column=0, pady="5 0", row=2, sticky="nsew")
-        self.scrolledChannelFrame.pack_propagate(0)
         self.channelEdit_Frame = ttk.Frame(frame1, name="channeledit_frame")
         self.channelEdit_Frame.configure(style="Normal.TFrame", width=200)
         self.ChannelToVFO_Button = ttk.Button(
@@ -260,14 +254,10 @@ class channelsUI(tk.Toplevel):
             self.runScan_Selection_CB,
             add="+")
         self.channelEdit_Frame.grid(
-            column=1,
-            padx="10 0",
-            pady="100 0",
-            row=2,
-            sticky="nw")
-        self.channelEdit_Frame.grid_anchor("center")
+            column=1, padx=10, pady="100 0", row=2, sticky="new")
+        self.channelEdit_Frame.rowconfigure(3, weight=1)
         self.closingFrame = ttk.Frame(frame1, name="closingframe")
-        self.closingFrame.configure(style="Normal.TFrame", width=600)
+        self.closingFrame.configure(style="Normal.TFrame")
         self.saveChannel_Button = ttk.Button(
             self.closingFrame, name="savechannel_button")
         self.saveChannel_Button.configure(
@@ -291,13 +281,16 @@ class channelsUI(tk.Toplevel):
         self.close_Button.configure(style="Button2b.TButton", text='Close')
         self.close_Button.grid(column=3, padx="10 0", row=0)
         self.close_Button.configure(command=self.close_Channel_CB)
-        self.closingFrame.grid(column=0, padx=15, pady=15, row=4)
-        frame1.pack(expand=True, fill="x", side="top")
-        frame1.rowconfigure(2, minsize=400)
-        labelframe1.pack(expand=True, fill="both", side="top")
-        self.configure(height=575, width=700)
-        self.geometry("725x600")
-        # Layout for 'channels_Window' skipped in custom widget template.
+        self.closingFrame.grid(column=0, padx=15, pady=15, row=4, sticky="sew")
+        self.closingFrame.grid_anchor("center")
+        frame1.pack(expand=True, fill="both", side="top")
+        frame1.rowconfigure(2, minsize=400, weight=2)
+        frame1.columnconfigure(1, weight=2)
+        self.configure(
+            style="Heading2.TLabelframe",
+            text='Frequency Channels',
+            width=850)
+        # Layout for 'labelframe1' skipped in custom widget template.
 
     def ChannelToVFO_CB(self):
         pass

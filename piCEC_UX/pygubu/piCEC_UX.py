@@ -29,18 +29,18 @@ def startMainWindow(comPortName, comPortID):
 
     comPort.place_forget()
 
-    mainWindow.place(x=0, y=0)                          # place the mainWindow on the screen
-
-    mainWindow.update_idletasks()
-    mainWindow_width = mainWindow.winfo_width()
-    print("mainWindow_width:", mainWindow_width)
-    mainWindow_height = mainWindow.winfo_height()
-    print("mainWindow_height:", mainWindow_height)
-
-    geo = str(mainWindow_width) +"x"+ str(mainWindow_height)
-    print("geo:",geo)
-
-    root.geometry(geo)
+    # mainWindow.place(x=0, y=0)                          # place the mainWindow on the screen
+    #
+    # mainWindow.update_idletasks()
+    # mainWindow_width = mainWindow.winfo_width()
+    # print("mainWindow_width:", mainWindow_width)
+    # mainWindow_height = mainWindow.winfo_height()
+    # print("mainWindow_height:", mainWindow_height)
+    #
+    # geo = str(mainWindow_width) +"x"+ str(mainWindow_height)
+    # print("geo:",geo)
+    #
+    # root.geometry(geo)
 
     comPort.place(relx=0.80, rely=1, anchor="s")
 
@@ -73,7 +73,7 @@ root = tk.Tk()
 # root.minsize(775, 800)
 # root.geometry("1020x800")
 root.geometry("400x230")
-root.title("PiCEC - A Nextion Emulator for CEC Software")
+# root.title("PiCEC - A Nextion Emulator for CEC Software")
 
 
 gv.config = configuration(root)                    # Read in config data, if missing preload with defaults
@@ -84,22 +84,36 @@ mainWindow = piCECNextion(root)
 comPort = comportManager(root,startMainWindow)
 
 
-comPort.place(x=0,y=0)
+# comPort.place(x=0,y=0)
 
-comPort.update()
-
-
-
-comPortWindow_width = comPort.winfo_width()
-print("comPortWindow_width:",comPort.winfo_width())
-comPortWindow_height = comPort.winfo_height()
-print("comPortWindow_height:",comPort.winfo_height())
-
-geo = str(comPortWindow_width) +"x"+ str(comPortWindow_height)
-
-root.geometry(geo)
+# comPort.update()
+#
+#
+#
+# comPortWindow_width = comPort.winfo_width()
+# print("comPortWindow_width:",comPort.winfo_width())
+# comPortWindow_height = comPort.winfo_height()
+# print("comPortWindow_height:",comPort.winfo_height())
+#
+# geo = str(comPortWindow_width) +"x"+ str(comPortWindow_height)
+#
+# root.geometry(geo)
 
 if not comPort.getComPort():
+    comPort.place(x=0,y=0)
+
+    comPort.update()
+
+
+
+    comPortWindow_width = comPort.winfo_width()
+    print("comPortWindow_width:",comPort.winfo_width())
+    comPortWindow_height = comPort.winfo_height()
+    print("comPortWindow_height:",comPort.winfo_height())
+
+    geo = str(comPortWindow_width) +"x"+ str(comPortWindow_height)
+
+    root.geometry(geo)
     root.after(500, comPort.retry() )           # If we failed to get a comport the easy way, try again
 
 root.mainloop()

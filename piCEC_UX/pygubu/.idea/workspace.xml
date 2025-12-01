@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b30f41e5-a6a9-4697-a427-3f8e706d9bd4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.piCEC.ini" beforeDir="false" afterPath="$PROJECT_DIR$/.piCEC.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/piCECNextion.py" beforeDir="false" afterPath="$PROJECT_DIR$/piCECNextion.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/piCEC_UX.py" beforeDir="false" afterPath="$PROJECT_DIR$/piCEC_UX.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/piCEC_UXui.py" beforeDir="false" afterPath="$PROJECT_DIR$/piCEC_UXui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +83,6 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.14" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -181,6 +183,6 @@
     <SUITE FILE_PATH="coverage/pygubu$VirtualKeyboard.coverage" NAME="VirtualKeyboard Coverage Results" MODIFIED="1762035572673" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pygubu$piCEC_UX.coverage" NAME="piCEC_UX Coverage Results" MODIFIED="1762800718257" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pygubu$frequencyChannel.coverage" NAME="frequencyChannel Coverage Results" MODIFIED="1762035780527" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/pygubu$piCEC.coverage" NAME="piCEC Coverage Results" MODIFIED="1764543208429" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/pygubu$piCEC.coverage" NAME="piCEC Coverage Results" MODIFIED="1764549481050" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

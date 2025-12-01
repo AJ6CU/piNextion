@@ -181,3 +181,4 @@ cython_debug/
 .cursorindexingignore
 .DS_Store
 .DS_Store
+piCEC_UX/pygubu/.idea/workspace.xml

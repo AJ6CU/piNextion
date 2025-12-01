@@ -24,6 +24,22 @@ class piCECNextion(baseui.piCECNextionUI):
             translator=None,
             on_first_object_cb=mystyles.setup_ttk_styles,
         )
+
+        self.pack_forget()
+        # self.place(x=0, y=0)  # place the mainWindow on the screen
+        #
+        # self.update_idletasks()
+        # width = self.winfo_width()
+        # print("mainWindow_width:", width)
+        # height = self.winfo_height()
+        # print("mainWindow_height:", height)
+        #
+        # geo = str(width) + "x" + str(height)
+        # print("geo:", geo)
+        #
+        # master.geometry(geo)
+
+
         self.theRadio = None            # Object pointer for the Radio
         self.cwSettingsWindow = None    # Object pointer for the CW Settinge Window
         self.settingsWindow = None      # Object pointer for the General Settings Window
@@ -244,6 +260,20 @@ class piCECNextion(baseui.piCECNextionUI):
         self.updateRateMultiplier()
         self.updateLabelTuning_Multiplier()
         self.toggle_Digit_Highlight(self.rate_selection[self.currentDigitPos], True)
+
+        # self.place(x=0, y=0)  # place the mainWindow on the screen
+        self.update_idletasks()
+        self.place(x=0,y=0)
+        self.update_idletasks()
+        width = self.winfo_width()
+        print("mainWindow_width:", width)
+        height = self.winfo_height()
+        print("mainWindow_height:", height)
+
+        geo = str(width) + "x" + str(height) + "+5+30"
+        print("geo:", geo)
+
+        self.master.geometry(geo)
 
 
     ######################################################################################

@@ -352,7 +352,7 @@ class piCECNextionUI(ttk.Frame):
             anchor="w", expand=True, fill="x", side="left")
         self.VFO_TX_Offset_Frame.grid(column=0, padx="0 10", row=4, sticky="w")
         self.vfo_display_Frame.grid(column=1, padx="0 0", row=0, sticky="ew")
-        self.vfoA_Frame.grid(column=0, row=0, sticky="w")
+        self.vfoA_Frame.grid(column=0, row=0, sticky="ew")
         self.vfoA_Frame.grid_anchor("w")
         self.frame3 = ttk.Frame(self.frame2)
         self.frame3.configure(height=200, style="Normal.TFrame", width=200)
@@ -381,12 +381,7 @@ class piCECNextionUI(ttk.Frame):
         self.tuning_Multiplier_Button.pack(anchor="n", pady=5, side="top")
         self.tuning_Multiplier_Button.configure(
             command=self.tuning_Multiplier_Button_CB)
-        self.frame3.grid(
-            columnspan=3,
-            padx="30 0",
-            row=1,
-            rowspan=3,
-            sticky="se")
+        self.frame3.grid(columnspan=3, row=1, rowspan=3, sticky="se")
         self.vfoB_Frame = ttk.Frame(self.frame2, name="vfob_frame")
         self.vfoB_Frame.configure(borderwidth=3, style="NormalOutline.TFrame")
         self.vfo_Frame = ttk.Frame(self.vfoB_Frame, name="vfo_frame")

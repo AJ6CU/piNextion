@@ -126,3 +126,12 @@ def validateKeyInDict(dict, key, name, parent):
         return False
     else:
         return True
+
+def trimAndLocateWindow(window,x_offset,y_offset):
+    window.update()        # Let things settle down so we can get
+
+    width = window.winfo_width()
+    height = window.winfo_height()
+
+    return (f'{width}x{height}+{x_offset}+{y_offset}')
+

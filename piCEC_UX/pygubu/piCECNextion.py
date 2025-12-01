@@ -261,19 +261,21 @@ class piCECNextion(baseui.piCECNextionUI):
         self.updateLabelTuning_Multiplier()
         self.toggle_Digit_Highlight(self.rate_selection[self.currentDigitPos], True)
 
-        # self.place(x=0, y=0)  # place the mainWindow on the screen
-        self.update_idletasks()
-        self.place(x=0,y=0)
-        self.update_idletasks()
-        width = self.winfo_width()
-        print("mainWindow_width:", width)
-        height = self.winfo_height()
-        print("mainWindow_height:", height)
+        self.place(x=0, y=0)  # place the mainWindow on the screen
+        # self.update_idletasks()
+        # self.place(x=0,y=0)
+        # self.update_idletasks()
+        # width = self.winfo_width()
+        # print("mainWindow_width:", width)
+        # height = self.winfo_height()
+        # print("mainWindow_height:", height)
 
-        geo = str(width) + "x" + str(height) + "+5+30"
-        print("geo:", geo)
+        # geo = str(width) + "x" + str(height) + "+5+30"
 
-        self.master.geometry(geo)
+        self.master.geometry(gv.trimAndLocateWindow(self, 5, 30))
+        # print("geo:", geo)
+        #
+        # self.master.geometry(geo)
 
 
     ######################################################################################

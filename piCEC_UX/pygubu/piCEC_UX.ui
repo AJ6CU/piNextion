@@ -30,7 +30,7 @@
     <property name="style">Normal.TFrame</property>
     <property name="width">875</property>
     <layout manager="pack">
-      <property name="anchor">nw</property>
+      <property name="anchor">w</property>
       <property name="expand">True</property>
       <property name="fill">both</property>
       <property name="side">top</property>

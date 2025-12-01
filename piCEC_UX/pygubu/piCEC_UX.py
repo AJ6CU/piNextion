@@ -69,51 +69,27 @@ def startMainWindow(comPortName, comPortID):
 #
 root = tk.Tk()
 
-# root.minsize(1020, 800)
-# root.minsize(775, 800)
-# root.geometry("1020x800")
-root.geometry("400x230")
-# root.title("PiCEC - A Nextion Emulator for CEC Software")
+root.geometry("400x275+5+30")           # necessary because latest Tixie put new windows in center
+root.title("PiCEC - A Nextion Emulator for CEC Software")
 
 
 gv.config = configuration(root)                    # Read in config data, if missing preload with defaults
                                                 # Root is passed to allow popup error messages
 
 mainWindow = piCECNextion(root)
-# mainWindow.update()
+
 comPort = comportManager(root,startMainWindow)
 
 
-# comPort.place(x=0,y=0)
-
-# comPort.update()
-#
-#
-#
-# comPortWindow_width = comPort.winfo_width()
-# print("comPortWindow_width:",comPort.winfo_width())
-# comPortWindow_height = comPort.winfo_height()
-# print("comPortWindow_height:",comPort.winfo_height())
-#
-# geo = str(comPortWindow_width) +"x"+ str(comPortWindow_height)
-#
-# root.geometry(geo)
-
 if not comPort.getComPort():
-    comPort.place(x=0,y=0)
+    #
+    #   Handles the case where the com port is not valid or not in .ini file.
+    #   Have to open up  selection window.
+    #
+    comPort.pack()
 
-    comPort.update()
+    root.geometry(gv.trimAndLocateWindow(comPort,5,30))
 
-
-
-    comPortWindow_width = comPort.winfo_width()
-    print("comPortWindow_width:",comPort.winfo_width())
-    comPortWindow_height = comPort.winfo_height()
-    print("comPortWindow_height:",comPort.winfo_height())
-
-    geo = str(comPortWindow_width) +"x"+ str(comPortWindow_height)
-
-    root.geometry(geo)
     root.after(500, comPort.retry() )           # If we failed to get a comport the easy way, try again
 
 root.mainloop()

@@ -183,3 +183,4 @@ cython_debug/
 .DS_Store
 piCEC_UX/pygubu/.idea/workspace.xml
 piCEC_UX/pygubu/.idea/workspace.xml
+*.xml

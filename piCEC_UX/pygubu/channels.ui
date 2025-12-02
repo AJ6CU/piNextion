@@ -47,7 +47,7 @@
               <property name="side">top</property>
             </layout>
             <containerlayout manager="grid">
-              <property type="col" id="1" name="weight">2</property>
+              <property type="col" id="0" name="weight">2</property>
               <property type="row" id="2" name="minsize">400</property>
               <property type="row" id="2" name="weight">2</property>
             </containerlayout>
@@ -218,7 +218,7 @@ Set</property>
                 <property name="usemousewheel">true</property>
                 <layout manager="grid">
                   <property name="column">0</property>
-                  <property name="pady">5 15</property>
+                  <property name="pady">5 0</property>
                   <property name="row">2</property>
                   <property name="sticky">nsew</property>
                 </layout>
@@ -409,7 +409,7 @@ Set</property>
                 <property name="width">200</property>
                 <layout manager="grid">
                   <property name="column">1</property>
-                  <property name="padx">10</property>
+                  <property name="padx">20 10</property>
                   <property name="pady">100 0</property>
                   <property name="row">2</property>
                   <property name="sticky">new</property>
@@ -424,7 +424,7 @@ Set</property>
                     <property name="state">normal</property>
                     <property name="style">Button2b.TButton</property>
                     <property name="text" translatable="yes">Channel-&gt;VFO</property>
-                    <property name="width">14</property>
+                    <property name="width">12</property>
                     <layout manager="grid">
                       <property name="column">0</property>
                       <property name="columnspan">2</property>
@@ -439,7 +439,7 @@ Set</property>
                     <property name="state">normal</property>
                     <property name="style">Button2b.TButton</property>
                     <property name="text" translatable="yes">VFO-&gt;Channel</property>
-                    <property name="width">14</property>
+                    <property name="width">12</property>
                     <layout manager="grid">
                       <property name="column">0</property>
                       <property name="columnspan">2</property>
@@ -455,7 +455,7 @@ Set</property>
                     <property name="style">Button2b.TButton</property>
                     <property name="text" translatable="yes">Run Scan</property>
                     <property name="textvariable">string:scan_Channel_ButtonText_VAR</property>
-                    <property name="width">14</property>
+                    <property name="width">12</property>
                     <layout manager="grid">
                       <property name="column">0</property>
                       <property name="pady">50 0</property>
@@ -475,7 +475,7 @@ Set</property>
                     <layout manager="grid">
                       <property name="column">0</property>
                       <property name="padx">10 0</property>
-                      <property name="pady">20 0</property>
+                      <property name="pady">15 0</property>
                       <property name="row">3</property>
                       <property name="sticky">e</property>
                     </layout>

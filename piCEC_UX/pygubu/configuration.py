@@ -64,7 +64,7 @@ class configuration:
                                     [10, "None"], [11, "None"], [12, "None"], [13, "None"], [14, "None"],
                                     [15, "None"], [16, "None"], [17, "None"], [18, "None"], [19, "None"]],
 
-                            "Scan On Station Time":10000,
+                            "Scan On Station Time":1000,
 
                             "MCU Command Headroom": .06,        # in seconds
                             "MCU Update Period": 500,            # in ms
@@ -103,7 +103,7 @@ class configuration:
 
 
     def get_Scan_On_Station_Time(self):
-        if len(self.config_data["Scan On Station Time"]) == 0:
+        if self.config_data["Scan On Station Time"] < 1000:
             return "1000"           #defaults to 1 second
         return self.config_data["Scan On Station Time"]
 

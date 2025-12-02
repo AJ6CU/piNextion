@@ -57,48 +57,50 @@ class settingsUI(ttk.Labelframe):
         self.settingsMisc_Button = ttk.Button(
             self.settingsButtons_Frame, name="settingsmisc_button")
         self.settingsMisc_Button.configure(
-            style="Button1Raised.TButton", text='General', width=14)
+            style="Button1Raised.TButton", text='General', width=15)
         self.settingsMisc_Button.grid(
             column=0, ipady=25, padx=10, pady=10, row=0)
         self.settingsMisc_Button.configure(command=self.settingsMisc_CB)
         self.settingsCW_Button = ttk.Button(
             self.settingsButtons_Frame, name="settingscw_button")
         self.settingsCW_Button.configure(
-            style="Button1Raised.TButton",
-            text='CW Settings',
-            width=14)
+            style="Button1Raised.TButton", text='CW', width=15)
         self.settingsCW_Button.grid(
             column=1, ipady=25, padx=10, pady=10, row=0)
         self.settingsCW_Button.configure(command=self.settingsCW_CB)
         self.settingsBackup_Button = ttk.Button(
             self.settingsButtons_Frame, name="settingsbackup_button")
         self.settingsBackup_Button.configure(
-            style="Button1Raised.TButton", text='Backup', width=14)
+            style="Button1Raised.TButton", text='Backup', width=15)
         self.settingsBackup_Button.grid(
             column=2, ipady=25, padx=10, pady=10, row=0)
         self.settingsBackup_Button.configure(command=self.settingsBackup_CB)
         self.settingsReserved2_Button = ttk.Button(
             self.settingsButtons_Frame, name="settingsreserved2_button")
         self.settingsReserved2_Button.configure(
-            state="disabled", style="Button1Raised.TButton", text='tbd', width=14)
+            state="disabled", style="Button1Raised.TButton", text='tbd', width=15)
         self.settingsReserved2_Button.grid(
             column=2, ipady=25, padx=10, pady=10, row=3)
         self.settingsMachine_Button = ttk.Button(
             self.settingsButtons_Frame, name="settingsmachine_button")
         self.settingsMachine_Button.configure(
-            style="Button1Raised.TButton", text='Machine', width=14)
+            style="Button1Raised.TButton", text='Machine', width=15)
         self.settingsMachine_Button.grid(
             column=0, ipady=25, padx=10, pady=10, row=3)
         self.settingsMachine_Button.configure(command=self.SettingsMachine_CB)
         self.settingsReboot_Button = ttk.Button(
             self.settingsButtons_Frame, name="settingsreboot_button")
         self.settingsReboot_Button.configure(
-            style="Button1Raised.TButton", text='Reboot uBITX', width=14)
+            style="Button1Raised.TButton", text='Reboot', width=15)
         self.settingsReboot_Button.grid(
             column=1, ipady=25, padx=10, pady=10, row=3)
         self.settingsReboot_Button.configure(command=self.settingsReboot_CB)
         self.settingsButtons_Frame.pack(
             anchor="center", expand=True, fill="both", side="top")
+        self.settingsButtons_Frame.rowconfigure(3, weight=1)
+        self.settingsButtons_Frame.columnconfigure(0, weight=1)
+        self.settingsButtons_Frame.columnconfigure(1, weight=1)
+        self.settingsButtons_Frame.columnconfigure(2, weight=1)
         self.settingsClose_Frame = ttk.Frame(self, name="settingsclose_frame")
         self.settingsClose_Frame.configure(
             height=200, style="Normal.TFrame", width=200)
@@ -109,12 +111,16 @@ class settingsUI(ttk.Labelframe):
         self.settingsClosed_Button.pack(anchor="center", ipady=5, side="top")
         self.settingsClosed_Button.configure(command=self.settingsClose_CB)
         self.settingsClose_Frame.pack(
-            anchor="center", expand=True, fill="both", side="top")
+            anchor="center",
+            expand=True,
+            fill="both",
+            padx=20,
+            side="top")
         self.configure(
             height=200,
             style="Heading2.TLabelframe",
             text='Settings',
-            width=200)
+            width=400)
         # Layout for 'settings_Labelframe' skipped in custom widget template.
 
     def settingsMisc_CB(self):

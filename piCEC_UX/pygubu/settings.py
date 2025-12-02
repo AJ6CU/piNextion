@@ -23,7 +23,7 @@ class settingsToplevel(tk.Toplevel):
         self.popup = tk.Toplevel(self.master)
 
         self.popup.title("PiCEC Software Settings")
-        self.popup.geometry("600x430")
+        self.popup.geometry("600x425")
         self.popup.wait_visibility()  # required on Linux
         self.popup.grab_set()
         self.popup.transient(self.master)

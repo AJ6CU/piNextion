@@ -26,13 +26,13 @@
     <property name="geometry">600x430</property>
     <property name="height">200</property>
     <property name="title" translatable="yes">Settings</property>
-    <property name="width">200</property>
+    <property name="width">800</property>
     <child>
       <object class="ttk.Labelframe" id="settings_Labelframe" named="True">
         <property name="height">200</property>
         <property name="style">Heading2.TLabelframe</property>
         <property name="text" translatable="yes">Settings</property>
-        <property name="width">200</property>
+        <property name="width">400</property>
         <layout manager="pack">
           <property name="expand">true</property>
           <property name="fill">both</property>
@@ -49,12 +49,18 @@
               <property name="fill">both</property>
               <property name="side">top</property>
             </layout>
+            <containerlayout manager="grid">
+              <property type="col" id="0" name="weight">1</property>
+              <property type="col" id="1" name="weight">1</property>
+              <property type="col" id="2" name="weight">1</property>
+              <property type="row" id="3" name="weight">1</property>
+            </containerlayout>
             <child>
               <object class="ttk.Button" id="settingsMisc_Button" named="True">
                 <property name="command" type="command" cbtype="simple">settingsMisc_CB</property>
                 <property name="style">Button1Raised.TButton</property>
                 <property name="text" translatable="yes">General</property>
-                <property name="width">14</property>
+                <property name="width">15</property>
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="ipady">25</property>
@@ -68,8 +74,8 @@
               <object class="ttk.Button" id="settingsCW_Button" named="True">
                 <property name="command" type="command" cbtype="simple">settingsCW_CB</property>
                 <property name="style">Button1Raised.TButton</property>
-                <property name="text" translatable="yes">CW Settings</property>
-                <property name="width">14</property>
+                <property name="text" translatable="yes">CW</property>
+                <property name="width">15</property>
                 <layout manager="grid">
                   <property name="column">1</property>
                   <property name="ipady">25</property>
@@ -84,7 +90,7 @@
                 <property name="command" type="command" cbtype="simple">settingsBackup_CB</property>
                 <property name="style">Button1Raised.TButton</property>
                 <property name="text" translatable="yes">Backup</property>
-                <property name="width">14</property>
+                <property name="width">15</property>
                 <layout manager="grid">
                   <property name="column">2</property>
                   <property name="ipady">25</property>
@@ -99,7 +105,7 @@
                 <property name="state">disabled</property>
                 <property name="style">Button1Raised.TButton</property>
                 <property name="text" translatable="yes">tbd</property>
-                <property name="width">14</property>
+                <property name="width">15</property>
                 <layout manager="grid">
                   <property name="column">2</property>
                   <property name="ipady">25</property>
@@ -114,7 +120,7 @@
                 <property name="command" type="command" cbtype="simple">SettingsMachine_CB</property>
                 <property name="style">Button1Raised.TButton</property>
                 <property name="text" translatable="yes">Machine</property>
-                <property name="width">14</property>
+                <property name="width">15</property>
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="ipady">25</property>
@@ -128,8 +134,8 @@
               <object class="ttk.Button" id="settingsReboot_Button" named="True">
                 <property name="command" type="command" cbtype="simple">settingsReboot_CB</property>
                 <property name="style">Button1Raised.TButton</property>
-                <property name="text" translatable="yes">Reboot uBITX</property>
-                <property name="width">14</property>
+                <property name="text" translatable="yes">Reboot</property>
+                <property name="width">15</property>
                 <layout manager="grid">
                   <property name="column">1</property>
                   <property name="ipady">25</property>
@@ -150,6 +156,7 @@
               <property name="anchor">center</property>
               <property name="expand">true</property>
               <property name="fill">both</property>
+              <property name="padx">20</property>
               <property name="side">top</property>
             </layout>
             <child>

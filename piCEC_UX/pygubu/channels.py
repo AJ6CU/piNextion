@@ -176,12 +176,9 @@ class channels(baseui.channelsUI):
 
 
     def close_Channel_CB(self):             # method called when window closed
-        print("In close channel cb")
         self.confirmExitorWriteDirty()
         self.mainWindow.Radio_Set_Tuning_Preset(self.savePreset)
-        print("withdrawing")
         self.master.withdraw()
-        print("done withdrawing")
 
     def confirmExitorWriteDirty(self):
         for channelNum in range(len(self.channelList)):
@@ -294,7 +291,7 @@ class channelsToplevel(channels):
         gv.formatCombobox(self.scan_Select_Combobox, "Arial", "14", "bold")
 
         self.pack(expand=tk.YES, fill=tk.BOTH)
-        gv.trimAndLocateWindow(self.popup, 10, 10)
+        gv.trimAndLocateWindow(self.popup, 0, 0)
 
 
 if __name__ == "__main__":

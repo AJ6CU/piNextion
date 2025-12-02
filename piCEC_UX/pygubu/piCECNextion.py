@@ -43,7 +43,7 @@ class piCECNextion(baseui.piCECNextionUI):
         self.theRadio = None            # Object pointer for the Radio
         self.cwSettingsWindow = None    # Object pointer for the CW Settinge Window
         self.settingsWindow = None      # Object pointer for the General Settings Window
-        self.channelWindow = None      # object pointer for the Memory-> VFO Window
+        self.channelsWindow = None      # object pointer for the Memory-> VFO Window
         self.vfoToMemWindow = None      # object pointer for the VFO->Memory Window
         self.classic_uBITX_ControlWindow = None
         self.classic_uBITX_ControlWindowObj = None
@@ -410,21 +410,15 @@ class piCECNextion(baseui.piCECNextionUI):
     #   packages sent by the MCU via the "sh_UX_Get_Memory" function
     #
     def displayChannelWindow(self):
-        if self.channelWindow == None:
-            self.channelWindow = channelsToplevel(self.master, self, self.refresh_CB).channelsWindowObj
-            # self.channelWindow.title("Memory Channel")
-            root_x = self.master.winfo_rootx()
-            root_y = self.master.winfo_rooty()
-            # self.channelWindow.geometry("+{}+{}".format(root_x+50, root_y+50))
-            # self.channelWindow.transient(self.master)
-            self.channelWindow.update_Current_Frequency (gv.formatFrequency(self.primary_VFO_VAR.get()))
-            self.channelWindow.update_Current_Mode (self.primary_Mode_VAR.get())
-            self.Radio_Req_Channel_Freqs()
-            self.Radio_Req_Channel_Labels()
-            self.Radio_Req_Channel_Show_Labels()
+        if self.channelsWindow == None:
+            self.channelsWindow = channelsToplevel(self.master, self, self.refresh_ChannelWindow_CB)
+
+            self.channelsWindow.initChannelsUX()
+
         else:
-            self.channelWindow.deiconify()
-            self.channelWindow.current_Channel_VAR.set("Not Saved")
+            print("deiconfigy called")
+            self.channelsWindow.popup.deiconify()
+            self.channelsWindow.current_Channel_VAR.set("Not Saved")
 
     def displayClassic_uBITXControlWindow(self):
         self.classic_uBITX_ControlWindow  = tk.Toplevel(self.master)
@@ -448,9 +442,9 @@ class piCECNextion(baseui.piCECNextionUI):
         if self.classic_uBITX_ControlWindowObj != None:
             self.classic_uBITX_ControlWindowObj.greenBoxInstructions_VAR.set(value)
     #
-    def refresh_CB(self):
-        self.channelWindow.destroy()
-        self.channelWindow = None
+    def refresh_ChannelWindow_CB(self):
+        self.channelsWindow.destroy()
+        self.channelsWindow = None
         self.displayChannelWindow()
 
     def Radio_Req_Channel_Freqs(self):
@@ -885,6 +879,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def channels_CB(self):
+        print("channel button cb called")
         self.displayChannelWindow()
     #
     #   The following routines handles the ATT jogwheel.
@@ -1587,8 +1582,7 @@ class piCECNextion(baseui.piCECNextionUI):
             case "Freq":                # Got a channel frequency request
                 freq = int(value,16) & 0x1FFFFFFF
                 mode = (int(value,16) >> 29) & 0x7
-
-                self.channelWindow.EEPROM_SetChanneFreqMode(
+                self.channelsWindow.EEPROM_SetChanneFreqMode(
                     self.EEPROM_Current_Slot_Freq,
                     freq,
                     mode)
@@ -1598,7 +1592,7 @@ class piCECNextion(baseui.piCECNextionUI):
                     self.EEPROM_Current_Slot_Freq = 0
 
             case "Label":               # have a label for a memory channel
-                self.channelWindow.EEPROM_SetChannelLabel(
+                self.channelsWindow.EEPROM_SetChannelLabel(
                     self.EEPROM_Current_Slot_Label,
                     value)
                 # if self.EEPROM_Current_Slot_Label == 9:
@@ -1610,12 +1604,12 @@ class piCECNextion(baseui.piCECNextionUI):
 
             case "ShowLabel":           # Reading switch on whether to show or not show the label
                 if (ord(value) == 0):
-                    self.channelWindow.EEPROM_SetChannelShowLabel(
+                    self.channelsWindow.EEPROM_SetChannelShowLabel(
                         self.EEPROM_Current_Slot_ShowLabel,
                         "No")
 
                 else:
-                    self.channelWindow.EEPROM_SetChannelShowLabel(
+                    self.channelsWindow.EEPROM_SetChannelShowLabel(
                         self.EEPROM_Current_Slot_ShowLabel,
                         "Yes")
 
@@ -1872,8 +1866,8 @@ class piCECNextion(baseui.piCECNextionUI):
         self.primary_VFO_VAR.set(value)
         self.update_VFO_Display(self.primary_VFO_VAR.get(),self.freqOffset)
 
-        if self.channelWindow != None:      #  Only update frequency if the channel window has been created once
-            self.channelWindow.update_Current_Frequency(gv.formatFrequency(self.primary_VFO_VAR.get()))
+        if self.channelsWindow != None:      #  Only update frequency if the channel window has been created once
+            self.channelsWindow.update_Current_Frequency(gv.formatFrequency(self.primary_VFO_VAR.get()))
 
 
         self.updateJogTracking()
@@ -1897,16 +1891,16 @@ class piCECNextion(baseui.piCECNextionUI):
         else:
             self.offsetVFOforTX(False)
 
-        if self.channelWindow != None:
+        if self.channelsWindow != None:
             # Only update frequency if the channel window has been created once
-            self.channelWindow.update_Current_Mode(self.primary_Mode_VAR.get())
+            self.channelsWindow.update_Current_Mode(self.primary_Mode_VAR.get())
 
 
     #
     #   The "va" command indicates assignment of vfoA to new frequency
     #
     def va_UX_Set_VFO_A_Frequency(self, buffer):
-        if (self.channelWindow != None) and (self.channelWindow.scanRunning):
+        if (self.channelsWindow != None) and (self.channelsWindow.scanRunning):
             # print("***Ignoring va command as we're scanning***")
             return  # ignore the VFO A command during scanning as it can be out of order
 
@@ -1926,7 +1920,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #   The "ca" command indicates assignment of a new mode to vfoA
     #
     def ca_UX_Set_VFO_A_Mode(self, buffer):
-        if (self.channelWindow != None) and (self.channelWindow.scanRunning):
+        if (self.channelsWindow != None) and (self.channelsWindow.scanRunning):
             # print("***Ignoring ca command as we're scanning***")
             return  # ignore the VFO A command during scanning  as it can be out of order
 
@@ -1948,7 +1942,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def vb_UX_Set_VFO_B_Frequency(self, buffer):
 
-        if (self.channelWindow != None) and (self.channelWindow.scanRunning):
+        if (self.channelsWindow != None) and (self.channelsWindow.scanRunning):
             return  # ignore the VFO B command during scanning as it can be out of order
 
         value = self.extractValue(buffer, 10, len(buffer) - 3)
@@ -1970,7 +1964,7 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def cb_UX_Set_VFO_B_Mode(self, buffer):
 
-        if (self.channelWindow != None) and (self.channelWindow.scanRunning):
+        if (self.channelsWindow != None) and (self.channelsWindow.scanRunning):
             return  # ignore the VFO B command during scanning as it can be out of order
 
         value = self.extractValue(buffer, 10, len(buffer) - 3)

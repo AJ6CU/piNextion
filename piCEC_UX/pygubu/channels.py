@@ -11,22 +11,7 @@ import globalvars as gv
 # Manual user code
 #
 
-class channelsToplevel(tk.Toplevel):
-    def __init__(self, master=None, mainWindow=None, refreshCallback=None,  **kw):
-        self.master = master
-        self.mainWindow = mainWindow
-        self.refreshCallback = refreshCallback
 
-        self.popup = tk.Toplevel(self.master)
-
-        self.popup.title("Memory Channels")
-        # self.popup.geometry("600x430")
-        self.popup.wait_visibility()  # required on Linux
-        self.popup.grab_set()
-        self.popup.transient(self.master)
-
-        self.channelsWindowObj = channels(self.popup,  self.mainWindow, self.refreshCallback, **kw)
-        self.channelsWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
 
 class channels(baseui.channelsUI):
     channelList = []
@@ -56,7 +41,6 @@ class channels(baseui.channelsUI):
         self.scanList = []
 
 
-
         for child in self.scrolledChannelFrame.innerframe.winfo_children():
             channels.channelList.append(child)
             child.assignChannelSelect_CB(self.channelSlot_CB)
@@ -72,6 +56,7 @@ class channels(baseui.channelsUI):
             child.ScanSet_Default(gv.config.get_ScanSet_Settings(self.channelSlotCount))
 
             self.channelSlotCount += 1
+
         self.scan_Select_Channel_Default()
         self.scan_Station_Time_Default()
 
@@ -191,9 +176,12 @@ class channels(baseui.channelsUI):
 
 
     def close_Channel_CB(self):             # method called when window closed
+        print("In close channel cb")
         self.confirmExitorWriteDirty()
         self.mainWindow.Radio_Set_Tuning_Preset(self.savePreset)
+        print("withdrawing")
         self.master.withdraw()
+        print("done withdrawing")
 
     def confirmExitorWriteDirty(self):
         for channelNum in range(len(self.channelList)):
@@ -253,6 +241,52 @@ class channels(baseui.channelsUI):
         for aChannel in range(len(self.channelList)):
             self.saveChannel(aChannel)
 
+class channelsToplevel(channels):
+    def __init__(self, root=None, mainWindow=None, refreshCallback=None,  **kw):
+        self.root = root
+        self.mainWindow = mainWindow
+        self.refreshCallback = refreshCallback
+
+        self.popup = tk.Toplevel(self.root)
+
+        self.popup.title("Frequency Channels")
+        self.popup.geometry("750x600")
+        self.popup.wait_visibility()  # required on Linux
+        # self.popup.grab_set()         # dont want as we can allow other things to click while using channels
+        self.popup.transient(self.mainWindow)
+
+        super().__init__(self.popup,  self.mainWindow, self.refreshCallback, **kw)
+
+        # self.channelsWindowObj = channels( **kw)
+        # self.channelsWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
+        #
+        # gv.trimAndLocateWindow(self.popup, 50, 50)
+
+
+        # self.channelWindow.title("Memory Channel")
+        # root_x = self.master.winfo_rootx()
+        # root_y = self.master.winfo_rooty()
+        # self.channelWindow.geometry("+{}+{}".format(root_x+50, root_y+50))
+        # self.channelWindow.transient(self.master)
+        # self.update_Current_Frequency(gv.formatFrequency(self.mainWindow.primary_VFO_VAR.get()))
+        # self.update_Current_Mode(self.mainWindow.primary_Mode_VAR.get())
+        # self.mainWindow.Radio_Req_Channel_Freqs()
+        # self.mainWindow.Radio_Req_Channel_Labels()
+        # self.mainWindow.Radio_Req_Channel_Show_Labels()
+        #
+        # self.pack(expand=tk.YES, fill=tk.BOTH)
+        # gv.trimAndLocateWindow(self.popup, 100, 100)
+        #
+
+    def initChannelsUX(self):
+        self.update_Current_Frequency(gv.formatFrequency(self.mainWindow.primary_VFO_VAR.get()))
+        self.update_Current_Mode(self.mainWindow.primary_Mode_VAR.get())
+        self.mainWindow.Radio_Req_Channel_Freqs()
+        self.mainWindow.Radio_Req_Channel_Labels()
+        self.mainWindow.Radio_Req_Channel_Show_Labels()
+
+        self.pack(expand=tk.YES, fill=tk.BOTH)
+        gv.trimAndLocateWindow(self.popup, 100, 100)
 
 
 if __name__ == "__main__":

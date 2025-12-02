@@ -25,10 +25,10 @@
   <object class="ttk.Frame" id="frequencyChannel" named="True">
     <property name="height">200</property>
     <property name="style">Normal.TFrame</property>
-    <property name="width">200</property>
+    <property name="width">600</property>
     <layout manager="pack">
       <property name="expand">true</property>
-      <property name="fill">y</property>
+      <property name="fill">both</property>
       <property name="side">top</property>
     </layout>
     <child>

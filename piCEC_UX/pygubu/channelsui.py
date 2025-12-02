@@ -285,7 +285,7 @@ class channelsUI(ttk.Labelframe):
         self.closingFrame.grid_anchor("center")
         frame1.pack(expand=True, fill="both", side="top")
         frame1.rowconfigure(2, minsize=400, weight=2)
-        frame1.columnconfigure(1, weight=2)
+        frame1.columnconfigure(0, weight=2)
         self.configure(
             style="Heading2.TLabelframe",
             text='Frequency Channels',

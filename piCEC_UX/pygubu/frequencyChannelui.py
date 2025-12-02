@@ -143,7 +143,7 @@ class frequencyChannelUI(ttk.Frame):
         self.dirtyChannel_Label = ttk.Label(self, name="dirtychannel_label")
         self.dirtyChannel_Label.configure(style="GreenLED.TLabel", width=2)
         self.dirtyChannel_Label.grid(column=7, padx="10 5", row=0)
-        self.configure(height=200, style="Normal.TFrame", width=200)
+        self.configure(height=200, style="Normal.TFrame", width=600)
         # Layout for 'frequencyChannel' skipped in custom widget template.
 
     def channel_Select_CB(self):

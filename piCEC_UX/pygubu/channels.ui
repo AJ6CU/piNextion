@@ -465,6 +465,18 @@ Set</property>
                   </object>
                 </child>
                 <child>
+                  <object class="ttk.Label" id="scan_Select_Channel_Label" named="True">
+                    <property name="style">Heading2b.TLabel</property>
+                    <property name="text" translatable="yes">Select Scan Set</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="pady">20 0</property>
+                      <property name="row">3</property>
+                      <property name="sticky">e</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
                   <object class="pygubu.widgets.Combobox" id="scan_Select_Combobox" named="True">
                     <property name="justify">center</property>
                     <property name="keyvariable">string:scan_Select_Channel_VAR</property>
@@ -475,8 +487,36 @@ Set</property>
                     <layout manager="grid">
                       <property name="column">0</property>
                       <property name="padx">10 0</property>
+                      <property name="pady">0</property>
+                      <property name="row">4</property>
+                      <property name="sticky">e</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="Time_On_Freq_Label" named="True">
+                    <property name="style">Heading2b.TLabel</property>
+                    <property name="text" translatable="yes">Time on Freq(sec)</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
                       <property name="pady">20 0</property>
-                      <property name="row">3</property>
+                      <property name="row">5</property>
+                      <property name="sticky">e</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="pygubu.widgets.Combobox" id="Time_On_Freq_Combobox" named="True">
+                    <property name="justify">center</property>
+                    <property name="keyvariable">string:Time_On_Freq_VAR</property>
+                    <property name="style">ComboBox2b.TCombobox</property>
+                    <property name="values">1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20</property>
+                    <property name="width">8</property>
+                    <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="update_Time_On_Station_CB" add="True" />
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">10 0</property>
+                      <property name="row">6</property>
                       <property name="sticky">e</property>
                     </layout>
                   </object>

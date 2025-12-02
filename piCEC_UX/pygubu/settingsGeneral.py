@@ -45,7 +45,6 @@ class settingsGeneral(baseui.settingsGeneralUI):
         self.Virtual_Keyboard_VAR.set(self.saveVirtual_Keyboard)
 
         self.saveTime_On_Freq = str(int(int(gv.config.get_Scan_On_Station_Time())/1000))
-        print(str(int(int(gv.config.get_Scan_On_Station_Time())/1000)))
         self.Time_On_Freq_VAR.set(self.saveTime_On_Freq)
         #
         #   Can now kickoff the UX
@@ -65,7 +64,6 @@ class settingsGeneral(baseui.settingsGeneralUI):
         gv.trimAndLocateWindow(self.popup, 0, 0)
 
     def apply_CB(self):
-        print("Applying settings")
 
         if self.NUMBER_DELIMITER_VAR.get() != self.saveNUMBER_DELIMITER:
             gv.config.set_NUMBER_DELIMITER(self.NUMBER_DELIMITER_VAR.get())

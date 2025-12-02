@@ -238,6 +238,12 @@ class channelsUI(ttk.Labelframe):
             width=14)
         self.scan_Button.grid(column=0, pady="50 0", row=2, sticky="w")
         self.scan_Button.configure(command=self.scan_Channel_CB)
+        self.scan_Select_Channel_Label = ttk.Label(
+            self.channelEdit_Frame, name="scan_select_channel_label")
+        self.scan_Select_Channel_Label.configure(
+            style="Heading2b.TLabel", text='Select Scan Set')
+        self.scan_Select_Channel_Label.grid(
+            column=0, pady="20 0", row=3, sticky="e")
         self.scan_Select_Combobox = Combobox(
             self.channelEdit_Frame, name="scan_select_combobox")
         self.scan_Select_Channel_VAR = tk.StringVar()
@@ -248,10 +254,31 @@ class channelsUI(ttk.Labelframe):
             values='None Scan1 Scan2 Scan3 Scan4',
             width=8)
         self.scan_Select_Combobox.grid(
-            column=0, padx="10 0", pady="20 0", row=3, sticky="e")
+            column=0, padx="10 0", pady=0, row=4, sticky="e")
         self.scan_Select_Combobox.bind(
             "<<ComboboxSelected>>",
             self.runScan_Selection_CB,
+            add="+")
+        self.Time_On_Freq_Label = ttk.Label(
+            self.channelEdit_Frame, name="time_on_freq_label")
+        self.Time_On_Freq_Label.configure(
+            style="Heading2b.TLabel",
+            text='Time on Freq(sec)')
+        self.Time_On_Freq_Label.grid(column=0, pady="20 0", row=5, sticky="e")
+        self.Time_On_Freq_Combobox = Combobox(
+            self.channelEdit_Frame, name="time_on_freq_combobox")
+        self.Time_On_Freq_VAR = tk.StringVar()
+        self.Time_On_Freq_Combobox.configure(
+            justify="center",
+            keyvariable=self.Time_On_Freq_VAR,
+            style="ComboBox2b.TCombobox",
+            values='1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20',
+            width=8)
+        self.Time_On_Freq_Combobox.grid(
+            column=0, padx="10 0", row=6, sticky="e")
+        self.Time_On_Freq_Combobox.bind(
+            "<<ComboboxSelected>>",
+            self.update_Time_On_Station_CB,
             add="+")
         self.channelEdit_Frame.grid(
             column=1,
@@ -306,6 +333,9 @@ class channelsUI(ttk.Labelframe):
         pass
 
     def runScan_Selection_CB(self, event=None):
+        pass
+
+    def update_Time_On_Station_CB(self, event=None):
         pass
 
     def saveChannel_CB(self):

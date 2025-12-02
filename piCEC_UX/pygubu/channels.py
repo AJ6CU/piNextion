@@ -99,6 +99,8 @@ class channels(baseui.channelsUI):
         self.mainWindow.Radio_Req_Channel_Labels()
         self.mainWindow.Radio_Req_Channel_Show_Labels()
 
+
+
         self.popup.title("Frequency Channels")
         self.popup.geometry("800x700")
         self.popup.wait_visibility()  # required on Linux
@@ -106,6 +108,7 @@ class channels(baseui.channelsUI):
         self.popup.transient(self.mainWindow)
 
         gv.formatCombobox(self.scan_Select_Combobox, "Arial", "14", "bold")
+        gv.formatCombobox(self.Time_On_Freq_Combobox, "Arial", "14", "bold")
 
         self.pack(expand=tk.YES, fill=tk.BOTH)
         gv.trimAndLocateWindow(self.popup, 0, 0)
@@ -153,6 +156,12 @@ class channels(baseui.channelsUI):
     #
     def scan_Station_Time_Default(self):
         self.scan_Time_On_Station = gv.config.get_Scan_On_Station_Time()
+        self.Time_On_Freq_VAR.set(str(int(int(gv.config.get_Scan_On_Station_Time())/1000)))
+
+    def update_Time_On_Station_CB(self, event=None):
+        self.scan_Time_On_Station = int(self.Time_On_Freq_VAR.get()) * 1000
+        gv.config.set_Scan_On_Station_Time(self.scan_Time_On_Station)
+
 
 
     #
@@ -275,6 +284,7 @@ class channels(baseui.channelsUI):
     def close_Channel_CB(self):             # method called when window closed
         self.confirmExitorWriteDirty()
         self.mainWindow.Radio_Set_Tuning_Preset(self.savePreset)
+        self.stopScan()                 # Stop any scan that might be running
         self.master.withdraw()
 
     #

@@ -19,27 +19,52 @@ class channels(baseui.channelsUI):
 
     def __init__(self, master=None, mainWindow=None, refreshCallback=None, **kw):
 
-        channels.channelList = []
-        channels.currentChannel = 0
-        super().__init__(master, **kw)
-        self.master = master
+        self.master = master                # save parameters for re-use later
         self.mainWindow = mainWindow
-
-        self.master.protocol("WM_DELETE_WINDOW", self.close_Channel_CB)
-        self.channelSlotCount = 0
-        self.channelSlotSelection = None
-        self.savePreset =  int(self.mainWindow.tuning_Preset_Selection_VAR.get())
-        self.mainWindow.Radio_Set_Tuning_Preset(1)
         self.refreshCallback = refreshCallback
 
+        channels.channelList = []           #initialize class variables
+        channels.currentChannel = 0
+
+        self.channelSlotCount = 0           #initialize instance variables to process channels
+        self.channelSlotSelection = None
+
+
+        self.popup = tk.Toplevel(self.master)           # Create a top level window to contain the channel window
+
+        super().__init__(self.popup, **kw)
+        #
+        #   Catch closes that happen thru Window Manager
+        #
+        self.popup.protocol("WM_DELETE_WINDOW", self.close_Channel_CB)
+        #
+        #   Channels could have been created using any frequency. Need to use
+        #   the smallest preset to avoid frequency being truncated. So capture it,
+        #   reset it and late we will reset it.
+        #
+        self.SaveAndSetPreset()
+        #
+        #   Since we display the frequency using the selected Delimiter, need
+        #   to register interest in its value in case it changes while channel window
+        #   is open.
         gv.config.register_observer("NUMBER DELIMITER", self.reformatChannelFreq)
 
+        #
+        #   Initialize scanning functions.
+        #
         self.scanRunning = False
         self.scanTimer = None
         self.scanSetSelected = None
         self.scanIndex = None
         self.scanList = []
 
+        #
+        #   Each channel is actually created from another object (frequencyChannel). So
+        #   We create a list of those channels so we can access them later either.
+        #   Also need to capture the callback of the particular frequencyChannel so when
+        #   the user selects, we can know which one to use. The callaback stores pointer
+        #   in channels.currentChannel
+        #
 
         for child in self.scrolledChannelFrame.innerframe.winfo_children():
             channels.channelList.append(child)
@@ -60,6 +85,35 @@ class channels(baseui.channelsUI):
         self.scan_Select_Channel_Default()
         self.scan_Station_Time_Default()
 
+    #
+    #   This routine is called after the object has been created and initialized. Some tweaking
+    #   happens to the user interface as well as an attempt to place the popup in a reasonable
+    #   place on the screen. Unfortunately, many window managers defeat this good intention and
+    #   will place it in the center of the screen
+    #
+
+    def initChannelsUX(self):
+        self.update_Current_Frequency(gv.formatFrequency(self.mainWindow.primary_VFO_VAR.get()))
+        self.update_Current_Mode(self.mainWindow.primary_Mode_VAR.get())
+        self.mainWindow.Radio_Req_Channel_Freqs()
+        self.mainWindow.Radio_Req_Channel_Labels()
+        self.mainWindow.Radio_Req_Channel_Show_Labels()
+
+        self.popup.title("Frequency Channels")
+        self.popup.geometry("800x700")
+        self.popup.wait_visibility()  # required on Linux
+        # self.popup.grab_set()         # dont want as we can allow other things to click while using channels
+        self.popup.transient(self.mainWindow)
+
+        gv.formatCombobox(self.scan_Select_Combobox, "Arial", "14", "bold")
+
+        self.pack(expand=tk.YES, fill=tk.BOTH)
+        gv.trimAndLocateWindow(self.popup, 0, 0)
+
+    #
+    #   Handles reformating the frequencies in the case someone changes the number delimiter
+    #   while the Channels window is open.
+    #
     def reformatChannelFreq(self, new_delimiter):
         if new_delimiter  == ",":
             prior_delimiter = "."
@@ -71,7 +125,17 @@ class channels(baseui.channelsUI):
 
         self.current_VFO_VAR.set(self.current_VFO_VAR.get().replace(prior_delimiter,new_delimiter))
 
-
+    #
+    #   Channels could have been created using any frequency. Need to use
+    #   the smallest preset to avoid frequency being truncated. SO this method capture it,
+    #   reset it and late we will reset it.
+    #
+    def SaveAndSetPreset(self):
+        self.savePreset = int(self.mainWindow.tuning_Preset_Selection_VAR.get())
+        self.mainWindow.Radio_Set_Tuning_Preset(1)
+    #
+    #   The following are just external visible methods to set/change various values
+    #
 
     def update_Current_Frequency(self, freq):
         self.current_VFO_VAR.set(freq)
@@ -83,8 +147,19 @@ class channels(baseui.channelsUI):
     def scan_Select_Channel_Default(self):
         self.scan_Select_Channel_VAR.set("None")
 
+    #
+    #   Time hanging around each channel during a scan is controllable via a configuration
+    #   parameter that can also be set in settings
+    #
     def scan_Station_Time_Default(self):
         self.scan_Time_On_Station = gv.config.get_Scan_On_Station_Time()
+
+
+    #
+    #   These routines are called from the routines in piCECNextion that process memory
+    #   contents sent by the MCU. The format of the information in the EEPROM was originally
+    #   designed to be concise so it needs to be reformated for humans
+    #
 
     def EEPROM_SetChanneFreqMode(self, channelNum,freq, mode):
 
@@ -98,7 +173,10 @@ class channels(baseui.channelsUI):
     def EEPROM_SetChannelShowLabel(self, channelNum, showFlag):
         channels.channelList[channelNum].Set_ShowLabel(showFlag)
 
-    def ChannelToVFO_CB(self):               # method called when Channel->VFO
+    #
+    # method called to implement Channel->VFO request
+    #
+    def ChannelToVFO_CB(self):
 
         if self.channelSlotSelection == None:
             messagebox.showinfo("Information", "Must SELECT a channel first.",
@@ -109,7 +187,11 @@ class channels(baseui.channelsUI):
         self.mainWindow.Radio_Set_Mode(self.mainWindow.Text_To_ModeNum[channels.channelList[self.channelSlotSelection].Get_Mode()])
         self.current_Channel_VAR.set(channels.channelList[self.channelSlotSelection].Get_Label())
 
-    def VFOToChannel_CB(self):              # method called to write current VFO to channel
+    #
+    # method called to write current VFO to channel
+    #
+
+    def VFOToChannel_CB(self):
         if self.channelSlotSelection == None:
             messagebox.showinfo("Information", "Must SELECT a channel first.",
                                 parent=self)
@@ -117,6 +199,11 @@ class channels(baseui.channelsUI):
         channels.channelList[self.channelSlotSelection].Set_Freq(self.current_VFO_VAR.get())
         channels.channelList[self.channelSlotSelection].Set_Mode(self.current_Mode_VAR.get())
         channels.channelList[self.channelSlotSelection].channel_Dirty()
+
+    #
+    #   Controls the scanning process. Builds the list of channels to scan and sends it to
+    #   "performScan" to actually process the list.
+    #
 
     def startScan(self):
         self.scanRunning = True
@@ -140,7 +227,9 @@ class channels(baseui.channelsUI):
             self.stopScan()
             return
         self.performScan()
-
+    #
+    #   Actually performs the scan. Note that it calls itself after "scan_Time_On_Station" happens
+    #
 
     def performScan(self):
         self.channelSlot_CB(self.scanList[self.scanIndex])
@@ -151,6 +240,9 @@ class channels(baseui.channelsUI):
             self.scanIndex = 0
         self.scanTimer = self.master.after(self.scan_Time_On_Station, self.performScan)
 
+    #
+    #   Just handles completion of the scan after the stop button is pressed.
+    #
     def stopScan(self):
         self.scanRunning = False
         self.scan_Channel_ButtonText_VAR.set("Run Scan")
@@ -168,18 +260,27 @@ class channels(baseui.channelsUI):
     def runScan_Selection_CB(self, event=None):
         self.scanSetSelected = self.scan_Select_Channel_VAR.get()
 
-
+    #
+    #   Callback for the Refresh button. Checks for dirty info, and then does the referesh
+    #
 
     def refresh_Channel_CB(self):           # method called when user wants to refresh channels from EEPROM
         self.confirmExitorWriteDirty()
         self.refreshCallback()
 
-
+    #
+    #   Handles the request to close window. Also called if the channels window is closed
+    #   via the window manager
+    #
     def close_Channel_CB(self):             # method called when window closed
         self.confirmExitorWriteDirty()
         self.mainWindow.Radio_Set_Tuning_Preset(self.savePreset)
         self.master.withdraw()
 
+    #
+    #   Called on close or refresh to check whether any information is "dirty". If so, a dialog
+    #   is popped up asking the user whether they want to save the values before exiting.
+    #
     def confirmExitorWriteDirty(self):
         for channelNum in range(len(self.channelList)):
             if (channels.channelList[channelNum].dirty):
@@ -191,7 +292,11 @@ class channels(baseui.channelsUI):
                 if response:  # True if "Yes" is clicked
                     self.saveAllChannels_CB()
                 break
-
+    #
+    #   This method is called when the user selects a particular channel. It is a little
+    #   complicated because need to figure out which of 20 possible channels has been selected.
+    #   This is where the list of channels (channels.channelList) comes in!
+    #
     def channelSlot_CB(self, slotNumber):
         if self.channelSlotSelection != None:
             channels.channelList[self.channelSlotSelection].channel_Select_Button.configure(
@@ -205,6 +310,10 @@ class channels(baseui.channelsUI):
             channels.channelList[self.channelSlotSelection].channel_Select_Button.configure(
                     style="Button2bipressed.TButton")
             channels.channelList[self.channelSlotSelection].channel_Select_VAR.set("Selected") # select the new one
+    #
+    #   Does the actual saving of a particular channel when a save is requested. A "save all"
+    #   just calls this method repeatedly
+    #
 
     def saveChannel(self,channelNum):
         if channelNum == None:
@@ -229,7 +338,9 @@ class channels(baseui.channelsUI):
 
             gv.config.set_ScanSet_Settings(channelNum,
                                                channels.channelList[channelNum].Get_ScanSet())
-
+    #
+    #   The two save all and save one channel button callbacks
+    #
 
     def saveChannel_CB(self):
         self.saveChannel(self.channelSlotSelection)
@@ -238,60 +349,6 @@ class channels(baseui.channelsUI):
         for aChannel in range(len(self.channelList)):
             self.saveChannel(aChannel)
 
-class channelsToplevel(channels):
-    def __init__(self, root=None, mainWindow=None, refreshCallback=None,  **kw):
-        self.root = root
-        self.mainWindow = mainWindow
-        self.refreshCallback = refreshCallback
-
-        self.popup = tk.Toplevel(self.root)
-
-        # self.popup.title("Frequency Channels")
-        # self.popup.geometry("750x600")
-        # self.popup.wait_visibility()  # required on Linux
-        # # self.popup.grab_set()         # dont want as we can allow other things to click while using channels
-        # self.popup.transient(self.mainWindow)
-
-        super().__init__(self.popup,  self.mainWindow, self.refreshCallback, **kw)
-
-        # self.channelsWindowObj = channels( **kw)
-        # self.channelsWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
-        #
-        # gv.trimAndLocateWindow(self.popup, 50, 50)
-
-
-        # self.channelWindow.title("Memory Channel")
-        # root_x = self.master.winfo_rootx()
-        # root_y = self.master.winfo_rooty()
-        # self.channelWindow.geometry("+{}+{}".format(root_x+50, root_y+50))
-        # self.channelWindow.transient(self.master)
-        # self.update_Current_Frequency(gv.formatFrequency(self.mainWindow.primary_VFO_VAR.get()))
-        # self.update_Current_Mode(self.mainWindow.primary_Mode_VAR.get())
-        # self.mainWindow.Radio_Req_Channel_Freqs()
-        # self.mainWindow.Radio_Req_Channel_Labels()
-        # self.mainWindow.Radio_Req_Channel_Show_Labels()
-        #
-        # self.pack(expand=tk.YES, fill=tk.BOTH)
-        # gv.trimAndLocateWindow(self.popup, 100, 100)
-        #
-
-    def initChannelsUX(self):
-        self.update_Current_Frequency(gv.formatFrequency(self.mainWindow.primary_VFO_VAR.get()))
-        self.update_Current_Mode(self.mainWindow.primary_Mode_VAR.get())
-        self.mainWindow.Radio_Req_Channel_Freqs()
-        self.mainWindow.Radio_Req_Channel_Labels()
-        self.mainWindow.Radio_Req_Channel_Show_Labels()
-
-        self.popup.title("Frequency Channels")
-        self.popup.geometry("800x700")
-        self.popup.wait_visibility()  # required on Linux
-        # self.popup.grab_set()         # dont want as we can allow other things to click while using channels
-        self.popup.transient(self.mainWindow)
-
-        gv.formatCombobox(self.scan_Select_Combobox, "Arial", "14", "bold")
-
-        self.pack(expand=tk.YES, fill=tk.BOTH)
-        gv.trimAndLocateWindow(self.popup, 0, 0)
 
 
 if __name__ == "__main__":

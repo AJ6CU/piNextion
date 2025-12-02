@@ -8,7 +8,7 @@ import piCEC_UXui as baseui
 from settings import settingsToplevel
 from cwSettings import cwSettings, cwSettingsToplevel
 
-from channels import channelsToplevel
+from channels import channels
 from Classic_uBITX_Control import Classic_uBITX_Control
 
 import mystyles  # Styles definition module
@@ -411,12 +411,12 @@ class piCECNextion(baseui.piCECNextionUI):
     #
     def displayChannelWindow(self):
         if self.channelsWindow == None:
-            self.channelsWindow = channelsToplevel(self.master, self, self.refresh_ChannelWindow_CB)
+            self.channelsWindow = channels(self.master, self, self.refresh_ChannelWindow_CB)
 
             self.channelsWindow.initChannelsUX()
 
         else:
-            print("deiconfigy called")
+            self.channelsWindow.SaveAndSetPreset()
             self.channelsWindow.popup.deiconify()
             self.channelsWindow.current_Channel_VAR.set("Not Saved")
 

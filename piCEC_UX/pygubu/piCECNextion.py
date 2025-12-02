@@ -5,7 +5,7 @@ import tkinter as tk
 # from Cython.Compiler.Naming import self_cname
 
 import piCEC_UXui as baseui
-from settings import settingsToplevel
+from settings import settings
 from cwSettings import cwSettings, cwSettingsToplevel
 
 from channels import channels
@@ -24,6 +24,8 @@ class piCECNextion(baseui.piCECNextionUI):
             translator=None,
             on_first_object_cb=mystyles.setup_ttk_styles,
         )
+
+        self.master = master
 
         self.pack_forget()
         # self.place(x=0, y=0)  # place the mainWindow on the screen
@@ -397,7 +399,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def settings_CB(self):
-        self.settingsWindow  = settingsToplevel(self)
+        self.settingsWindow  = settings(self.master, self)
 
 
     def displayCWSettingsWindow(self):

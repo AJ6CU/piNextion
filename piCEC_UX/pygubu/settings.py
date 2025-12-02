@@ -9,6 +9,7 @@ from settingsMisc import settingsMiscToplevel
 from settingsBackup import settingsBackupToplevel
 from settingsFactoryReset import settingsFatoryResetToplevel
 from tkinter import messagebox
+import globalvars as gv
 
 
 #
@@ -16,50 +17,60 @@ from tkinter import messagebox
 #
 
 
-class settingsToplevel(tk.Toplevel):
-    def __init__(self, master=None,  **kw):
+class settings(baseui.settingsUI):
+    def __init__(self, master=None, mainWindow = None,  **kw):
+        #
+        #   Save parameters for later use
+        #
         self.master = master
+        self.mainWindow = mainWindow
 
+        #
+        #   Create a toplevel window to contain the settings popup
+        #
         self.popup = tk.Toplevel(self.master)
 
+        super().__init__(self.popup, **kw)
+        #
+        #   Make sure that a close by the Window manager goes to the same close callback
+        #
+        self.popup.protocol("WM_DELETE_WINDOW", self.settingsClose_CB)
+
+        #
+        #   Initialize to none all the object pointers for the sub-settings windows
+        #
+
+        self.settingsMachineWindow = None
+        self.settingsCWWindow = None
+        self.settingsMiscWindow = None              # This is the "general" settings
+        self.settingsChannelsWindow = None
+        self.settingsBackupWindow = None
+        self.settingsFactoryResetWindow = None
+        self.settingsRebootWindow = None
+        #
+        #   Can now kickoff the UX
+        #
+        self.initUX()
+
+        #
+        #   This routine performs the house keeping for actually displaying the Settings
+        #   Dialog box
+        #
+
+    def initUX(self):
         self.popup.title("PiCEC Software Settings")
         self.popup.geometry("600x425")
         self.popup.wait_visibility()  # required on Linux
         self.popup.grab_set()
-        self.popup.transient(self.master)
+        self.popup.transient(self.mainWindow)
+        # self.mainWindow.wait_window(self.popup)
 
-        self.settingsWindowObj = settings(self.popup,  self.master, **kw)
-        self.settingsWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
+        self.pack(expand=tk.YES, fill=tk.BOTH)
+        gv.trimAndLocateWindow(self.popup, 0, 0)
 
-
-class settings(baseui.settingsUI):
-    def __init__(self, master=None, mainWindow = None,  **kw):
-        self.master = master
-        self.mainWindow = mainWindow
-
-        super().__init__(self.master, **kw)
-        self.master.protocol("WM_DELETE_WINDOW", self.settingsClose_CB)
-
-
-        self.settingsMachineWindow = None
-
-
-        self.settingsCWWindow = None
-
-
-        self.settingsMiscWindow = None
-
-
-        self.settingsChannelsWindow = None
-
-        self.settingsBackupWindow = None
-
-
-        self.settingsFactoryResetWindow = None
-
-        self.settingsRebootWindow = None
-
-
+    #
+    #   The following are the callbacks for the various buttons in the Settings Dialog
+    #
 
     def settingsClose_CB(self):
         self.master.destroy()

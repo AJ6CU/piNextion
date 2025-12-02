@@ -294,7 +294,7 @@ class channelsToplevel(channels):
         gv.formatCombobox(self.scan_Select_Combobox, "Arial", "14", "bold")
 
         self.pack(expand=tk.YES, fill=tk.BOTH)
-        gv.trimAndLocateWindow(self.popup, 100, 100)
+        gv.trimAndLocateWindow(self.popup, 50, 50)
 
 
 if __name__ == "__main__":

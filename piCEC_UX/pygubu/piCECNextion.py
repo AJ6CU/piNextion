@@ -443,7 +443,7 @@ class piCECNextion(baseui.piCECNextionUI):
             self.classic_uBITX_ControlWindowObj.greenBoxInstructions_VAR.set(value)
     #
     def refresh_ChannelWindow_CB(self):
-        self.channelsWindow.destroy()
+        self.channelsWindow.popup.destroy()
         self.channelsWindow = None
         self.displayChannelWindow()
 
@@ -879,7 +879,6 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def channels_CB(self):
-        print("channel button cb called")
         self.displayChannelWindow()
     #
     #   The following routines handles the ATT jogwheel.

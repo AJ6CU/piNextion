@@ -204,7 +204,7 @@ class channelsUI(ttk.Labelframe):
             self.scrolledChannelFrame.innerframe, name="frequencychannel20")
         self.frequencyChannel20.pack(anchor="w", pady="10 0", side="top")
         self.scrolledChannelFrame.grid(
-            column=0, pady="5 15", row=2, sticky="nsew")
+            column=0, pady="5 0", row=2, sticky="nsew")
         self.channelEdit_Frame = ttk.Frame(frame1, name="channeledit_frame")
         self.channelEdit_Frame.configure(style="Normal.TFrame", width=200)
         self.ChannelToVFO_Button = ttk.Button(
@@ -214,7 +214,7 @@ class channelsUI(ttk.Labelframe):
             state="normal",
             style="Button2b.TButton",
             text='Channel->VFO',
-            width=14)
+            width=12)
         self.ChannelToVFO_Button.grid(
             column=0, columnspan=2, row=0, sticky="w")
         self.ChannelToVFO_Button.configure(command=self.ChannelToVFO_CB)
@@ -224,7 +224,7 @@ class channelsUI(ttk.Labelframe):
             state="normal",
             style="Button2b.TButton",
             text='VFO->Channel',
-            width=14)
+            width=12)
         self.VFOToChannel_Button.grid(
             column=0, columnspan=2, pady="50 0", row=1, sticky="w")
         self.VFOToChannel_Button.configure(command=self.VFOToChannel_CB)
@@ -235,7 +235,7 @@ class channelsUI(ttk.Labelframe):
             style="Button2b.TButton",
             text='Run Scan',
             textvariable=self.scan_Channel_ButtonText_VAR,
-            width=14)
+            width=12)
         self.scan_Button.grid(column=0, pady="50 0", row=2, sticky="w")
         self.scan_Button.configure(command=self.scan_Channel_CB)
         self.scan_Select_Combobox = Combobox(
@@ -248,13 +248,17 @@ class channelsUI(ttk.Labelframe):
             values='None Scan1 Scan2 Scan3 Scan4',
             width=8)
         self.scan_Select_Combobox.grid(
-            column=0, padx="10 0", pady="20 0", row=3, sticky="e")
+            column=0, padx="10 0", pady="15 0", row=3, sticky="e")
         self.scan_Select_Combobox.bind(
             "<<ComboboxSelected>>",
             self.runScan_Selection_CB,
             add="+")
         self.channelEdit_Frame.grid(
-            column=1, padx=10, pady="100 0", row=2, sticky="new")
+            column=1,
+            padx="20 10",
+            pady="100 0",
+            row=2,
+            sticky="new")
         self.channelEdit_Frame.rowconfigure(3, weight=1)
         self.closingFrame = ttk.Frame(frame1, name="closingframe")
         self.closingFrame.configure(style="Normal.TFrame")
@@ -285,7 +289,7 @@ class channelsUI(ttk.Labelframe):
         self.closingFrame.grid_anchor("center")
         frame1.pack(expand=True, fill="both", side="top")
         frame1.rowconfigure(2, minsize=400, weight=2)
-        frame1.columnconfigure(1, weight=2)
+        frame1.columnconfigure(0, weight=2)
         self.configure(
             style="Heading2.TLabelframe",
             text='Frequency Channels',

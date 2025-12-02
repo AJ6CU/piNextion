@@ -5,7 +5,7 @@ import settingsui as baseui
 import settingsMachine as sm
 from cwSettings import cwSettingsToplevel
 from settingsMachine import settingsMachineToplevel
-from settingsMisc import settingsMiscToplevel
+from settingsGeneral import settingsGeneral
 from settingsBackup import settingsBackupToplevel
 from settingsFactoryReset import settingsFatoryResetToplevel
 from tkinter import messagebox
@@ -42,7 +42,7 @@ class settings(baseui.settingsUI):
 
         self.settingsMachineWindow = None
         self.settingsCWWindow = None
-        self.settingsMiscWindow = None              # This is the "general" settings
+        self.settingsGeneralWindow = None              # This is the "general" settings
         self.settingsChannelsWindow = None
         self.settingsBackupWindow = None
         self.settingsFactoryResetWindow = None
@@ -73,7 +73,8 @@ class settings(baseui.settingsUI):
     #
 
     def settingsClose_CB(self):
-        self.master.destroy()
+        self.popup.destroy()
+        # self.master.destroy()
 
     def SettingsMachine_CB(self):
         self.settingsMachineWindow = settingsMachineToplevel(self.mainWindow)
@@ -82,8 +83,8 @@ class settings(baseui.settingsUI):
         self.settingsCWWindow = cwSettingsToplevel(self.mainWindow)
 
 
-    def settingsMisc_CB(self):
-        self.settingsMiscWindow = settingsMiscToplevel(self.mainWindow)
+    def settingsGeneral_CB(self):
+        self.settingsGeneralWindow = settingsGeneral(self.master, self.mainWindow)
 
     def settingsBackup_CB(self):
         self.settingsBackupWindow = settingsBackupToplevel(self.mainWindow)

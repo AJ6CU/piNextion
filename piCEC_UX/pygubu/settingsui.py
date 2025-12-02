@@ -60,7 +60,7 @@ class settingsUI(ttk.Labelframe):
             style="Button1Raised.TButton", text='General', width=15)
         self.settingsMisc_Button.grid(
             column=0, ipady=25, padx=10, pady=10, row=0)
-        self.settingsMisc_Button.configure(command=self.settingsMisc_CB)
+        self.settingsMisc_Button.configure(command=self.settingsGeneral_CB)
         self.settingsCW_Button = ttk.Button(
             self.settingsButtons_Frame, name="settingscw_button")
         self.settingsCW_Button.configure(
@@ -123,7 +123,7 @@ class settingsUI(ttk.Labelframe):
             width=400)
         # Layout for 'settings_Labelframe' skipped in custom widget template.
 
-    def settingsMisc_CB(self):
+    def settingsGeneral_CB(self):
         pass
 
     def settingsCW_CB(self):

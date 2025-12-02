@@ -27,7 +27,7 @@ def image_loader_default(master, image_name: str):
 #
 # Base class definition
 #
-class settingsMiscUI(ttk.Labelframe):
+class settingsGeneralUI(ttk.Labelframe):
     def __init__(
         self,
         master=None,
@@ -48,14 +48,16 @@ class settingsMiscUI(ttk.Labelframe):
 
         super().__init__(master, **kw)
 
-        self.misc_Settings_Frame = ttk.Frame(self, name="misc_settings_frame")
-        self.misc_Settings_Frame.configure(
+        self.general_Settings_Frame = ttk.Frame(
+            self, name="general_settings_frame")
+        self.general_Settings_Frame.configure(
             height=200, style="Normal.TFrame", width=200)
         # First object created
-        on_first_object_cb(self.misc_Settings_Frame)
+        on_first_object_cb(self.general_Settings_Frame)
 
         self.Number_Delimiter_Label = ttk.Label(
-            self.misc_Settings_Frame, name="number_delimiter_label")
+            self.general_Settings_Frame,
+            name="number_delimiter_label")
         self.Number_Delimiter_Label.configure(
             justify="right",
             style="Heading1b.TLabel",
@@ -63,7 +65,8 @@ class settingsMiscUI(ttk.Labelframe):
         self.Number_Delimiter_Label.grid(
             column=0, padx=10, pady=10, row=0, sticky="e")
         self.Number_Delimiter_Combobox = Combobox(
-            self.misc_Settings_Frame, name="number_delimiter_combobox")
+            self.general_Settings_Frame,
+            name="number_delimiter_combobox")
         self.NUMBER_DELIMITER_VAR = tk.StringVar()
         self.Number_Delimiter_Combobox.configure(
             justify="center",
@@ -74,7 +77,8 @@ class settingsMiscUI(ttk.Labelframe):
         self.Number_Delimiter_Combobox.grid(
             column=1, padx="20 0", row=0, sticky="w")
         self.Virtual_Keyboard_Label = ttk.Label(
-            self.misc_Settings_Frame, name="virtual_keyboard_label")
+            self.general_Settings_Frame,
+            name="virtual_keyboard_label")
         self.Virtual_Keyboard_Label.configure(
             justify="right",
             style="Heading1b.TLabel",
@@ -82,7 +86,8 @@ class settingsMiscUI(ttk.Labelframe):
         self.Virtual_Keyboard_Label.grid(
             column=0, padx=10, pady="40 20", row=1, sticky="e")
         self.Virtual_Keyboard_Combobox = Combobox(
-            self.misc_Settings_Frame, name="virtual_keyboard_combobox")
+            self.general_Settings_Frame,
+            name="virtual_keyboard_combobox")
         self.Virtual_Keyboard_VAR = tk.StringVar()
         self.Virtual_Keyboard_Combobox.configure(
             keyvariable=self.Virtual_Keyboard_VAR,
@@ -91,7 +96,28 @@ class settingsMiscUI(ttk.Labelframe):
             width=4)
         self.Virtual_Keyboard_Combobox.grid(
             column=1, padx="20 0", pady="40 20", row=1, sticky="w")
-        self.misc_Settings_Frame.pack(padx=10, pady=10, side="top")
+        self.Time_On_Freq_Label = ttk.Label(
+            self.general_Settings_Frame,
+            name="time_on_freq_label")
+        self.Time_On_Freq_Label.configure(
+            justify="right",
+            style="Heading1b.TLabel",
+            text='Time on Frequency\nduring Scan')
+        self.Time_On_Freq_Label.grid(
+            column=0, padx=10, pady="40 20", row=2, sticky="e")
+        self.Time_On_Freq_Combobox = Combobox(
+            self.general_Settings_Frame,
+            name="time_on_freq_combobox")
+        self.Time_On_Freq_VAR = tk.StringVar()
+        self.Time_On_Freq_Combobox.configure(
+            justify="right",
+            keyvariable=self.Time_On_Freq_VAR,
+            style="ComboBox1.TCombobox",
+            values='1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20',
+            width=4)
+        self.Time_On_Freq_Combobox.grid(
+            column=1, padx="20 0", pady="40 20", row=2, sticky="w")
+        self.general_Settings_Frame.pack(padx=10, pady=10, side="top")
         self.closingFrame = ttk.Frame(self, name="closingframe")
         self.closingFrame.configure(
             height=50, style="Normal.TFrame", width=200)
@@ -125,6 +151,6 @@ class settingsMiscUI(ttk.Labelframe):
 
 if __name__ == "__main__":
     root = tk.Tk()
-    widget = settingsMiscUI(root)
+    widget = settingsGeneralUI(root)
     widget.pack(expand=True, fill="both")
     root.mainloop()

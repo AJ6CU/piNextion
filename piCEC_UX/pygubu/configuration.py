@@ -103,6 +103,8 @@ class configuration:
 
 
     def get_Scan_On_Station_Time(self):
+        if len(self.config_data["Scan On Station Time"]) == 0:
+            return "1000"           #defaults to 1 second
         return self.config_data["Scan On Station Time"]
 
     def set_Scan_On_Station_Time(self, time):

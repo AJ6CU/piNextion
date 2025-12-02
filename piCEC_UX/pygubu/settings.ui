@@ -57,7 +57,7 @@
             </containerlayout>
             <child>
               <object class="ttk.Button" id="settingsMisc_Button" named="True">
-                <property name="command" type="command" cbtype="simple">settingsMisc_CB</property>
+                <property name="command" type="command" cbtype="simple">settingsGeneral_CB</property>
                 <property name="style">Button1Raised.TButton</property>
                 <property name="text" translatable="yes">General</property>
                 <property name="width">15</property>

@@ -57,7 +57,7 @@ class settingsMachineUI(ttk.Labelframe):
             frame1, name="mcu_command_headroom_label")
         self.MCU_Command_Headroom_Label.configure(
             style="Heading1b.TLabel",
-            text='Minimum time between commands sent to Radio (ms):')
+            text='Minimum time between\ncommands sent to\nRadio (ms):')
         self.MCU_Command_Headroom_Label.grid(
             column=0, padx=10, pady=10, row=0, sticky="e")
         self.MCU_Command_Headroom_Combobox = Combobox(
@@ -74,7 +74,7 @@ class settingsMachineUI(ttk.Labelframe):
             frame1, name="mcu_update_period_label")
         self.MCU_Update_Period_Label.configure(
             style="Heading1b.TLabel",
-            text='Frequency to check for UX changes (ms):')
+            text='Frequency to check for\nUX changes (ms):')
         self.MCU_Update_Period_Label.grid(
             column=0, padx=10, pady=50, row=1, sticky="e")
         self.MCU_Update_Period_Combobox = Combobox(

@@ -50,7 +50,9 @@
             <child>
               <object class="ttk.Label" id="MCU_Command_Headroom_Label" named="True">
                 <property name="style">Heading1b.TLabel</property>
-                <property name="text" translatable="yes">Minimum time between commands sent to Radio (ms):</property>
+                <property name="text" translatable="yes">Minimum time between
+commands sent to
+Radio (ms):</property>
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="padx">10</property>
@@ -77,7 +79,8 @@
             <child>
               <object class="ttk.Label" id="MCU_Update_Period_Label" named="True">
                 <property name="style">Heading1b.TLabel</property>
-                <property name="text" translatable="yes">Frequency to check for UX changes (ms):</property>
+                <property name="text" translatable="yes">Frequency to check for
+UX changes (ms):</property>
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="padx">10</property>

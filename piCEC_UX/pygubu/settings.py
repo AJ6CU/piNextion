@@ -4,7 +4,7 @@ import tkinter.ttk as ttk
 import settingsui as baseui
 import settingsMachine as sm
 from cwSettings import cwSettingsToplevel
-from settingsMachine import settingsMachineToplevel
+from settingsMachine import settingsMachine
 from settingsGeneral import settingsGeneral
 from settingsBackup import settingsBackupToplevel
 from settingsFactoryReset import settingsFatoryResetToplevel
@@ -77,7 +77,7 @@ class settings(baseui.settingsUI):
         # self.master.destroy()
 
     def SettingsMachine_CB(self):
-        self.settingsMachineWindow = settingsMachineToplevel(self.mainWindow)
+        self.settingsMachineWindow = settingsMachine(self.master, self.mainWindow)
 
     def settingsCW_CB(self):
         self.settingsCWWindow = cwSettingsToplevel(self.mainWindow)

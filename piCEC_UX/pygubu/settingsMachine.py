@@ -9,27 +9,17 @@ import globalvars as gv
 #
 # Manual user code
 #
-class settingsMachineToplevel(tk.Toplevel):
-    def __init__(self, master=None, **kw):
-        self.master = master
-
-        self.popup = tk.Toplevel(self.master)
-
-        self.popup.title("Machine Specific Settings")
-        self.popup.minsize(750,350)
-        self.popup.wait_visibility()  # required on Linux
-        self.popup.grab_set()
-        self.popup.transient(self.master)
-
-        self.settingsMachineWindow = settingsMachine(self.popup, self.master, **kw)
-        self.settingsMachineWindow.pack(expand=tk.YES, fill=tk.BOTH)
 
 class settingsMachine(baseui.settingsMachineUI):
     def __init__(self, master=None, mainWindow=None, **kw):
         self.master = master
         self.mainWindow = mainWindow
+        #
+        #   Create a toplevel window to contain the settings popup
+        #
+        self.popup = tk.Toplevel(self.master)
 
-        super().__init__(master, **kw)
+        super().__init__(self.popup, **kw)
 
         self.saveMCU_Command_Headroom = int(gv.config.get_MCU_Command_Headroom()*1000)
         self.saveMCU_Update_Period = gv.config.get_MCU_Update_Period()
@@ -42,6 +32,21 @@ class settingsMachine(baseui.settingsMachineUI):
 
         self.MCU_Command_Headroom_Combobox.configure(values=gv.MCU_Headroom_Values)
         self.MCU_Update_Period_Combobox.configure(values=gv.Frequency_To_Run_UX_loop)
+        #
+        #   Can now kickoff the UX
+        #
+
+        self.initUX()
+
+    def initUX(self):
+        self.popup.title("Machine Specific Settings")
+        self.popup.geometry("450x400")
+        self.popup.wait_visibility()  # required on Linux
+        self.popup.grab_set()
+        self.popup.transient(self.mainWindow)
+
+        self.pack(expand=tk.YES, fill=tk.BOTH)
+        gv.trimAndLocateWindow(self.popup, 0, 0)
 
     def apply_CB(self):
         print("Applying settings")

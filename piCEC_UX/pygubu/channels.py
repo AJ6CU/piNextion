@@ -249,11 +249,11 @@ class channelsToplevel(channels):
 
         self.popup = tk.Toplevel(self.root)
 
-        self.popup.title("Frequency Channels")
-        self.popup.geometry("750x600")
-        self.popup.wait_visibility()  # required on Linux
-        # self.popup.grab_set()         # dont want as we can allow other things to click while using channels
-        self.popup.transient(self.mainWindow)
+        # self.popup.title("Frequency Channels")
+        # self.popup.geometry("750x600")
+        # self.popup.wait_visibility()  # required on Linux
+        # # self.popup.grab_set()         # dont want as we can allow other things to click while using channels
+        # self.popup.transient(self.mainWindow)
 
         super().__init__(self.popup,  self.mainWindow, self.refreshCallback, **kw)
 
@@ -284,6 +284,14 @@ class channelsToplevel(channels):
         self.mainWindow.Radio_Req_Channel_Freqs()
         self.mainWindow.Radio_Req_Channel_Labels()
         self.mainWindow.Radio_Req_Channel_Show_Labels()
+
+        self.popup.title("Frequency Channels")
+        self.popup.geometry("775x700")
+        self.popup.wait_visibility()  # required on Linux
+        # self.popup.grab_set()         # dont want as we can allow other things to click while using channels
+        self.popup.transient(self.mainWindow)
+
+        gv.formatCombobox(self.scan_Select_Combobox, "Arial", "14", "bold")
 
         self.pack(expand=tk.YES, fill=tk.BOTH)
         gv.trimAndLocateWindow(self.popup, 100, 100)

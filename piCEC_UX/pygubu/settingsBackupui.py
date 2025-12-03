@@ -507,7 +507,7 @@ class settingsBackupUI(ttk.Labelframe):
             onvalue=1,
             style="Checkbox1b.TCheckbutton",
             variable=self.select_All_Checked_VAR)
-        self.select_All_Checkbutton.pack(padx="18 0", pady="5 0", side="left")
+        self.select_All_Checkbutton.pack(padx="28 0", pady="5 0", side="left")
         self.select_All_Checkbutton.configure(
             command=self.select_All_Checkbutton_CB)
         self.select_All_Label = ttk.Label(frame5, name="select_all_label")

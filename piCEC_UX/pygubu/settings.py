@@ -3,7 +3,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import settingsui as baseui
 import settingsMachine as sm
-from cwSettings import cwSettingsToplevel
+from cwSettings import cwSettings
 from settingsMachine import settingsMachine
 from settingsGeneral import settingsGeneral
 from settingsBackup import settingsBackupToplevel
@@ -80,7 +80,7 @@ class settings(baseui.settingsUI):
         self.settingsMachineWindow = settingsMachine(self.master, self.mainWindow)
 
     def settingsCW_CB(self):
-        self.settingsCWWindow = cwSettingsToplevel(self.mainWindow)
+        self.settingsCWWindow = cwSettings(self.master, self.mainWindow)
 
 
     def settingsGeneral_CB(self):

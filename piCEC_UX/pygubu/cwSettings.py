@@ -11,36 +11,19 @@ from time import sleep
 # Manual user code
 #
 
-class cwSettingsToplevel(tk.Toplevel):
-    def __init__(self, master=None, **kw):
-        self.master = master
-
-        self.popup = tk.Toplevel(self.master)
-
-        self.popup.title("CW Settings")
-        self.popup.minsize(800,500)
-        self.popup.wait_visibility()  # required on Linux
-        self.popup.grab_set()
-        self.popup.transient(self.master)
-
-        self.cwSettingsWindowObj = cwSettings(self.popup, self.master, **kw)
-        self.cwSettingsWindowObj.pack(expand=tk.YES, fill=tk.BOTH)
-
-        self.cwSettingsWindowObj.loadCurrentCWSettings(self.master.tone_value_VAR.get(),
-                                                       self.master.key_type_value_VAR.get(),
-                                                       self.master.key_speed_value_VAR.get(),
-                                                       self.master.delay_starting_tx_value_VAR.get(),
-                                                       self.master.delay_returning_to_rx_value_VAR.get(),
-                                                       self.master.cwTX_OffsetFlag
-                                                       )
-
 
 class cwSettings(baseui.cwSettingsUI):
     def __init__(self, master=None, mainWindow=None, **kw):
 
         self.mainWindow = mainWindow
         self.master = master
-        super().__init__(self.master,  **kw)
+
+        #
+        #   Create a toplevel window to contain the settings popup
+        #
+        self.popup = tk.Toplevel(self.master)
+
+        super().__init__(self.popup,  **kw)
 
         #
         #   Magic code to get a handle on the current font of the default item and propagate it to the list...
@@ -68,55 +51,33 @@ class cwSettings(baseui.cwSettingsUI):
         self.offset_Freq_Flag = None
 
         #
-        # the following is a failed attempt to get the combobox to scroll the selected value to the middle of the list
-        # perhaps I will figure this out in the future....
+        #   Can now kickoff the UX
         #
 
-    # def combobox_center_list_CB(self):
-    #
-    #     """Scrolls the listbox to the currently selected item."""
-    #     # Get the index of the current value
-    #     print(" trying to scroll the listbox")
-    #
-    #     try:
-    #         current_index = gv.CW_Sidetone_Values.index(self.tone_value_VAR.get())
-    #     except:             # not found just return
-    #         print(" value not in list")
-    #         return
-    #
-    #     # Access the internal Tcl/Tk listbox widget
-    #     try:
-    #         # This is a non-public method, subject to change across Tk versions
-    #         # It returns the Tk widget name for the internal listbox
-    #         # listbox_name = self.tk.call(self._w, "listbox")
-    #         # print("failed on first call")
-    #         # listbox = self.winfo_toplevel().nametowidget(listbox_name)
-    #         print("trying to find popdown widget")
-    #         popdown_window = self.master.tk.call(
-    #             "ttk::combobox::PopdownWindow", self.master._w
-    #         )
-    #         print("got thru popdown window")
-    #         # The listbox is inside a frame named ".f", and its name is ".l"
-    #         listbox_path = popdown_window + ".f.l"
-    #         print("found path", listbox_path)
-    #         # Get the Python widget reference using the path
-    #         modpath = ".!root"+listbox_path
-    #         print("modpath", modpath)
-    #         listbox = self.nametowidget(modpath)
-    #         print("found listbox")
-    #
-    #         # Use the see() method to ensure the current item is visible
-    #         # The listbox will scroll to show the index
-    #         print("got to the see")
-    #         listbox.see(current_index)
-    #         print("failed on see")
-    #
-    #         # To try and "center" it more, you could calculate an offset
-    #         # For this example, 'see' ensures visibility
-    #
-    #     except:
-    #         print("failed to access internal")
-    #         return          # can't access internal, just dont try to center the list
+        self.initUX()
+
+    def initUX(self):
+
+        self.loadCurrentCWSettings(self.mainWindow.tone_value_VAR.get(),
+                                                       self.mainWindow.key_type_value_VAR.get(),
+                                                       self.mainWindow.key_speed_value_VAR.get(),
+                                                       self.mainWindow.delay_starting_tx_value_VAR.get(),
+                                                       self.mainWindow.delay_returning_to_rx_value_VAR.get(),
+                                                       self.mainWindow.cwTX_OffsetFlag
+                                                       )
+
+        self.popup.title("CW Settings")
+        self.popup.geometry("825x450")
+        self.popup.wait_visibility()  # required on Linux
+        self.popup.grab_set()
+        self.popup.transient(self.mainWindow)
+
+        self.pack(expand=tk.YES, fill=tk.BOTH)
+        gv.trimAndLocateWindow(self.popup, 0, 0)
+
+
+
+
 
 
     def loadCurrentCWSettings(self,tone,keyType,keySpeed,delayToTX,delayToRX, offset_Freq_Flag):

@@ -6,7 +6,7 @@ import tkinter as tk
 
 import piCEC_UXui as baseui
 from settings import settings
-from cwSettings import cwSettings, cwSettingsToplevel
+from cwSettings import cwSettings, cwSettings
 
 from channels import channels
 from Classic_uBITX_Control import Classic_uBITX_Control
@@ -403,7 +403,7 @@ class piCECNextion(baseui.piCECNextionUI):
 
 
     def displayCWSettingsWindow(self):
-        self.cwSettingsWindow = cwSettingsToplevel(self)
+        self.settingsCWWindow = cwSettings(self.master, self)
 
 
     #

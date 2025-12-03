@@ -29,8 +29,10 @@ def setup_ttk_styles(master=None):
 
     fontList = {'Heading0': ('Arial',36, 'bold' ),
             'Heading1': ('Times New Roman', 24, 'bold'),
+            'Heading1Std': ('Arial', 24),
             'Heading1Fixed': ("TkFixedFont", 24, 'bold'),
             'Heading1b': ('Arial', 20, 'bold'),
+            'Heading1bi': ('Arial', 20, 'bold', 'italic'),
             'Heading2': ('Arial',18, 'bold' ),
             'Heading2b': ('Arial',14, 'bold' ),
             'Heading2bi': ('Arial', 14, 'bold', 'italic'),
@@ -44,9 +46,12 @@ def setup_ttk_styles(master=None):
             'Symbol1': ('Symbol',18, 'bold'),
             'Symbol3': ('Symbol',12, 'bold')}
 
+    style.configure('Heading1Std.TLabel', font=fontList['Heading1Std'], background='gray', foreground='white')
     style.configure('Heading1.TLabel',font=fontList['Heading1'], background='gray', foreground='white')
     style.configure('Heading1Fixed.TLabel',font=fontList['Heading1'], background='gray', foreground='white')
     style.configure('Heading1b.TLabel', font=fontList['Heading1b'], background='gray', foreground='white')
+    style.configure('Heading1bi.TLabel', font=fontList['Heading1bi'], background='gray', foreground='white')
+
     style.configure('Heading2.TLabel',font=fontList['Heading2'])
     style.configure('Heading2b.TLabel',font=fontList['Heading2b'], background='gray', foreground='white')
     style.configure('Heading2bi.TLabel', font=fontList['Heading2bi'], background='gray', foreground='white')
@@ -88,6 +93,7 @@ def setup_ttk_styles(master=None):
     style.configure('RadioButtonEmphasis.TRadiobutton',font=fontList['Emphasis'])
     style.configure('Heading2b.TMenubutton',font=fontList['Heading2b'])
     style.configure('Submenu.TMenuitem.Command',font=fontList['Heading2b'])
+    style.configure('Checkbox1b.TCheckbutton', font=fontList['Heading1b'], background='gray', foreground='white')
     style.configure('Checkbox2b.TCheckbutton', font=fontList['Heading2b'], background='gray', foreground='white')
     style.configure('Checkbox3.TCheckbutton',font=fontList['Heading3'])
     style.configure('Checkbox4.TCheckbutton',font=fontList['Heading4'])

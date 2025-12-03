@@ -58,35 +58,35 @@ class settingsBackupUI(ttk.Labelframe):
         self.label29.configure(
             anchor="w",
             justify="right",
-            style="Heading2b.TLabel",
+            style="Heading1b.TLabel",
             text='Select')
         self.label29.grid(column=0, padx=5, row=0, sticky="w")
         self.label14 = ttk.Label(self.backupSettings_Frame, name="label14")
         self.label14.configure(
             anchor="w",
             justify="right",
-            style="Heading2b.TLabel",
+            style="Heading1b.TLabel",
             text='Setting')
         self.label14.grid(column=1, padx=5, row=0, sticky="w")
         self.label15 = ttk.Label(self.backupSettings_Frame, name="label15")
         self.label15.configure(
             anchor="e",
             justify="center",
-            style="Heading2b.TLabel",
+            style="Heading1b.TLabel",
             text='Factory\nValue')
         self.label15.grid(column=2, row=0, sticky="ew")
         self.label16 = ttk.Label(self.backupSettings_Frame, name="label16")
         self.label16.configure(
             anchor="e",
             justify="center",
-            style="Heading2b.TLabel",
+            style="Heading1b.TLabel",
             text='Current\nValue')
         self.label16.grid(column=3, row=0, sticky="ew")
         self.label17 = ttk.Label(self.backupSettings_Frame, name="label17")
         self.label17.configure(
             anchor="e",
             justify="center",
-            style="Heading2b.TLabel",
+            style="Heading1b.TLabel",
             text='Config\nFile')
         self.label17.grid(column=4, row=0, sticky="ew")
         frame2 = ttk.Frame(self.backupSettings_Frame)
@@ -101,13 +101,13 @@ class settingsBackupUI(ttk.Labelframe):
         self.Master_Cal_Checkbutton.configure(
             offvalue=0,
             onvalue=1,
-            style="Checkbox2b.TCheckbutton",
+            style="Checkbox1b.TCheckbutton",
             variable=self.Master_Cal_Checked_VAR)
         self.Master_Cal_Checkbutton.grid(column=0, padx=5, pady=5, row=3)
         self.Master_Cal_Heading_Label = ttk.Label(
             self.backupSettings_Frame, name="master_cal_heading_label")
         self.Master_Cal_Heading_Label.configure(
-            anchor="w", style="Heading2b.TLabel", text='Master Cal:', width=10)
+            anchor="w", style="Heading1b.TLabel", text='Master Cal', width=10)
         self.Master_Cal_Heading_Label.grid(column=1, padx=5, pady=5, row=3)
         self.EEPROM_Factory_Master_Cal_Label = ttk.Label(
             self.backupSettings_Frame, name="eeprom_factory_master_cal_label")
@@ -115,7 +115,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.EEPROM_Factory_Master_Cal_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label3',
             textvariable=self.EEPROM_Factory_Master_Cal_VAR,
             width=10)
@@ -127,7 +127,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.EEPROM_Current_Master_Cal_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.EEPROM_Current_Master_Cal_VAR,
             width=10)
@@ -139,7 +139,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.ConfigFile_Master_Cal_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.ConfigFile_Master_Cal_VAR,
             width=10)
@@ -151,13 +151,13 @@ class settingsBackupUI(ttk.Labelframe):
         self.SSB_BFO_Checkbutton.configure(
             offvalue=0,
             onvalue=1,
-            style="Checkbox2b.TCheckbutton",
+            style="Checkbox1b.TCheckbutton",
             variable=self.SSB_BFO_Checked_VAR)
         self.SSB_BFO_Checkbutton.grid(column=0, padx=0, pady=5, row=4)
         self.SSB_BFO_Heading_Label = ttk.Label(
             self.backupSettings_Frame, name="ssb_bfo_heading_label")
         self.SSB_BFO_Heading_Label.configure(
-            anchor="w", style="Heading2b.TLabel", text='SSB BFO:', width=10)
+            anchor="w", style="Heading1b.TLabel", text='SSB BFO', width=10)
         self.SSB_BFO_Heading_Label.grid(column=1, padx=5, pady="0 5", row=4)
         self.EEPROM_Factory_SSB_BFO_Label = ttk.Label(
             self.backupSettings_Frame, name="eeprom_factory_ssb_bfo_label")
@@ -165,7 +165,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.EEPROM_Factory_SSB_BFO_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label3',
             textvariable=self.EEPROM_Factory_SSB_BFO_VAR,
             width=10)
@@ -177,7 +177,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.EEPROM_Current_SSB_BFO_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.EEPROM_Current_SSB_BFO_VAR,
             width=10)
@@ -189,7 +189,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.ConfigFile_SSB_BFO_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.ConfigFile_SSB_BFO_VAR,
             width=10)
@@ -201,18 +201,22 @@ class settingsBackupUI(ttk.Labelframe):
         self.CW_BFO_Checkbutton.configure(
             offvalue=0,
             onvalue=1,
-            style="Checkbox2b.TCheckbutton",
+            style="Checkbox1b.TCheckbutton",
             variable=self.CW_BFO_Checked_VAR)
         self.CW_BFO_Checkbutton.grid(column=0, padx=0, pady=5, row=5)
         self.CW_BFO_Heading_Label = ttk.Label(
             self.backupSettings_Frame, name="cw_bfo_heading_label")
         self.CW_BFO_Heading_Label.configure(
-            anchor="w", style="Heading2b.TLabel", text='CW BFO:', width=10)
+            anchor="w", style="Heading1b.TLabel", text='CW BFO', width=10)
         self.CW_BFO_Heading_Label.grid(column=1, padx=5, pady="0 5", row=5)
         self.EEPROM_Factory_CW_BFO_Label = ttk.Label(
             self.backupSettings_Frame, name="eeprom_factory_cw_bfo_label")
         self.EEPROM_Factory_CW_BFO_Label.configure(
-            anchor="e", justify="right", style="Heading3b.TLabel", text='N/A', width=10)
+            anchor="e",
+            justify="right",
+            style="Heading1Std.TLabel",
+            text='N/A',
+            width=10)
         self.EEPROM_Factory_CW_BFO_Label.grid(
             column=2, padx="0 5", pady="0 5", row=5, sticky="e")
         self.EEPROM_Current_CW_BFO_Label = ttk.Label(
@@ -221,7 +225,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.EEPROM_Current_CW_BFO_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.EEPROM_Current_CW_BFO_VAR,
             width=10)
@@ -233,7 +237,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.ConfigFIle_CW_BFO_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.ConfigFIle_CW_BFO_VAR,
             width=10)
@@ -245,18 +249,18 @@ class settingsBackupUI(ttk.Labelframe):
         self.CW_Keytype_Checkbutton.configure(
             offvalue=0,
             onvalue=1,
-            style="Checkbox2b.TCheckbutton",
+            style="Checkbox1b.TCheckbutton",
             variable=self.CW_Keytype_Checked_VAR)
         self.CW_Keytype_Checkbutton.grid(column=0, padx=0, pady=5, row=6)
         self.CW_Keytype_Heading_Label = ttk.Label(
             self.backupSettings_Frame, name="cw_keytype_heading_label")
         self.CW_Keytype_Heading_Label.configure(
-            anchor="w", style="Heading2b.TLabel", text='Keytype:', width=10)
+            anchor="w", style="Heading1b.TLabel", text='Keytype', width=10)
         self.CW_Keytype_Heading_Label.grid(column=1, padx=5, pady="0 5", row=6)
         self.EEPROM_Factory_CW_Keytype_Label = ttk.Label(
             self.backupSettings_Frame, name="eeprom_factory_cw_keytype_label")
         self.EEPROM_Factory_CW_Keytype_Label.configure(
-            anchor="e", justify="right", style="Heading3b.TLabel", text='N/A', width=10)
+            anchor="e", justify="right", style="Heading1Std.TLabel", text='N/A', width=10)
         self.EEPROM_Factory_CW_Keytype_Label.grid(
             column=2, padx="0 5", pady="0 5", row=6, sticky="e")
         self.EEPROM_Current_CW_Keytype_Label = ttk.Label(
@@ -265,7 +269,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.EEPROM_Current_CW_Keytype_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.EEPROM_Current_CW_Keytype_VAR,
             width=10)
@@ -277,7 +281,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.ConfigFile_CW_Keytype_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.ConfigFile_CW_Keytype_VAR,
             width=10)
@@ -289,20 +293,20 @@ class settingsBackupUI(ttk.Labelframe):
         self.CW_Speed_Checkbutton.configure(
             offvalue=0,
             onvalue=1,
-            style="Checkbox2b.TCheckbutton",
+            style="Checkbox1b.TCheckbutton",
             variable=self.CW_Speed_Checked_VAR)
         self.CW_Speed_Checkbutton.grid(column=0, padx=0, pady=5, row=7)
         self.CW_Speed_Heading_Label = ttk.Label(
             self.backupSettings_Frame, name="cw_speed_heading_label")
         self.CW_Speed_Heading_Label.configure(
-            anchor="w", style="Heading2b.TLabel", text='CW Speed:', width=10)
+            anchor="w", style="Heading1b.TLabel", text='CW Speed', width=10)
         self.CW_Speed_Heading_Label.grid(column=1, padx=5, pady="0 5", row=7)
         self.EEPROM_Factory_CW_Speed_Label = ttk.Label(
             self.backupSettings_Frame, name="eeprom_factory_cw_speed_label")
         self.EEPROM_Factory_CW_Speed_VAR = tk.StringVar(value='label6')
         self.EEPROM_Factory_CW_Speed_Label.configure(
             anchor="e",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label6',
             textvariable=self.EEPROM_Factory_CW_Speed_VAR,
             width=10)
@@ -314,7 +318,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.EEPROM_Current_CW_Speed_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.EEPROM_Current_CW_Speed_VAR,
             width=10)
@@ -326,7 +330,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.ConfigFile_CW_Speed_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.ConfigFIle_CW_Speed_VAR,
             width=10)
@@ -338,13 +342,13 @@ class settingsBackupUI(ttk.Labelframe):
         self.CW_Sidetone_Checkbutton.configure(
             offvalue=0,
             onvalue=1,
-            style="Checkbox2b.TCheckbutton",
+            style="Checkbox1b.TCheckbutton",
             variable=self.CW_Sidetone_Checked_VAR)
         self.CW_Sidetone_Checkbutton.grid(column=0, padx=0, pady=5, row=8)
         self.CW_Sidetone_Heading_Label = ttk.Label(
             self.backupSettings_Frame, name="cw_sidetone_heading_label")
         self.CW_Sidetone_Heading_Label.configure(
-            anchor="w", style="Heading2b.TLabel", text='Sidetone', width=10)
+            anchor="w", style="Heading1b.TLabel", text='Sidetone', width=10)
         self.CW_Sidetone_Heading_Label.grid(
             column=1, padx=5, pady="0 5", row=8)
         self.EEPROM_Factory_CW_Sidetone_Label = ttk.Label(
@@ -353,7 +357,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.EEPROM_Factory_CW_Sidetone_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label10',
             textvariable=self.EEPROM_Factory_CW_Sidetone_VAR,
             width=10)
@@ -365,7 +369,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.EEPROM_Current_CW_Sidetone_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.EEPROM_Current_CW_Sidetone_VAR,
             width=10)
@@ -377,7 +381,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.ConfigFile_CW_Sidetone_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.ConfigFile_CW_Sidetone_VAR,
             width=10)
@@ -389,20 +393,20 @@ class settingsBackupUI(ttk.Labelframe):
         self.CW_Delay_Before_TX_Checkbutton.configure(
             offvalue=0,
             onvalue=1,
-            style="Checkbox2b.TCheckbutton",
+            style="Checkbox1b.TCheckbutton",
             variable=self.CW_Delay_Before_TX_Checked_VAR)
         self.CW_Delay_Before_TX_Checkbutton.grid(
             column=0, padx=0, pady=5, row=9)
         self.CW_Delay_Before_TX_Heading_Label = ttk.Label(
             self.backupSettings_Frame, name="cw_delay_before_tx_heading_label")
         self.CW_Delay_Before_TX_Heading_Label.configure(
-            anchor="w", style="Heading2b.TLabel", text='Delay->TX:', width=10)
+            anchor="w", style="Heading1b.TLabel", text='Delay->TX', width=10)
         self.CW_Delay_Before_TX_Heading_Label.grid(
             column=1, padx=5, pady="0 5", row=9)
         self.EEPROM_Factory_CW_Delay_Before_TX = ttk.Label(
             self.backupSettings_Frame, name="eeprom_factory_cw_delay_before_tx")
         self.EEPROM_Factory_CW_Delay_Before_TX.configure(
-            anchor="e", justify="right", style="Heading3b.TLabel", text='N/A', width=10)
+            anchor="e", justify="right", style="Heading1Std.TLabel", text='N/A', width=10)
         self.EEPROM_Factory_CW_Delay_Before_TX.grid(
             column=2, padx="0 5", pady="0 5", row=9, sticky="e")
         self.EEPROM_Current_CW_Delay_Before_TX = ttk.Label(
@@ -412,7 +416,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.EEPROM_Current_CW_Delay_Before_TX.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.EEPROM_Current_CW_Delay_Before_TX_VAR,
             width=10)
@@ -424,7 +428,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.ConfigFile_CW_Delay_Before_TX_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.ConfigFile_CW_Delay_Before_TX_VAR,
             width=10)
@@ -436,14 +440,14 @@ class settingsBackupUI(ttk.Labelframe):
         self.CW_Delay_Returning_To_RX_Checkbutton.configure(
             offvalue=0,
             onvalue=1,
-            style="Checkbox2b.TCheckbutton",
+            style="Checkbox1b.TCheckbutton",
             variable=self.CW_Delay_Returning_To_RX_Checked_VAR)
         self.CW_Delay_Returning_To_RX_Checkbutton.grid(
             column=0, padx=0, pady=5, row=10)
         self.CW_Delay_Returning_To_RX_Heading_Label = ttk.Label(
             self.backupSettings_Frame, name="cw_delay_returning_to_rx_heading_label")
         self.CW_Delay_Returning_To_RX_Heading_Label.configure(
-            anchor="w", style="Heading2b.TLabel", text='Delay->RX:', width=10)
+            anchor="w", style="Heading1b.TLabel", text='Delay->RX', width=10)
         self.CW_Delay_Returning_To_RX_Heading_Label.grid(
             column=1, padx=5, pady="0 5", row=10)
         self.EEPROM_Factory_CW_Delay_Returning_To_RX_Label = ttk.Label(
@@ -453,7 +457,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.EEPROM_Factory_CW_Delay_Returning_To_RX_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='N/A',
             textvariable=self.EEPROM_Factory_CW_Delay_Returning_To_RX_VAR,
             width=10)
@@ -466,7 +470,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.EEPROM_Current_CW_Delay_Returning_To_RX_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.EEPROM_Current_CW_Delay_Returning_To_RX_Label_VAR,
             width=10)
@@ -479,7 +483,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.ConfigFIle_CW_Delay_Returning_To_RX_Label.configure(
             anchor="e",
             justify="right",
-            style="Heading3b.TLabel",
+            style="Heading1Std.TLabel",
             text='label4',
             textvariable=self.ConfigFIle_CW_Delay_Returning_To_RX_VAR,
             width=10)
@@ -499,7 +503,7 @@ class settingsBackupUI(ttk.Labelframe):
         self.select_All_Checkbutton.configure(
             offvalue=0,
             onvalue=1,
-            style="Checkbox2b.TCheckbutton",
+            style="Checkbox1b.TCheckbutton",
             variable=self.select_All_Checked_VAR)
         self.select_All_Checkbutton.pack(padx="18 0", pady="5 0", side="left")
         self.select_All_Checkbutton.configure(
@@ -507,12 +511,13 @@ class settingsBackupUI(ttk.Labelframe):
         self.select_All_Label = ttk.Label(frame5, name="select_all_label")
         self.select_All_Checked_Text_VAR = tk.StringVar(value='Select All')
         self.select_All_Label.configure(
-            style="Heading2bi.TLabel",
+            style="Heading1bi.TLabel",
             text='Select All',
             textvariable=self.select_All_Checked_Text_VAR)
         self.select_All_Label.pack(padx=15, pady="5 0", side="right")
-        frame5.grid(column=0, columnspan=4, row=12, sticky="w")
-        self.backupSettings_Frame.grid(column=0, pady="10 0", row=1)
+        frame5.grid(column=0, columnspan=4, padx=8, row=12, sticky="w")
+        self.backupSettings_Frame.grid(
+            column=0, padx=10, pady="10 0", row=1, sticky="ew")
         self.action_Frame = ttk.Frame(self, name="action_frame")
         self.action_Frame.configure(
             height=200, style="Normal.TFrame", width=200)

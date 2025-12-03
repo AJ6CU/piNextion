@@ -15,28 +15,30 @@ from tkinter import messagebox
 # Manual user code
 #
 
-class settingsBackupToplevel(tk.Toplevel):
-    def __init__(self, master=None, **kw):
-        self.master = master
-
-        self.popup = tk.Toplevel(self.master)
-
-        self.popup.title("Backup Key Radio Settings")
-        self.popup.minsize(550,500)
-        self.popup.wait_visibility()  # required on Linux
-        self.popup.grab_set()
-        self.popup.transient(self.master)
-
-        self.settingsBackupWindow = settingsBackup(self.popup, self.master, **kw)
-        self.settingsBackupWindow.pack(expand=tk.YES, fill=tk.BOTH)
-
 
 
 class settingsBackup(baseui.settingsBackupUI):
     def __init__(self, master=None,mainWindow=None, **kw):
         super().__init__(master, **kw)
+
+        self.master= master
         self.mainWindow = mainWindow
 
+        #
+        #   Create a toplevel window to contain the settings popup
+        #
+        self.popup = tk.Toplevel(self.master)
+
+        super().__init__(self.popup, **kw)
+
+        #
+        #   Make sure that a close by the Window manager goes to the same close callback
+        #
+        self.popup.protocol("WM_DELETE_WINDOW", self.cancel_CB)
+
+        #
+        #   Update all the fields in the dialog. These are the easy ones as they are preloaded
+        #
         self.ConfigFile_Master_Cal_VAR.set(self.get_ConfigFile_Master_Cal())
         self.ConfigFile_SSB_BFO_VAR.set(self.get_ConfigFile_SSB_BFO())
         self.ConfigFIle_CW_BFO_VAR.set(self.get_ConfigFile_CW_BFO())
@@ -74,7 +76,24 @@ class settingsBackup(baseui.settingsBackupUI):
         mainWindow.Radio_Req_Factory_CW_Sidetone(self.load_Factory_CW_Tone)
 
         self.reboot = False                 # Some settings require a reboot to take effect
-        sleep(.5)
+        sleep(.5)                           # give the MCU some time to respond
+
+        #
+        #   Can now kickoff the UX
+        #
+        self.initUX()
+
+    def initUX(self):
+        self.popup.title("Backup Key Radio Settings")
+        self.popup.geometry("750x600")
+        self.popup.wait_visibility()  # required on Linux
+        self.popup.grab_set()
+        self.popup.transient(self.mainWindow)
+
+        self.pack(expand=tk.YES, fill=tk.BOTH)
+        gv.trimAndLocateWindow(self.popup, 0, 0)
+
+
     #
     #   Master Cal getters/setters
     #
@@ -446,10 +465,10 @@ class settingsBackup(baseui.settingsBackupUI):
             ):
                     self.mainWindow.theRadio.rebootRadio()
 
-        self.master.destroy()
+        self.popup.destroy()
 
     def cancel_CB(self):
-        self.master.destroy()
+        self.popup.destroy()
 
 
 if __name__ == "__main__":

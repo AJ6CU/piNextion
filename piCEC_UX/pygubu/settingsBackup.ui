@@ -44,14 +44,16 @@
             <property name="width">200</property>
             <layout manager="grid">
               <property name="column">0</property>
+              <property name="padx">10</property>
               <property name="pady">10 0</property>
               <property name="row">1</property>
+              <property name="sticky">ew</property>
             </layout>
             <child>
               <object class="ttk.Label" id="label29" named="True">
                 <property name="anchor">w</property>
                 <property name="justify">right</property>
-                <property name="style">Heading2b.TLabel</property>
+                <property name="style">Heading1b.TLabel</property>
                 <property name="text" translatable="yes">Select</property>
                 <layout manager="grid">
                   <property name="column">0</property>
@@ -65,7 +67,7 @@
               <object class="ttk.Label" id="label14" named="True">
                 <property name="anchor">w</property>
                 <property name="justify">right</property>
-                <property name="style">Heading2b.TLabel</property>
+                <property name="style">Heading1b.TLabel</property>
                 <property name="text" translatable="yes">Setting</property>
                 <layout manager="grid">
                   <property name="column">1</property>
@@ -79,7 +81,7 @@
               <object class="ttk.Label" id="label15" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">center</property>
-                <property name="style">Heading2b.TLabel</property>
+                <property name="style">Heading1b.TLabel</property>
                 <property name="text" translatable="yes">Factory
 Value</property>
                 <layout manager="grid">
@@ -93,7 +95,7 @@ Value</property>
               <object class="ttk.Label" id="label16" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">center</property>
-                <property name="style">Heading2b.TLabel</property>
+                <property name="style">Heading1b.TLabel</property>
                 <property name="text" translatable="yes">Current
 Value</property>
                 <layout manager="grid">
@@ -107,7 +109,7 @@ Value</property>
               <object class="ttk.Label" id="label17" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">center</property>
-                <property name="style">Heading2b.TLabel</property>
+                <property name="style">Heading1b.TLabel</property>
                 <property name="text" translatable="yes">Config
 File</property>
                 <layout manager="grid">
@@ -143,7 +145,7 @@ File</property>
               <object class="ttk.Checkbutton" id="Master_Cal_Checkbutton" named="True">
                 <property name="offvalue">0</property>
                 <property name="onvalue">1</property>
-                <property name="style">Checkbox2b.TCheckbutton</property>
+                <property name="style">Checkbox1b.TCheckbutton</property>
                 <property name="variable">string:Master_Cal_Checked_VAR</property>
                 <layout manager="grid">
                   <property name="column">0</property>
@@ -156,8 +158,8 @@ File</property>
             <child>
               <object class="ttk.Label" id="Master_Cal_Heading_Label" named="True">
                 <property name="anchor">w</property>
-                <property name="style">Heading2b.TLabel</property>
-                <property name="text" translatable="yes">Master Cal:</property>
+                <property name="style">Heading1b.TLabel</property>
+                <property name="text" translatable="yes">Master Cal</property>
                 <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">1</property>
@@ -171,7 +173,7 @@ File</property>
               <object class="ttk.Label" id="EEPROM_Factory_Master_Cal_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label3</property>
                 <property name="textvariable">string:EEPROM_Factory_Master_Cal_VAR</property>
                 <property name="width">10</property>
@@ -188,7 +190,7 @@ File</property>
               <object class="ttk.Label" id="EEPROM_Current_Master_Cal_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:EEPROM_Current_Master_Cal_VAR</property>
                 <property name="width">10</property>
@@ -205,7 +207,7 @@ File</property>
               <object class="ttk.Label" id="ConfigFile_Master_Cal_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:ConfigFile_Master_Cal_VAR</property>
                 <property name="width">10</property>
@@ -222,7 +224,7 @@ File</property>
               <object class="ttk.Checkbutton" id="SSB_BFO_Checkbutton" named="True">
                 <property name="offvalue">0</property>
                 <property name="onvalue">1</property>
-                <property name="style">Checkbox2b.TCheckbutton</property>
+                <property name="style">Checkbox1b.TCheckbutton</property>
                 <property name="variable">string:SSB_BFO_Checked_VAR</property>
                 <layout manager="grid">
                   <property name="column">0</property>
@@ -235,8 +237,8 @@ File</property>
             <child>
               <object class="ttk.Label" id="SSB_BFO_Heading_Label" named="True">
                 <property name="anchor">w</property>
-                <property name="style">Heading2b.TLabel</property>
-                <property name="text" translatable="yes">SSB BFO:</property>
+                <property name="style">Heading1b.TLabel</property>
+                <property name="text" translatable="yes">SSB BFO</property>
                 <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">1</property>
@@ -250,7 +252,7 @@ File</property>
               <object class="ttk.Label" id="EEPROM_Factory_SSB_BFO_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label3</property>
                 <property name="textvariable">string:EEPROM_Factory_SSB_BFO_VAR</property>
                 <property name="width">10</property>
@@ -267,7 +269,7 @@ File</property>
               <object class="ttk.Label" id="EEPROM_Current_SSB_BFO_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:EEPROM_Current_SSB_BFO_VAR</property>
                 <property name="width">10</property>
@@ -284,7 +286,7 @@ File</property>
               <object class="ttk.Label" id="ConfigFile_SSB_BFO_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:ConfigFile_SSB_BFO_VAR</property>
                 <property name="width">10</property>
@@ -301,7 +303,7 @@ File</property>
               <object class="ttk.Checkbutton" id="CW_BFO_Checkbutton" named="True">
                 <property name="offvalue">0</property>
                 <property name="onvalue">1</property>
-                <property name="style">Checkbox2b.TCheckbutton</property>
+                <property name="style">Checkbox1b.TCheckbutton</property>
                 <property name="variable">string:CW_BFO_Checked_VAR</property>
                 <layout manager="grid">
                   <property name="column">0</property>
@@ -314,8 +316,8 @@ File</property>
             <child>
               <object class="ttk.Label" id="CW_BFO_Heading_Label" named="True">
                 <property name="anchor">w</property>
-                <property name="style">Heading2b.TLabel</property>
-                <property name="text" translatable="yes">CW BFO:</property>
+                <property name="style">Heading1b.TLabel</property>
+                <property name="text" translatable="yes">CW BFO</property>
                 <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">1</property>
@@ -329,7 +331,7 @@ File</property>
               <object class="ttk.Label" id="EEPROM_Factory_CW_BFO_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">N/A</property>
                 <property name="width">10</property>
                 <layout manager="grid">
@@ -345,7 +347,7 @@ File</property>
               <object class="ttk.Label" id="EEPROM_Current_CW_BFO_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:EEPROM_Current_CW_BFO_VAR</property>
                 <property name="width">10</property>
@@ -362,7 +364,7 @@ File</property>
               <object class="ttk.Label" id="ConfigFIle_CW_BFO_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:ConfigFIle_CW_BFO_VAR</property>
                 <property name="width">10</property>
@@ -379,7 +381,7 @@ File</property>
               <object class="ttk.Checkbutton" id="CW_Keytype_Checkbutton" named="True">
                 <property name="offvalue">0</property>
                 <property name="onvalue">1</property>
-                <property name="style">Checkbox2b.TCheckbutton</property>
+                <property name="style">Checkbox1b.TCheckbutton</property>
                 <property name="variable">string:CW_Keytype_Checked_VAR</property>
                 <layout manager="grid">
                   <property name="column">0</property>
@@ -392,8 +394,8 @@ File</property>
             <child>
               <object class="ttk.Label" id="CW_Keytype_Heading_Label" named="True">
                 <property name="anchor">w</property>
-                <property name="style">Heading2b.TLabel</property>
-                <property name="text" translatable="yes">Keytype:</property>
+                <property name="style">Heading1b.TLabel</property>
+                <property name="text" translatable="yes">Keytype</property>
                 <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">1</property>
@@ -407,7 +409,7 @@ File</property>
               <object class="ttk.Label" id="EEPROM_Factory_CW_Keytype_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">N/A</property>
                 <property name="width">10</property>
                 <layout manager="grid">
@@ -423,7 +425,7 @@ File</property>
               <object class="ttk.Label" id="EEPROM_Current_CW_Keytype_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:EEPROM_Current_CW_Keytype_VAR</property>
                 <property name="width">10</property>
@@ -440,7 +442,7 @@ File</property>
               <object class="ttk.Label" id="ConfigFile_CW_Keytype_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:ConfigFile_CW_Keytype_VAR</property>
                 <property name="width">10</property>
@@ -457,7 +459,7 @@ File</property>
               <object class="ttk.Checkbutton" id="CW_Speed_Checkbutton" named="True">
                 <property name="offvalue">0</property>
                 <property name="onvalue">1</property>
-                <property name="style">Checkbox2b.TCheckbutton</property>
+                <property name="style">Checkbox1b.TCheckbutton</property>
                 <property name="variable">string:CW_Speed_Checked_VAR</property>
                 <layout manager="grid">
                   <property name="column">0</property>
@@ -470,8 +472,8 @@ File</property>
             <child>
               <object class="ttk.Label" id="CW_Speed_Heading_Label" named="True">
                 <property name="anchor">w</property>
-                <property name="style">Heading2b.TLabel</property>
-                <property name="text" translatable="yes">CW Speed:</property>
+                <property name="style">Heading1b.TLabel</property>
+                <property name="text" translatable="yes">CW Speed</property>
                 <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">1</property>
@@ -484,7 +486,7 @@ File</property>
             <child>
               <object class="ttk.Label" id="EEPROM_Factory_CW_Speed_Label" named="True">
                 <property name="anchor">e</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label6</property>
                 <property name="textvariable">string:EEPROM_Factory_CW_Speed_VAR</property>
                 <property name="width">10</property>
@@ -501,7 +503,7 @@ File</property>
               <object class="ttk.Label" id="EEPROM_Current_CW_Speed_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:EEPROM_Current_CW_Speed_VAR</property>
                 <property name="width">10</property>
@@ -518,7 +520,7 @@ File</property>
               <object class="ttk.Label" id="ConfigFile_CW_Speed_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:ConfigFIle_CW_Speed_VAR</property>
                 <property name="width">10</property>
@@ -535,7 +537,7 @@ File</property>
               <object class="ttk.Checkbutton" id="CW_Sidetone_Checkbutton" named="True">
                 <property name="offvalue">0</property>
                 <property name="onvalue">1</property>
-                <property name="style">Checkbox2b.TCheckbutton</property>
+                <property name="style">Checkbox1b.TCheckbutton</property>
                 <property name="variable">string:CW_Sidetone_Checked_VAR</property>
                 <layout manager="grid">
                   <property name="column">0</property>
@@ -548,7 +550,7 @@ File</property>
             <child>
               <object class="ttk.Label" id="CW_Sidetone_Heading_Label" named="True">
                 <property name="anchor">w</property>
-                <property name="style">Heading2b.TLabel</property>
+                <property name="style">Heading1b.TLabel</property>
                 <property name="text" translatable="yes">Sidetone</property>
                 <property name="width">10</property>
                 <layout manager="grid">
@@ -563,7 +565,7 @@ File</property>
               <object class="ttk.Label" id="EEPROM_Factory_CW_Sidetone_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label10</property>
                 <property name="textvariable">string:EEPROM_Factory_CW_Sidetone_VAR</property>
                 <property name="width">10</property>
@@ -580,7 +582,7 @@ File</property>
               <object class="ttk.Label" id="EEPROM_Current_CW_Sidetone_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:EEPROM_Current_CW_Sidetone_VAR</property>
                 <property name="width">10</property>
@@ -597,7 +599,7 @@ File</property>
               <object class="ttk.Label" id="ConfigFile_CW_Sidetone_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:ConfigFile_CW_Sidetone_VAR</property>
                 <property name="width">10</property>
@@ -614,7 +616,7 @@ File</property>
               <object class="ttk.Checkbutton" id="CW_Delay_Before_TX_Checkbutton" named="True">
                 <property name="offvalue">0</property>
                 <property name="onvalue">1</property>
-                <property name="style">Checkbox2b.TCheckbutton</property>
+                <property name="style">Checkbox1b.TCheckbutton</property>
                 <property name="variable">string:CW_Delay_Before_TX_Checked_VAR</property>
                 <layout manager="grid">
                   <property name="column">0</property>
@@ -627,8 +629,8 @@ File</property>
             <child>
               <object class="ttk.Label" id="CW_Delay_Before_TX_Heading_Label" named="True">
                 <property name="anchor">w</property>
-                <property name="style">Heading2b.TLabel</property>
-                <property name="text" translatable="yes">Delay-&gt;TX:</property>
+                <property name="style">Heading1b.TLabel</property>
+                <property name="text" translatable="yes">Delay-&gt;TX</property>
                 <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">1</property>
@@ -642,7 +644,7 @@ File</property>
               <object class="ttk.Label" id="EEPROM_Factory_CW_Delay_Before_TX" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">N/A</property>
                 <property name="width">10</property>
                 <layout manager="grid">
@@ -658,7 +660,7 @@ File</property>
               <object class="ttk.Label" id="EEPROM_Current_CW_Delay_Before_TX" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:EEPROM_Current_CW_Delay_Before_TX_VAR</property>
                 <property name="width">10</property>
@@ -675,7 +677,7 @@ File</property>
               <object class="ttk.Label" id="ConfigFile_CW_Delay_Before_TX_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:ConfigFile_CW_Delay_Before_TX_VAR</property>
                 <property name="width">10</property>
@@ -692,7 +694,7 @@ File</property>
               <object class="ttk.Checkbutton" id="CW_Delay_Returning_To_RX_Checkbutton" named="True">
                 <property name="offvalue">0</property>
                 <property name="onvalue">1</property>
-                <property name="style">Checkbox2b.TCheckbutton</property>
+                <property name="style">Checkbox1b.TCheckbutton</property>
                 <property name="variable">string:CW_Delay_Returning_To_RX_Checked_VAR</property>
                 <layout manager="grid">
                   <property name="column">0</property>
@@ -705,8 +707,8 @@ File</property>
             <child>
               <object class="ttk.Label" id="CW_Delay_Returning_To_RX_Heading_Label" named="True">
                 <property name="anchor">w</property>
-                <property name="style">Heading2b.TLabel</property>
-                <property name="text" translatable="yes">Delay-&gt;RX:</property>
+                <property name="style">Heading1b.TLabel</property>
+                <property name="text" translatable="yes">Delay-&gt;RX</property>
                 <property name="width">10</property>
                 <layout manager="grid">
                   <property name="column">1</property>
@@ -720,7 +722,7 @@ File</property>
               <object class="ttk.Label" id="EEPROM_Factory_CW_Delay_Returning_To_RX_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">N/A</property>
                 <property name="textvariable">string:EEPROM_Factory_CW_Delay_Returning_To_RX_VAR</property>
                 <property name="width">10</property>
@@ -737,7 +739,7 @@ File</property>
               <object class="ttk.Label" id="EEPROM_Current_CW_Delay_Returning_To_RX_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:EEPROM_Current_CW_Delay_Returning_To_RX_Label_VAR</property>
                 <property name="width">10</property>
@@ -754,7 +756,7 @@ File</property>
               <object class="ttk.Label" id="ConfigFIle_CW_Delay_Returning_To_RX_Label" named="True">
                 <property name="anchor">e</property>
                 <property name="justify">right</property>
-                <property name="style">Heading3b.TLabel</property>
+                <property name="style">Heading1Std.TLabel</property>
                 <property name="text" translatable="yes">label4</property>
                 <property name="textvariable">string:ConfigFIle_CW_Delay_Returning_To_RX_VAR</property>
                 <property name="width">10</property>
@@ -797,6 +799,7 @@ File</property>
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="columnspan">4</property>
+                  <property name="padx">8</property>
                   <property name="row">12</property>
                   <property name="sticky">w</property>
                 </layout>
@@ -805,7 +808,7 @@ File</property>
                     <property name="command" type="command" cbtype="simple">select_All_Checkbutton_CB</property>
                     <property name="offvalue">0</property>
                     <property name="onvalue">1</property>
-                    <property name="style">Checkbox2b.TCheckbutton</property>
+                    <property name="style">Checkbox1b.TCheckbutton</property>
                     <property name="variable">string:select_All_Checked_VAR</property>
                     <layout manager="pack">
                       <property name="padx">18 0</property>
@@ -816,7 +819,7 @@ File</property>
                 </child>
                 <child>
                   <object class="ttk.Label" id="select_All_Label" named="True">
-                    <property name="style">Heading2bi.TLabel</property>
+                    <property name="style">Heading1bi.TLabel</property>
                     <property name="text" translatable="yes">Select All</property>
                     <property name="textvariable">string:select_All_Checked_Text_VAR</property>
                     <layout manager="pack">

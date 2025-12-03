@@ -6,7 +6,7 @@ import settingsMachine as sm
 from cwSettings import cwSettings
 from settingsMachine import settingsMachine
 from settingsGeneral import settingsGeneral
-from settingsBackup import settingsBackupToplevel
+from settingsBackup import settingsBackup
 from settingsFactoryReset import settingsFatoryResetToplevel
 from tkinter import messagebox
 import globalvars as gv
@@ -87,7 +87,7 @@ class settings(baseui.settingsUI):
         self.settingsGeneralWindow = settingsGeneral(self.master, self.mainWindow)
 
     def settingsBackup_CB(self):
-        self.settingsBackupWindow = settingsBackupToplevel(self.mainWindow)
+        self.settingsBackupWindow = settingsBackup(self.master, self.mainWindow)
 
     def settingsReboot_CB(self):
         if messagebox.askokcancel("Reboot?", "Do you really want to reboot?", parent=self):

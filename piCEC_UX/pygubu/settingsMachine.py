@@ -21,6 +21,9 @@ class settingsMachine(baseui.settingsMachineUI):
 
         super().__init__(self.popup, **kw)
 
+        self.MCU_Command_Headroom_Combobox.configure(values=gv.MCU_Headroom_Values)
+        self.MCU_Update_Period_Combobox.configure(values=gv.Frequency_To_Run_UX_loop)
+
         self.saveMCU_Command_Headroom = int(gv.config.get_MCU_Command_Headroom()*1000)
         self.saveMCU_Update_Period = gv.config.get_MCU_Update_Period()
 
@@ -30,8 +33,7 @@ class settingsMachine(baseui.settingsMachineUI):
         gv.formatCombobox(self.MCU_Command_Headroom_Combobox, "Arial", "24", "bold")
         gv.formatCombobox(self.MCU_Update_Period_Combobox, "Arial", "24", "bold")
 
-        self.MCU_Command_Headroom_Combobox.configure(values=gv.MCU_Headroom_Values)
-        self.MCU_Update_Period_Combobox.configure(values=gv.Frequency_To_Run_UX_loop)
+
         #
         #   Can now kickoff the UX
         #

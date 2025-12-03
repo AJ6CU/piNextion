@@ -40,7 +40,7 @@ class settingsMachine(baseui.settingsMachineUI):
 
     def initUX(self):
         self.popup.title("Machine Settings - Advanced Usage Only")
-        self.popup.geometry("500x400")
+        self.popup.geometry("500x425")
         self.popup.wait_visibility()  # required on Linux
         self.popup.grab_set()
         self.popup.transient(self.mainWindow)

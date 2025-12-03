@@ -67,7 +67,7 @@ class cwSettings(baseui.cwSettingsUI):
                                                        )
 
         self.popup.title("CW Settings")
-        self.popup.geometry("1000x450")
+        self.popup.geometry("1025x475")
         self.popup.wait_visibility()  # required on Linux
         self.popup.grab_set()
         self.popup.transient(self.mainWindow)

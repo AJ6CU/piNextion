@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.5" author="PygubuDesigner 0.41.4">
+  <project>
+    <settings>
+      <setting id="name">settingsGeneral</setting>
+      <setting id="description">Used to save general settings</setting>
+      <setting id="module_name">settingsGeneral</setting>
+      <setting id="template">widget</setting>
+      <setting id="main_widget">labelframe1</setting>
+      <setting id="main_classname">settingsGeneral</setting>
+      <setting id="main_menu" />
+      <setting id="output_dir">../Code</setting>
+      <setting id="output_dir2">../Code</setting>
+      <setting id="import_tkvariables">False</setting>
+      <setting id="use_ttk_styledefinition_file">True</setting>
+      <setting id="use_i18n">False</setting>
+      <setting id="all_ids_attributes">False</setting>
+      <setting id="generate_code_onsave">False</setting>
+      <setting id="use_window_centering_code">False</setting>
+      <setting id="ttk_style_definition_file">../Code/mystyles.py</setting>
+    </settings>
+    <customwidgets />
+    <resources />
+  </project>
+  <object class="tk.Toplevel" id="settingsMisc_Toplevel" named="True">
+    <property name="height">200</property>
+    <property name="title" translatable="yes">Settings</property>
+    <property name="width">200</property>
+    <child>
+      <object class="ttk.Labelframe" id="labelframe1">
+        <property name="height">400</property>
+        <property name="style">Heading2.TLabelframe</property>
+        <property name="text" translatable="yes">General Settings</property>
+        <property name="width">600</property>
+        <layout manager="pack">
+          <property name="expand">true</property>
+          <property name="fill">both</property>
+          <property name="side">top</property>
+        </layout>
+        <child>
+          <object class="ttk.Frame" id="general_Settings_Frame" named="True">
+            <property name="height">200</property>
+            <property name="style">Normal.TFrame</property>
+            <property name="width">200</property>
+            <layout manager="pack">
+              <property name="padx">10</property>
+              <property name="pady">10</property>
+              <property name="side">top</property>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="Number_Delimiter_Label" named="True">
+                <property name="justify">right</property>
+                <property name="style">Heading1b.TLabel</property>
+                <property name="text" translatable="yes">Number Delimiter</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">10</property>
+                  <property name="pady">10</property>
+                  <property name="row">0</property>
+                  <property name="sticky">e</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="pygubu.widgets.Combobox" id="Number_Delimiter_Combobox" named="True">
+                <property name="justify">center</property>
+                <property name="keyvariable">string:NUMBER_DELIMITER_VAR</property>
+                <property name="style">ComboBox1.TCombobox</property>
+                <property name="values">, .</property>
+                <property name="width">4</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="padx">20 0</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="Virtual_Keyboard_Label" named="True">
+                <property name="justify">right</property>
+                <property name="style">Heading1b.TLabel</property>
+                <property name="text" translatable="yes">Virtual Keyboard</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">10</property>
+                  <property name="pady">40 20</property>
+                  <property name="row">1</property>
+                  <property name="sticky">e</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="pygubu.widgets.Combobox" id="Virtual_Keyboard_Combobox" named="True">
+                <property name="keyvariable">string:Virtual_Keyboard_VAR</property>
+                <property name="style">ComboBox1.TCombobox</property>
+                <property name="values">On Off</property>
+                <property name="width">4</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="padx">20 0</property>
+                  <property name="pady">40 20</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="Time_On_Freq_Label" named="True">
+                <property name="justify">right</property>
+                <property name="style">Heading1b.TLabel</property>
+                <property name="text" translatable="yes">Time on Frequency
+during Scan</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">10</property>
+                  <property name="pady">40 20</property>
+                  <property name="row">2</property>
+                  <property name="sticky">e</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="pygubu.widgets.Combobox" id="Time_On_Freq_Combobox" named="True">
+                <property name="justify">right</property>
+                <property name="keyvariable">string:Time_On_Freq_VAR</property>
+                <property name="style">ComboBox1.TCombobox</property>
+                <property name="values">1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20</property>
+                <property name="width">4</property>
+                <layout manager="grid">
+                  <property name="column">1</property>
+                  <property name="padx">20 0</property>
+                  <property name="pady">40 20</property>
+                  <property name="row">2</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="closingFrame" named="True">
+            <property name="height">50</property>
+            <property name="style">Normal.TFrame</property>
+            <property name="width">200</property>
+            <layout manager="pack">
+              <property name="anchor">center</property>
+              <property name="expand">false</property>
+              <property name="pady">20</property>
+              <property name="side">top</property>
+            </layout>
+            <child>
+              <object class="ttk.Button" id="apply_Button" named="True">
+                <property name="command" type="command" cbtype="simple">apply_CB</property>
+                <property name="style">Button2b.TButton</property>
+                <property name="text" translatable="yes">Apply</property>
+                <layout manager="pack">
+                  <property name="anchor">center</property>
+                  <property name="padx">10</property>
+                  <property name="side">left</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="cancel_Buttom" named="True">
+                <property name="command" type="command" cbtype="simple">cancel_CB</property>
+                <property name="style">Button2b.TButton</property>
+                <property name="text" translatable="yes">Cancel</property>
+                <layout manager="pack">
+                  <property name="anchor">center</property>
+                  <property name="padx">10</property>
+                  <property name="side">left</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

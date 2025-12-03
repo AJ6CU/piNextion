@@ -12,8 +12,8 @@ Using the original Nextion harness colors:
 
 Black - Ground
 Red - Power ( I left the jumper off)
-Blue - TXD
-Yellow - RXC
+Blue -   TXD (Nextion) to  RX Pin (D8) (Raduino)
+Yellow - RXD (Nextion) to  TX Pin (D9)  (Raduino) 
 
 Given the code is in active development, I have not yet created any distribution packages. So you will need to download the code and start the python script piCEC_UX.py.  I am using the latest Python 3.13/3.14 and the application requires Pyserial, Pillow and Pygubu (https://github.com/alejandroautalan/pygubu) libraries. I probably require a few more packages that I will add when I find them :-).
 

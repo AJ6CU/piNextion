@@ -1604,6 +1604,14 @@ class piCECNextion(baseui.piCECNextionUI):
                     self.EEPROM_Current_Slot_Label = 0
 
             case "ShowLabel":           # Reading switch on whether to show or not show the label
+                try:
+                    test = ord(value)
+                except TypeError:
+                    print("type error")
+                    print ("buffer =", buffer)
+                    print("showlabel #=", self.EEPROM_Current_Slot_ShowLabel)
+                    sys.exit("A fatal internal error occurred")
+
                 if (ord(value) == 0):
                     self.channelsWindow.EEPROM_SetChannelShowLabel(
                         self.EEPROM_Current_Slot_ShowLabel,

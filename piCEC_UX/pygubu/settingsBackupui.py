@@ -47,13 +47,15 @@ class settingsBackupUI(ttk.Labelframe):
 
         super().__init__(master, **kw)
 
+        frame1 = ttk.Frame(self)
+        frame1.configure(height=200, style="Normal.TFrame", width=200)
+        # First object created
+        on_first_object_cb(frame1)
+
         self.backupSettings_Frame = ttk.Frame(
-            self, name="backupsettings_frame")
+            frame1, name="backupsettings_frame")
         self.backupSettings_Frame.configure(
             height=200, style="Normal.TFrame", width=200)
-        # First object created
-        on_first_object_cb(self.backupSettings_Frame)
-
         self.label29 = ttk.Label(self.backupSettings_Frame, name="label29")
         self.label29.configure(
             anchor="w",
@@ -505,7 +507,7 @@ class settingsBackupUI(ttk.Labelframe):
             onvalue=1,
             style="Checkbox1b.TCheckbutton",
             variable=self.select_All_Checked_VAR)
-        self.select_All_Checkbutton.pack(padx="28 0", pady="5 0", side="left")
+        self.select_All_Checkbutton.pack(padx="18 0", pady="5 0", side="left")
         self.select_All_Checkbutton.configure(
             command=self.select_All_Checkbutton_CB)
         self.select_All_Label = ttk.Label(frame5, name="select_all_label")
@@ -516,9 +518,10 @@ class settingsBackupUI(ttk.Labelframe):
             textvariable=self.select_All_Checked_Text_VAR)
         self.select_All_Label.pack(padx=15, pady="5 0", side="right")
         frame5.grid(column=0, columnspan=4, padx=8, row=12, sticky="w")
-        self.backupSettings_Frame.grid(
-            column=0, padx=10, pady="10 0", row=1, sticky="ew")
-        self.action_Frame = ttk.Frame(self, name="action_frame")
+        self.backupSettings_Frame.pack(
+            anchor="center", expand=True, fill="x", side="top")
+        self.backupSettings_Frame.grid_anchor("center")
+        self.action_Frame = ttk.Frame(frame1, name="action_frame")
         self.action_Frame.configure(
             height=200, style="Normal.TFrame", width=200)
         self.from_Label = ttk.Label(self.action_Frame, name="from_label")
@@ -548,20 +551,31 @@ class settingsBackupUI(ttk.Labelframe):
             values='Select Current ConfigFile',
             width=9)
         self.to_Combobox.grid(column=5, padx="5 0", row=0)
-        self.action_Frame.grid(column=0, padx=10, pady=10, row=2)
-        self.closingFrame = ttk.Frame(self, name="closingframe")
+        self.action_Frame.pack(
+            anchor="center",
+            expand=True,
+            fill="x",
+            pady="10 0",
+            side="top")
+        self.action_Frame.grid_anchor("center")
+        self.closingFrame = ttk.Frame(frame1, name="closingframe")
         self.closingFrame.configure(
             height=50, style="Normal.TFrame", width=200)
         self.apply_Button = ttk.Button(self.closingFrame, name="apply_button")
         self.apply_Button.configure(style="Button2b.TButton", text='Copy')
-        self.apply_Button.pack(anchor="center", padx=10, side="left")
+        self.apply_Button.pack(padx=10, side="left")
         self.apply_Button.configure(command=self.copy_CB)
         self.cancel_Buttom = ttk.Button(
             self.closingFrame, name="cancel_buttom")
         self.cancel_Buttom.configure(style="Button2b.TButton", text='Cancel')
-        self.cancel_Buttom.pack(anchor="center", padx=10, side="left")
+        self.cancel_Buttom.pack(padx=10, side="left")
         self.cancel_Buttom.configure(command=self.cancel_CB)
-        self.closingFrame.grid(column=0, pady="40 20", row=3)
+        self.closingFrame.pack(
+            anchor="center",
+            expand=False,
+            pady=20,
+            side="top")
+        frame1.pack(anchor="center", expand=True, fill="both", side="top")
         self.configure(
             height=400,
             style="Heading2.TLabelframe",

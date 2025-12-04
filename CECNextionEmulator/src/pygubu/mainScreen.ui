@@ -4,23 +4,23 @@
     <settings>
       <setting id="name">pi_Nextion_UX</setting>
       <setting id="description">A Nextion GUI emulator for CEC</setting>
-      <setting id="module_name">CECNextionEmulator</setting>
+      <setting id="module_name">mainScreen</setting>
       <setting id="template">widget</setting>
       <setting id="main_widget">main_window</setting>
-      <setting id="main_classname">CECNextionEmulator</setting>
+      <setting id="main_classname">mainScreen</setting>
       <setting id="main_menu" />
-      <setting id="output_dir">../Code</setting>
-      <setting id="output_dir2">../Code</setting>
+      <setting id="output_dir">..</setting>
+      <setting id="output_dir2">..</setting>
       <setting id="import_tkvariables">False</setting>
       <setting id="use_ttk_styledefinition_file">True</setting>
       <setting id="use_i18n">False</setting>
       <setting id="all_ids_attributes">True</setting>
       <setting id="generate_code_onsave">False</setting>
       <setting id="use_window_centering_code">False</setting>
-      <setting id="ttk_style_definition_file">../Code/mystyles.py</setting>
+      <setting id="ttk_style_definition_file">../mystyles.py</setting>
     </settings>
     <customwidgets>
-      <customwidget path="../code/JogwheelCustom_UXbo.py" />
+      <customwidget path="../JogwheelCustom_UXbo.py" />
     </customwidgets>
     <resources />
   </project>

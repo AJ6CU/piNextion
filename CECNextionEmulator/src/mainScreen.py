@@ -1547,91 +1547,94 @@ class mainScreen(baseui.mainScreenUI):
 
 
     def sh_UX_Get_Memory(self, buffer):
-
-        value = self.extractValue(buffer, 10, len(buffer) - 3)
-        if not self.memoryQueue:    # make sure something in queue, otherwise fatal error
-            messagebox.showerror("Application Error", "Memory Queue is empty, yet memory value delivered by MCU")
-            sys.exit("A fatal internal error occurred")
-
-        match self.memoryQueue.pop(0):
-
-            case "Freq":                # Got a channel frequency request
-                freq = int(value,16) & 0x1FFFFFFF
-                mode = (int(value,16) >> 29) & 0x7
-                self.channelsWindow.EEPROM_SetChanneFreqMode(
-                    self.EEPROM_Current_Slot_Freq,
-                    freq,
-                    mode)
-                self.EEPROM_Current_Slot_Freq += 1
-                if (self.EEPROM_Current_Slot_Freq ==
-                        self.EEPROM_Mem_Address["channel_freq_Mode"][self.totalSlots]):
-                    self.EEPROM_Current_Slot_Freq = 0
-
-            case "Label":               # have a label for a memory channel
-                self.channelsWindow.EEPROM_SetChannelLabel(
-                    self.EEPROM_Current_Slot_Label,
-                    value)
-                # if self.EEPROM_Current_Slot_Label == 9:
-                #         print("label slot=", self.EEPROM_Current_Slot_Label, "value=", value, sep='*', end='*')
-                self.EEPROM_Current_Slot_Label += 1
-                if (self.EEPROM_Current_Slot_Label ==
-                        self.EEPROM_Mem_Address["channel_Label"][self.totalSlots]):
-                    self.EEPROM_Current_Slot_Label = 0
-
-            case "ShowLabel":           # Reading switch on whether to show or not show the label
-                try:
-                    test = ord(value)
-                except TypeError:
-                    print("type error")
-                    print ("buffer =", buffer)
-                    print("showlabel #=", self.EEPROM_Current_Slot_ShowLabel)
-                    sys.exit("A fatal internal error occurred")
-
-                if (ord(value) == 0):
-                    self.channelsWindow.EEPROM_SetChannelShowLabel(
-                        self.EEPROM_Current_Slot_ShowLabel,
-                        "No")
-
-                else:
-                    self.channelsWindow.EEPROM_SetChannelShowLabel(
-                        self.EEPROM_Current_Slot_ShowLabel,
-                        "Yes")
-
-                self.EEPROM_Current_Slot_ShowLabel += 1
-                if (self.EEPROM_Current_Slot_ShowLabel ==
-                        self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]):
-                    self.EEPROM_Current_Slot_ShowLabel = 0
-
-            case "MasterCal":          # Got a master cal value
-                self.Master_Cal_Setter(str(int(value, 16)))
-
-
-            case "SSB_BFO":            # Got a SSB BFO value
-                self.SSB_BFO_Setter(str(int(value, 16)))
-
-            case "CW_BFO":             # Got a CW BFO Value
-                self.CW_BFO_Setter(str(int(value, 16)))
-
-            case "Factory_MasterCal":   #Got a Factory_MasterCal memory value
-                self.Factory_Master_Cal_Setter(str(int(value, 16)))
-
-            case "Factory_SSB_BFO":     # Got a Factory SSB BFO memory value
-                self.Factory_SSB_BFO_Setter(str(int(value, 16)))
-
-            case "Factory_CW_Speed":    # Got a CW Speed memory value
-                if int(value,16) != 0:
-                    cw_speed = str(round(1200/int(value,16)))
-                else:
-                    cw_speed = "0"
-
-                self.Factory_CW_Speed_Setter(cw_speed)
-
-            case "Factory_CW_Sidetone":
-                self.Factory_CW_Sidetone_Setter(str(int(value, 16)))
-
-            case _:
-                messagebox.showerror("Application Error", "Unknown Memory Request")
+        try:
+            value = self.extractValue(buffer, 10, len(buffer) - 3)
+            if not self.memoryQueue:    # make sure something in queue, otherwise fatal error
+                messagebox.showerror("Application Error", "Memory Queue is empty, yet memory value delivered by MCU")
                 sys.exit("A fatal internal error occurred")
+
+            memoryCategory = self.memoryQueue.pop(0)
+            match memoryCategory:
+
+                case "Freq":                # Got a channel frequency request
+                    freq = int(value,16) & 0x1FFFFFFF
+                    mode = (int(value,16) >> 29) & 0x7
+                    self.channelsWindow.EEPROM_SetChanneFreqMode(
+                        self.EEPROM_Current_Slot_Freq,
+                        freq,
+                        mode)
+                    self.EEPROM_Current_Slot_Freq += 1
+                    if (self.EEPROM_Current_Slot_Freq ==
+                            self.EEPROM_Mem_Address["channel_freq_Mode"][self.totalSlots]):
+                        self.EEPROM_Current_Slot_Freq = 0
+
+                case "Label":               # have a label for a memory channel
+                    self.channelsWindow.EEPROM_SetChannelLabel(
+                        self.EEPROM_Current_Slot_Label,
+                        value)
+                    # if self.EEPROM_Current_Slot_Label == 9:
+                    #         print("label slot=", self.EEPROM_Current_Slot_Label, "value=", value, sep='*', end='*')
+                    self.EEPROM_Current_Slot_Label += 1
+                    if (self.EEPROM_Current_Slot_Label ==
+                            self.EEPROM_Mem_Address["channel_Label"][self.totalSlots]):
+                        self.EEPROM_Current_Slot_Label = 0
+
+                case "ShowLabel":           # Reading switch on whether to show or not show the label
+                    if (ord(value) == 0):
+                        self.channelsWindow.EEPROM_SetChannelShowLabel(
+                            self.EEPROM_Current_Slot_ShowLabel,
+                            "No")
+
+                    else:
+                        self.channelsWindow.EEPROM_SetChannelShowLabel(
+                            self.EEPROM_Current_Slot_ShowLabel,
+                            "Yes")
+
+                    self.EEPROM_Current_Slot_ShowLabel += 1
+                    if (self.EEPROM_Current_Slot_ShowLabel ==
+                            self.EEPROM_Mem_Address["channel_ShowLabel"][self.totalSlots]):
+                        self.EEPROM_Current_Slot_ShowLabel = 0
+
+                case "MasterCal":          # Got a master cal value
+                    self.Master_Cal_Setter(str(int(value, 16)))
+
+
+                case "SSB_BFO":            # Got a SSB BFO value
+                    self.SSB_BFO_Setter(str(int(value, 16)))
+
+                case "CW_BFO":             # Got a CW BFO Value
+                    self.CW_BFO_Setter(str(int(value, 16)))
+
+                case "Factory_MasterCal":   #Got a Factory_MasterCal memory value
+                    self.Factory_Master_Cal_Setter(str(int(value, 16)))
+
+                case "Factory_SSB_BFO":     # Got a Factory SSB BFO memory value
+                    self.Factory_SSB_BFO_Setter(str(int(value, 16)))
+
+                case "Factory_CW_Speed":    # Got a CW Speed memory value
+                    if int(value,16) != 0:
+                        cw_speed = str(round(1200/int(value,16)))
+                    else:
+                        cw_speed = "0"
+
+                    self.Factory_CW_Speed_Setter(cw_speed)
+
+                case "Factory_CW_Sidetone":
+                    self.Factory_CW_Sidetone_Setter(str(int(value, 16)))
+
+                case _:
+                    messagebox.showerror("Application Error", "Unknown Memory Request")
+                    sys.exit("A fatal internal error occurred")
+        except TypeError:
+            print("type error")
+            print("memory category =", memoryCategory)
+            print(" freq slot =", self.EEPROM_Current_Slot_Freq)
+            print(" label slot =", self.EEPROM_Current_Slot_Label)
+            print(" show slot =", self.EEPROM_Current_Slot_ShowLabel)
+            
+            print("buffer =", buffer)
+            message = messagebox.showerror("Application Error", "Unknown Memory Request\nRestart application")
+            sys.exit("A fatal internal error occurred")
 
 
 

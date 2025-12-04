@@ -57,7 +57,7 @@ def startMainWindow(comPortName, comPortID):
 root = tk.Tk()
 
 root.geometry("400x275+5+30")           # necessary because latest Tixie put new windows in center
-root.title("PiCEC - A Nextion Emulator for CEC Software")
+root.title("CECNextionEmulator - A Nextion Emulator for CEC Firmware running on the uBITX")
 
 
 gv.config = configuration(root)                    # Read in config data, if missing preload with defaults

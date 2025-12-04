@@ -7,7 +7,7 @@ from tkinter import messagebox
 import globalvars as gv
 
 
-configuration_file = os.path.expanduser(os.path.join("~", ".piCEC.ini"))
+configuration_file = os.path.expanduser(os.path.join("~", ".CECNextionEmulator.ini"))
 
 class configuration:
 
@@ -80,7 +80,7 @@ class configuration:
                             "CW Speed":"10",
                             "CW Key Type":"STRAIGHT",
                             "CW Delay Before TX":"500",
-                            "CW Delay Returning to RX":"2000",
+                            "CW Delay Returning to RX":"1000",
                             "Callsign":"",
                             "Virtual Keyboard Switch":"On"
 

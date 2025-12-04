@@ -11,7 +11,7 @@ from time import sleep
 import globalvars as gv
 from configuration import configuration
 
-
+import os
 
 
 #
@@ -24,8 +24,21 @@ class comportManager(baseui.comportManagerUI):
         super().__init__(master, **kw)
         self.master = master
         self.actionCallback = actionCallback
-        self.img_img_Reload24x24 = tk.PhotoImage(file=gv.RELOADICON)
-        self.comPortListRefresh.configure(image=self.img_img_Reload24x24)
+        imagepath = os.path.join(os.path.dirname(__file__), "reloadicon.png")
+
+        self.img_Reload24x24 = tk.PhotoImage(file=imagepath)
+        self.comPortListRefresh.configure(image=self.img_Reload24x24)
+
+        # try:
+        #     print("trying to find path")
+        #     myfile = gv.getImagePath("reloadicon.png")
+        #     print("file path =", myfile)
+        #     self.img_Reload24x24 = tk.PhotoImage(file=myfile)
+        # except:
+        #     self.img_Reload24x24 = tk.PhotoImage(file="reloadicon.png")
+        # self.reloadicon = "img_Reload-24x24.png"
+        # self.comPortListRefresh.configure(image=self.img_Reload24x24)
+
         self.open_com_port = None
         self.selectionMade = False
 

@@ -1,25 +1,29 @@
 import os
 import tkinter.font as font
 from tkinter import messagebox
+import importlib.resources as pkg_resources
 
 #application required files################################################
-def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
+# def resource_path(relative_path):
+#     """ Get absolute path to resource, works for dev and for PyInstaller """
+#     try:
+#         # PyInstaller creates a temp folder and stores path in _MEIPASS
+#         base_path = sys._MEIPASS
+#     except Exception:
+#         base_path = os.path.abspath(".")
+#
+#     return os.path.join(base_path, relative_path)
 
 # to use pyinstaller we need to get the resource not the path
 # resource_path is in globalvars
 #
 
+# def getImagePath(name):
+#     return pkg_resources.files('cec_nextion_emulator') /  name
+
 config = None
 
-RELOADICON = resource_path("src/images/img_Reload-24x24.png")
+# RELOADICON = resource_path("src/images/img_Reload-24x24.png")
 BAUD = 9600
 NUMBER_DELIMITER = ""               # Loaded with value from configuration file
 

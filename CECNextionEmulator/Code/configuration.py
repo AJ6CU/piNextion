@@ -80,7 +80,7 @@ class configuration:
                             "CW Speed":"10",
                             "CW Key Type":"STRAIGHT",
                             "CW Delay Before TX":"500",
-                            "CW Delay Returning to RX":"1000",
+                            "CW Delay Returning to RX":"5000",
                             "Callsign":"",
                             "Virtual Keyboard Switch":"On"
 

@@ -1631,7 +1631,7 @@ class mainScreen(baseui.mainScreenUI):
             print(" freq slot =", self.EEPROM_Current_Slot_Freq)
             print(" label slot =", self.EEPROM_Current_Slot_Label)
             print(" show slot =", self.EEPROM_Current_Slot_ShowLabel)
-            
+
             print("buffer =", buffer)
             message = messagebox.showerror("Application Error", "Unknown Memory Request\nRestart application")
             sys.exit("A fatal internal error occurred")

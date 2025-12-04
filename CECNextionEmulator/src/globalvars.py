@@ -19,7 +19,7 @@ def resource_path(relative_path):
 
 config = None
 
-RELOADICON = resource_path("src/images/img_Reload-24x24.png")
+RELOADICON = resource_path("images/img_Reload-24x24.png")
 BAUD = 9600
 NUMBER_DELIMITER = ""               # Loaded with value from configuration file
 

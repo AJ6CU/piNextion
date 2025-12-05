@@ -20,30 +20,25 @@ import os
 
 class comportManager(baseui.comportManagerUI):
 
+
+
+
     def __init__(self, master=None, actionCallback=None, **kw):
         super().__init__(master, **kw)
         self.master = master
         self.actionCallback = actionCallback
-        imagepath = os.path.join(os.path.dirname(__file__), "reloadicon.png")
-
-        self.img_Reload24x24 = tk.PhotoImage(file=imagepath)
-        self.comPortListRefresh.configure(image=self.img_Reload24x24)
-
-        # try:
-        #     print("trying to find path")
-        #     myfile = gv.getImagePath("reloadicon.png")
-        #     print("file path =", myfile)
-        #     self.img_Reload24x24 = tk.PhotoImage(file=myfile)
-        # except:
-        #     self.img_Reload24x24 = tk.PhotoImage(file="reloadicon.png")
-        # self.reloadicon = "img_Reload-24x24.png"
-        # self.comPortListRefresh.configure(image=self.img_Reload24x24)
+        #
+        #   Using get_image to isolate difference between a "package" and direct all
+        #
+        self.reloadicon = gv.get_image(gv.RELOADICON)
+        self.comPortListRefresh.configure(image=self.reloadicon)
 
         self.open_com_port = None
         self.selectionMade = False
 
         self.updateComPorts()               #preload the available com ports
         self.comPortsOptionMenu.configure(width=15)
+
 
     #
     #   this is how we get things started. Main program asks for a comPort, make the callback if found, else report failure

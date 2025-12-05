@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import pathlib
-import sys
+import sys, os
+
 import tkinter as tk
 import tkinter.ttk as ttk
 import pygubu
@@ -13,6 +14,7 @@ from piRadio import piRadio
 from configuration import configuration
 from comportManager import comportManager
 import globalvars as gv
+
 from tkinter import messagebox
 
 
@@ -51,6 +53,7 @@ def startMainWindow(comPortName, comPortID):
 
     myRadio.updateData()  # This process read any data available, but dont schedule followup
 
+# def CECNextionEmulator():
 #
 #   Main program and loop
 #
@@ -80,3 +83,6 @@ if not comPort.getComPort():
     root.after(500, comPort.retry() )           # If we failed to get a comport the easy way, try again
 
 root.mainloop()
+
+
+# CECNextionEmulator()

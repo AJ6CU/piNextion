@@ -110,10 +110,13 @@ dependencies = ["pyserial", "pygubu"]
 [project.scripts]
 cecnextion = "cec_nextion_emulator:CECNextionEmulator"
 
+[tool.setuptools.packages.find]
+where = ["src"]
 
 # This is configuration specific to the `setuptools` build backend.
 # If you are using a different build backend, you will need to change this.
 [tool.setuptools]
+
 # If there are data files included in your packages that need to be
 # installed, specify them here.
-#package-data = { "cec_nextion_emulator" = ["images/*.png"] }
+package-data = { "cec_nextion_emulator" = ["reloadicon.png"] }

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+folder_name="CEC"
+default_ini_file=".CECNextionEmulator.ini"
+
+cd ~
+rm -r $folder_name
+rm $default_ini_file

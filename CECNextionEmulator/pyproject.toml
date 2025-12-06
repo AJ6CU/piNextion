@@ -107,8 +107,8 @@ dependencies = ["pyserial", "pygubu"]
 
 # The following would provide a command line executable called `sample`
 # which executes the function `main` from this package when invoked.
-[project.scripts]
-cecnextion = "cec_nextion_emulator:CECNextionEmulator"
+#[project.scripts]
+#cecnextion = "cec_nextion_emulator:CECNextionEmulator"
 
 [tool.setuptools.packages.find]
 where = ["src"]

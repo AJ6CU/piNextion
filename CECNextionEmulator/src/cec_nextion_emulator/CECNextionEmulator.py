@@ -53,7 +53,7 @@ def startMainWindow(comPortName, comPortID):
 
     myRadio.updateData()  # This process read any data available, but dont schedule followup
 
-# def CECNextionEmulator():
+
 #
 #   Main program and loop
 #
@@ -83,6 +83,3 @@ if not comPort.getComPort():
     root.after(500, comPort.retry() )           # If we failed to get a comport the easy way, try again
 
 root.mainloop()
-
-
-# CECNextionEmulator()

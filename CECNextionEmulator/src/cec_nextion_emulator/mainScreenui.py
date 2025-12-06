@@ -85,30 +85,33 @@ class mainScreenUI(ttk.Frame):
             text=' \nMode\n',
             textvariable=self.primary_Mode_VAR,
             width=9)
-        self.menu1 = tk.Menu(self.mode_select_Menubutton)
-        self.menu1.configure(tearoff=False)
-        self.menu1.add(
+        menu1 = tk.Menu(self.mode_select_Menubutton)
+        menu1.configure(tearoff=False)
+        menu1.add(
             "command",
             command=self.mode_lsb_CB,
             font="{Arial} 36 {}",
             label='LSB',
             state="normal")
-        self.menu1.add(
+        menu1.add(
             "command",
             command=self.mode_usb_CB,
             font="{Arial} 36 {}",
-            label='USB')
-        self.menu1.add(
+            label='USB',
+            state="normal")
+        menu1.add(
             "command",
             command=self.mode_cwl_CB,
             font="{Arial} 36 {}",
-            label='CWL')
-        self.menu1.add(
+            label='CWL',
+            state="normal")
+        menu1.add(
             "command",
             command=self.mode_cwu_CB,
             font="{Arial} 36 {}",
-            label='CWU')
-        self.mode_select_Menubutton.configure(menu=self.menu1)
+            label='CWU',
+            state="normal")
+        self.mode_select_Menubutton.configure(menu=menu1)
         self.mode_select_Menubutton.grid(
             column=2, padx="0 2", row=0, sticky="ns")
         self.band_up_Button = ttk.Button(
@@ -151,9 +154,9 @@ class mainScreenUI(ttk.Frame):
         self.speaker_Button.grid(column=6, row=0, sticky="ns")
         self.speaker_Button.configure(command=self.speaker_CB)
         self.menuBar_Frame.pack(anchor="n", expand=True, fill="x", side="top")
-        self.frame2 = ttk.Frame(self)
-        self.frame2.configure(height=200, style="Normal.TFrame", width=1250)
-        self.vfoA_Frame = ttk.Frame(self.frame2, name="vfoa_frame")
+        frame2 = ttk.Frame(self)
+        frame2.configure(height=200, style="Normal.TFrame", width=1250)
+        self.vfoA_Frame = ttk.Frame(frame2, name="vfoa_frame")
         self.vfoA_Frame.configure(borderwidth=3, style="NormalOutline.TFrame")
         self.rxTX_Status_Frame = ttk.Frame(
             self.vfoA_Frame, name="rxtx_status_frame")
@@ -186,9 +189,9 @@ class mainScreenUI(ttk.Frame):
             width=6)
         self.stop_Button.grid(column=1, padx="20 10", row=0, rowspan=2)
         self.stop_Button.configure(command=self.stop_CB)
-        self.separator2 = ttk.Separator(self.rxTX_Status_Frame)
-        self.separator2.configure(orient="vertical")
-        self.separator2.grid(column=2, row=0, rowspan=3, sticky="ns")
+        separator2 = ttk.Separator(self.rxTX_Status_Frame)
+        separator2.configure(orient="vertical")
+        separator2.grid(column=2, row=0, rowspan=3, sticky="ns")
         self.rxTX_Status_Frame.grid(column=0, padx=15, row=0, sticky="e")
         self.vfo_display_Frame = ttk.Frame(
             self.vfoA_Frame, name="vfo_display_frame")
@@ -354,10 +357,10 @@ class mainScreenUI(ttk.Frame):
         self.vfo_display_Frame.grid(column=1, padx="0 0", row=0, sticky="ew")
         self.vfoA_Frame.grid(column=0, row=0, sticky="ew")
         self.vfoA_Frame.grid_anchor("w")
-        self.frame3 = ttk.Frame(self.frame2)
-        self.frame3.configure(height=200, style="Normal.TFrame", width=200)
+        frame3 = ttk.Frame(frame2)
+        frame3.configure(height=200, style="Normal.TFrame", width=200)
         self.tuning_Jogwheel = JogwheelCustom(
-            self.frame3,
+            frame3,
             start=0,
             end=9,
             divisions=10,
@@ -371,7 +374,7 @@ class mainScreenUI(ttk.Frame):
         self.tuning_Jogwheel.pack(side="top")
         self.tuning_Jogwheel.configure(command=self.tuning_Jogwheel_CB)
         self.tuning_Multiplier_Button = ttk.Button(
-            self.frame3, name="tuning_multiplier_button")
+            frame3, name="tuning_multiplier_button")
         self.tuning_Multiplier_VAR = tk.StringVar(
             value='Tuning Factor\nx 100mhz')
         self.tuning_Multiplier_Button.configure(
@@ -381,8 +384,8 @@ class mainScreenUI(ttk.Frame):
         self.tuning_Multiplier_Button.pack(anchor="n", pady=5, side="top")
         self.tuning_Multiplier_Button.configure(
             command=self.tuning_Multiplier_Button_CB)
-        self.frame3.grid(columnspan=3, row=1, rowspan=3, sticky="se")
-        self.vfoB_Frame = ttk.Frame(self.frame2, name="vfob_frame")
+        frame3.grid(columnspan=3, row=1, rowspan=3, sticky="se")
+        self.vfoB_Frame = ttk.Frame(frame2, name="vfob_frame")
         self.vfoB_Frame.configure(borderwidth=3, style="NormalOutline.TFrame")
         self.vfo_Frame = ttk.Frame(self.vfoB_Frame, name="vfo_frame")
         self.vfo_Frame.configure(style="Normal.TFrame")
@@ -407,21 +410,21 @@ class mainScreenUI(ttk.Frame):
         self.callsign_Frame = ttk.Frame(self.vfoB_Frame, name="callsign_frame")
         self.callsign_Frame.configure(
             height=200, style="Normal.TFrame", width=200)
-        self.label5 = ttk.Label(self.callsign_Frame)
+        label5 = ttk.Label(self.callsign_Frame)
         self.callSign_VAR = tk.StringVar(value='AJ6CUxyz')
-        self.label5.configure(
+        label5.configure(
             style="Heading2b.TLabel",
             text='AJ6CUxyz',
             textvariable=self.callSign_VAR,
             width=10)
-        self.label5.pack(anchor="nw", padx="0 10", side="left")
-        self.label6 = ttk.Label(self.callsign_Frame)
+        label5.pack(anchor="nw", padx="0 10", side="left")
+        label6 = ttk.Label(self.callsign_Frame)
         self.firmwareVersion_VAR = tk.StringVar(value='V2.0 RCLxyz')
-        self.label6.configure(
+        label6.configure(
             style="Heading2b.TLabel",
             text='V2.0 RCLxyz',
             textvariable=self.firmwareVersion_VAR)
-        self.label6.pack(anchor="nw", side="left")
+        label6.pack(anchor="nw", side="left")
         self.callsign_Frame.pack(
             expand=False,
             fill="y",
@@ -450,7 +453,7 @@ class mainScreenUI(ttk.Frame):
         self.tuning_Step_Frame.pack(padx="5 0", pady="5 0", side="right")
         self.vfoB_Frame.grid(column=0, ipadx=25, row=1, sticky="w")
         self.control_Meter_Tuning_Frame = ttk.Frame(
-            self.frame2, name="control_meter_tuning_frame")
+            frame2, name="control_meter_tuning_frame")
         self.control_Meter_Tuning_Frame.configure(
             height=200, style="Normal.TFrame", width=200)
         self.secondary_menu_Frame = ttk.Frame(
@@ -558,12 +561,12 @@ class mainScreenUI(ttk.Frame):
             name="smeter_frame")
         self.sMeter_Frame.configure(
             height=200, style="Normal.TFrame", width=200)
-        self.label7 = ttk.Label(self.sMeter_Frame)
-        self.label7.configure(
+        label7 = ttk.Label(self.sMeter_Frame)
+        label7.configure(
             font="{Arial} 14 {bold}",
             style="Heading2b.TLabel",
             text=' ...................5................7..............8..........9........')
-        self.label7.grid(column=1, row=0, sticky="ew")
+        label7.grid(column=1, row=0, sticky="ew")
         self.s_meter_Label = ttk.Label(self.sMeter_Frame, name="s_meter_label")
         self.s_meter_Label.configure(style="Heading2b.TLabel", text='S Meter')
         self.s_meter_Label.grid(column=0, padx="0 10", row=1, sticky="w")
@@ -581,9 +584,9 @@ class mainScreenUI(ttk.Frame):
         self.s_meter_Progressbar.grid(column=1, row=1, sticky="w")
         self.sMeter_Frame.grid(column=0, padx="20 0", row=1, sticky="w")
         self.control_Meter_Tuning_Frame.grid(column=0, row=2, sticky="nw")
-        self.frame2.pack(anchor="n", expand=True, fill="x", side="top")
-        self.frame2.columnconfigure(0, weight=1)
-        self.frame2.columnconfigure(1, weight=2)
+        frame2.pack(anchor="n", expand=True, fill="x", side="top")
+        frame2.columnconfigure(0, weight=1)
+        frame2.columnconfigure(1, weight=2)
         self.ATT_IFS_Adjust_Frame = ttk.Frame(
             self, name="att_ifs_adjust_frame")
         self.ATT_IFS_Adjust_Frame.configure(style="Normal.TFrame", width=1250)

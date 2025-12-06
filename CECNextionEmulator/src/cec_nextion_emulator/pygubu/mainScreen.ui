@@ -14,7 +14,7 @@
       <setting id="import_tkvariables">False</setting>
       <setting id="use_ttk_styledefinition_file">True</setting>
       <setting id="use_i18n">False</setting>
-      <setting id="all_ids_attributes">True</setting>
+      <setting id="all_ids_attributes">False</setting>
       <setting id="generate_code_onsave">False</setting>
       <setting id="use_window_centering_code">False</setting>
       <setting id="ttk_style_definition_file">../mystyles.py</setting>
@@ -112,6 +112,7 @@ Mode
                     <property name="command" type="command" cbtype="simple">mode_usb_CB</property>
                     <property name="font">{Arial} 36 {}</property>
                     <property name="label" translatable="yes">USB</property>
+                    <property name="state">normal</property>
                   </object>
                 </child>
                 <child>
@@ -119,6 +120,7 @@ Mode
                     <property name="command" type="command" cbtype="simple">mode_cwl_CB</property>
                     <property name="font">{Arial} 36 {}</property>
                     <property name="label" translatable="yes">CWL</property>
+                    <property name="state">normal</property>
                   </object>
                 </child>
                 <child>
@@ -126,6 +128,7 @@ Mode
                     <property name="command" type="command" cbtype="simple">mode_cwu_CB</property>
                     <property name="font">{Arial} 36 {}</property>
                     <property name="label" translatable="yes">CWU</property>
+                    <property name="state">normal</property>
                   </object>
                 </child>
               </object>

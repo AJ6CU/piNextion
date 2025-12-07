@@ -66,7 +66,7 @@ class configuration:
 
                             "Scan On Station Time":1000,
 
-                            "MCU Command Headroom": .06,        # in seconds
+                            "MCU Command Headroom": .09,        # in seconds
                             "MCU Update Period": 500,            # in ms
 
                             "NUMBER DELIMITER": ".",

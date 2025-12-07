@@ -1,6 +1,0 @@
-$folder_name = "CEC"
-$default_ini_file = ".CECNextionEmulator.ini"
-
-Set-Location -Path $HOME
-Remove-Item -Recurse -Force -Path $folder_name
-Remove-Item -Force -Path $default_ini_file

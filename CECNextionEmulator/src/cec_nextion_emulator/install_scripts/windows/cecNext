@@ -1,3 +1,0 @@
-$SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path
-. "$SCRIPT_DIR/activate"
-python -m cec_nextion_emulator.CECNextionEmulator

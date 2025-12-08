@@ -23,6 +23,9 @@ https://www.amazon.com/dp/B0CM315RFP
 
 I created a harness using a 4 slot male connector for the plug that would have gone into the nextion  and mated it to a 6 slot female connector that plugs into the TTL-USB connector. (seel below). With this connector, i can swap between the TTL-USB and the Nextion by just a quick unplug/plug operation.
 
+<img width="1952" height="672" alt="wiring_harness" src="https://github.com/user-attachments/assets/dd9e0055-9c7c-427f-8c55-186f3b58ccbe" />
+
+
 I have created an initial Alpha release for those brave folks. You can download it here
 https://github.com/AJ6CU/NextionEmulatorforCEC_Firmware/releases/tag/Alpha1
 

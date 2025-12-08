@@ -18,6 +18,9 @@ Using the original Nextion harness colors:
 
 Unless you are real good at crimping jst connectors, I would highly recommend you get a pre-crimpt set like:
 https://www.amazon.com/dp/B0CM315RFP
+
+<img width="292" height="320" alt="Screenshot 2025-12-08 153435" src="https://github.com/user-attachments/assets/468b2b5b-952f-436a-9b5f-cbfcc2ab29af" />
+
 I created a harness using a 4 slot male connector for the plug that would have gone into the nextion  and mated it to a 6 slot female connector that plugs into the TTL-USB connector. (seel below). With this connector, i can swap between the TTL-USB and the Nextion by just a quick unplug/plug operation.
 
 I have created an initial Alpha release for those brave folks. You can download it here

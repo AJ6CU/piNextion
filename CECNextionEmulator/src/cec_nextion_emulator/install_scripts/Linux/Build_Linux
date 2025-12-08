@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+mkdir CECNext_Linux
+cp cecNext CECNext_Linux
+cp Install_Linux CECNext_Linux
+cp Uninstall_Linux CECNext_Linux
+cp ../../../../dist/cec_nextion_emulator-0.1.0-py3-none-any.whl CECNext_Linux
+cp ../../defaultCECNextionEmulator.ini CECNext_Linux
+
+zip -r CECNext_Linux.zip CECNext_Linux
+rm -r CECNext_Linux

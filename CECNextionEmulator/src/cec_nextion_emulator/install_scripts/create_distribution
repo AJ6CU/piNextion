@@ -1,0 +1,22 @@
+#!/bin/zsh -x
+
+cd ../../..
+rm -r ../build
+rm -r ../dist
+
+python3 -m build --sdist
+python3 -m build --wheel
+
+cd src/cec_nextion_emulator/install_scripts
+
+cd Linux
+rm CECNext_Linux.zip
+./Build_Linux
+
+cd ../MacOS
+rm CECNext_MacOS.zip
+./Build_MacOS
+
+cd ../Windows
+rm CECNext_Windows.zip
+./Build_Windows

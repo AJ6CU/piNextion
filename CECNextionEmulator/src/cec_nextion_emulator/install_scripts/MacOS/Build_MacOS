@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+mkdir CECNext_MacOS
+cp cecNext CECNext_MacOS
+cp Install_MacOS CECNext_MacOS
+cp Uninstall_MacOS CECNext_MacOS
+cp ../../../../dist/cec_nextion_emulator-0.1.0-py3-none-any.whl CECNext_MacOS
+cp ../../defaultCECNextionEmulator.ini CECNext_MacOS
+
+zip -r CECNext_MacOS.zip CECNext_MacOS
+rm -r CECNext_MacOS

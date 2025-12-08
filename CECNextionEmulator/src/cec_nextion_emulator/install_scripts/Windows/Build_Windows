@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+mkdir CECNext_Windows
+cp cecNext.bat CECNext_Windows
+cp Install_Windows.bat CECNext_Windows
+cp Uninstall_Windows.bat CECNext_Windows
+cp ../../../../dist/cec_nextion_emulator-0.1.0-py3-none-any.whl CECNext_Windows
+cp ../../defaultCECNextionEmulator.ini CECNext_Windows
+
+zip -r CECNext_Windows.zip CECNext_Windows
+rm -r CECNext_Windows

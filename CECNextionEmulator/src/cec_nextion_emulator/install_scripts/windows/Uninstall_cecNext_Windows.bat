@@ -1,7 +1,7 @@
-REM @echo off
+@echo off
 
-SET "VENV_DIR=%USERPROFILE%\Documents\CEC"
+SET "folder_name=CEC"
 SET "default_ini_file=%USERPROFILE%\.CECNextionEmulator.ini"
 
-RMDIR /s /q "%VENV_DIR%"
+RMDIR /s /q "%USERPROFILE%\Documents\%folder_name%"
 DEL "%default_ini_file%"

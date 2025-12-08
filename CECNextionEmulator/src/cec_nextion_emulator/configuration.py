@@ -37,7 +37,7 @@ class configuration:
             self.writeDefaults()
     def distributeConfigData(self):
         gv.NUMBER_DELIMITER = self.get_NUMBER_DELIMITER()
-        print("delimiter number is ", gv.NUMBER_DELIMITER)
+        # print("delimiter number is ", gv.NUMBER_DELIMITER)
         self.register_observer("NUMBER DELIMITER", gv.updateNUMBER_DELIMITER)
 
 

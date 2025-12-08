@@ -34,7 +34,7 @@ def startMainWindow(comPortName, comPortID):
     comPort.place(relx=0.80, rely=1, anchor="s")
 
     gv.config.setComPort(comPortName)  # update the config file if necessary because of comport selection
-    print(" radio:", comPortName)
+    # print(" radio:", comPortName)
     # comPort.setComPort(comPortName)
     myRadio = piRadio(comPortName, comPortID, mainWindow)  # Initialize the Radio object with selected port
 

@@ -1,7 +1,7 @@
-#!/bin/zsh
+#!/bin/bash
 
 folder_name="CEC"
-install_dir="${0:a:h}"
+install_dir=$PWD
 
 wheel="cec_nextion_emulator-0.1.0-py3-none-any.whl"
 startscript="cecNext"
@@ -10,15 +10,14 @@ default_ini_file="defaultCECNextionEmulator.ini"
 target_ini_file=".CECNextionEmulator.ini"
 
 full_wheel_path="${install_dir}/${wheel}"
-echo "fullpathwheel =" $full_wheel_path
 full_startscript_path="${install_dir}/${startscript}"
 full_default_ini_file_path="${install_dir}/${default_ini_file}"
 
-python3 -m venv ~/${folder_name}
-cd ~/${folder_name}/bin
+python -m venv ~/Documents/${folder_name}
+cd ~/Documents/${folder_name}/bin
 source activate
 
-pip3 install $full_wheel_path
+pip install $full_wheel_path
 
-cp $full_startscript_path ~/$folder_name/bin/$startscript
+cp $full_startscript_path ~/Documents/$folder_name/bin/$startscript
 cp $full_default_ini_file_path ~/$target_ini_file

@@ -1437,7 +1437,8 @@ class mainScreen(baseui.mainScreenUI):
     #   The "vo" if 1, then turn on IFS and use initial value
     #
     def voGet(self, buffer):
-        print("voGet, buffer=",buffer)
+        pass
+        # print("voGet, buffer=",buffer)
 
 
     def cp_UX_S_Meter_Value(self, buffer):
@@ -1452,7 +1453,7 @@ class mainScreen(baseui.mainScreenUI):
     def al_UX_S_Meter_Value(self, buffer):
         value = self.extractValue(buffer, 6, len(buffer) - 3)
         if value.isnumeric():
-            print("correcting for mal formed s-meter commend", buffer, "setting s-meter to", value)
+            # print("correcting for mal formed s-meter commend", buffer, "setting s-meter to", value)
             self.s_meter_Progressbar_VAR.set(int(value))
         else:
             print("another weird malformed command, buffer =", buffer)
@@ -1473,14 +1474,14 @@ class mainScreen(baseui.mainScreenUI):
     #
     def vpGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        print("vp get called:", "buffer =", buffer)
+        # print("vp get called:", "buffer =", buffer)
 
     #
     #   The "vq" command is referred to as display option 2 in EEPROM
     #
     def vqGet(self, buffer):
         value = self.extractValue(buffer, 10, len(buffer) - 3)
-        print("vq get called: buffer=", buffer)
+        # print("vq get called: buffer=", buffer)
 
 
 

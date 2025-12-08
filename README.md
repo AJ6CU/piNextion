@@ -11,14 +11,19 @@ Installation requires you to reroute the wires that went originally to the Nexti
 
 Using the original Nextion harness colors:
 
-Black - Ground
-Red - Power ( I left the jumper off)
-Blue -   TXD (Nextion) to  RX Pin (D8) (Raduino)
-Yellow - RXD (Nextion) to  TX Pin (D9)  (Raduino) 
+- Black - Ground
+- Red - Power ( I left the jumper off)
+- Blue -   TXD (Nextion) to  RX Pin (D8) (Raduino)
+- Yellow - RXD (Nextion) to  TX Pin (D9)  (Raduino)
 
-Given the code is in active development, I have not yet created any distribution packages. So you will need to download the code and start the python script CECNextionEmulator that is in the Code directory.  I am using the latest Python 3.13/3.14 and the application requires Pyserial, Pillow and Pygubu (https://github.com/alejandroautalan/pygubu) libraries. I probably require a few more packages that I will add when I find them :-).
+Unless you are real good at crimping jst connectors, I would highly recommend you get a pre-crimpt set like:
+https://www.amazon.com/dp/B0CM315RFP
+I created a harness using a 4 slot male connector for the plug that would have gone into the nextion  and mated it to a 6 slot female connector that plugs into the TTL-USB connector. (seel below). With this connector, i can swap between the TTL-USB and the Nextion by just a quick unplug/plug operation.
 
-Obviously this is still a pre-alpha piece of software so expect "surprises". Please feel free to add to the issues list any surprises you might find!
+I have created an initial Alpha release for those brave folks. You can download it here
+https://github.com/AJ6CU/NextionEmulatorforCEC_Firmware/releases/tag/Alpha1
+
+Please feel free to add to the issues list any surprises you might find!
 
 73
 Mark

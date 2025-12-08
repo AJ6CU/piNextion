@@ -207,10 +207,10 @@ class piRadio:
 
     def updateMCU_Update_Period(self, value):
         self.MCU_Update_Period = value
-        print("update period is changing, now = ", self.MCU_Update_Period)
+        # print("update period is changing, now = ", self.MCU_Update_Period)
 
     def updateMCU_Command_Headroom(self, value):
         self.MCU_Command_Headroom = value
-        print("update MCU Command Headroom is changing, now = ", self.MCU_Command_Headroom)
+        # print("update MCU Command Headroom is changing, now = ", self.MCU_Command_Headroom)
 
 

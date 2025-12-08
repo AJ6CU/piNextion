@@ -10,11 +10,11 @@ python3 -m build --wheel
 cd src/cec_nextion_emulator/install_scripts
 
 cd Linux
-rm CECNext_Linux.zip
+rm CECNext_Linux.tar.gz
 ./Build_Linux
 
 cd ../MacOS
-rm CECNext_MacOS.zip
+rm CECNext_MacOS.tar.gz
 ./Build_MacOS
 
 cd ../Windows

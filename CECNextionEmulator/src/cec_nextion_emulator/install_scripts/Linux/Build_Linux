@@ -1,11 +1,11 @@
 #!/bin/zsh
 
-mkdir CECNext_Linux
-cp cecNext CECNext_Linux
-cp Install_Linux CECNext_Linux
-cp Uninstall_Linux CECNext_Linux
-cp ../../../../dist/cec_nextion_emulator-0.1.0-py3-none-any.whl CECNext_Linux
-cp ../../defaultCECNextionEmulator.ini CECNext_Linux
+mkdir cecNext_Linux
+cp cecNext cecNext_Linux
+cp Install_cecNext_Linux cecNext_Linux
+cp Uninstall_cecNext_Linux cecNext_Linux
+cp ../../../../dist/cec_nextion_emulator-0.1.0-py3-none-any.whl cecNext_Linux
+cp ../../defaultCECNextionEmulator.ini cecNext_Linux
 
-zip -r CECNext_Linux.zip CECNext_Linux
-rm -r CECNext_Linux
+COPYFILE_DISABLE=true tar -czv --no-xattrs -f cecNext_Linux.tar.gz --exclude=".DS_Store" cecNext_Linux
+rm -r cecNext_Linux

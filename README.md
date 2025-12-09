@@ -1,5 +1,6 @@
 
-<img width="798" height="773" alt="Screenshot 2025-12-03 at 3 19 21 PM" src="https://github.com/user-attachments/assets/13009740-ad1a-4c22-a96c-cb451b5dae75" />
+<img width="788" height="759" alt="main_window_start" src="https://github.com/user-attachments/assets/83fc2f11-8f6f-4db7-b41c-8b3ed0df1443" />
+
 
 
 CECNextionEmulator is a Nextion emualtor for the KD8CEC software that runs on the uBITX. Since it is pretends to be a Nextion (at least as far as the CEC software can tell), there is no software changes required. It also works with both the original 1.x KD8CEC software as well as my CEC 2.0 fork that targets Pico and Teensy MCU's.

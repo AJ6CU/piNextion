@@ -3,9 +3,12 @@
 
 
 
-CECNextionEmulator is a Nextion emualtor for the KD8CEC software that runs on the uBITX. Since it is pretends to be a Nextion (at least as far as the CEC software can tell), there is no software changes required. It also works with both the original 1.x KD8CEC software as well as my CEC 2.0 fork that targets Pico and Teensy MCU's.
+CECNextionEmulator is a Nextion emulator for the KD8CEC software that runs on the uBITX. Since it is pretends to be a Nextion (at least as far as the CEC software can tell), there is no software changes required. It also works with both the original 1.x KD8CEC software as well as my CEC 2.0 fork that targets Pico and Teensy MCU's.
 
 The software runs on MacOS, Linux and Windows. I have tested the Linux version on a RaspberryPi 4/4gb and although the startup takes a little longer than on my RaspberryPi 5, the user interface performance is acceptable after it gets going. Generally any desktop processor is going to have too much speed, indeed I had to put in a trap to ensure that the computer running cecNext doesn't overrun the poor Nano on the Raduino. (Even my Pico Raduino's had issues with being overrun!)
+
+It is especially nice on Touchscreens. A 1280x800 is the minimum touchscreen size. There are some inexpensive case/screens for RaspberryPi 4 and 5 such as this one which is for the RaspberryPi 4:
+https://www.amazon.com/dp/B0CLQZ48BF?th=1
 
 Installation requires you to install the cecNextion software and reroute the wires that went originally to the Nextion thru a USB to TTL Serial converter such as https://www.amazon.com/dp/B0BJKCSZZW. There are no other changes required to your uBITX assuming you have already made a Nextion converter.
 
@@ -68,6 +71,8 @@ I have included some screen shots below.
 <img width="449" height="481" alt="general_settings" src="https://github.com/user-attachments/assets/b7fadfac-2192-4140-8bc1-b3f556c11a29" />
 
 
+**WARNING: One surprising UX "features"**
+At first I thought this was a bug, but later found out it was a "feature". If you use a mouse, you click on the "Mode" button and then click again to select the Mode (e.g. CWL). But on a Touchscreen, you tap the "Mode" button, and you drag your finger (without releasing) to the desired Mode. When you reach it, lift your finger. I originally thought this was a Bug and spent multiple hours tracking it down to find it was a feature...
 
 
 ###Unsupported Features of Original Nextion/CEC Screens
@@ -80,6 +85,8 @@ The following are the features from the original Nextion/CEC screens that have n
 
 I have created an initial Alpha release for those brave folks. You can download it here
 https://github.com/AJ6CU/NextionEmulatorforCEC_Firmware/releases/tag/Alpha1
+
+YOU SHOULD KNOW WHAT YOU ARE DOING AND PROTECT YOURSELF AND YOUR EQUIPMENT AS YOU EXPERIMENT WITH MY SOFTWARE AND HARDWARE SUGGESTIONS. ABSOLUTELY NO IMPLIED OR STATED WARRANTY OR LIABILITY OF ANY KIND IS INCLUDED WITH THIS SOFTWARE.
 
 Please feel free to add to the issues list any surprises you might find!
 

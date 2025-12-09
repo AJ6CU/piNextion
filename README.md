@@ -41,18 +41,23 @@ I have included some screen shots below.
 <img width="323" height="240" alt="startupscreen_selectport" src="https://github.com/user-attachments/assets/aa67e1fe-0284-4622-84ed-2bea8c492a3b" />
 
 **Channel Scanning**
+
 <img width="801" height="735" alt="channel_scanning" src="https://github.com/user-attachments/assets/b5c11af8-c9b9-4590-b461-1ab8ef110302" />
 
 **Backup**
+
 <img width="848" height="705" alt="backup_screen" src="https://github.com/user-attachments/assets/a7cf0624-364e-4ad6-a754-698c55392b32" />
 
 **Per Digit Tuning on Main Screen**
+
 <img width="790" height="763" alt="per_digit_tuning" src="https://github.com/user-attachments/assets/58a208ce-3b8b-4fde-bfc8-cd2def66a53a" />
 
 **CW Settings**
+
 <img width="1021" height="532" alt="cw_settings" src="https://github.com/user-attachments/assets/060df551-c9ac-4ce6-9047-bdc36cf56134" />
 
 **Preferences**
+
 <img width="449" height="481" alt="general_settings" src="https://github.com/user-attachments/assets/b7fadfac-2192-4140-8bc1-b3f556c11a29" />
 
 

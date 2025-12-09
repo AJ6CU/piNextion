@@ -5,7 +5,9 @@
 
 CECNextionEmulator is a Nextion emualtor for the KD8CEC software that runs on the uBITX. Since it is pretends to be a Nextion (at least as far as the CEC software can tell), there is no software changes required. It also works with both the original 1.x KD8CEC software as well as my CEC 2.0 fork that targets Pico and Teensy MCU's.
 
-Installation requires you to reroute the wires that went originally to the Nextion thru a USB to TTL Serial converter such as https://www.amazon.com/dp/B0BJKCSZZW. 
+The software runs on MacOS, Linux and Windows. I have tested the Linux version on a RaspberryPi 4/4gb and although the startup takes a little longer than on my RaspberryPi 5, the user interface performance is acceptable after it gets going. Generally any desktop processor is going to have too much speed, indeed I had to put in a trap to ensure that the computer running cecNext doesn't overrun the poor Nano on the Raduino. (Even my Pico Raduino's had issues with being overrun!)
+
+Installation requires you to install the cecNextion software and reroute the wires that went originally to the Nextion thru a USB to TTL Serial converter such as https://www.amazon.com/dp/B0BJKCSZZW. There are no other changes required to your uBITX assuming you have already made a Nextion converter.
 
 
 <img width="606" height="384" alt="ttl-usb" src="https://github.com/user-attachments/assets/8517d695-b6ff-461b-b12f-36c737beb3f1" />

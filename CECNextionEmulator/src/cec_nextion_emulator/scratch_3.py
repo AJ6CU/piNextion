@@ -1,6 +1,9 @@
 import numbers
 import tkinter as tk
 import math
+from pickle import GLOBAL
+
+angle_boundaries = {}
 
 def draw_circle(canvas, center_x, center_y, radius):
     # Draw the main circle
@@ -46,9 +49,39 @@ def check_release_in_circle(event, canvas, circle_center_x, circle_center_y, cir
         on_circle_release(release_x, release_y, circle_center_x, circle_center_y)
     else:
         print(f"Button released outside the circle at ({release_x}, {release_y})")
+
+def find_key_by_range(data_dict, target_value):
+  """
+  Finds the key in a dictionary where the target_value falls within the range
+  specified by the dictionary's value (a tuple or list of two numbers).
+
+  Args:
+    data_dict: The dictionary where values are in the format [min_val, max_val].
+    target_value: The number you want to check against the ranges.
+
+  Returns:
+    The key associated with the matching range, or None if no match is found.
+  """
+  for key, (min_val, max_val) in data_dict.items(): # Unpack the values directly
+    if min_val <= target_value <= max_val:
+      return key
+  return None
+
 def on_circle_release(x,y, circle_center_x, circle_center_y):
+    angle_boundaries
     newAngle = math.degrees(math.atan2(circle_center_y - y, x - circle_center_x))
     print("new angle =", newAngle)
+    if newAngle < 0:
+        print("in lower portion")
+        print("real angle = ", abs(newAngle))
+        angle= abs(newAngle)
+    else:
+        print("in upper portion")
+        print("real angle = ", 360-abs(newAngle))
+        angle = 360-abs(newAngle)
+
+    result_key = find_key_by_range(angle_boundaries, angle)
+    print("value =", result_key)
 
 def on_press(event):
     # This handler helps ensure the release event is tracked across the entire canvas if needed for complex drag/drop
@@ -71,6 +104,7 @@ circle_center_y = canvas_height // 2
 circle_radius = 125
 base_angle_degrees = 32
 
+
 # Draw the elements
 canvas.create_oval(circle_center_x - circle_radius, circle_center_y - circle_radius,
                        circle_center_x + circle_radius, circle_center_y + circle_radius,
@@ -80,9 +114,11 @@ canvas.create_oval(circle_center_x - circle_radius, circle_center_y - circle_rad
 
 for i in range(10):
     draw_line_element(canvas, circle_center_x, circle_center_y, circle_radius, base_angle_degrees*i, str(i))
+    angle_boundaries[i] = [(base_angle_degrees*i)-(base_angle_degrees/2), (base_angle_degrees*i)+(base_angle_degrees/2)]
 
+print(angle_boundaries)
 canvas.bind("<ButtonRelease-1>", lambda event: check_release_in_circle(
         event, canvas, circle_center_x, circle_center_y, circle_radius))
 
-# Run the application
+# Run the application]
 root.mainloop()

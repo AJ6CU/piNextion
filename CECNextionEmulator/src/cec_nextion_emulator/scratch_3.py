@@ -51,20 +51,15 @@ def check_release_in_circle(event, canvas, circle_center_x, circle_center_y, cir
         print(f"Button released outside the circle at ({release_x}, {release_y})")
 
 def find_key_by_range(data_dict, target_value):
-  """
-  Finds the key in a dictionary where the target_value falls within the range
-  specified by the dictionary's value (a tuple or list of two numbers).
+  for key, (center_angle, min_val, max_val) in data_dict.items():
+    if min_val > max_val:
+        if target_value >= min_val or target_value < max_val:
+            return key
+    else:
+        if min_val <= target_value < max_val:
+            return key
 
-  Args:
-    data_dict: The dictionary where values are in the format [min_val, max_val].
-    target_value: The number you want to check against the ranges.
 
-  Returns:
-    The key associated with the matching range, or None if no match is found.
-  """
-  for key, (min_val, max_val) in data_dict.items(): # Unpack the values directly
-    if min_val <= target_value <= max_val:
-      return key
   return None
 
 def on_circle_release(x,y, circle_center_x, circle_center_y):
@@ -103,6 +98,7 @@ circle_center_x = canvas_width // 2
 circle_center_y = canvas_height // 2
 circle_radius = 125
 base_angle_degrees = 32
+angle_offset = 125
 
 
 # Draw the elements
@@ -112,9 +108,23 @@ canvas.create_oval(circle_center_x - circle_radius, circle_center_y - circle_rad
 
 # my_circle=draw_circle(canvas, circle_center_x, circle_center_y, circle_radius)
 
+
 for i in range(10):
-    draw_line_element(canvas, circle_center_x, circle_center_y, circle_radius, base_angle_degrees*i, str(i))
-    angle_boundaries[i] = [(base_angle_degrees*i)-(base_angle_degrees/2), (base_angle_degrees*i)+(base_angle_degrees/2)]
+    draw_line_element(canvas, circle_center_x, circle_center_y, circle_radius, (base_angle_degrees*i)+angle_offset, str(i))
+    theAngle = (base_angle_degrees*i)+angle_offset
+    bound1 = int(theAngle - (base_angle_degrees/2))
+    bound2 = int(theAngle + (base_angle_degrees/2))
+    if bound1 > 360:
+        bound1 -= 360
+    if bound2 > 360:
+        bound2 -= 360
+
+    angle_boundaries[i] = [theAngle, bound1, bound2]
+    # if bound1 < bound2:
+    #     angle_boundaries[i] = [bound1, bound2]
+    # else:
+    #     angle_boundaries[i] = [bound2, bound1]
+
 
 print(angle_boundaries)
 canvas.bind("<ButtonRelease-1>", lambda event: check_release_in_circle(

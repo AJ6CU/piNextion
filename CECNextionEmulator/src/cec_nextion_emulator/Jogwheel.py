@@ -131,9 +131,9 @@ class Jogwheel(tk.Canvas):
         """
         
         self.xn = self.yn = (self.radius) / 2
-        self.radians = (self.radius) / 2
+        self.radians = (self.radius) / 2     # appears to be related to where divisions start
         self.absolute = abs(self.max - self.start)
-        self.arc_pos = (self.radians) / 4
+        self.arc_pos = (self.radians) / 4  # incremental distance out of the outer arc
         
         # major scale 
 

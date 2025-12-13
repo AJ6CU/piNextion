@@ -636,7 +636,6 @@ class mainScreen(baseui.mainScreenUI):
             self.tuning_Preset_Selection_Frame.grid()
 
     def tuning_Jogwheel_CB(self):
-
         newFreq =  int(self.primary_VFO_VAR.get()) - (self.currentVFO_Tuning_Rate * self.baselineJogValue)
         newFreq += self.currentVFO_Tuning_Rate * self.tuning_Jogwheel.get()
         # if self.DeepDebug:
@@ -814,7 +813,7 @@ class mainScreen(baseui.mainScreenUI):
         #     print("updating jogwheel, digit=", self.getVFOdigit())
         #     print("current jogwheel position =", self.tuning_Jogwheel.get())
 
-        self.tuning_Jogwheel.setSpecial(self.getVFOdigit())
+        self.tuning_Jogwheel.set(self.getVFOdigit(), False)
         if(newBaseline):
             self.baselineJogValue = self.tuning_Jogwheel.get()
 

@@ -612,6 +612,7 @@ STOP!
                 <property name="scroll_steps">1</property>
                 <property name="start">0</property>
                 <property name="state">normal</property>
+                <property name="touchOptimized">True</property>
                 <property name="value">0</property>
                 <layout manager="pack">
                   <property name="side">top</property>
@@ -1009,6 +1010,7 @@ CHANNELS
                     <property name="scroll_steps">10</property>
                     <property name="start">0</property>
                     <property name="state">disabled</property>
+                    <property name="touchOptimized">False</property>
                     <property name="value">70</property>
                     <bind sequence="&lt;ButtonPress&gt;" handler="ATT_Jogwheel_ButtonPressed_CB" add="True" />
                     <bind sequence="&lt;ButtonRelease&gt;" handler="ATT_Jogwheel_ButtonReleased_CB" add="True" />
@@ -1050,6 +1052,7 @@ CHANNELS
                     <property name="scroll_steps">150</property>
                     <property name="start">-2000</property>
                     <property name="state">disabled</property>
+                    <property name="touchOptimized">False</property>
                     <property name="value">0</property>
                     <bind sequence="&lt;ButtonPress&gt;" handler="IFS_Jogwheel_ButtonPressed_CB" add="True" />
                     <bind sequence="&lt;ButtonRelease&gt;" handler="IFS_Jogwheel_ButtonReleased_CB" add="True" />

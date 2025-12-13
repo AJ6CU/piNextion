@@ -8,7 +8,7 @@ import math
 from Jogwheel import Jogwheel
 
 class JogwheelCustom(Jogwheel):
-    jogwheel_num = 0
+    # jogwheel_num = 0    # used for debugging boundaries
     def __init__(self, master=None, **kw):
 
 
@@ -28,9 +28,11 @@ class JogwheelCustom(Jogwheel):
 
 
         self.initialValue = 0           # Provides default value on creation. Avoids requiring a set operation
+        self.touchOptimized = False     # Provides alternative method for changing dial that is more
+                                        # Optimized for touchscreens
         self.lastValue = 0              # lastValue saves the current value thru enable/disable operations
         self.angle_boundaries = {}  # Used to identify boundaries for touch zones
-        self.last_segment = None
+        self.last_segment = 0
 
 
 
@@ -38,6 +40,8 @@ class JogwheelCustom(Jogwheel):
             kw.pop("name")
         if "value" in kw:
             self.initialValue = kw.pop("value")
+        if "touchOptimized" in kw:
+            self.touchOptimized = kw.pop("touchOptimized")
 
         super().__init__(master,
                         bg=ttk.Style().lookup(master.cget('style'),'background'),
@@ -45,16 +49,9 @@ class JogwheelCustom(Jogwheel):
                         text_font=ttk.Style().lookup(master.cget('style'),'font'),
                         **kw
         )
-        self.scroll = False
-        #
-        # x1 = y1 = self.arc_pos
-        # x2 = y2 = self.radius - self.arc_pos
-        #
-        # self.circle_center_x = x2-x1
-        # self.circle_center_y = y2-y1
-        self.circle_center_x = self.circle_center_y = self.radius/2
 
-        self.create_touch_boundaries()
+        if self.touchOptimized:
+            self.create_touch_boundaries()          #touch boundaries only needed for Touchopttimized jogwheels
 
         self.lastValue = self.initialValue      #Set the initial value for the jogwheel
         self.set(self.lastValue)
@@ -84,7 +81,7 @@ class JogwheelCustom(Jogwheel):
         base_angle_degrees = ((360-abs(self.start_angle + self.end_angle)))/lines
 
         for i in range (lines):
-            theAngle = (base_angle_degrees * i) + self.start_angle
+            theAngle = (base_angle_degrees * (lines-i)) + self.start_angle    # -25
             bound1 = int(theAngle - (base_angle_degrees / 2))
             bound2 = int(theAngle + (base_angle_degrees / 2))
             if theAngle > 360:
@@ -95,12 +92,12 @@ class JogwheelCustom(Jogwheel):
                 bound2 -= 360
 
             self.angle_boundaries[i] = [theAngle, bound1, bound2]
-        if JogwheelCustom.jogwheel_num == 0:
-            print(self.start, self.max)
-            print(self.start, self.max, self.angle_boundaries)
-            print("lines", lines, "absolute", self.absolute, "start_angle", self.start_angle, "end_angle", self.end_angle)
-            print("base_angle_degrees", base_angle_degrees)
-            JogwheelCustom.jogwheel_num += 1
+        # if JogwheelCustom.jogwheel_num == 0:
+        #     print(self.start, self.max)
+        #     print(self.start, self.max, self.angle_boundaries)
+        #     print("lines", lines, "absolute", self.absolute, "start_angle", self.start_angle, "end_angle", self.end_angle)
+        #     print("base_angle_degrees", base_angle_degrees)
+        #     JogwheelCustom.jogwheel_num += 1
 
     def find_key_by_range(self, data_dict, target_value):
         for key, (center_angle, min_val, max_val) in data_dict.items():
@@ -111,77 +108,67 @@ class JogwheelCustom(Jogwheel):
                 if min_val <= target_value < max_val:
                     return key
 
-        return None
-
-    def on_circle_release(self, x, y, circle_center_x, circle_center_y):
-        print("x y", x, y)
-        newAngle = math.degrees(math.atan2(circle_center_y - y, x - circle_center_x))
-        print("new angle =", newAngle)
-        if newAngle < 0:
-            print("in lower portion")
-            print("real angle = ", abs(newAngle))
-            angle = abs(newAngle)
-        else:
-            print("in upper portion")
-            print("real angle = ", 360-abs(newAngle))
-            angle = 360 - abs(newAngle)
-
-        result_key = self.find_key_by_range(self.angle_boundaries, angle)
-        print("value =", result_key)
-        return result_key
+        return 0
+#
+    #
+    # def on_circle_release(self, x, y, circle_center_x, circle_center_y):
+    #     print("x y", x, y)
+    #     newAngle = math.degrees(math.atan2(circle_center_y - y, x - circle_center_x))
+    #     print("new angle =", newAngle)
+    #     if newAngle < 0:
+    #         print("in lower portion")
+    #         print("real angle = ", abs(newAngle))
+    #         angle = abs(newAngle)
+    #     else:
+    #         print("in upper portion")
+    #         print("real angle = ", 360-abs(newAngle))
+    #         angle = 360 - abs(newAngle)
+    #
+    #     result_key = self.find_key_by_range(self.angle_boundaries, angle)
+    #     print("value =", result_key)
+    #     return result_key
 
 
 
     def rotate_needle(self, event):
-
-        """
-        Checks if the mouse button was released within the defined circle.
-        """
-        # Get the coordinates of the mouse release event
+    #
+    #     Causes the needle to rotate
+    #
+    #     # Get the coordinates of the mouse release event
         release_x, release_y = event.x, event.y
+    #
+    #   Since the center of x and y is an internal mangled protected instance variable, have tocreate the mangled name
+    #   and then use getattr to get teh value
+    #
+        center_x = center_y = getattr(self,"_Jogwheel__x")
+    #
 
-        x1 = y1 = self.arc_pos
-        x2 = y2 = self.radius - self.arc_pos
+        angle = math.degrees(math.atan2(center_y - event.y, event.x - center_x))
 
-        circle_center_x = (x2-x1)/2
-        circle_center_y = (y1-y2)/2
-
-        # Calculate the distance from the center of the circle to the release point
-        distance = math.sqrt((release_x - circle_center_x) ** 2 + (release_y - circle_center_y) ** 2)
-
-        # Check if the distance is less than or equal to the radius
-        # if distance <= self.radius:
-        if 1 == 1:
-            # print(f"Button released inside the circle at ({release_x}, {release_y})")
-            # Call your desired function here
-            new_segment = self.on_circle_release(release_x, release_y, circle_center_x, circle_center_y)
-
-            if new_segment is not None:
-                if new_segment != self.last_segment:
-                    print(f"moved from {self.last_segment} to {new_segment}")
-                    self.last_segment = new_segment
-                    # self.previous_angle = new_segment
-                    self.set(new_segment)
+        if self.touchOptimized:
+            if angle >0:
+                # print("newangle =", angle, "prior angle=", self.previous_angle)
+                self.set(self.find_key_by_range(self.angle_boundaries, angle))
+            else:
+                # print("negative newangle =", 360+angle, "prior angle=", self.previous_angle)
+                self.set(self.find_key_by_range(self.angle_boundaries, 360 +angle))
         else:
-            print(f"Button released outside the circle at ({release_x}, {release_y})")
-    #
-    #     angle = math.degrees(math.atan2(self.__y - event.y, event.x - self.__x))
-    #     if self.previous_angle > angle:
-    #         if self.max > self.start and self.start_angle > self.end_angle:
-    #             self.set(self.value + self.scroll_steps)
-    #         elif self.max < self.start and self.start_angle < self.end_angle:
-    #             self.set(self.value + self.scroll_steps)
-    #         else:
-    #             self.set(self.value - self.scroll_steps)
-    #     else:
-    #         if self.max > self.start and self.start_angle > self.end_angle:
-    #             self.set(self.value - self.scroll_steps)
-    #         elif self.max < self.start and self.start_angle < self.end_angle:
-    #             self.set(self.value - self.scroll_steps)
-    #         else:
-    #             self.set(self.value + self.scroll_steps)
-    #
-    #     self.previous_angle = angle
+            if self.previous_angle>angle:
+                if self.max>self.start and self.start_angle>self.end_angle:
+                    self.set(self.value+self.scroll_steps)
+                elif self.max<self.start and self.start_angle<self.end_angle:
+                    self.set(self.value+self.scroll_steps)
+                else:
+                    self.set(self.value-self.scroll_steps)
+            else:
+                if self.max>self.start and self.start_angle>self.end_angle:
+                    self.set(self.value-self.scroll_steps)
+                elif self.max<self.start and self.start_angle<self.end_angle:
+                    self.set(self.value-self.scroll_steps)
+                else:
+                   self.set(self.value+self.scroll_steps)
+
+        self.previous_angle = angle
 
 
     def configure(self, **kwargs):
@@ -278,5 +265,58 @@ class JogwheelCustom(Jogwheel):
         if "command" in kwargs:
             self.command = kwargs.pop("command")
 
+        if "touchOptimized" in kwargs:
+            self.touchOptimized = kwargs.pop("touchOptimized")
+            if self.touchOptimized:
+                self.create_touch_boundaries()  # if jogwheel changes to touch_optimized must create boundaries
+
         if len(kwargs)>0:
             raise ValueError("unknown option: " + list(kwargs.keys())[0])
+
+    def set (self, value, exceCommand=True):
+        """
+        This function is used to set the position of the needle
+        """
+
+        self.value = value
+        angle = (value - self.start) * (self.end - self.start_angle) / (self.max - self.start) + self.start_angle
+
+        if self.start < self.max:
+            if value < self.start:
+                self.value = self.start
+                value = self.start
+            elif value > self.max:
+                self.value = self.max
+                value = self.max
+        else:
+            if value > self.start:
+                self.value = self.start
+                value = self.start
+            elif value < self.max:
+                self.value = self.max
+                value = self.max
+
+        if self.progress:
+            extend_angle = angle - (self.start_angle + self.end_angle)
+            self.itemconfigure(self.arc_id, extent=extend_angle)
+
+        self.coords(
+            self.knob,
+            self.line_coordinates(
+                r1=0,
+                r2=self.radius / 2 - self.arc_pos - self.bt_radius,
+                angle=angle
+            )
+        )
+
+        if self.integer == False:
+            value = round(value, 2)
+        else:
+            value = int(value)
+
+        if self.text:
+            self.itemconfig(tagOrId='text', text=self.text + str(value), fill=self.text_color)
+
+        if self.previous_angle != 0:
+            if self.command is not None and exceCommand:
+                self.command()

@@ -370,7 +370,7 @@ class mainScreenUI(ttk.Frame):
             scroll=True,
             scroll_steps=1,
             name="tuning_jogwheel")
-        self.tuning_Jogwheel.configure(state="normal")
+        self.tuning_Jogwheel.configure(state="normal", touchOptimized=True)
         self.tuning_Jogwheel.pack(side="top")
         self.tuning_Jogwheel.configure(command=self.tuning_Jogwheel_CB)
         self.tuning_Multiplier_Button = ttk.Button(
@@ -607,7 +607,7 @@ class mainScreenUI(ttk.Frame):
             value=70,
             scroll_steps=10,
             name="att_jogwheel")
-        self.ATT_Jogwheel.configure(state="disabled")
+        self.ATT_Jogwheel.configure(state="disabled", touchOptimized=False)
         self.ATT_Jogwheel.pack(anchor="center", padx="20 0", side="top")
         self.ATT_Jogwheel.configure(command=self.updateATTValue_CB)
         self.ATT_Jogwheel.bind(
@@ -639,7 +639,7 @@ class mainScreenUI(ttk.Frame):
             value=0,
             scroll_steps=150,
             name="ifs_jogwheel")
-        self.IFS_Jogwheel.configure(state="disabled")
+        self.IFS_Jogwheel.configure(state="disabled", touchOptimized=False)
         self.IFS_Jogwheel.pack(anchor="center", padx="20 0", side="top")
         self.IFS_Jogwheel.configure(command=self.updateIFSValue_CB)
         self.IFS_Jogwheel.bind(

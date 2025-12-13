@@ -45,12 +45,14 @@ class JogwheelCustom(Jogwheel):
                         text_font=ttk.Style().lookup(master.cget('style'),'font'),
                         **kw
         )
-
-        x1 = y1 = self.arc_pos
-        x2 = y2 = self.radius - self.arc_pos
-
-        self.circle_center_x = x2-x1
-        self.circle_center_y = y2-y1
+        self.scroll = False
+        #
+        # x1 = y1 = self.arc_pos
+        # x2 = y2 = self.radius - self.arc_pos
+        #
+        # self.circle_center_x = x2-x1
+        # self.circle_center_y = y2-y1
+        self.circle_center_x = self.circle_center_y = self.radius/2
 
         self.create_touch_boundaries()
 
@@ -85,6 +87,8 @@ class JogwheelCustom(Jogwheel):
             theAngle = (base_angle_degrees * i) + self.start_angle
             bound1 = int(theAngle - (base_angle_degrees / 2))
             bound2 = int(theAngle + (base_angle_degrees / 2))
+            if theAngle > 360:
+                theAngle -= 360
             if bound1 > 360:
                 bound1 -= 360
             if bound2 > 360:
@@ -110,20 +114,20 @@ class JogwheelCustom(Jogwheel):
         return None
 
     def on_circle_release(self, x, y, circle_center_x, circle_center_y):
-
+        print("x y", x, y)
         newAngle = math.degrees(math.atan2(circle_center_y - y, x - circle_center_x))
-        # print("new angle =", newAngle)
+        print("new angle =", newAngle)
         if newAngle < 0:
-            # print("in lower portion")
-            # print("real angle = ", abs(newAngle))
+            print("in lower portion")
+            print("real angle = ", abs(newAngle))
             angle = abs(newAngle)
         else:
-            # print("in upper portion")
-            # print("real angle = ", 360-abs(newAngle))
+            print("in upper portion")
+            print("real angle = ", 360-abs(newAngle))
             angle = 360 - abs(newAngle)
 
         result_key = self.find_key_by_range(self.angle_boundaries, angle)
-        # print("value =", result_key)
+        print("value =", result_key)
         return result_key
 
 
@@ -136,14 +140,18 @@ class JogwheelCustom(Jogwheel):
         # Get the coordinates of the mouse release event
         release_x, release_y = event.x, event.y
 
-        circle_center_x = self.radius/2
-        circle_center_y = self.radius/2
+        x1 = y1 = self.arc_pos
+        x2 = y2 = self.radius - self.arc_pos
+
+        circle_center_x = (x2-x1)/2
+        circle_center_y = (y1-y2)/2
 
         # Calculate the distance from the center of the circle to the release point
         distance = math.sqrt((release_x - circle_center_x) ** 2 + (release_y - circle_center_y) ** 2)
 
         # Check if the distance is less than or equal to the radius
-        if distance <= self.radius:
+        # if distance <= self.radius:
+        if 1 == 1:
             # print(f"Button released inside the circle at ({release_x}, {release_y})")
             # Call your desired function here
             new_segment = self.on_circle_release(release_x, release_y, circle_center_x, circle_center_y)
@@ -152,7 +160,7 @@ class JogwheelCustom(Jogwheel):
                 if new_segment != self.last_segment:
                     print(f"moved from {self.last_segment} to {new_segment}")
                     self.last_segment = new_segment
-                    self.previous_angle = new_segment
+                    # self.previous_angle = new_segment
                     self.set(new_segment)
         else:
             print(f"Button released outside the circle at ({release_x}, {release_y})")

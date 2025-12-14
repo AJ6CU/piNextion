@@ -208,6 +208,8 @@ class mainScreenUI(ttk.Frame):
             textvariable=self.digit7_primary_VFO_VAR,
             width=1)
         self.digit7_primary_VFO_Label.grid(column=0, row=0, sticky="e")
+        self.digit7_primary_VFO_Label.bind(
+            "<Button>", self.primary_vfo_10mhz_CB, add="")
         self.digit7_Highlight_Label = ttk.Label(
             self.VFO_Frame, name="digit7_highlight_label")
         self.digit7_Highlight_Label.configure(style="OffLED.TLabel", width=7)
@@ -222,6 +224,8 @@ class mainScreenUI(ttk.Frame):
             textvariable=self.digit6_primary_VFO_VAR,
             width=1)
         self.digit6_primary_VFO_Label.grid(column=1, row=0, sticky="e")
+        self.digit6_primary_VFO_Label.bind(
+            "<Button>", self.primary_vfo_1mhz_CB, add="")
         self.digit6_Highlight_Label = ttk.Label(
             self.VFO_Frame, name="digit6_highlight_label")
         self.digit6_Highlight_Label.configure(style="OffLED.TLabel", width=7)
@@ -251,6 +255,8 @@ class mainScreenUI(ttk.Frame):
             textvariable=self.digit5_primary_VFO_VAR,
             width=1)
         self.digit5_primary_VFO_Label.grid(column=3, row=0, sticky="e")
+        self.digit5_primary_VFO_Label.bind(
+            "<Button>", self.primary_vfo_100khz_CB, add="")
         self.digit5_Highlight_Label = ttk.Label(
             self.VFO_Frame, name="digit5_highlight_label")
         self.digit5_Highlight_Label.configure(style="OffLED.TLabel", width=7)
@@ -265,6 +271,8 @@ class mainScreenUI(ttk.Frame):
             textvariable=self.digit4_primary_VFO_VAR,
             width=1)
         self.digit4_primary_VFO_Label.grid(column=4, row=0, sticky="e")
+        self.digit4_primary_VFO_Label.bind(
+            "<Button>", self.primary_vfo_10khz_CB, add="")
         self.digit4_Highlight_Label = ttk.Label(
             self.VFO_Frame, name="digit4_highlight_label")
         self.digit4_Highlight_Label.configure(style="OffLED.TLabel", width=7)
@@ -273,12 +281,13 @@ class mainScreenUI(ttk.Frame):
             self.VFO_Frame, name="digit3_primary_vfo_label")
         self.digit3_primary_VFO_VAR = tk.StringVar(value='3')
         self.digit3_primary_VFO_Label.configure(
-            anchor="e",
             style="VFO.TLabel",
             text='3',
             textvariable=self.digit3_primary_VFO_VAR,
             width=1)
         self.digit3_primary_VFO_Label.grid(column=5, row=0, sticky="e")
+        self.digit3_primary_VFO_Label.bind(
+            "<Button>", self.primary_vfo_1khz_CB, add="")
         self.digit3_Highlight_Label = ttk.Label(
             self.VFO_Frame, name="digit3_highlight_label")
         self.digit3_Highlight_Label.configure(style="OffLED.TLabel", width=7)
@@ -307,6 +316,8 @@ class mainScreenUI(ttk.Frame):
             textvariable=self.digit2_primary_VFO_VAR,
             width=1)
         self.digit2_primary_VFO_Label.grid(column=7, row=0, sticky="e")
+        self.digit2_primary_VFO_Label.bind(
+            "<Button>", self.primary_vfo_100hz_CB, add="")
         self.digit2_Highlight_Label = ttk.Label(
             self.VFO_Frame, name="digit2_highlight_label")
         self.digit2_Highlight_Label.configure(style="OffLED.TLabel", width=7)
@@ -321,6 +332,8 @@ class mainScreenUI(ttk.Frame):
             textvariable=self.digit1_primary_VFO_VAR,
             width=1)
         self.digit1_primary_VFO_Label.grid(column=8, row=0, sticky="e")
+        self.digit1_primary_VFO_Label.bind(
+            "<Button>", self.primary_vfo_10hz_CB, add="")
         self.digit1_Highlight_Label = ttk.Label(
             self.VFO_Frame, name="digit1_highlight_label")
         self.digit1_Highlight_Label.configure(style="OffLED.TLabel", width=7)
@@ -833,6 +846,27 @@ class mainScreenUI(ttk.Frame):
         pass
 
     def stop_CB(self):
+        pass
+
+    def primary_vfo_10mhz_CB(self, event=None):
+        pass
+
+    def primary_vfo_1mhz_CB(self, event=None):
+        pass
+
+    def primary_vfo_100khz_CB(self, event=None):
+        pass
+
+    def primary_vfo_10khz_CB(self, event=None):
+        pass
+
+    def primary_vfo_1khz_CB(self, event=None):
+        pass
+
+    def primary_vfo_100hz_CB(self, event=None):
+        pass
+
+    def primary_vfo_10hz_CB(self, event=None):
         pass
 
     def tuning_Jogwheel_CB(self):

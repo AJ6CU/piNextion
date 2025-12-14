@@ -781,17 +781,23 @@ class mainScreen(baseui.mainScreenUI):
         self.updateLabelTuning_Multiplier()
 
 
-    def updateLEDTuningHighlight(self):
+    def updateLEDTuningHighlight(self, tuning_Digit = None):
         #
         #   First turn off the old LED
         #
         self.toggle_Digit_Highlight(self.rate_selection[self.currentDigitPos], False)
         #
-        #   Increment to the next slot and turn its LED on, check for rollover
+        #   IF increment mode (tuning_Digit == None)
+        #   Increment to the next slot and turn its LED on, check for rollover, otherwise go directly to the indicated
+        #   digit
         #
-        self.currentDigitPos += 1
-        if self.currentDigitPos > len(self.rate_selection)-1:
-            self.currentDigitPos = 0
+        if tuning_Digit == None:
+            self.currentDigitPos += 1
+            if self.currentDigitPos > len(self.rate_selection) - 1:
+                self.currentDigitPos = 0
+        else:
+            self.currentDigitPos = tuning_Digit
+
         self.toggle_Digit_Highlight(self.rate_selection[self.currentDigitPos], True)
 
     def updateRateMultiplier(self):
@@ -828,7 +834,50 @@ class mainScreen(baseui.mainScreenUI):
         #   Now set the text on the multiplier button to reflect the new rate
         #
         self.tuning_Multiplier_VAR.set("Tuning Factor\nx" + multiplier_string)
+#
+    #
+    #   this callback allows a user to click on the 10hz digit and then use the tuning jogwheel
+    #
+    def primary_vfo_direct_digit_set(self, digit):
+        #
+        #   First turn off the old LED, turn on new LED indicator for tuning
+        #
+        self.updateLEDTuningHighlight(digit)
+        #
+        #   Update rate multiplier for jogwheel
+        #
+        self.updateRateMultiplier()
+        #
+        #   set tracking variables for new rate change
+        #
+        self.updateJogTracking()
+        #
+        #   Update the label on the tuning button selector
+        #
+        self.updateLabelTuning_Multiplier()
 
+
+
+    def primary_vfo_10mhz_CB(self, event=None):
+        self.primary_vfo_direct_digit_set(7)
+
+    def primary_vfo_1mhz_CB(self, event=None):
+        self.primary_vfo_direct_digit_set(6)
+
+    def primary_vfo_100khz_CB(self, event=None):
+        self.primary_vfo_direct_digit_set(5)
+
+    def primary_vfo_10khz_CB(self, event=None):
+        self.primary_vfo_direct_digit_set(4)
+
+    def primary_vfo_1khz_CB(self, event=None):
+        self.primary_vfo_direct_digit_set(3)
+
+    def primary_vfo_100hz_CB(self, event=None):
+        self.primary_vfo_direct_digit_set(2)
+
+    def primary_vfo_10hz_CB(self, event=None):
+        self.primary_vfo_direct_digit_set(1)
 #
 #   This function sends to the Radio a notice that a screen lock has been requested
 #   The actual locking of the screen waits until the Radio sends back a commond

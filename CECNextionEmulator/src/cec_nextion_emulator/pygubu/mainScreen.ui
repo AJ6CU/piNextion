@@ -326,6 +326,7 @@ STOP!
                         <property name="text" translatable="yes">7</property>
                         <property name="textvariable">string:digit7_primary_VFO_VAR</property>
                         <property name="width">1</property>
+                        <bind sequence="&lt;Button&gt;" handler="primary_vfo_10mhz_CB" add="" />
                         <layout manager="grid">
                           <property name="column">0</property>
                           <property name="row">0</property>
@@ -350,6 +351,7 @@ STOP!
                         <property name="text" translatable="yes">6</property>
                         <property name="textvariable">string:digit6_primary_VFO_VAR</property>
                         <property name="width">1</property>
+                        <bind sequence="&lt;Button&gt;" handler="primary_vfo_1mhz_CB" add="" />
                         <layout manager="grid">
                           <property name="column">1</property>
                           <property name="row">0</property>
@@ -397,6 +399,7 @@ STOP!
                         <property name="text" translatable="yes">5</property>
                         <property name="textvariable">string:digit5_primary_VFO_VAR</property>
                         <property name="width">1</property>
+                        <bind sequence="&lt;Button&gt;" handler="primary_vfo_100khz_CB" add="" />
                         <layout manager="grid">
                           <property name="column">3</property>
                           <property name="row">0</property>
@@ -421,6 +424,7 @@ STOP!
                         <property name="text" translatable="yes">4</property>
                         <property name="textvariable">string:digit4_primary_VFO_VAR</property>
                         <property name="width">1</property>
+                        <bind sequence="&lt;Button&gt;" handler="primary_vfo_10khz_CB" add="" />
                         <layout manager="grid">
                           <property name="column">4</property>
                           <property name="row">0</property>
@@ -440,11 +444,11 @@ STOP!
                     </child>
                     <child>
                       <object class="ttk.Label" id="digit3_primary_VFO_Label" named="True">
-                        <property name="anchor">e</property>
                         <property name="style">VFO.TLabel</property>
                         <property name="text" translatable="yes">3</property>
                         <property name="textvariable">string:digit3_primary_VFO_VAR</property>
                         <property name="width">1</property>
+                        <bind sequence="&lt;Button&gt;" handler="primary_vfo_1khz_CB" add="" />
                         <layout manager="grid">
                           <property name="column">5</property>
                           <property name="row">0</property>
@@ -493,6 +497,7 @@ STOP!
                         <property name="text" translatable="yes">2</property>
                         <property name="textvariable">string:digit2_primary_VFO_VAR</property>
                         <property name="width">1</property>
+                        <bind sequence="&lt;Button&gt;" handler="primary_vfo_100hz_CB" add="" />
                         <layout manager="grid">
                           <property name="column">7</property>
                           <property name="row">0</property>
@@ -517,6 +522,7 @@ STOP!
                         <property name="text" translatable="yes">1</property>
                         <property name="textvariable">string:digit1_primary_VFO_VAR</property>
                         <property name="width">1</property>
+                        <bind sequence="&lt;Button&gt;" handler="primary_vfo_10hz_CB" add="" />
                         <layout manager="grid">
                           <property name="column">8</property>
                           <property name="row">0</property>
